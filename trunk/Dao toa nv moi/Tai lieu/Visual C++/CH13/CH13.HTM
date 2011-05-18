@@ -1,0 +1,1685 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 13 -- Saving and Restoring Work--File Access</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch12/ch12.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch14/ch14.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 13 -<BR>
+Saving and Restoring Work--File Access</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Serialization</A>
+	<UL>
+		<LI><A HREF="#Heading2">The CArchive and CFile Classes</A>
+		<LI><A HREF="#Heading3">The Serialize Function</A>
+		<LI><A HREF="#Heading4">Making Objects Serializable</A>
+		<LI><A HREF="#Heading5">Listing 13.3. Including the IMPLEMENT_SERIAL macro in the
+		class implementation.</A>
+	</UL>
+	<LI><A HREF="#Heading6">Implementing a Serializable Class</A>
+	<UL>
+		<LI><A HREF="#Heading7">Creating a Serialized Application</A>
+		<LI><A HREF="#Heading8">Creating a Serializable Class</A>
+		<LI><A HREF="#Heading9">Building Support in the Document Class</A>
+		<LI><A HREF="#Heading10">Adding Navigating and Editing Support in the View Class</A>
+	</UL>
+	<LI><A HREF="#Heading11">Summary</A>
+	<LI><A HREF="#Heading12">Q&amp;A</A>
+	<LI><A HREF="#Heading13">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading14">Quiz</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+Most applications provide the user the option of saving what has been created. The
+creation can be a word-processing document, a spreadsheet, a drawing, or a set of
+data records. Today, you will explore how Visual C++ provides you with the means
+to implement this functionality easily. Today, you will learn</P>
+
+<P>
+
+<UL>
+	<LI>How Visual C++ uses C++ streams to save information about your application
+	<P>
+	<LI>How to store your application data in binary files
+	<P>
+	<LI>How to make your application objects serializable
+	<P>
+	<LI>How you can store variables of differing data types into a single file
+</UL>
+
+<H2><A NAME="Heading1"></A>Serialization</H2>
+<P>There are two parts of serialization. When application data is stored on the system
+drive in the form of a file, it is called serialization. When the application state
+is restored from the file, it is called deserialization. The combination of these
+two parts makes up the serialization of application objects in Visual C++.</P>
+<P>
+<H3><A NAME="Heading2"></A>The CArchive and CFile Classes</H3>
+<P>Serialization in Visual C++ applications is accomplished through the CArchive
+class. The CArchive class is designed to act as an input/output (I/O) stream for
+a CFile object, as shown in Figure 13.1. It uses C++ streams to enable efficient
+data flow to and from the file that is the storage of the application data. The CArchive
+class cannot exist without a CFile class object to which it is attached.</P>
+
+<P><A HREF="javascript:popUp('13fig01.gif')"><B>FIGURE 13.1.</B></A><B> </B><I>The
+CArchive class stores application data in a CFile object.</I></P>
+
+<P>The CArchive class can store data in a number of types of files, all of which
+are descendants of the CFile class. By default, the AppWizard includes all the functionality
+to create and open regular CFile objects for use with CArchive. If you want or need
+to work with one of these other file types, you might need to add additional code
+to your application to enable the use of these different file types.</P>
+<P>
+<H3><A NAME="Heading3"></A>The Serialize Function</H3>
+<P>The CArchive class is used in the Serialize function on the document and data
+objects in Visual C++ applications. When an application is reading or writing a file,
+the document object's Serialize function is called, passing the CArchive object that
+is used to write to or read from the file. In the Serialize function, the typical
+logic to follow is to determine whether the archive is being written to or read from
+by calling the CArchive IsStoring or IsLoading functions. The return value from either
+of these two functions determines if your application needs to be writing to or reading
+from the CArchive class's I/O stream. A typical Serialize function in the view class
+looks like Listing 13.1.</P>
+<P>
+<H4>LISTING 13.1. A TYPICAL Serialize FUNCTION.</H4>
+<PRE> 1: void CAppDoc::Serialize(CArchive&amp; ar)
+ 2: {
+ 3:    // Is the archive being written to?
+ 4:    if (ar.IsStoring())
+ 5:    {
+ 6:       // Yes, write my variable
+ 7:       ar &lt;&lt; m_MyVar;
+ 8:    }
+ 9:    else
+10:    {
+11:       // No, read my variable
+12:       ar &gt;&gt; m_MyVar;
+13:    }
+14: }</PRE>
+<P>You can place a Serialize function in any classes you create so that you can call
+their Serialize function from the document Serialize function. If you place your
+custom objects into an object array, such as the CObArray that you used in your drawing
+application for the past three days, you can call the array's Serialize function
+from the document's Serialize function. The object array will, in turn, call the
+Serialize function of any objects that have been stored in the array.</P>
+<P>
+<H3><A NAME="Heading4"></A>Making Objects Serializable</H3>
+<P>When you created the CLine class on Day 10, &quot;Creating Single Document Interface
+Applications,&quot; you had to add two macros before you could save and restore your
+drawings. These two macros, DECLARE_SERIAL and IMPLEMENT_SERIAL, include functionality
+in your classes that are necessary for the Serialize function to work correctly.</P>
+<P>
+<H4>Including the DECLARE_SERIAL Macro</H4>
+<P>You must include the DECLARE_SERIAL macro in your class declaration, as shown
+in Listing 13.2. The DECLARE_SERIAL macro takes a single argument, the class name.
+This macro automatically adds to your class some standard function and operator declarations
+that are necessary for serialization to work correctly.</P>
+<P>
+<H4>LISTING 13.2. INCLUDING THE DECLARE_SERIAL MACRO IN THE CLASS DECLARATION.</H4>
+<PRE>1: class CMyClass : public CObject
+2: {
+3:     DECLARE_SERIAL (CMyClass)
+4: public:
+5:     virtual void Serialize(CArchive &amp;ar);
+6:     CMyClass();
+7:     virtual ~CMyClass();
+</PRE>
+
+<PRE>8: };</PRE>
+<P>
+<H4>Including the IMPLEMENT_SERIAL Macro</H4>
+<P>You need to add the IMPLEMENT_SERIAL macro to the implementation of your class.
+This macro needs to appear outside any other class functions because it adds the
+code for the class functions that were declared with the DECLARE_SERIAL macro.</P>
+<P>The IMPLEMENT_SERIAL macro takes three arguments. The first argument is the class
+name, as in the DECLARE_SERIAL macro. The second argument is the name of the base
+class, from which your class is inherited. The third argument is a version number
+that can be used to determine whether a file is the correct version for reading into
+your application. The version number, which must be a positive number, should be
+incremented each time the serialization method of the class is changed in any way
+that alters the data being written to or read from a file. A typical usage of the
+IMPLEMENT_SERIAL macro is provided in Listing 13.3.</P>
+<P>
+<H3><A NAME="Heading5"></A>Listing 13.3. Including the IMPLEMENT_SERIAL macro in
+the class implementation.</H3>
+<PRE> 1: // MyClass.cpp: implementation of the CMyClass class.
+ 2: //
+ 3: //////////////////////////////////////////////////////////////////////
+ 4: 
+ 5: #include &quot;stdafx.h&quot;
+ 6: #include &quot;MyClass.h&quot;
+ 7: 
+ 8: #ifdef _DEBUG
+ 9: #undef THIS_FILE
+10: static char THIS_FILE[]=__FILE__;
+11: #define new DEBUG_NEW
+12: #endif
+13: 
+14: IMPLEMENT_SERIAL (CMyClass, CObject, 1)
+15: //////////////////////////////////////////////////////////////////////
+16: // Construction/Destruction
+17: //////////////////////////////////////////////////////////////////////
+18: 
+19: CMyClass::CMyClass()
+20: {
+21: }
+22: 
+23: CMyClass::~CMyClass()
+24: {
+</PRE>
+
+<PRE>25: }</PRE>
+<P>
+<H4>Defining the Serialize Function</H4>
+<P>Along with the two macros, you need to include a Serialize function in your class.
+This function should be declared as a void function with a single argument (CArchive
+&amp;ar), public access, and the virtual check box selected--producing the function
+declaration in Listing 13.2. When you implement the Serialize function for your class,
+you typically use the same approach as that used in the document class, shown in
+Listing 13.1, where you check to determine whether the file is being written to or
+read from.</P>
+<P>
+<H2><A NAME="Heading6"></A>Implementing a Serializable Class</H2>
+<P>When you begin designing a new application, one of the first things you need to
+design is how to store the data in the document class that your application will
+create and operate on. If you are creating a data-oriented application that collects
+sets of data from the user, much like a contact database application, how are you
+going to hold that data in the application memory? What if you are building a word
+processor application--how are you going to hold the document being written in the
+application memory? Or a spreadsheet? Or a painting program? Or...you get the idea.</P>
+<P>Once you determine how you are going to design the data structures on which your
+application will operate, then you can determine how best to serialize your application
+and classes. If you are going to hold all data directly in the document class, all
+you need to worry about is writing the data to and reading the data from the CArchive
+object in the document's Serialize function. If you are going to create your own
+class to hold your application data, you need to add the serialization functionality
+to your data classes so that they can save and restore themselves.</P>
+<P>In the application that you are going to build today, you will create a simple,
+flat-file database application that illustrates how you can combine a mixture of
+data types into a single data stream in the application serialization. Your application
+will display a few fields of data, some of which are variable-length strings, and
+others that are integer or boolean, and will save and restore them in a single data
+stream to and from the CArchive object.</P>
+<P>
+<H3><A NAME="Heading7"></A>Creating a Serialized Application</H3>
+<P>You can create your own classes, which can also be serialized, for use in an SDI
+or MDI application. In short, any application that works with any sort of data, whether
+a database or a document, can be serialized. Now you will create a simple, flat-file
+database application that you will serialize.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> A flat-file database is one of the original types of databases. It
+	is a simple file-based database, with the records sequentially appended to the end
+	of the previous record. It has none of the fancy relational functionality that is
+	standard in most databases today. The database that you will build today is closer
+	to an old dBASE or Paradox database, without any indexes, than to databases such
+	as Access or SQL Server.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>Creating the Application Shell</H4>
+<P>To get your application started, create a new AppWizard application. Give your
+application a name, such as Serialize, and click OK to start the AppWizard.</P>
+<P>In the AppWizard, select to create a single document style application using the
+Document/View architecture. You can choose to include support for ActiveX controls
+in the third AppWizard step, although it's not really necessary for the example that
+you will build.</P>
+<P>In the fourth step, be sure to specify the file extension for the files that your
+application will create and read. An example of a file extension that you might want
+to use is ser for serialize or fdb for flat-file database.</P>
+<P>In the sixth AppWizard step, you need to specify which base class to use for the
+application view class. For a description of the different base classes available
+for inheriting the view class from, refer to Day 10 in the section &quot;The Document/View
+Architecture.&quot; For the sample application you are building, because it will
+be a database application, you'll find it easiest to use CFormView as the base class
+from which your view class will be inherited. This enables you to use the dialog
+designer for your application view.</P>
+<P>Once you finish making your way through the AppWizard and let the AppWizard create
+your application shell, you will see a large window canvas in the dialog designer
+as if you had created a dialog-style application, only without the OK and Cancel
+buttons, as shown in Figure 13.2.</P>
+<P><A HREF="javascript:popUp('13fig02tif.gif')"><B>FIGURE 13.2.</B></A><B> </B><I>The
+window designer for an SDI appli-cation.</I></P>
+
+<P><I></I>
+<H4>Designing Your Application Window</H4>
+<P>After you create an SDI or MDI application where the view class is based on the
+CFormView class, you need to design your application view. Designing the view is
+much like designing the window layout for a dialog window, but you don't need to
+worry about including any buttons to close the window while either saving or canceling
+the work done by the user. With an SDI or MDI application, the functionality to save
+and exit the window is traditionally located on the application menus or on the toolbar.
+As a result, you need to include only the controls for the function that your application
+window will perform.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> If you are building dialog-style applications, the AppWizard doesn't
+	provide any serialization code in your application shell. If you need to serialize
+	a dialog-style application, you'll need to add all this code yourself.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>For the sample application that you are building today, lay out controls on the
+window canvas as shown in Figure 13.3 using the control properties listed in Table
+13.1.</P>
+<P><A HREF="javascript:popUp('13fig03tif.gif')"><B>FIGURE 13.3.</B></A><B> </B><I>The
+sample application window layout.</I></P>
+
+<P><I></I>
+<H4>TABLE 13.1. CONTROL PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">
+			<H4>Static Text
+		</TD>
+		<TD ALIGN="LEFT">
+			<H4>ID
+		</TD>
+		<TD ALIGN="LEFT">
+			<H4>IDC_STATIC
+		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Name:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_ENAME		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Age		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EAGE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Marital Status:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RSINGLE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Single		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Group		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RMARRIED		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Married		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RDIVORCED		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Divorced		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RWIDOW		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Widowed		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Check Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_CBEMPLOYED		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Employed		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_BFIRST		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;First		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_BPREV		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Previous		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_BNEXT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Nex&amp;t		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_BLAST		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Last		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_SPOSITION		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Record 0 of 0		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>When you were developing dialog-style applications or windows, you attached variables
+to the controls on the window in the dialog class. However, with an SDI or MDI application,
+which class do you create the variables in? Because the UpdateData function is a
+member of the CWnd class, and the view class is descended from the CWnd class, although
+the document is not, then the view class is the most logical place to add the variables
+that you will attach to the controls you placed on the window.</P>
+<P>To attach variables to the controls in your sample application, open the Class
+Wizard and add variables to the controls, specifying that the place to add them is
+the view class (in this case, CSerializeView). For the sample application, add the
+variables in Table 13.2 to the controls specified.</P>
+<P>
+<H4>TABLE 13.2. CONTROL VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+		<TD ALIGN="LEFT"><I>Category</I></TD>
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_CBEMPLOYED		</TD>
+		<TD ALIGN="LEFT">m_bEmployed		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">BOOL		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EAGE		</TD>
+		<TD ALIGN="LEFT">m_iAge		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_ENAME		</TD>
+		<TD ALIGN="LEFT">m_sName		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_RSINGLE		</TD>
+		<TD ALIGN="LEFT">m_iMaritalStatus		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_SPOSITION		</TD>
+		<TD ALIGN="LEFT">m_sPosition		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>If you examine the source code for the view class, you will notice that there
+is no OnDraw function. If you are using the CFormView ancestor class for your SDI
+or MDI application, you don't need to worry about the OnDraw function. Instead, you
+treat the view class very much as you would the dialog class in a dialog window or
+dialog-style application. The primary difference is that the data that you need to
+use to populate the controls on the window are not in the view class, but in the
+document class. As a result, you need to build the interaction between these two
+classes to pass the data for the controls back and forth.</P>
+<P>
+<H3><A NAME="Heading8"></A>Creating a Serializable Class</H3>
+<P>When you create a form-based application, it is assumed that your application
+will hold multiple records in the form and that the user will be able to scroll through
+the records to make changes. The user will be able to add additional records or even
+remove records from the record set. The challenge at this point in building this
+application is how you represent this set of records, supporting all the necessary
+functionality.</P>
+<P>One approach is to create a class that would encapsulate each record, and then
+hold these records in an array, much as you did with the drawing application that
+you created and enhanced over the past few days. This class would need to descend
+from the CObject class and would need to contain variables for all the control variables
+that you added to the view class, along with methods to read and write all of these
+variables. Along with adding the methods to set and read all of the variables, you
+need to make the class serializable by adding the Serialize function to the class,
+as well as the two macros that complete the serialization of the class.</P>
+<P>
+<H4>Creating the Basic Class</H4>
+<P>As you may remember from Day 10, when you want to create a new class, you can
+select the project in the Class View tab of the workspace pane, right-click the mouse
+button, and select New Class from the context menu. This opens the New Class dialog.</P>
+<P>In the New Class dialog, you specify the type of class, whether it's an MFC class,
+and generic class, or a form class. To create a class that can contain one record's
+data, you most likely want to create a generic class. You'll learn more about how
+to determine which of these types of classes to create on Day 16, &quot;Creating
+Your Own Classes and Modules.&quot; The other things that you need to do are give
+your class a name and specify the base class from which it will be inherited.</P>
+<P>For your sample application, because the form that you created has information
+about a person, you might want to call your class something like CPerson. To be able
+to hold your class in the object array, you need to give it CObject as the base class.
+Just like on Day 10, the New Class dialog will claim that it cannot find the header
+with the base class in it and that you need to add this. Well, it's already included,
+so you can ignore this message. (On Day 16, you'll learn when you need to pay attention
+to this message.)</P>
+<P>Once you create your new class, you'll need to add the variables for holding the
+data elements that will be displayed on the screen for the user. Following good object-oriented
+design, these variables will all be declared as private variables, where they cannot
+be directly manipulated by other classes. The variable types should match the variable
+types of the variables that are attached to the window controls in the view class.</P>
+<P>With the sample application you are creating, you need to add the variables in
+Table 13.3.</P>
+<P>
+<H4>TABLE 13.3. CLASS VARIABLES FOR THE CPerson CLASS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">
+			<H4>Name
+		</TD>
+		<TD ALIGN="LEFT">
+			<H4>Type
+		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_bEmployed		</TD>
+		<TD ALIGN="LEFT">BOOL		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_iAge		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_sName		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_iMaritalStatus		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+	</TR>
+</TABLE>
+
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> An inline function is a short C++ function in which, when the application
+	is being compiled, the function body is copied in place of the function call. As
+	a result, when the compiled application is running, the function code is executed
+	without having to make a context jump to the function and then jump back once the
+	function has completed. This reduces the overhead in the running application, increasing
+	the execution speed slightly, but also makes the resulting executable application
+	slightly larger. The more places the inline function is called, the larger the application
+	will eventually get. For more information on inline functions, consult Appendix A,
+	&quot;C++ Review.&quot;
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>Adding Methods for Reading and Writing Variables</H4>
+<P>Once you create your class, you need to provide a means for reading and writing
+to the variables in the class. One of the easiest ways to provide this functionality
+is to add inline functions to the class definition. You create a set of inline functions
+to set each of the variables and then make another set for retrieving the current
+value of each variable.</P>
+<P>If you want to implement the Get and Set variable functions for your CPerson class
+in the sample application that you are building, edit the Person.h header file, adding
+the lines in Listing 13.4.</P>
+<P>
+<H4>LISTING 13.4. THE Get AND Set INLINE FUNCTION DECLARATIONS.</H4>
+<PRE> 1: class CPerson : public CObject
+ 2: {
+ 3: public:
+ 4:     // Functions for setting the variables
+ 5:     void SetEmployed(BOOL bEmployed) { m_bEmployed = bEmployed;}
+ 6:     void SetMaritalStat(int iStat) { m_iMaritalStatus = iStat;}
+ 7:     void SetAge(int iAge) { m_iAge = iAge;}
+ 8:     void SetName(CString sName) { m_sName = sName;}
+ 9:     // Functions for getting the current settings of the variables
+10:     BOOL GetEmployed() { return m_bEmployed;}
+11:     int GetMaritalStatus() { return m_iMaritalStatus;}
+12:     int GetAge() {return m_iAge;}
+13:     CString GetName() {return m_sName;}
+14:     CPerson();
+15:     virtual ~CPerson();
+16: 
+17: private:
+18:     BOOL m_bEmployed;
+19:     int m_iMaritalStatus;
+20:     int m_iAge;
+21:     CString m_sName;
+22: };</PRE>
+<P>After you have the methods for setting and retrieving the values of the variables
+in your custom class, you'll probably want to make sure that the variables are initialized
+when the class is first created. You can do this in the class constructor by setting
+each of the variables to a default value. For instance, in your sample application,
+you add the code in Listing 13.5 to the constructor of the CPerson class.</P>
+<P>
+<H4>LISTING 13.5. THE CPerson CONSTRUCTOR.</H4>
+<PRE>1: CPerson::CPerson()
+2: {
+3:     // Initialize the class variables
+4:     m_iMaritalStatus = 0;
+5:     m_iAge = 0;
+6:     m_bEmployed = FALSE;
+7:     m_sName = &quot;&quot;;
+8: }</PRE>
+<P>
+<H4>Serializing the Class</H4>
+<P>After you have your custom class with all variables defined and initialized, you
+need to make the class serializable. Making your class serializable involves three
+steps. The first step is adding the Serialize function to the class. This function
+writes the variable values to, and reads them back from, the CArchive object using
+C++ streams. The other two steps consist of adding the DECLARE_SERIAL and IMPLEMENT_SERIAL
+macros. Once you add these elements, your custom class will be serializable and ready
+for your application.</P>
+<P>To add the Serialize function to your custom class, add a member function through
+the Class View tab in the workspace pane. Specify the function type as void, the
+function declaration as Serialize(CArchive &amp;ar), and the access as public and
+check the Virtual check box. This should add the Serialize function and place you
+in the editor, ready to flesh out the function code.</P>
+<P>In the Serialize function, the first thing you want to do is to call the ancestor's
+Serialize function. When you call the ancestor's function first, any foundation information
+that has been saved is restored first, providing the necessary support for your class
+before the variables in your class are restored. Once you call the ancestor function,
+you need to determine whether you need to read or write the class variables. You
+can do this by calling CArchive's IsStoring method. This function returns TRUE if
+the archive is being written to and FALSE if it's being read from. If the IsStoring
+function returns TRUE, you can use C++ I/O streams to write all your class variables
+to the archive. If the function returns FALSE, you can use C++ streams to read from
+the archive. In both cases, you must be certain to order the variables in the same
+order for both reading and writing. If you need more information about C++ streams,
+see Appendix A.</P>
+<P>An example of a typical Serialize function for your sample custom class is shown
+in Listing 13.6. Notice that the CPerson variables are in the same order when writing
+to and reading from the archive.</P>
+<P>
+<H4>LISTING 13.6. THE CPerson.Serialize FUNCTION.</H4>
+<PRE> 1: void CPerson::Serialize(CArchive &amp;ar)
+ 2: {
+ 3:     // Call the ancestor function
+ 4:     CObject::Serialize(ar);
+ 5: 
+ 6:     // Are we writing?
+ 7:     if (ar.IsStoring())
+ 8:         // Write all of the variables, in order
+ 9:         ar &lt;&lt; m_sName &lt;&lt; m_iAge &lt;&lt; m_iMaritalStatus &lt;&lt; m_bEmployed;
+10:     else
+11:         // Read all of the variables, in order
+12:         ar &gt;&gt; m_sName &gt;&gt; m_iAge &gt;&gt; m_iMaritalStatus &gt;&gt; m_bEmployed;
+13: }</PRE>
+<P>Once you have the Serialize function in place, you need to add the macros to your
+custom class. The first macro, DECLARE_SERIAL, needs to go in the class header and
+is passed the class name as its only argument.</P>
+<P>For example, to add the DECLARE_SERIAL macro to the custom CPerson class in your
+sample application, you add the macro just below the start of the class declaration,
+where it will receive the default access for the class. You specify the class name,
+CPerson, as the only argument to the macro, as in Listing 13.7.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> The default access permission for functions and variables in C++
+	classes is public. All functions and variables that are declared before the first
+	access declaration are public by default. You could easily add all of the public
+	class functions and variables in this area of the class declaration, but explicitly
+	declaring the access permission for all functions and variables is better practice--because
+	that way, there is little to no confusion about the visibility of any of the class
+	functions or variables.
+<HR>
+<BR>
+	</P>
+
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Most C++ functions need a semicolon at the end of the line of code.
+	The two serialization macros do not, due to the C preprocessor, which replaces each
+	of the macros with all of the code before compiling the application. It doesn't hurt
+	to place the semicolons there; they are simply ignored.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>LISTING 13.7. THE SERIALIZED CPerson CLASS DECLARATION.</H4>
+<PRE> 1: class CPerson : public CObject
+ 2: {
+ 3:     DECLARE_SERIAL (CPerson)
+ 4: public:
+ 5:     // Functions for setting the variables
+ 6:     void SetEmployed(BOOL bEmployed) { m_bEmployed = bEmployed;}
+ 7:     void SetMaritalStat(int iStat) { m_iMaritalStatus = iStat;}
+ 8:     void SetAge(int iAge) { m_iAge = iAge;}
+ 9:     void SetName(CString sName) { m_sName = sName;}
+10:     // Functions for getting the current settings of the variables
+11:     BOOL GetEmployed() { return m_bEmployed;}
+12:     int GetMaritalStatus() { return m_iMaritalStatus;}
+13:     int GetAge() {return m_iAge;}
+14:     CString GetName() {return m_sName;}
+15:     CPerson();
+16:     virtual ~CPerson();
+17: 
+18: private:
+19:     BOOL m_bEmployed;
+20:     int m_iMaritalStatus;
+21:     int m_iAge;
+22:     CString m_sName;
+23: };</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> In practice, if you read a file that was written using a previous
+	version of the Serialize function in your class, your application will raise an exception,
+	which you can then catch using standard C++ exception-handling techniques. This allows
+	you to add code to your application to recognize and convert files created with earlier
+	versions of your application. For information on C++ exception handling, see Appendix
+	A.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>To complete the serialization of your custom class, you need to add the IMPLEMENT_
+SERIAL macro to the class definition. The best place to add this macro is before
+the constructor definition in the CPP file containing the class source code. This
+macro takes three arguments: the custom class name, the base class name, and the
+version number. If you make any changes to the Serialize function, you should increment
+the version number argument to the IMPLEMENT_SERIAL macro. This version number indicates
+when a file was written using a previous version of the Serialize function and thus
+may not be readable by the current version of the application.</P>
+<P>To add the IMPLEMENT_SERIAL macro to your sample application, add it into the
+Person.cpp file just before the CPerson class constructor. Pass CPerson as the first
+argument (the class name), CObject as the second argument (the base class), and 1
+as the version number, as in Listing 13.8.</P>
+<P>
+<H4>LISTING 13.8. THE IMPLEMENT_SERIAL MACRO IN THE CPerson CODE.</H4>
+<PRE> 1: // Person.cpp: implementation of the CPerson class.
+ 2: //
+ 3: //////////////////////////////////////////////////////////////////////
+ 4: 
+ 5: #include &quot;stdafx.h&quot;
+ 6: #include &quot;Serialize.h&quot;
+ 7: #include &quot;Person.h&quot;
+ 8: 
+ 9: #ifdef _DEBUG
+10: #undef THIS_FILE
+11: static char THIS_FILE[]=__FILE__;
+12: #define new DEBUG_NEW
+13: #endif
+14: 
+15: IMPLEMENT_SERIAL (CPerson, CObject, 1)
+16: //////////////////////////////////////////////////////////////////////
+17: // Construction/Destruction
+18: //////////////////////////////////////////////////////////////////////
+19: 
+20: CPerson::CPerson()
+21: {
+22:     // Initialize the class variables
+23:     m_iMaritalStatus = 0;
+24:     m_iAge = 0;
+25:     m_bEmployed = FALSE;
+26:     m_sName = &quot;&quot;;
+27: }</PRE>
+<P>
+<H3><A NAME="Heading9"></A>Building Support in the Document Class</H3>
+<P>When you build a form-based application, where the form on the window is the primary
+place for the user to interact with the application, there is an unstated assumption
+that your application will allow the user to work with a number of records. This
+means that you need to include support for holding and navigating these records.
+The support for holding the records can be as simple as adding an object array as
+a variable to the document class, as you did back on Day 10. This allows you to add
+additional record objects as needed. The navigation could be a number of functions
+for retrieving the first, last, next, or previous record objects. Finally, you need
+informational functionality so that you can determine what record in the set the
+user is currently editing.</P>
+<P>To hold and support this functionality, the document class will probably need
+two variables, the object array and the current record number in the array. These
+two variables will provide the necessary support for holding and navigating the record
+set.</P>
+<P>For your example, add the two variables for supporting the record set of CPerson
+objects as listed in Table 13.4. Specify private access for both variables.</P>
+<P>
+<H4>TABLE 13.4. DOCUMENT CLASS VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">
+			<H4>Name
+		</TD>
+		<TD ALIGN="LEFT">
+			<H4>Type
+		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_iCurPosition		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_oaPeople		</TD>
+		<TD ALIGN="LEFT">CObArray		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The other thing that you need to do to the document class to provide support for
+the record objects is make sure that the document knows about and understands the
+record object that it will be holding. You do this by including the custom class
+header file before the header file for the document class is included in the document
+class source code file. Because the document class needs to trigger actions in the
+view class, it's a good idea to also include the header file for the view class in
+the document class.</P>
+<P>To include these header files in your sample application, open the source-code
+file for the document class and add the two #include statements as shown in Listing
+13.9.</P>
+<P>
+<H4>LISTING 13.9. INCLUDING THE CUSTOM AND VIEW CLASSES IN THE DOCUMENT CLASS IMPLEMENTATION.</H4>
+<PRE> 1: // SerializeDoc.cpp : implementation of the CSerializeDoc class
+ 2: //
+ 3: 
+ 4: #include &quot;stdafx.h&quot;
+ 5: #include &quot;Serialize.h&quot;
+ 6: 
+ 7: #include &quot;Person.h&quot;
+ 8: #include &quot;SerializeDoc.h&quot;
+ 9: #include &quot;SerializeView.h&quot;
+10: 
+11: #ifdef _DEBUG
+12: #define new DEBUG_NEW
+13: #undef THIS_FILE
+14: static char THIS_FILE[] = __FILE__;
+15: #endif
+16: 
+17: //////////////////////////////////////////////////////////////////////
+18: // CSerializeDoc</PRE>
+<P>
+<H4>Adding New Records</H4>
+<P>Before you can navigate the record set, you need to be able to add new records
+to the object array. If you add a private function for adding new records, you can
+add new records to the set dynamically as new records are needed. Because new records
+should be presenting the user with blank or empty data fields, you don't need to
+set any of the record variables when adding a new record to the object array, so
+you can use the default constructor.</P>
+<P>Following the same logic that you used to add new line records on Day 10, you
+should add a new person record to the object array in your document class in today's
+sample application. Once you add a new record, you can return a pointer to the new
+record so that the view class can directly update the variables in the record object.</P>
+<P>Once the new record is added, you will want to set the current record position
+marker to the new record in the array. This way, the current record number can easily
+be determined by checking the position counter.</P>
+<P>If there are any problems in creating the new person record object, let the user
+know that the application has run out of available memory and delete the allocated
+object, just as you did on Day 10.</P>
+<P>To add this functionality to your sample application, add a new member function
+to the document class. Specify the type as a pointer to your custom class. If you
+named your custom class CPerson, the function type is CPerson*. This function needs
+no arguments. Give the function a name that reflects what it does, such as AddNewRecord.
+Specify the access for this function as private because it will only be accessed
+from other functions within the document class. You can edit the resulting function,
+adding the code in Listing 13.10.</P>
+<P>
+<H4>LISTING 13.10. THE CSerializeDoc.AddNewRecord FUNCTION.</H4>
+<PRE> 1: CPerson * CSerializeDoc::AddNewRecord()
+ 2: {
+ 3:     // Create a new CPerson object
+ 4:     CPerson *pPerson = new CPerson();
+ 5:     try
+ 6:     {
+ 7:         // Add the new person to the object array
+ 8:         m_oaPeople.Add(pPerson);
+ 9:         // Mark the document as dirty
+10:         SetModifiedFlag();
+11:         // Set the new position mark
+12:         m_iCurPosition = (m_oaPeople.GetSize() - 1);
+13:     }
+14:     // Did we run into a memory exception?
+15:     catch (CMemoryException* perr)
+16:     {
+17:         // Display a message for the user, giving them the
+18:         // bad news
+19:         AfxMessageBox(&quot;Out of memory&quot;, MB_ICONSTOP | MB_OK);
+20:         // Did we create a line object?
+21:         if (pPerson)
+22:         {
+23:             // Delete it
+24:             delete pPerson;
+25:             pPerson = NULL;
+26:         }
+27:         // Delete the exception object
+28:         perr-&gt;Delete();
+29:     }
+30:     return pPerson;
+31: }</PRE>
+<P>
+<H4>Getting the Current Position</H4>
+<P>To aid the user in navigating the record set, it's always helpful to provide a
+guide about where the user is in the record set. To provide this information, you
+need to be able to get the current record number and the total number of records
+from the document to display for the user.</P>
+<P>The functions to provide this information are both fairly simple. For the total
+number of records in the object array, all you need to do is get the size of the
+array and return that to the caller.</P>
+<P>For your sample application, add a new member function to the document class.
+Specify the function type as int, the function name as GetTotalRecords, and the access
+as public. Once you add the function, edit it using the code in Listing 13.11.</P>
+<P>
+<H4>LISTING 13.11. THE CSerializeDoc.GetTotalRecords FUNCTION.</H4>
+<PRE>1: int CSerializeDoc::GetTotalRecords()
+2: {
+3:     // Return the array count
+4:     return m_oaPeople.GetSize();
+5: }</PRE>
+<P>Getting the current record number is almost just as simple. If you are maintaining
+a position counter in the document class, this variable contains the record number
+that the user is currently editing. As a result, all you need to do is return the
+value of this variable to the calling routine. Because the object array begins with
+position 0, you probably need to add 1 to the current position before returning to
+display for the user.</P>
+<P>To add this function to your sample application, add another new member function
+to the document class. Specify the type as int, the function name as GetCurRecordNbr,
+and the access as public. Edit the function using the code in Listing 13.12.</P>
+<P>
+<H4>LISTING 13.12. THE CSerializeDoc.GetCurRecordNbr FUNCTION.</H4>
+<PRE>1: int CSerializeDoc::GetCurRecordNbr()
+2: {
+3:     // Return the current position
+4:     return (m_iCurPosition + 1);
+5: }</PRE>
+<P>
+<H4>Navigating the Record Set</H4>
+<P>To make your application really useful, you will need to provide the user with
+some way of navigating the record set. A base set of functionality for performing
+this navigation is a set of functions in the document class to get pointers to specific
+records in the record set. First is a function to get a pointer to the current record.
+Next are functions to get pointers to the first and last records in the set. Finally,
+you need functions to get the previous record in the set and the next record in the
+set. If the user is already editing the last record in the set and attempts to move
+to the next record, you can automatically add a new record to the set and provide
+the user with this new, blank record.</P>
+<P>To add all this functionality, start with the function to return the current record.
+This function needs to check the value in the position marker to make sure that the
+current record is a valid array position. Once it has made sure that the current
+position is valid, the function can return a pointer to the current record in the
+array.</P>
+<P>To add this function to your sample application, add a new member function to
+the document class. Specify the function type as CPerson* (a pointer to the custom
+class), the function name as GetCurRecord, and the access as public. Edit the function,
+adding the code in Listing 13.13.</P>
+<P>
+<H4>LISTING 13.13. THE CSerializeDoc.GetCurRecord FUNCTION.</H4>
+<PRE> 1: CPerson* CSerializeDoc::GetCurRecord()
+ 2: {
+ 3:     // Are we editing a valid record number?
+ 4:     if (m_iCurPosition &gt;= 0)
+ 5:         // Yes, return the current record
+ 6:         return (CPerson*)m_oaPeople[m_iCurPosition];
+ 7:     else
+ 8:         // No, return NULL
+ 9:         return NULL;
+10: }</PRE>
+<P>The next function you might want to tackle is the function to return the first
+record in the array. In this function, you need to first check to make sure that
+the array has records. If there are records in the array, set the current position
+marker to 0 and return a pointer to the first record in the array.</P>
+<P>To add this function to your sample application, add a new member function to
+the document class. Specify the function type as CPerson* (a pointer to the custom
+class), the function name as GetFirstRecord, and the access as public. Edit the function,
+adding the code in Listing 13.14.</P>
+<P>
+<H4>LISTING 13.14. THE CSerializeDoc.GetFirstRecord FUNCTION.</H4>
+<PRE> 1: CPerson* CSerializeDoc::GetFirstRecord()
+ 2: {
+ 3:     // Are there any records in the array?
+ 4:     if (m_oaPeople.GetSize() &gt; 0)
+ 5:     {
+ 6:         // Yes, move to position 0
+ 7:         m_iCurPosition = 0;
+ 8:         // Return the record in position 0
+ 9:         return (CPerson*)m_oaPeople[0];
+10:     }
+11:     else
+12:         // No records, return NULL
+13:         return NULL;
+14: }</PRE>
+<P>For the function to navigate to the next record in the set, you need to increment
+the current position marker and then check to see if you are past the end of the
+array. If you are not past the end of the array, you need to return a pointer to
+the current record in the array. If you are past the end of the array, you need to
+add a new record to the end of the array.</P>
+<P>To add this function to your sample application, add a new member function to
+the document class. Specify the function type as CPerson* (a pointer to the custom
+class), the function name as GetNextRecord, and the access as public. Edit the function,
+adding the code in Listing 13.15.</P>
+<P>
+<H4>LISTING 13.15. THE CSerializeDoc.GetNextRecord FUNCTION.</H4>
+<PRE> 1: CPerson * CSerializeDoc::GetNextRecord()
+ 2: {
+ 3:     // After incrementing the position marker, are we
+ 4:     // past the end of the array?
+ 5:     if (++m_iCurPosition &lt; m_oaPeople.GetSize())
+ 6:         // No, return the record at the new current position
+ 7:         return (CPerson*)m_oaPeople[m_iCurPosition];
+ 8:     else
+ 9:         // Yes, add a new record
+10:         return AddNewRecord();
+11: }
+</PRE>
+<P>For the function to navigate to the previous record in the array, you need to
+make several checks. First, you need to verify that the array has records. If there
+are records in the array, you need to decrement the current position marker. If the
+marker is less than zero, you need to set the current position marker to equal zero,
+pointing at the first record in the array. Once you've made it through all of this,
+you can return a pointer to the current record in the array.</P>
+<P>To add this function to your sample application, add a new member function to
+the document class. Specify the function type as CPerson* (a pointer to the custom
+class), the function name as GetPrevRecord, and the access as public. Edit the function,
+adding the code in Listing 13.16.</P>
+<P>
+<H4>LISTING 13.16. THE CSerializeDoc.GetPrevRecord FUNCTION.</H4>
+<PRE> 1: CPerson * CSerializeDoc::GetPrevRecord()
+ 2: {
+ 3:     // Are there any records in the array?
+ 4:     if (m_oaPeople.GetSize() &gt; 0)
+ 5:     {
+ 6:         // Once we decrement the current position,
+ 7:         // are we below position 0?
+ 8:         if (--m_iCurPosition &lt; 0)
+ 9:             // If so, set the record to position 0
+10:             m_iCurPosition = 0;
+11:         // Return the record at the new current position
+12:         return (CPerson*)m_oaPeople[m_iCurPosition];
+13:     }
+14:     else
+15:         // No records, return NULL
+16:         return NULL;
+17: }</PRE>
+<P>For the function that navigates to the last record in the array, you still need
+to check to make sure that there are records in the array. If the array does have
+records, you can get the current size of the array and set the current position marker
+to one less than the number of records in the array. This is actually the last record
+in the array because the first record in the array is record 0. Once you set the
+current position marker, you can return a pointer to the last record in the array.</P>
+<P>To add this function to your sample application, add a new member function to
+the document class. Specify the function type as CPerson* (a pointer to the custom
+class), the function name as GetLastRecord, and the access as public. Edit the function,
+adding the code in Listing 13.17.</P>
+<P>
+<H4>LISTING 13.17. THE CSerializeDoc.GetLastRecord FUNCTION.</H4>
+<PRE> 1: CPerson * CSerializeDoc::GetLastRecord()
+ 2: {
+ 3:     // Are there any records in the array?
+ 4:     if (m_oaPeople.GetSize() &gt; 0)
+ 5:     {
+ 6:         // Move to the last position in the array
+ 7:         m_iCurPosition = (m_oaPeople.GetSize() - 1);
+ 8:         // Return the record in this position
+ 9:         return (CPerson*)m_oaPeople[m_iCurPosition];
+10:     }
+11:     else
+12:         // No records, return NULL
+13:         return NULL;
+14: }</PRE>
+<P>
+<H4>Serializing the Record Set</H4>
+<P>When filling in the Serialize functionality in the document class, there's little
+to do other than pass the CArchive object to the object array's Serialize function,
+just as you did on Day 10.</P>
+<P>When reading data from the archive, the object array will query the CArchive object
+to determine what object type it needs to create and how many it needs to create.
+The object array will then create each object in the array and call its Serialize
+function, passing the CArchive object to each in turn. This enables the objects in
+the object array to read their own variable values from the CArchive object in the
+same order that they were written.</P>
+<P>When writing data to the file archive, the object array will call each object's
+Serialize function in order, passing the CArchive object (just as when reading from
+the archive). This allows each object in the array to write its own variables into
+the archive as necessary.</P>
+<P>For the sample application, edit the document class's Serialize function to pass
+the CArchive object to the object array's Serialize function, as in Listing 13.18.</P>
+<P>
+<H4>Listing 13.18. THE CSerializeDoc.Serialize FUNCTION.</H4>
+<PRE>1: void CSerializeDoc::Serialize(CArchive&amp; ar)
+2: {
+3:     // Pass the serialization on to the object array
+4:     m_oaPeople.Serialize(ar);
+5: }</PRE>
+<P>
+<H4>Cleaning Up</H4>
+<P>Now you need to add the code to clean up the document once the document is closed
+or a new document is opened. This consists of looping through all objects in the
+object array and deleting each and every one. Once all the objects are deleted, the
+object array can be reset when you call its RemoveAll function.</P>
+<P>To implement this functionality in your sample application, add an event-handler
+function to the document class on the DeleteContents event message using the Class
+Wizard. When editing the function, add the code in Listing 13.19.</P>
+<P>
+<H4>LISTING 13.19. THE CSerializeDoc.DeleteContents FUNCTION.</H4>
+<PRE> 1: void CSerializeDoc::DeleteContents()
+ 2: {
+ 3:     // TODO: Add your specialized code here and/or call the base class
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Get the number of lines in the object array
+10:     int liCount = m_oaPeople.GetSize();
+11:     int liPos;
+12: 
+13:     // Are there any objects in the array?
+14:     if (liCount)
+15:     {
+16:         // Loop through the array, deleting each object
+17:         for (liPos = 0; liPos &lt; liCount; liPos++)
+18:             delete m_oaPeople[liPos];
+19:         // Reset the array
+20:         m_oaPeople.RemoveAll();
+21:     }
+22: 
+23:     ///////////////////////
+24:     // MY CODE ENDS HERE
+25:     ///////////////////////
+26: 
+27:     CDocument::DeleteContents();
+28: }</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> One thing to keep in mind when writing this code is that you need
+	to cast the pointer to the view as a pointer of the class of your view object. The
+	GetNextView function returns a pointer of type CView, so you will not be able to
+	call any of your additions to the view class until you cast the pointer to your view
+	class. Casting the pointer tells the compiler that the pointer is really a pointer
+	to your view object class and thus does contain all the functions that you have added.
+	If you don't cast the pointer, the compiler will assume that the view object does
+	not contain any of the functions that you have added and will not allow you to compile
+	your application.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>Opening a New Document</H4>
+<P>When a new document is started, you need to present the user with an empty form,
+ready for new information. To make that empty record ready to accept new information,
+you need to add a new record into the object array, which is otherwise empty. This
+results in only one record in the object array. Once the new record is added to the
+array, you must modify the view to show that a new record exists; otherwise, the
+view will continue to display the last record edited from the previous record set
+(and the user will probably wonder why your application didn't start a new record
+set).</P>
+<P>To implement this functionality, you will need to edit the OnNewDocument function
+in your document class. This function is already in the document class, so you do
+not need to add it through the Class Wizard. The first thing that you do in this
+function is add a new record to the object array. Once the new record is added, you
+need to get a pointer to the view object. You use the GetFirstViewPosition function
+to get the position of the view object. Using the position returned for the view
+object, you can use the GetNextView function to retrieve a pointer to the view object.
+Once you have a valid pointer, you can use it to call a function that you will create
+in the view class to tell the view to refresh the current record information being
+displayed in the form.</P>
+<P>Locate the OnNewDocument function in the document class source code, and add the
+code in Listing 13.20. Before you will be able to compile your application, you will
+need to add the NewDataSet function to the view class.</P>
+<P>
+<H4>LISTING 13.20. THE CSerializeDoc.OnNewDocument FUNCTION.</H4>
+<PRE> 1: BOOL CSerializeDoc::OnNewDocument()
+ 2: {
+ 3:     if (!CDocument::OnNewDocument())
+ 4:         return FALSE;
+ 5: 
+ 6:     // TODO: add reinitialization code here
+ 7:     // (SDI documents will reuse this document)
+ 8: 
+ 9:     ///////////////////////
+10:     // MY CODE STARTS HERE
+11:     ///////////////////////
+12: 
+13:     // If unable to add a new record, return FALSE
+14:     if (!AddNewRecord())
+15:         return FALSE;
+16: 
+17:     // Get a pointer to the view
+18:     POSITION pos = GetFirstViewPosition();
+19:     CSerializeView* pView = (CSerializeView*)GetNextView(pos);
+20:     // Tell the view that it's got a new data set
+21:     if (pView)
+22:         pView-&gt;NewDataSet();
+23: 
+24:     ///////////////////////
+25:     // MY CODE ENDS HERE
+26:     ///////////////////////
+27: 
+28:     return TRUE;
+29: }</PRE>
+<P>When opening an existing data set, you don't need to add any new records, but
+you still need to let the view object know that it needs to refresh the record being
+displayed for the user. As a result, you can add the same code to the OnOpenDocument
+function as you added to the OnNewDocument, only leaving out the first part where
+you added a new record to the object array.</P>
+<P>Add an event-handler function to the document class for the OnOpenDocument event
+using the Class Wizard. Once you add the function, edit it adding the code in Listing
+13.21.</P>
+<P>
+<H4>LISTING 13.21. THE CSerializeDoc.OnOpenDocument FUNCTION.</H4>
+<PRE> 1: BOOL CSerializeDoc::OnOpenDocument(LPCTSTR lpszPathName)
+ 2: {
+ 3:     if (!CDocument::OnOpenDocument(lpszPathName))
+ 4:         return FALSE;
+ 5: 
+ 6:     // TODO: Add your specialized creation code here
+ 7: 
+ 8:     ///////////////////////
+ 9:     // MY CODE STARTS HERE
+10:     ///////////////////////
+11: 
+12:     // Get a pointer to the view
+13:     POSITION pos = GetFirstViewPosition();
+14:     CSerializeView* pView = (CSerializeView*)GetNextView(pos);
+15:     // Tell the view that it's got a new data set
+16:     if (pView)
+17:         pView-&gt;NewDataSet();
+18: 
+19:     ///////////////////////
+20:     // MY CODE ENDS HERE
+21:     ///////////////////////
+22: 
+23:     return TRUE;
+24: }</PRE>
+<P>
+<H3><A NAME="Heading10"></A>Adding Navigating and Editing Support in the View Class</H3>
+<P>Now that you've added support for the record set to your document class, you need
+to add the functionality into the view class to navigate, display, and update the
+records. When you first designed your view class, you placed a number of controls
+on the window for viewing and editing the various data elements in each record. You
+also included controls for navigating the record set. Now you need to attach functionality
+to those controls to perform the record navigation and to update the record with
+any data changes the user makes.</P>
+<P>Because of the amount of direct interaction that the form will have with the record
+object--reading variable values from the record and writing new values to the record--it
+makes sense that you want to add a record pointer to the view class as a private
+variable. For your example, add a new member variable to the view class, specify
+the type as CPerson*, give it a name such as m_pCurPerson, and specify the access
+as private. Next, edit the view source code file and include the header file for
+the person class, as in Listing 13.22.</P>
+<P>
+<H4>LISTING 13.22. INCLUDING THE CUSTOM OBJECT HEADER IN THE VIEW CLASS SOURCE CODE.</H4>
+<PRE> 1: // SerializeView.cpp : implementation of the CSerializeView class
+ 2: //
+ 3: 
+ 4: #include &quot;stdafx.h&quot;
+ 5: #include &quot;Serialize.h&quot;
+ 6: 
+ 7: #include &quot;Person.h&quot;
+ 8: #include &quot;SerializeDoc.h&quot;
+ 9: #include &quot;SerializeView.h&quot;
+10: 
+11: #ifdef _DEBUG
+12: .
+13: .
+14: .</PRE>
+<P>
+<H4>Displaying the Current Record</H4>
+<P>The first functionality that you will want to add to the view class is the functionality
+to display the current record. Because this functionality will be used in several
+different places within the view class, it makes the most sense to create a separate
+function to perform this duty. In this function, you get the current values of all
+the variables in the record object and place those values in the view class variables
+that are attached to the controls on the window. The other thing that you want to
+do is get the current record number and the total number of records in the set and
+display those for the user so that the user knows his or her relative position within
+the record set.</P>
+<P>In your sample application, add a new member function, specify the function type
+as void, give the function a name that makes sense, such as PopulateView, and specify
+the access as private. In the function, get a pointer to the document object. Once
+you have a valid pointer to the document, format the position text display with the
+current record number and the total number of records in the set, using the GetCurRecordNbr
+and GetTotalRecords functions that you added to the document class earlier. Next,
+if you have a valid pointer to a record object, set all the view variables to the
+values of their respective fields in the record object. Once you set the values of
+all of the view class variables, update the window with the variable values, as shown
+in Listing 13.23.</P>
+<P>
+<H4>LISTING 13.23. THE CSerializeView.PopulateView FUNCTION.</H4>
+<PRE> 1: void CSerializeView::PopulateView()
+ 2: {
+ 3:     // Get a pointer to the current document
+ 4:     CSerializeDoc* pDoc = GetDocument();
+ 5:     if (pDoc)
+ 6:     {
+ 7:         // Display the current record position in the set
+ 8:         m_sPosition.Format(&quot;Record %d of %d&quot;, pDoc-&gt;GetCurRecordNbr(),
+ 9:                 pDoc-&gt;GetTotalRecords());
+10:     }
+11:     // Do we have a valid record object?
+12:     if (m_pCurPerson)
+13:     {
+14:         // Yes, get all of the record values
+15:         m_bEmployed = m_pCurPerson-&gt;GetEmployed();
+16:         m_iAge = m_pCurPerson-&gt;GetAge();
+17:         m_sName = m_pCurPerson-&gt;GetName();
+18:         m_iMaritalStatus = m_pCurPerson-&gt;GetMaritalStatus();
+19:     }
+20:     // Update the display
+21:     UpdateData(FALSE); 
+22: }</PRE>
+<P>
+<H4>Navigating the Record Set</H4>
+<P>If you added navigation buttons to your window when you were designing the form,
+then adding navigation functionality is a simple matter of adding event-handler functions
+for each of these navigation buttons and calling the appropriate navigation function
+in the document. Once the document navigates to the appropriate record in the set,
+you need to call the function you just created to display the current record. If
+the document navigation functions are returning pointers to the new current record
+object, you should capture that pointer before calling the function to display the
+current record.</P>
+<P>To add this functionality to your sample application, add an event handler to
+the clicked event for the First button using the Class Wizard. In the function, get
+a pointer to the document object. Once you have a valid pointer to the document,
+call the document object's GetFirstRecord function, capturing the returned object
+pointer in the view CPerson pointer variable. If you receive a valid pointer, call
+the PopulateView function to display the record data, as in Listing 13.24.</P>
+<P>
+<H4>LISTING 13.24. THE CSerializeView.OnBfirst FUNCTION.</H4>
+<PRE> 1: void CSerializeView::OnBfirst()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     // Get a pointer to the current document
+ 6:     CSerializeDoc * pDoc = GetDocument();
+ 7:     if (pDoc)
+ 8:     {
+ 9:         // Get the first record from the document
+10:         m_pCurPerson = pDoc-&gt;GetFirstRecord();
+11:         if (m_pCurPerson)
+12:         {
+13:             // Display the current record
+14:             PopulateView();
+15:         }
+16:     }
+17: }</PRE>
+<P>For the Last button, perform the same steps as for the First button, but call
+the document object's GetLastRecord function, as in Listing 13.25.</P>
+<P>
+<H4>LISTING 13.25. THE CSerializeView.OnBlast FUNCTION.</H4>
+<PRE> 1: void CSerializeView::OnBlast()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     // Get a pointer to the current document
+ 6:     CSerializeDoc * pDoc = GetDocument();
+ 7:     if (pDoc)
+ 8:     {
+ 9:         // Get the last record from the document
+10:         m_pCurPerson = pDoc-&gt;GetLastRecord();
+11:         if (m_pCurPerson)
+12:         {
+13:             // Display the current record
+14:             PopulateView();
+15:         }
+16:     }
+17: }</PRE>
+<P>For the Previous and Next buttons, repeat the same steps again, but call the document
+object's GetPrevRecord and GetNextRecord functions. This final step provides your
+application with all the navigation functionality necessary to move through the record
+set. Also, because calling the document's GetNextRecord on the last record in the
+set automatically adds a new record to the set, you also have the ability to add
+new records to the set as needed.</P>
+<P>
+<H4>Saving Edits and Changes</H4>
+<P>When the user enters changes to the data in the controls on the screen, these
+changes somehow need to make their way into the current record in the document. If
+you are maintaining a pointer in the view object to the current record object, you
+can call the record object's various set value functions, passing in the new value,
+to set the value in the record object.</P>
+<P>To implement this in your sample application, add an event handler to the CLICKED
+event for the Employed check box using the Class Wizard. In the function that you
+created, first call the UpdateData to copy the values from the form to the view variables.
+Check to make sure that you have a valid pointer to the current record object, and
+then call the appropriate Set function on the record object (in this case, the SetEmployed
+function as in Listing 13.26).</P>
+<P>
+<H4>LISTING 13.26. THE CSerializeView.OnCbemployed FUNCTION.</H4>
+<PRE> 1: void CSerializeView::OnCbemployed()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     // Sync the data in the form with the variables
+ 6:     UpdateData(TRUE);
+ 7:     // If we have a valid person object, pass the data changes to it
+ 8:     if (m_pCurPerson)
+ 9:         m_pCurPerson-&gt;SetEmployed(m_bEmployed);
+10: }</PRE>
+<P>Repeat these same steps for the other controls, calling the appropriate record
+object functions. For the Name and Age edit boxes, you add an event handler on the
+EN_CHANGE event and call the SetName and SetAge functions. For the marital status
+radio buttons, add an event handler for the BN_CLICKED event and call the same event-handler
+function for all four radio buttons. In this function, you call the SetMaritalStat
+function in the record object.</P>
+<P>
+<H4>Displaying a New Record Set</H4>
+<P>The last functionality that you need to add is the function to reset the view
+whenever a new record set is started or opened so that the user doesn't continue
+to see the old record set. You will call the event handler for the First button,
+forcing the view to display the first record in the new set of records.</P>
+<P>To implement this functionality in your sample application, add a new member function
+to the view class. Specify the function type as void, give the function the name
+that you were calling from the document object (NewDataSet), and specify the access
+as public (so that it can be called from the document class). In the function, call
+the First button event handler, as in Listing 13.27.</P>
+<P>
+<H4>LISTING 13.27. THE CSerializeView.NewDataSet FUNCTION.</H4>
+<PRE>1: void CSerialize1View::NewDataSet()
+2: {
+3:     // Display the first record in the set
+4:     OnBfirst();
+5: }</PRE>
+<P>
+<H4>Wrapping Up the Project</H4>
+<P>Before you can compile and run your application, you need to include the header
+file for your custom class in the main application source-code file. This file is
+named the same as your project with the CPP extension. Your custom class header file
+should be included before the header files for either the document or view classes.
+For your sample application, you edit the Serialize.cpp file, adding line 8 in Listing
+13.28.</P>
+<P><A HREF="javascript:popUp('13fig04tif.gif')"><B>FIGURE 13.4.</B></A><B> </B><I>The
+running serialization application.</I></P>
+
+<P><I></I>
+<H4>LISTING 13.28. INCLUDING THE RECORD CLASS HEADER IN THE MAIN SOURCE FILE.</H4>
+<PRE> 1: // Serialize.cpp : Defines the class behaviors for the application.
+ 2: //
+ 3: 
+ 4: #include &quot;stdafx.h&quot;
+ 5: #include &quot;Serialize.h&quot;
+ 6: 
+ 7: #include &quot;MainFrm.h&quot;
+ 8: #include &quot;Person.h&quot;
+ 9: #include &quot;SerializeDoc.h&quot;
+10: #include &quot;SerializeView.h&quot;
+11: 
+12: #ifdef _DEBUG
+13: .
+14: .
+15: .</PRE>
+<P>At this point, you can add, edit, save, and restore sets of records with your
+application. If you compile and run your application, you can create records of yourself
+and all your family members, your friends, and anyone else you want to include in
+this application. If you save the record set you create and then reopen the record
+set the next time that you run your sample application, you should find that the
+records are restored back to the state that you originally entered them, as in Figure
+13.4.</P>
+<P>
+<H2><A NAME="Heading11"></A>Summary</H2>
+<P>Today, you learned quite a bit. You learned how serialization works and what it
+does. You learned how to make a custom class serializable and why and how to use
+the two macros that are necessary to serialize a class. You also learned how to design
+and build a form-based SDI application, maintaining a set of records in a flat-file
+database for use in the application. You learned how to use serialization to create
+and maintain the flat-file database and how to construct the functionality in the
+document and view classes to provide navigating and editing capabilities on these
+record sets.</P>
+<P>
+<H2><A NAME="Heading12"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q If I make any changes to one of the records in my record set after I save
+	the record set and then I close the application, or open a different set of records,
+	my application doesn't ask if I want to save my changes. How do I get it to ask me?
+	How do I get my application to prompt for saving when data has been changed?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> One function call in the AddNewRecord function in the document object
+	is the key to this problem. After adding a new record to the object array, you call
+	the SetModifiedFlag function. This function marks the document as &quot;dirty.&quot;
+	When you save the record set, the document is automatically set to a &quot;clean&quot;
+	state (unless the application is unable to save the record set for any reason). What
+	you need to do when saving the edits is set the document to the &quot;dirty&quot;
+	state so that the application knows that the document has unsaved changes.
+	<P>
+	<DT></DT>
+	<DD>You can fix this by adding some code to each of your data control event handlers.
+	Once you save the new value to the current record, get a pointer to the document
+	object and call the document<B>'</B>s SetModifiedFlag function, as in Listing 13.29.
+	If you make this same addition to all the data change event handlers, your application
+	will ask you whether to save the changes you made since the last time the record
+	set was saved.
+	<P>
+</DL>
+
+<H4>LISTING 13.29. THE MODIFIED CSerializeView.OnCbemployed FUNCTION.</H4>
+<PRE> 1: void CSerializeView::OnCbemployed()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     // Sync the data in the form with the variables
+ 6:     UpdateData(TRUE);
+ 7:     // If we have a valid person object, pass the data changes to it
+ 8:     if (m_pCurPerson)
+ 9:         m_pCurPerson-&gt;SetEmployed(m_bEmployed);
+10:     // Get a pointer to the document
+11:     CSerializeDoc * pDoc = GetDocument();
+12:     if (pDoc)
+13:         // Set the modified flag in the document
+14:         pDoc-&gt;SetModifiedFlag();
+15: }</PRE>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q Why do I need to change the version number in the IMPLEMENT_SERIAL macro
+	if I change the Serialize function in the record custom class?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> Whether you need to increment the version number depends on the type
+	of change you make. For instance, if you add a calculated field in the record class
+	and you add the code to calculate this new variable from the values you read in the
+	variables from the CArchive object, then you don<B>'</B>t really need to increment
+	the version number because the variables and order of the variables that you are
+	writing to and reading from the archive did not change. However, if you add a new
+	field to the record class and add the new field into the I/O stream being written
+	to and read from the CArchive object, then what you are writing to and reading from
+	the archive will have changed, and you do need to increment the version number. If
+	you don<B>'</B>t increment the version number, reading files created using the previous
+	version of your application will result in an &quot;Unexpected file format&quot;
+	message instead of the file being read. Once you increment the version number and
+	you read a file written with the old version number, you get the same message, but
+	you have the option of writing your own code to handle the exception and redirecting
+	the archive to a conversion routine to convert the file to the new file format.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('13fig05tif.gif')"><B>FIGURE 13.5.</B></A><B> </B><I>The
+running serialization application with the person's sex.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading13"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you<B>'</B>ve
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading14"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What two macros do you have to add to a class to make it serializable?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>How can you determine whether the CArchive object is reading from or
+	writing to the archive file?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What arguments do you need to pass to the IMPLEMENT_SERIAL macro?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>What class do you need to inherit the view class from to be able to
+	use the dialog designer to create a form for the main window in an SDI or MDI application?
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>What type of file does the CArchive write to by default?
+	<P>
+</DL>
+
+<H3><B>Exercise</B></H3>
+<P>Add a couple of radio buttons to the form to specify the person's sex, as shown
+in Figure 13.5. Incorporate this change into the CPerson class to make the field
+persistent.</P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch12/ch12.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch14/ch14.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

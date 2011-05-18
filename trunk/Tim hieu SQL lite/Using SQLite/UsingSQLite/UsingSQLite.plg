@@ -1,0 +1,39 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: UsingSQLite - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\Users\TuanAnh\AppData\Local\Temp\RSPD88A.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /FR"Debug/" /Fp"Debug/UsingSQLite.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"E:\Hoc Tap\Ky 10\Dropbox\Thuc tap\Tim hieu SQL lite\Using SQLite\UsingSQLite\CppSQLite3.cpp"
+]
+Creating command line "cl.exe @C:\Users\TuanAnh\AppData\Local\Temp\RSPD88A.tmp" 
+Creating temporary file "C:\Users\TuanAnh\AppData\Local\Temp\RSPD88B.tmp" with contents
+[
+sqlite3.lib /nologo /subsystem:windows /incremental:yes /pdb:"Debug/UsingSQLite.pdb" /debug /machine:I386 /out:"Debug/UsingSQLite.exe" /pdbtype:sept 
+".\Debug\AddUser.obj"
+".\Debug\CppSQLite3.obj"
+".\Debug\DataAccess.obj"
+".\Debug\StdAfx.obj"
+".\Debug\Users.obj"
+".\Debug\UsingSQLite.obj"
+".\Debug\UsingSQLiteDlg.obj"
+".\Debug\UsingSQLite.res"
+]
+Creating command line "link.exe @C:\Users\TuanAnh\AppData\Local\Temp\RSPD88B.tmp"
+<h3>Output Window</h3>
+Compiling...
+CppSQLite3.cpp
+Linking...
+
+
+
+<h3>Results</h3>
+UsingSQLite.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

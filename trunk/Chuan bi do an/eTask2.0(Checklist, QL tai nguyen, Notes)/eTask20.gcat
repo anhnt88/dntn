@@ -1,0 +1,185 @@
+<Catalogue
+	CID = "1"
+	NextCID = "2">
+	<Files
+		CID = "1">
+		<FileInfo
+			ID = "1399DE4F-A420-4EA0-ADBC9B2FF3797712"
+			RelativePath = "Bitmap\Group.bmp"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\Group.bmp"/>
+		<FileInfo
+			ID = "18EA2B4A-97F1-41C9-BBD8044C5035B0B8"
+			RelativePath = "Bitmap\old\CheckList.bmp"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\old\CheckList.bmp"/>
+		<FileInfo
+			ID = "1E034C2E-94B6-48EF-832FEA569C872475"
+			RelativePath = "Bitmap\CheckList.bmp"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\CheckList.bmp"/>
+		<FileInfo
+			ID = "25375DC2-12F6-4657-A522B35AF4AF7ED8"
+			RelativePath = "Bitmap\OK.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\OK.ico"/>
+		<FileInfo
+			ID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+			RelativePath = "_Icons\user.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "_Icons\user.ico"/>
+		<FileInfo
+			ID = "3C2D98BA-E286-44D3-8DF1FCBCE2C52B84"
+			RelativePath = "Bitmap\Calendar.bmp"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\Calendar.bmp"/>
+		<FileInfo
+			ID = "3D118C66-E45C-4DE1-9C0EA673973E6648"
+			RelativePath = "Note\Ghi chú.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\Ghi chú.gui"/>
+		<FileInfo
+			ID = "47A6DC66-6016-459E-BF03F13DA5840805"
+			RelativePath = "Note\components\CayPhongBan.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\components\CayPhongBan.gui"/>
+		<FileInfo
+			ID = "4EB891B6-46B6-4212-81E537EBEDF86574"
+			RelativePath = "Bitmap\Collaps.gif"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\Collaps.gif"/>
+		<FileInfo
+			ID = "50784E81-E33F-4E83-AE5387086271E6AF"
+			RelativePath = "_Icons\root.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "_Icons\root.ico"/>
+		<FileInfo
+			ID = "634C0E4E-7B09-49A7-9758CCFC8AF3C17C"
+			RelativePath = "Bitmap\Expand.gif"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\Expand.gif"/>
+		<FileInfo
+			ID = "6CE51996-D00B-4EC5-8B592BB379381798"
+			RelativePath = "_Icons\depart.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "_Icons\depart.ico"/>
+		<FileInfo
+			ID = "6F7F81A2-2276-4A65-B3E88D43B51D0B2C"
+			RelativePath = "Note\Checklist_new.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\Checklist_new.gui"/>
+		<FileInfo
+			ID = "7372E0E5-BA59-423B-94E8826DA78E76F7"
+			RelativePath = "Note\Ghi chu.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\Ghi chu.gui"
+			IsDeleted = "1"/>
+		<FileInfo
+			ID = "769ABBBF-2F85-4B67-82090383143DC666"
+			RelativePath = "Note\note.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\note.gui"
+			IsDeleted = "1"/>
+		<FileInfo
+			ID = "7A45D5AD-EA80-422C-897EAA0A44689E5B"
+			RelativePath = "Note\Checklist_Gadget.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\Checklist_Gadget.gui"/>
+		<FileInfo
+			ID = "8CD17457-48E1-4A20-A49BC45B0D4C7D06"
+			RelativePath = "Note\DuyetTaiNguyen_old.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\DuyetTaiNguyen.gui"/>
+		<FileInfo
+			ID = "9BBD8F15-CA55-4464-9ACBD1B61C69D524"
+			RelativePath = "Note\Checklist_Manager.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Checklist_Manager.gui"/>
+		<FileInfo
+			ID = "9D5FD819-6236-4042-99F1C09C68A0FD9D"
+			RelativePath = "Bitmap\Cancel.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\Cancel.ico"/>
+		<FileInfo
+			ID = "9DB59AC0-8DBE-4D51-8E59228631942C56"
+			RelativePath = "Note\components\AddUser.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\components\AddUser.gui"/>
+		<FileInfo
+			ID = "9E97FB24-2C5A-48D3-A1572EB3A67C8DA4"
+			RelativePath = "Note\Checklist_ManagerForm.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\Checklist_ManagerForm.gui"/>
+		<FileInfo
+			ID = "A73D7892-CD56-4E51-8490CAAE811A6342"
+			RelativePath = "Bitmap\cayPhongBan1.bmp"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\cayPhongBan1.bmp"/>
+		<FileInfo
+			ID = "A9DA1056-EA9E-477F-A2B979A416B982B8"
+			RelativePath = "Bitmap\attach.gif"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\attach.gif"/>
+		<FileInfo
+			ID = "AA9ECD0C-9017-4CCD-A02907BF46BD30E1"
+			RelativePath = "Note\Notify.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\Notify.gui"/>
+		<FileInfo
+			ID = "C580516C-A32A-4285-9A3041F9FD4CA990"
+			RelativePath = "Note\Checklist_DetailForm.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\Checklist_DetailForm.gui"/>
+		<FileInfo
+			ID = "CDB0B028-00C5-4831-8927ABCAB03F29F9"
+			RelativePath = "Note\Checklist.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\Checklist.gui"/>
+		<FileInfo
+			ID = "DE45D342-76B2-4FD7-9AC8A253274E82E9"
+			RelativePath = "Bitmap\CayPhongBan.bmp"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\CayPhongBan.bmp"/>
+		<FileInfo
+			ID = "DF525FBC-D418-4938-9F1894B50B5BB609"
+			RelativePath = "Bitmap\Group.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\Group.ico"/>
+		<FileInfo
+			ID = "DF710C13-2269-4E3F-9A0A2D1A7AEBE4F9"
+			RelativePath = "Note\components\DateTime.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\components\DateTime.gui"/>
+		<FileInfo
+			ID = "EF5E4635-061C-4724-B1332E0079D64B7B"
+			RelativePath = "Note\Checklist_Detail.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\Checklist_Detail.gui"/>
+		<FileInfo
+			ID = "EF9B9F6C-EBD5-461B-A248C60A7FB38D66"
+			RelativePath = "Note\Main.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\hello.gui"/>
+		<FileInfo
+			ID = "EFCE9B85-EC18-4666-B6F1B141E5F702F6"
+			RelativePath = "Note\components\editWithAdvanceBar.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\components\editWithAdvanceBar.gui"
+			IsDeleted = "1"/>
+		<FileInfo
+			ID = "F40F43D1-8220-4B78-9681F8AA5FC52A50"
+			RelativePath = "Bitmap\advance bar.bmp"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\advance bar.bmp"/>
+		<FileInfo
+			ID = "F909E3EF-321F-4C2E-9963E3F90A666B11"
+			RelativePath = "Note\DuyetTaiNguyen.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\DuyetTaiNguyen.gui"/>
+		<FileInfo
+			ID = "FC5A5F60-08D5-48E5-B1DAAB073065C7D2"
+			RelativePath = "Note\components\AdvanceBar.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Note\components\AdvanceBar.gui"/>
+	</Files>
+</Catalogue>

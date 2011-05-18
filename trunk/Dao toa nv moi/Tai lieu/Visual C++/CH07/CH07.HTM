@@ -1,0 +1,1271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 7 -- Working with Text and Fonts</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch06/ch06.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch08/ch08.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 7 -<BR>
+Working with Text and Fonts</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Finding and Using Fonts</A>
+	<UL>
+		<LI><A HREF="#Heading2">Listing the Available Fonts</A>
+		<LI><A HREF="#Heading3">Using a Font</A>
+	</UL>
+	<LI><A HREF="#Heading4">Using Fonts</A>
+	<UL>
+		<LI><A HREF="#Heading5">Creating the Application Shell</A>
+		<LI><A HREF="#Heading6">Building a List of Fonts</A>
+		<LI><A HREF="#Heading7">Setting the Font Sample Text</A>
+		<LI><A HREF="#Heading8">Selecting a Font to Display</A>
+	</UL>
+	<LI><A HREF="#Heading9">Summary</A>
+	<LI><A HREF="#Heading10">Q&amp;A</A>
+	<LI><A HREF="#Heading11">Workshop</A>
+	<LI><A HREF="#Heading12">Quiz</A>
+	<UL>
+		<LI><A HREF="#Heading13">Exercises</A>
+	</UL>
+	<LI><A HREF="#Heading14">In Review</A>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+In most Windows applications, you don't need to worry about specifying fonts, much
+less their weight, height, and so on. If you don't specify the font to be used, Windows
+supplies a default font for your application. If you do need to use a particular
+font, you can specify a font to use for a particular dialog window through the dialog
+properties. Sometimes, however, you want or need to control the font used in your
+application. You might need to change the font being used or allow the user to select
+a font to use in a particular instance. It is for those circumstances that you will
+learn how to change and list fonts today. Among the things that you will learn are</P>
+
+<P>
+
+<UL>
+	<LI>How to build a list of available fonts.
+	<P>
+	<LI>How to specify a font for use.
+	<P>
+	<LI>How to change fonts dynamically.
+</UL>
+
+<H2><A NAME="Heading1"></A>Finding and Using Fonts</H2>
+<P>One of the first things that you need to know when working with fonts is that
+not every system that your applications run on will have the same fonts installed.
+Fonts are specified in files that can be installed and removed from Windows systems
+with relative ease. Every computer user can customize his system with whatever combination
+of fonts he wants. If you specify a font that doesn't exist on the system, Windows
+will choose either the system default font or what the operating system considers
+to be a reasonably close alternative font.</P>
+<P>What you can do instead is ask the operating system what fonts are available.
+This method allows you to make your own decisions on which font to use or let the
+user make the decision. When you ask what fonts are available, you can limit the
+types of fonts that are listed, or you can choose to list them all and select various
+fonts based on various attributes.</P>
+<P>
+<H3><A NAME="Heading2"></A>Listing the Available Fonts</H3>
+<P>To get a list of all available fonts on a computer, you call a Windows API (Application
+Programming Interface) function called EnumFontFamiliesEx. This function tells Windows
+that you want a list of the fonts on the system. Before you start using this function
+and expecting it to pass you a big list of available fonts, you need to understand
+how it gives you the list.</P>
+<P>
+<H4>Callback Functions</H4>
+<P>One of the key arguments to the EnumFontFamiliesEx function is the address of
+another function. This second function is what is known as a callback function, which
+is called by the operating system. For almost every enumeration function in the Windows
+operating system, you pass the address of a callback function as an argument because
+the callback function is called once for each of the elements in the enumerated list.
+In other words, you have to include a function in your application to receive each
+individual font that is on the system and then build the list of fonts yourself.</P>
+<P>When you create this function to receive each font and build your list, you cannot
+define your callback function in any way you want. All callback functions are already
+defined in the Windows API. You have to use a specific type of callback function
+to receive the list of fonts. For getting a list of fonts, the function type is EnumFontFamProc.
+This function type specifies how your function must be defined, what its arguments
+must be, and what type of return value it must return. It does not specify what your
+function should be named or how it needs to work internally. These aspects are left
+completely up to you.</P>
+<P>
+<H4>The EnumFontFamiliesEx Function</H4>
+<P>The EnumFontFamiliesEx function, which you call to request the list of available
+fonts, takes five arguments. A typical use of this function follows:</P>
+<P>
+<PRE>// Create a device context variable
+CClientDC dc (this);
+// Declare a LOGFONT structure
+LOGFONT lLogFont;
+// Specify the character set
+lLogFont.lfCharSet = DEFAULT_CHARSET;
+// Specify all fonts
+lLogFont.lfFaceName[0] = NULL;
+// Must be zero unless Hebrew or Arabic
+lLogFont.lfPitchAndFamily = 0;
+// Enumerate the font families
+::EnumFontFamiliesEx((HDC) dc, &amp;lLogFont,
+(FONTENUMPROC) EnumFontFamProc, (LPARAM) this, 0);
+</PRE>
+<P>The first argument is a device context, which can be an instance of the CClientDC
+class. Every application running within the Windows operating system has a device
+context. The device context provides a lot of necessary information to the operating
+system about what is available to the application and what is not.</P>
+<P>The second argument is a pointer to a LOGFONT structure. This structure contains
+information about the fonts that you want listed. You can specify in this structure
+which character set you want to list or whether you want all the fonts in a particular
+font family. If you want all the fonts on the system, you pass NULL in the place
+of this argument.</P>
+<P>The third argument is the address of the callback function that will be used to
+build your list of fonts. Passing the address of your callback function is a simple
+matter of using the function name as the argument. The Visual C++ compiler takes
+care of replacing the function name with the function address. However, you do need
+to cast the function as the type of callback function that the function requires.</P>
+<P>The fourth argument is a LPARAM value that will be passed to the callback function.
+This parameter is not used by Windows but provides your callback function with a
+context in which to build the font list. In the example, the value being passed is
+a pointer to the window in which the code is being run. This way, the callback function
+can use this pointer to access any structures it needs to build the list of fonts.
+This pointer can also be the first node in a linked list of fonts or other such structure.</P>
+<P>The fifth and final argument is always 0. This reserved argument may be used in
+future versions of Windows, but for now, it must be 0 so that your application passes
+a value that won't cause the function to misbehave.</P>
+<P>
+<H4>The EnumFontFamProc Function Type</H4>
+<P>When you create your callback function, it must be defined as an independent function,
+not as a member of any C++ class. A typical EnumFontFamProc function declaration
+follows:</P>
+<P>
+<PRE>int CALLBACK EnumFontFamProc(
+LPENUMLOGFONT lpelf,
+LPNEWTEXTMETRIC lpntm,
+DWORD nFontType,
+long lParam)
+{
+    // Create a pointer to the dialog window
+    CMyDlg* pWnd = (CMyDlg*) lParam;
+    // Add the font name to the list box
+    pWnd-&gt;m_ctlFontList.AddString(lpelf-&gt;elfLogFont.lfFaceName);
+    // Return 1 to continue font enumeration
+    return 1;
+}
+</PRE>
+<P>The first argument to this function is a pointer to an ENUMLOGFONTEX structure.
+This structure contains information about the logical attributes of the font, including
+the font name, style, and script. You may have numerous fonts listed with the same
+name but different styles. You can have one for normal, one for bold, one for italic,
+and one for bold italic.</P>
+<P>The second argument is a pointer to a NEWTEXTMETRICEX structure. This structure
+contains information about the physical attributes of the font, such as height, width,
+and space around the font. These values are all relative in nature because they need
+to scale as the font is made larger or smaller.</P>
+<P>The third argument is a flag that specifies the type of font. This value may contain
+a combination of the following values:</P>
+
+<UL>
+	<LI>DEVICE_FONTYPE
+	<LI>RASTER_FONTYPE
+	<P>
+	<LI>TRUETYPE_FONTYPE
+</UL>
+
+<P>Finally, the fourth argument is the value that was passed into the EnumFontFamiliesEx
+function. In the example, it was a pointer to the dialog on which the list of fonts
+is being built. If you cast this value as a pointer to the dialog, the function can
+access a list box control to add the font names.</P>
+<P>The return value from this function determines whether the listing of fonts continues.
+If 0 is returned from this function, the operating system quits listing the available
+fonts. If 1 is returned, the operating system continues to list the available fonts.</P>
+<P>
+<H3><A NAME="Heading3"></A>Using a Font</H3>
+<P>To use a particular font in an application, you call an instance of the CFont
+class. By calling the CreateFont method, you can specify the font to be used, along
+with the size, style, and orientation. Once you've created a font, you can tell a
+control or window to use the font by calling the object's SetFont method. An example
+of this process follows:</P>
+<P>
+<PRE>CFont m_fFont;    // The font to be used
+// Create the font to be used
+m_fFont.CreateFont(12, 0, 0, 0, FW_NORMAL,
+        0, 0, 0, DEFAULT_CHARSET, OUT_CHARACTER_PRECIS,
+        CLIP_CHARACTER_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH |
+        FF_DONTCARE, m_sFontName);
+// Set the font for the display area
+m_ctlDisplayText.SetFont(&amp;m_fFont);
+</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> The CFont variable used in the previous code should be declared as
+	a member variable of the class in which this code is placed. In the sample code,
+	it is declared above where it is used to show how it is declared. This variable should
+	not be declared or used as a local variable in a function.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>Seems simple enough--just two function calls--but that CreateFont function needs
+an awful lot of arguments passed to it. It is these arguments that make the CreateFont
+method a flexible function with a large amount of functionality. Once you create
+the font, using it is a simple matter of passing the font to the SetFont method,
+which is a member of the CWnd class and thus available to all window and control
+classes in Visual C++. This means that you can use this technique on any visible
+object within a Visual C++ application.</P>
+<P>To understand how the CreateFont function works, let's look at the individual
+arguments that you have to pass to it. The function is defined as</P>
+<P>
+<PRE>BOOL CreateFont(
+int nHeight,
+    int nWidth,
+    int nEscapement,
+    int nOrientation,
+    int nWeight,
+    BYTE bItalic,
+    BYTE bUnderline,
+    BYTE cStrikeOut,
+    BYTE nCharSet,
+    BYTE nOutPrecision,
+    BYTE nClipPrecision,
+    BYTE nQuality,
+    BYTE nPitchAndFamily,
+    LPCTSTR lpszFaceName);
+</PRE>
+<P>The first of these arguments, nHeight, specifies the height of the font to be
+used. This logical value is translated into a physical value. If the value is 0,
+a reasonable default value is used. If the value is greater or less than 0, the absolute
+height is converted into device units. It is key to understand that height values
+of 10 and -10 are basically the same.</P>
+<P>The second argument, nWidth, specifies the average width of the characters in
+the font. This logical value is translated into a physical value in much the same
+way as the height is.</P>
+<P>The third argument, nEscapement, determines the angle at which the text will be
+printed. This value is specified in 0.1-degree units in a counterclockwise pattern.
+If you want to print vertical text that reads from bottom to top, you supply 900
+as the value for this argument. For printing normal horizontal text that flows from
+left to right, supply 0 as this value.</P>
+<P>The fourth argument, nOrientation, determines the angle of each individual character
+in the font. This works on the same basis as the previous argument, but it controls
+the output on a character basis, not a line-of-text basis. To print upside-down characters,
+set this value to 1800. To print characters on their backs, set this value to 900.</P>
+<P>The fifth argument, nWeight, specifies the weight, or boldness, of the font. This
+can be any value from 0 to 1000, with 1000 being heavily bolded. You can use constants
+defined for this argument to control this value with ease and consistency. These
+constants are listed in Table 7.1.</P>
+<P>
+<H4>TABLE 7.1. FONT WEIGHT CONSTANTS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Constant</I></TD>
+		<TD ALIGN="LEFT"><I>Value</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_DONTCARE		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_THIN		</TD>
+		<TD ALIGN="LEFT">100		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_EXTRALIGHT		</TD>
+		<TD ALIGN="LEFT">200		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_ULTRALIGHT		</TD>
+		<TD ALIGN="LEFT">200		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_LIGHT		</TD>
+		<TD ALIGN="LEFT">300		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_NORMAL		</TD>
+		<TD ALIGN="LEFT">400		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_REGULAR		</TD>
+		<TD ALIGN="LEFT">400		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_MEDIUM		</TD>
+		<TD ALIGN="LEFT">500		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Constant</I></TD>
+		<TD ALIGN="LEFT"><I>Value</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_SEMIBOLD		</TD>
+		<TD ALIGN="LEFT">600		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_DEMIBOLD		</TD>
+		<TD ALIGN="LEFT">600		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_BOLD		</TD>
+		<TD ALIGN="LEFT">700		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_EXTRABOLD		</TD>
+		<TD ALIGN="LEFT">800		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_ULTRABOLD		</TD>
+		<TD ALIGN="LEFT">800		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_BLACK		</TD>
+		<TD ALIGN="LEFT">900		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FW_HEAVY		</TD>
+		<TD ALIGN="LEFT">900		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The actual interpretation and availability of these weights depend on the font.
+Some fonts only have FW_NORMAL, FW_REGULAR, and FW_BOLD weights. If you specify FW_DONTCARE,
+a default weight is used, just as with most of the rest of the arguments.</P>
+<P>The sixth argument, bItalic, specifies whether the font is to be italicized. This
+is a boolean value; 0 indicates that the font is not italicized, and any other value
+indicates that the font is italicized.</P>
+<P>The seventh argument, bUnderline, specifies whether the font is to be underlined.
+This is also a boolean value; 0 indicates that the font is not underlined, and any
+other value indicates that the font is underlined.</P>
+<P>The eighth argument, cStrikeOut, specifies whether the characters in the font
+are displayed with a line through the character. This is another boolean value using
+a non-zero value as TRUE and 0 as FALSE.</P>
+<P>The ninth argument, nCharSet, specifies the font's character set. The available
+constants for this value are listed in Table 7.2.</P>
+<P>
+<H4>TABLE 7.2. FONT CHARACTER SET CONSTANTS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Constant</I></TD>
+		<TD ALIGN="LEFT"><I>Value</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">ANSI_CHARSET		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">DEFAULT_CHARSET		</TD>
+		<TD ALIGN="LEFT">1		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">SYMBOL_CHARSET		</TD>
+		<TD ALIGN="LEFT">2		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">SHIFTJIS_CHARSET		</TD>
+		<TD ALIGN="LEFT">128		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">OEM_CHARSET		</TD>
+		<TD ALIGN="LEFT">255		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The system on which your application is running might have other character sets,
+and the OEM character set is system dependent, making it different for systems from
+different manufacturers. If you are using one of these character sets, it is risky
+to try to manipulate the strings to be output, so it's best to just pass along the
+string to be displayed.</P>
+<P>The tenth argument, nOutPrecision, specifies how closely the output must match
+the requested font's height, width, character orientation, escapement, and pitch.
+The available values for this argument are</P>
+<P>
+
+<UL>
+	<LI>OUT_CHARACTER_PRECIS
+	<P>
+	<LI>OUT_DEFAULT_PRECIS
+	<P>
+	<LI>OUT_DEVICE_PRECIS
+	<P>
+	<LI>OUT_RASTER_PRECIS
+	<P>
+	<LI>OUT_STRING_PRECIS
+	<P>
+	<LI>OUT_STROKE_PRECIS
+	<P>
+	<LI>OUT_TT_PRECIS
+</UL>
+
+<P>The OUT_DEVICE_PRECIS, OUT_RASTER_PRECIS, and OUT_TT_PRECIS values control which
+font is chosen if there are multiple fonts with the same name. For instance, if you
+use the OUT_TT_PRECIS value and specify a font with both a TrueType and raster version,
+then the TrueType version is used. In fact, the OUT_TT_PRECIS value forces the system
+to use a TrueType font, even when the specified font does not have a TrueType version.</P>
+<P>The eleventh argument, nClipPrecision, specifies how to clip characters that are
+partially outside of the display area. The values for this argument are</P>
+<P>
+
+<UL>
+	<LI>CLIP_CHARACTER_PRECIS
+	<P>
+	<LI>CLIP_DEFAULT_PRECIS
+	<P>
+	<LI>CLIP_ENCAPSULATE
+	<P>
+	<LI>CLIP_LH_ANGLES
+	<P>
+	<LI>CLIP_MASK
+	<P>
+	<LI>CLIP_STROKE_PRECIS
+	<P>
+	<LI>CLIP_TT_ALWAYS
+</UL>
+
+<P>These values can be ORed together to specify a combination of clipping techniques.</P>
+<P>The twelfth argument, nQuality, specifies the output quality and how carefully
+the GDI (Graphics Device Interface) must attempt to match the logical font attributes
+to the physical font output. The available values for this argument are</P>
+<P>
+
+<UL>
+	<LI>DEFAULT_QUALITY
+	<P>
+	<LI>DRAFT_QUALITY
+	<P>
+	<LI>PROOF_QUALITY
+</UL>
+
+<P>The thirteenth argument, nPitchAndFamily, specifies the pitch and family of the
+font. This value consists of two values that are ORed together to create a combination
+value. The first set of available values is</P>
+<P>
+
+<UL>
+	<LI>DEFAULT_PITCH
+	<P>
+	<LI>VARIABLE_PITCH
+	<P>
+	<LI>FIXED_PITCH
+</UL>
+
+<P>This value specifies the pitch to be used with the font. The second set of available
+values specifies the family of fonts to be used. The available values for this portion
+of the argument are</P>
+<P>
+
+<UL>
+	<LI>FF_DECORATIVE
+	<P>
+	<LI>FF_DONTCARE
+	<P>
+	<LI>FF_MODERN
+	<P>
+	<LI>FF_ROMAN
+	<P>
+	<LI>FF_SCRIPT
+	<P>
+	<LI>FF_SWISS
+</UL>
+
+<P>The font family describes in a general way the appearance of a font. You can use
+the font family value to choose an alternative font when a specific font does not
+exist on a system. The final argument, lpszFacename, is a standard C-style string
+that contains the name of the font to be used. This font name comes from the font
+information received by the EnumFontFamProc callback function.</P>
+<P>
+<H2><A NAME="Heading4"></A>Using Fonts</H2>
+<PRE>Today you will build an application that allows the user to select from a list of available fonts to be displayed. The user will be able to enter some text to be displayed in the selected font, allowing the user to see what the font looks like.
+</PRE>
+<H3><A NAME="Heading5"></A>Creating the Application Shell</H3>
+<P>To begin today's application, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Create a new project workspace using the MFC AppWizard. Name the project
+	<B>Day7</B>.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Use the same defaults that you used for the previous day's projects,
+	giving the application a title of <B>Fonts</B>.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Design the main dialog as in Figure 7.1, using the properties in Table
+	7.3.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('07fig01.gif')"><B>FIGURE 7.1.</B></A><B> </B><I>The
+main dialog layout.</I></P>
+
+<P><I></I>
+<H4>TABLE 7.3. CONTROL PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Enter Some Text:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_ESAMPTEXT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Select a Font		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">List Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_LFONTS		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Group Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Font Sample		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_DISPLAYTEXT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">(inside group box; size to		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Empty string		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">fill the group box)		</TD>
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Command Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EXIT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">E&amp;xit		</TD>
+	</TR>
+</TABLE>
+</P>
+
+<DL>
+	<DT><B></B></DT>
+	<DD><B>4. </B>Using the Class Wizard, add the variables in Table 7.4 to the controls
+	on the dialog.
+	<P>
+</DL>
+
+<H4>TABLE 7.4. CONTROL VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+		<TD ALIGN="LEFT"><I>Category</I></TD>
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_DISPLAYTEXT		</TD>
+		<TD ALIGN="LEFT">m_ctlDisplayText		</TD>
+		<TD ALIGN="LEFT">Control		</TD>
+		<TD ALIGN="LEFT">CStatic		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">m_strDisplayText		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_LFONTS		</TD>
+		<TD ALIGN="LEFT">m_ctlFontList		</TD>
+		<TD ALIGN="LEFT">Control		</TD>
+		<TD ALIGN="LEFT">CListBox		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">m_strFontName		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_ESAMPTEXT		</TD>
+		<TD ALIGN="LEFT">m_strSampText		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+</TABLE>
+</P>
+
+<DL>
+	<DT><B></B></DT>
+	<DD><B>5. </B>Attach a function to the IDC_EXIT button to close the application,
+	as in the previous day's applications.
+	<P>
+</DL>
+
+<H3><A NAME="Heading6"></A>Building a List of Fonts</H3>
+<P>To be able to create your list of fonts, you need to add your callback function
+to get each font list and add it to the list box that you placed on the dialog window.
+To do this, edit the Day7Dlg.h header file and add the function declaration in Listing
+7.1 near the top of the file. This function cannot be added through any of the tools
+available in Visual C++. You need to open the file and add it yourself.</P>
+<P>
+<H4>LISTING 7.1. THE CALLBACK FUNCTION DECLARATION IN THE Day7Dlg.h HEADER FILE.</H4>
+<PRE> 1: #if _MSC_VER &gt; 1000
+ 2: #pragma once
+ 3: #endif // _MSC_VER &gt; 1000
+ 4: 
+ 5: int CALLBACK EnumFontFamProc(LPENUMLOGFONT lpelf,
+ 6: LPNEWTEXTMETRIC lpntm, DWORD nFontType, long lParam);
+ 7: 
+ 8: ////////////////////////////////////////////////////////////////////  9: // CDay7Dlg dialog
+10: 
+11: class CDay7Dlg : public CDialog
+12: .
+13: .
+</PRE>
+
+<PRE>14: .</PRE>
+<P>Once you add the function declaration to the header file, open the Day7Dlg.cpp
+source-code file, scroll to the bottom of the file, and add the function definition
+in Listing 7.2.</P>
+<P>
+<H4>LISTING 7.2. THE CALLBACK FUNCTION DEFINITION IN THE Day7Dlg.cpp SOURCE FILE.</H4>
+<PRE> 1: int CALLBACK EnumFontFamProc(LPENUMLOGFONT lpelf,
+ 2: LPNEWTEXTMETRIC lpntm, DWORD nFontType, long lParam)
+ 3: {
+ 4:     // Create a pointer to the dialog window
+ 5:     CDay7Dlg* pWnd = (CDay7Dlg*) lParam;
+ 6: 
+ 7:     // Add the font name to the list box
+ 8:     pWnd-&gt;m_ctlFontList.AddString(lpelf-&gt;elfLogFont.lfFaceName);
+ 9:     // Return 1 to continue font enumeration
+10:     return 1;
+11: }
+</PRE>
+<P>Now that you have the callback function defined, you need to add a function to
+request the list of fonts from the operating system. To add this function, follow
+these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select the Class View tab on the project workspace pane.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Select the CDay7Dlg class, right-click the mouse, and select Add Member
+	Function from the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Specify the function type as void, the function declaration as FillFontList,
+	and the access as Private. Click the OK button to close the dialog and add the function.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Edit the function definition as in Listing 7.3.
+	<P>
+</DL>
+
+<H4>LISTING 7.3. THE FillFontList FUNCTION.</H4>
+<PRE> 1: void CDay7Dlg::FillFontList()
+ 2: {
+ 3:     LOGFONT lf;
+ 4:
+ 5:     // Initialize the LOGFONT structure
+ 6:     lf.lfCharSet = DEFAULT_CHARSET;
+ 7:     strcpy(lf.lfFaceName, &quot;&quot;);
+ 8:     // Clear the list box
+ 9:     m_ctlFontList.ResetContent();
+10:     // Create a device context variable
+11:     CClientDC dc (this);
+12:     // Enumerate the font families
+13:     ::EnumFontFamiliesEx((HDC) dc, &amp;lf,
+14: (FONTENUMPROC) EnumFontFamProc, (LPARAM) this, 0);
+15: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>5. </B>Edit the OnInitDialog function to call the FillFontList function, as
+	in Listing 7.4.
+	<P>
+</DL>
+
+<H4>LISTING 7.4. THE EDITED OnInitDialog FUNCTION.</H4>
+<PRE> 1: BOOL CDay7Dlg::OnInitDialog()
+ 2: {
+ 3:     CDialog::OnInitDialog();
+ 4: .
+ 5: .
+ 6: .
+ 7:     // TODO: Add extra initialization here
+ 8: 
+ 9:     ///////////////////////
+10:     // MY CODE STARTS HERE
+11:     ///////////////////////
+12: 
+13:     // Fill the font list box
+14:     FillFontList();
+15: 
+16:     ///////////////////////
+17:     // MY CODE ENDS HERE
+18:     ///////////////////////
+19: 
+20:     return TRUE;  // return TRUE  unless you set the focus to a control
+21: }
+</PRE>
+<P>If you compile and run your application now, you should find that your list box
+is filled with the names of all the fonts available on the system. However, there's
+one aspect of this list that you probably don't want in your application. Figure
+7.2 shows many duplicate entries in the list of fonts in the list box. It would be
+nice if you could eliminate these duplicates and have only one line per font.</P>
+<P><A HREF="javascript:popUp('07fig02.gif')"><B>FIGURE 7.2.</B></A><B> </B><I>Listing
+all the fonts in the system.</I></P>
+
+<P>It turns out that the EnumFontFamiliesEx function call is synchronous in nature.
+This means that it doesn't return until all the fonts in the system are listed in
+calls to your callback function. You can place code in the FillFontList function
+to remove all the duplicate entries once the list box is filled. To do this, modify
+the FillFontList function as in Listing 7.5.</P>
+<P></P>
+
+<P><B>Listing 7.5.</B> The modified FILLFONTLIST function. 
+<PRE> 1: void CDay7Dlg::FillFontList()
+ 2: {
+ 3:     int iCount;            // The number of fonts
+ 4:     int iCurCount;        // The current font
+ 5:     CString strCurFont;        // The current font name
+ 6:     CString strPrevFont = &quot;&quot;;    // The previous font name
+ 7:     LOGFONT lf;
+ 8:
+ 9:     // Initialize the LOGFONT structure
+10:     lf.lfCharSet = DEFAULT_CHARSET;
+11:     strcpy(lf.lfFaceName, &quot;&quot;);
+12:     // Clear the list box
+13:     m_ctlFontList.ResetContent();
+14:     // Create a device context variable
+15:     CClientDC dc (this);
+16:     // Enumerate the font families
+17:     ::EnumFontFamiliesEx((HDC) dc, &amp;lf,
+18: (FONTENUMPROC) EnumFontFamProc, (LPARAM) this, 0);
+19:     // Get the number of fonts in the list box
+20:     iCount = m_ctlFontList.GetCount();
+21:     // Loop from the last entry in the list box to the first,
+22:     // searching for and deleting the duplicate entries
+23:     for (iCurCount = iCount; iCurCount &gt; 0; iCurCount--)
+24:     {
+25:         // Get the current font name
+26:         m_ctlFontList.GetText((iCurCount - 1), strCurFont);
+27:         // Is it the same as the previous font name?
+28:         if (strCurFont == strPrevFont)
+29:         {
+30:             // If yes, then delete it
+31:             m_ctlFontList.DeleteString((iCurCount - 1));
+32:         }
+33:         // Set the previous font name to the current font name
+34:         strPrevFont = strCurFont;
+35:     }
+36: }
+</PRE>
+<P>Notice that the for loop started at the end of the list and worked backward. This
+allowed you to delete the current entry without worrying about manipulating the loop
+counter to prevent skipping lines in the list box. If you compile and run your application,
+there shouldn't be any duplicate entries in the list of available fonts.</P>
+<P>
+<H3><A NAME="Heading7"></A>Setting the Font Sample Text</H3>
+<P>Before you can display the font for the user, you need to place some text into
+the display area. The edit box near the top of the dialog is where the user enters
+text to be displayed in the font selected. To add the functionality, do the following:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Edit the OnInitDialog function to add code to initialize the edit box
+	and display text, as in Listing 7.6.
+	<P>
+</DL>
+
+<H4>LISTING 7.6. THE MODIFIED OnInitDialog FUNCTION.</H4>
+<PRE> 1: BOOL CDay7Dlg::OnInitDialog()
+ 2: {
+ 3:     CDialog::OnInitDialog();
+ 4: .
+ 5: .
+ 6: .
+ 7:     // TODO: Add extra initialization here
+ 8: 
+ 9:     ///////////////////////
+10:     // MY CODE STARTS HERE
+11:     ///////////////////////
+12: 
+13:     // Fill the font list box
+14:     FillFontList();
+15: 
+16:     // Initialize the text to be entered
+17:     m_strSampText = &quot;Testing&quot;;
+18:     // Copy the text to the font sample area
+19:     m_strDisplayText = m_strSampText;
+20:     // Update the dialog
+21:     UpdateData(FALSE);
+22: 
+23:     ///////////////////////
+24:     // MY CODE ENDS HERE
+25:     ///////////////////////
+26: 
+27:     return TRUE;  // return TRUE  unless you set the focus to a control
+28: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>2. </B>Using the Class Wizard, add a function on the EN_CHANGE event message
+	for the IDC_ESAMPTEXT edit box control.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Edit the function you just added, adding the code in Listing 7.7.
+	<P>
+</DL>
+
+<H4>LISTING 7.7. THE OnChangeEsamptext FUNCTION.</H4>
+<PRE> 1: void CDay7Dlg::OnChangeEsamptext()
+</PRE>
+<PRE> 2: {
+ 3:     // TODO: If this is a RICHEDIT control, the control will not
+ 4:     // send this notification unless you override the                     &Acirc;CDialog::OnInitialUpdate()
+ 5:     // function and call CRichEditCrtl().SetEventMask()
+ 6:     // with the EN_CHANGE flag ORed into the mask.
+ 7: 
+ 8:     // TODO: Add your control notification handler code here
+ 9: 
+10:     ///////////////////////
+11:     // MY CODE STARTS HERE
+12:     ///////////////////////
+13: 
+14:     // Update the variables with the dialog controls
+15:     UpdateData(TRUE);
+16: 
+17:     // Copy the current text to the font sample
+18:     m_strDisplayText = m_strSampText;
+19: 
+20:     // Update the dialog with the variables
+21:     UpdateData(FALSE);
+22: 
+23:     ///////////////////////
+24:     // MY CODE ENDS HERE
+25:     ///////////////////////
+26: }
+</PRE>
+<P>If you compile and run your application, you should be able to type text into
+the edit box and see it change in the font display area in the group box below.</P>
+<P>
+<H3><A NAME="Heading8"></A>Selecting a Font to Display</H3>
+<P>Before you can start changing the font for the display area, you'll need to have
+a CFont member variable of the dialog class that you can use to set and change the
+display font. To add this variable, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>In the Class View of the workspace pane, right-click the mouse on the
+	CDay7Dlg class. Select Add Member Variable from the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Specify the variable type as CFont, the variable name as m_fSampFont,
+	and the access as Private. Click the OK button to close the dialog box and add the
+	variable.
+	<P>
+</DL>
+
+<P>When adding the code to use the selected font, you'll add it as a separate function
+that is not attached to a control. Why you do this will become clear as you proceed
+further through building and running today's application. To add the function to
+display and use the selected font, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>In the Class View of the workspace pane, right-click the mouse on the
+	CDay7Dlg class. Select Add Member Function from the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Specify the function type as void, the function declaration as SetMyFont,
+	and the access as Private. Click the OK button to close the dialog and add the function.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Edit the function, adding the code in Listing 7.8.
+	<P>
+</DL>
+
+<H4>LISTING 7.8. THE SetMyFont FUNCTION.</H4>
+<PRE> 1: void CDay7Dlg::SetMyFont()
+ 2: {
+ 3:     CRect rRect;        // The rectangle of the display area
+ 4:     int iHeight;    // The height of the display area
+ 5: 
+ 6:     // Has a font been selected?
+ 7:     if (m_strFontName != &quot;&quot;)
+ 8:     {
+ 9:         // Get the dimensions of the font sample display area
+10:         m_ctlDisplayText.GetWindowRect(&amp;rRect);
+11:         // Calculate the area height
+12:         iHeight = rRect.top - rRect.bottom;
+13:         // Make sure the height is positive
+14:         if (iHeight &lt; 0)
+15:             iHeight = 0 - iHeight;
+16:         // Release the current font
+17:         m_fSampFont.Detach();
+18:         // Create the font to be used
+19:         m_fSampFont.CreateFont((iHeight - 5), 0, 0, 0, FW_NORMAL,
+20:                0, 0, 0, DEFAULT_CHARSET, OUT_CHARACTER_PRECIS,
+21:                CLIP_CHARACTER_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH |
+22:                FF_DONTCARE, m_strFontName);
+23: 
+24:         // Set the font for the sample display area
+25:         m_ctlDisplayText.SetFont(&amp;m_fSampFont);
+26:     }
+27: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>4. </B>Using the Class Wizard, add a function to the LBN_SELCHANGE event message
+	for the IDC_LFONTS list box. Edit the function, adding the code in Listing 7.9.
+	<P>
+</DL>
+
+<H4>LISTING 7.9. THE OnSelchangeLfonts FUNCTION.</H4>
+<PRE> 1: void CDay7Dlg::OnSelchangeLfonts()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+</PRE>
+<PRE> 7:     ///////////////////////
+</PRE>
+<PRE> 8: 
+ 9:     // Update the variables with the dialog controls
+10:     UpdateData(TRUE);
+11: 
+12:     // Set the font for the sample
+13:     SetMyFont();
+14: 
+15:     ///////////////////////
+16:     // MY CODE ENDS HERE
+17:     ///////////////////////
+18: }
+</PRE>
+<P>In the SetMyFont function, you first checked to make sure that a font had been
+selected. Next, you retrieved the area of the static text control that will be used
+to display the font. This enables you to specify a font height just slightly smaller
+than the height of the area you have available to display the font in. After you
+calculated the height of the static text control and made sure that it is a positive
+value, you created the selected font and told the static text control to use the
+newly created font.</P>
+<P>In the OnSelchangeLfonts function, you copy the control values to the attached
+variables and then call the SetMyFont function to use the selected font. If you compile
+and run your application, you should be able to select a font and see it displayed
+in the sample static text control, as in Figure 7.3.</P>
+<P><A HREF="javascript:popUp('07fig03.gif')"><B>FIGURE 7.3.</B></A><B> </B><I>Displaying
+the selected font.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading9"></A>Summary</H2>
+<P>Today you learned how to use fonts in Visual C++ applications. You learned how
+to get a list of the available fonts that are loaded on the system and then how to
+create a font for use on a display object. You learned how you can create and use
+callback functions to get a list of resources from the Windows operating system.
+You also learned how you can access controls from the callback function using a window
+pointer that you passed to the function requesting the resource list.</P>
+<P>
+<H2><A NAME="Heading10"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q The CreateFont function has a lot of arguments to specify and pass. Is there
+	any other alternative to using this function?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> Yes, there is, although you still specify all of the same information.
+	A structure called LOGFONT contains all the same attributes that are passed to the
+	CreateFont function. You can declare an instance of this structure, initializing
+	the attributes to default values, and then pass this structure to the CreateFontIndirect
+	function. If you make numerous font changes, this approach is preferable because
+	you could use the same instance of the structure, modifying those attributes that
+	are changing from the current settings and using it to create the various fonts.
+	<P>
+	<DT></DT>
+	<DD>The way that you use this alternative way of creating the font is to declare
+	an instance of the LOGFONT structure as a member of the dialog class and then initialize
+	all the attributes before calling the SetMyFont function. In the SetMyFont function,
+	you modify it as shown in Listing 7.10.
+	<P>
+</DL>
+
+<H4>LISTING 7.10. THE MODIFIED SetMyFont FUNCTION.</H4>
+<PRE> 1: void CDay7Dlg::SetMyFont()
+ 2: {
+ 3: 
+ 4:     // Has a font been selected?
+ 5:     if (m_strFontName != &quot;&quot;)
+ 6:     {
+ 7:         // Assume that the font size has already been initialized in the
+ 8:         // m_lLogFont structure. This allows you to only have to specify
+ 9:         // the font name.
+10:         tcscpy(m_lLogFont.lfFaceName, m_strFontName);
+11:         // Create the font to be used
+12:         m_fSampFont.CreateFontIndirect(&amp;m_lLogFont);
+13: 
+14:         // Set the font for the sample display area
+15:         m_ctlDisplayText.SetFont(&amp;m_fSampFont);
+16:     }
+17: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q How can I limit the fonts in my list to just the TrueType fonts?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> You can check the nFontType argument to your callback function to determine
+	the font type. For instance, if you want to include only TrueType fonts in your list
+	of fonts, you modify your callback function to mask the nFontType argument with the
+	TRUETYPE_FONTTYPE constant and check to see if the resulting value equals the TRUETYPE_FONTTYPE
+	value, as in the following:
+	<P>
+</DL>
+
+<PRE>int CALLBACK EnumFontFamProc(LPENUMLOGFONT lpelf,
+LPNEWTEXTMETRIC lpntm, DWORD nFontType, long lParam)
+{
+    // Create a pointer to the dialog window
+    CDay7Dlg* pWnd = (CDay7Dlg*) lParam;
+    // Limit the list to TrueType fonts
+    if ((nFontType &amp; TRUETYPE_FONTTYPE) == TRUETYPE_FONTTYPE)
+    {
+        // Add the font name to the list box
+        pWnd-&gt;m_ctlFontList.AddString(
+                        lpelf-&gt;elfLogFont.lfFaceName);
+    }
+    // Return 1 to continue font enumeration
+    return 1;
+}
+</PRE>
+<H2><A NAME="Heading11"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H2><A NAME="Heading12"></A>Quiz</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>How can you specify that the text is to be underlined?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>How can you print your text upside down?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>How many times is the EnumFontFamProc callback function called by the
+	operating system?
+	<P>
+</DL>
+
+<H3><A NAME="Heading13"></A>Exercises</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Add a check box to switch between using the entered text to display
+	the font and using the font name to display the font, as in Figure 7.4.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Add a check box to display the font sample in italics, as in Figure
+	7.5.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('07fig04.gif')"><B>FIGURE 7.4.</B></A><B> </B><I>Displaying
+the selected font with the font name.</I></P>
+
+<P><A HREF="javascript:popUp('07fig05.gif')"><B>FIGURE 7.5.</B></A><B> </B><I>Displaying
+the selected font in italics.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading14"></A>In Review</H2>
+<P>Well, you've made it through the first week. By this point, you've gotten a good
+taste for what's possible when building applications with Visual C++. Now it's time
+to look back over what's been covered and what you should have learned up to this
+point.</P>
+<P>What you might want to do at this point, to cement your understanding of how you
+can use these elements in your own applications, is to try designing and building
+a couple of simple applications of your own. You can use a variety of controls and
+add some additional dialogs, just so you can make sure that you do understand and
+are comfortable with these topics. In fact, you might want to try out all the topics
+that I've covered up to this point in small applications of your own design. That's
+the true test of your understanding of how the concepts work. You might also want
+to dive into the MFC documentation to learn a little about some of the more advanced
+functionality that I haven't covered to see if you can figure out how you can use
+and incorporate it into your applications.</P>
+<P>One of the most important things that you should understand at this point is how
+you can use controls and dialog windows in your applications to get and display information
+to the user. This is an important part of any Windows application because just about
+every application interacts with the user in some way. You should be able to place
+any of the standard controls on a dialog in your application and be able to incorporate
+them into your application without any problem. Likewise, you should be comfortable
+with using the standard message box and dialog windows provided to your application
+by the Windows operating system. You should also be able to create and incorporate
+your own custom dialog windows into any application you might want to build. If you
+don't feel comfortable with any of these topics, you might want to go back and review
+Day 2 to get a better understanding of how you can use controls and Day 5 to understand
+how you can incorporate standard and custom dialog windows into your applications.</P>
+<P>Another key skill that you will be using in the majority of your applications
+is the ability to build and incorporate menus into your applications. You need to
+have a firm understanding of how to design a good menu, how to make sure that there
+are no conflicting mnemonics, and how you can attach application functionality to
+the menu selections. At this point, you should be able to create your own customized
+menus, with entries for each of the various functions that your application performs,
+and integrate it with your application with no problems. If you aren't 100% comfortable
+with this topic, you might want to go back and study Day 6 a little more.</P>
+<P>You will find that there are various situations in which you need to have some
+means of triggering actions on a regular basis or in which you need to keep track
+of how long some process has been running. For both of these situations, as well
+as numerous others, you'll often find yourself turning to the use of timers in your
+application. If you are even slightly foggy on how you can integrate timers into
+your applications, you will definitely want to go back and review Day 4.</P>
+<P>Understanding how you can use text and fonts in your applications will allow you
+to build more flexibility into the appearance of your applications--to give your
+users the ability to customize the appearance as they want. You will be able to examine
+the available fonts on the computer on which your application is running and, if
+a font that you want to use in your application isn't available, choose another font
+that is close to use instead. If you still have any questions on how the font infrastructure
+in Windows works and how you can use it in your applications, you'll want to go back
+and review Day 7 once more.</P>
+<P>Depending on the nature of your application, being able to capture and track mouse
+and keyboard actions by the user can be very important. If you are building a drawing
+application, this is crucial information. If you are building an application that
+needs to include drag-and-drop capabilities, this is important once again. There
+are any number of situations in which you'll want to include this functionality into
+your applications. By this point, you should understand how you can capture the various
+mouse events and determine which mouse buttons are involved in the event. You should
+also be able to capture keyboard events in situations where the keyboard input isn't
+captured by any controls that are on the window. If you don't feel like you have
+a complete grasp of this, you should take another look at Day 3.</P>
+<P>Finally, you should be familiar with the Visual C++ development environment, the
+Developer Studio. You should have a good understanding of what each area of the environment
+is for and how you can use the various tools and utilities in building your applications.
+You should be comfortable with using the workspace pane to navigate around your application
+project, locating and bringing into the various editors and designers any part of
+your application. You should be comfortable with locating and redesigning the icon
+that will be displayed to represent your application and with finding any member
+functions or variables in any of your application's classes.</P>
+
+<P>By now you should be getting fairly comfortable working with Visual C++. If you
+feel like you understand all the topics that I've covered so far, you are ready to
+continue forward, learning more about the various things that you can do, and functionality
+that you can build, using Visual C++ as your programming tool. With that said, it's
+on to the second week...</P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch06/ch06.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch08/ch08.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

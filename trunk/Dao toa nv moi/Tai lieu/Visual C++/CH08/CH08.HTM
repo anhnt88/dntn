@@ -1,0 +1,1612 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 8 -- Adding Flash--Incorporating Graphics, Drawing, and Bitmaps</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch07/ch07.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch09/ch09.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 8 -<BR>
+Adding Flash--Incorporating Graphics, Drawing, and Bitmaps</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Understanding the Graphics Device Interface</A>
+	<UL>
+		<LI><A HREF="#Heading2">Device Contexts</A>
+		<LI><A HREF="#Heading3">Mapping Modes and Coordinate Systems</A>
+	</UL>
+	<LI><A HREF="#Heading4">Creating a Graphics Application</A>
+	<UL>
+		<LI><A HREF="#Heading5">Generating the Application Shell</A>
+		<LI><A HREF="#Heading7">Adding the Graphics Capabilities</A>
+	</UL>
+	<LI><A HREF="#Heading9">Summary</A>
+	<LI><A HREF="#Heading10">Q&amp;A</A>
+	<LI><A HREF="#Heading11">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading12">Quiz</A>
+		<LI><A HREF="#Heading13">Exercises</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+You've probably noticed that a large number of applications use graphics and display
+images. This adds a certain level of flash and polish to the application. With some
+applications, graphics are an integral part of their functionality. Having a good
+understanding of what's involved in adding these capabilities to your applications
+is a key part of programming for the Windows platform. You've already learned how
+you can draw lines and how you can string a series of these lines together to make
+a continuous drawing. Today, you're going to go beyond that capacity and learn how
+you can add more advanced graphics capabilities to your applications. Today, you
+will learn</P>
+
+<P>
+
+<UL>
+	<LI>How Windows uses a device context to translate drawing instructions into graphics
+	output.
+	<P>
+	<LI>How you can determine the level of control you have over the graphics output
+	through different mapping modes.
+	<P>
+	<LI>How Windows uses pens and brushes to draw different portions of the graphics
+	image.
+	<P>
+	<LI>How you can load and display bitmaps dynamically.
+</UL>
+
+<H2><A NAME="Heading1"></A>Understanding the Graphics Device Interface</H2>
+<P>The Windows operating system provides you with a couple of levels of abstraction
+for creating and using graphics in your applications. During the days of DOS programming,
+you needed to exercise a great deal of control over the graphics hardware to draw
+any kind of images in an application. This control required an extensive knowledge
+and understanding of the various types of graphics cards that users might have in
+their computers, along with their options for monitors and resolutions. There were
+a few graphics libraries that you could buy for your applications, but overall, it
+was fairly strenuous programming to add this capability to your applications.</P>
+<P>With Windows, Microsoft has made the job much easier. First, Microsoft provides
+you with a virtual graphics device for all of your Windows applications. This virtual
+device doesn't change with the hardware but remains the same for all possible graphics
+hardware that the user might have. This consistency provides you with the ability
+to create whatever kind of graphics you want in your applications because you know
+that the task of converting them to something that the hardware understands isn't
+your problem.</P>
+<P>
+<H3><A NAME="Heading2"></A>Device Contexts</H3>
+<P>Before you can create any graphics, you must have the device context in which
+the graphics will be displayed. The device context contains information about the
+system, the application, and the window in which you are drawing any graphics. The
+operating system uses the device context to learn in which context a graphic is being
+drawn, how much of the area is visible, and where on the screen it is currently located.</P>
+<P>When you draw graphics, you always draw them in the context of an application
+window. At any time, this window may be full view, minimized, partly hidden, or completely
+hidden. This status is not your concern because you draw your graphics on the window
+using its device context. Windows keeps track of each device context and uses it
+to determine how much and what part of the graphics you draw to actually display
+for the user. In essence, the device context you use to display your graphics is
+the visual context of the window in which you draw them.</P>
+<P>The device context uses two resources to perform most of its drawing and graphics
+functions. These two resources are pens and brushes. Much like their real-world counterparts,
+pens and brushes perform similar yet different tasks. The device context uses pens
+to draw lines and shapes, whereas brushes paint areas of the screen. It's the same
+idea as working on paper when you use a pen to draw an outline of an image and then
+pick up a paintbrush to fill in the color between the lines.</P>
+<P>
+<H4>The Device Context Class</H4>
+<P>In Visual C++, the MFC device context class (CDC) provides numerous drawing functions
+for drawing circles, squares, lines, curves, and so on. All these functions are part
+of the device context class because they all use the device context information to
+draw on your application windows.</P>
+<P>You create a device context class instance with a pointer to the window class
+that you want to associate with the device context. This allows the device context
+class to place all of the code associated with allocating and freeing a device context
+in the class constructor and destructors.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Device context objects, as well as all of the various drawing objects,
+	are classified as resources in the Windows operating system. The operating system
+	has only a limited amount of these resources. Although the total number of resources
+	is large in recent versions of Windows, it is still possible to run out of resources
+	if an application allocates them and doesn't free them correctly. This loss is known
+	as a resource leak, and much like a memory leak, it can eventually lock up a user's
+	system. As a result, it's advisable to create these resources in the functions where
+	they will be used and then delete them as soon as you are finished with them.<BR>
+	Following this advised approach to using device contexts and their drawing resources,
+	you use them almost exclusively as local variables within a single function. The
+	only real exception is when the device context object is created by Windows and passed
+	into the event-processing function as an argument. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>The Pen Class</H4>
+<P>You have already seen how you can use the pen class, CPen, to specify the color
+and width for drawing lines onscreen. CPen is the primary resource tool for drawing
+any kind of line onscreen. When you create an instance of the CPen class, you can
+specify the line type, color, and thickness. After you create a pen, you can select
+it as the current drawing tool for the device context so that it is used for all
+of your drawing commands to the device context. To create a new pen, and then select
+it as the current drawing pen, you use the following code:</P>
+<P>
+<PRE>// Create the device context
+CDC dc(this);
+// Create the pen
+CPen lPen(PS_SOLID, 1, RGB(0, 0, 0));
+// Select the pen as the current drawing pen
+dc.SelectObject(&amp;lPen);
+</PRE>
+<P>You can use a number of different pen styles. These pen styles all draw different
+patterns when drawing lines. Figure 8.1 shows the basic styles that can be used in
+your applications with any color.</P>
+<P><A HREF="javascript:popUp('08fig01.gif')"><B>FIGURE 8.1.</B></A><B> </B><I>Windows
+pen styles.</I></P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> When you use any of these line styles with a pen thickness greater
+	than 1, all of the lines appear as solid lines. If you want to use any line style
+	other than PS_SOLID, you need to use a pen width of 1.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>Along with the line style that the pen should draw, you also have to specify the
+pen's width and color. The combination of these three variables specifies the appearance
+of the resulting lines. The line width can range from 1 on up, although when you
+reach a width of 32, it's difficult to exercise any level of precision in your drawing
+efforts.</P>
+<P>You specify the color as a RGB value, which has three separate values for the
+brightness of the red, green, and blue color components of the pixels on the computer
+screen. These three separate values can range from 0 to 255, and the RGB function
+combines them into a single value in the format needed by Windows. Some of the more
+common colors are listed in Table 8.1.</P>
+<P>
+<H4>TABLE 8.1. COMMON WINDOWS COLORS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Color</I></TD>
+		<TD ALIGN="LEFT"><I>Red</I></TD>
+		<TD ALIGN="LEFT"><I>Green</I></TD>
+		<TD ALIGN="LEFT"><I>Blue</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Black		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Blue		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">255		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Dark blue		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">128		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Green		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">255		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Dark green		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">128		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Cyan		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">255		</TD>
+		<TD ALIGN="LEFT">255		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Dark cyan		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">128		</TD>
+		<TD ALIGN="LEFT">128		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Red		</TD>
+		<TD ALIGN="LEFT">255		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Dark red		</TD>
+		<TD ALIGN="LEFT">128		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Magenta		</TD>
+		<TD ALIGN="LEFT">255		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">255		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Dark magenta		</TD>
+		<TD ALIGN="LEFT">128		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">128		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Yellow		</TD>
+		<TD ALIGN="LEFT">255		</TD>
+		<TD ALIGN="LEFT">255		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Dark yellow		</TD>
+		<TD ALIGN="LEFT">128		</TD>
+		<TD ALIGN="LEFT">128		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Dark gray		</TD>
+		<TD ALIGN="LEFT">128		</TD>
+		<TD ALIGN="LEFT">128		</TD>
+		<TD ALIGN="LEFT">128		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">
+			<PRE>Light gray</PRE>
+		</TD>
+		<TD ALIGN="LEFT">
+			<PRE>192</PRE>
+		</TD>
+		<TD ALIGN="LEFT">
+			<PRE>192</PRE>
+		</TD>
+		<TD ALIGN="LEFT">
+			<PRE>192</PRE>
+		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">White		</TD>
+		<TD ALIGN="LEFT">255		</TD>
+		<TD ALIGN="LEFT">255		</TD>
+		<TD ALIGN="LEFT">255		</TD>
+	</TR>
+</TABLE>
+
+<H4>The Brush Class</H4>
+<P>The brush class, CBrush, allows you to create brushes that define how areas will
+be filled in. When you draw shapes that enclose an area and fill in the enclosed
+area, the outline is drawn with the current pen, and the interior of the area is
+filled by the current brush. Brushes can be solid colors (specified using the same
+RGB values as with the pens), a pattern of lines, or even a repeated pattern created
+from a small bitmap. If you want to create a solid-color brush, you need to specify
+the color to use:</P>
+<P>
+<PRE>CBrush lSolidBrush(RGB(255, 0, 0));
+</PRE>
+<P>To create a pattern brush, you need to specify not only the color but also the
+pattern to use:</P>
+<P>
+<PRE>CBrush lPatternBrush(HS_BDIAGONAL, RGB(0, 0, 255));
+</PRE>
+<P>After you create a brush, you can select it with the device context object, just
+like you do with pens. When you select a brush, it is used as the current brush whenever
+you draw something that uses a brush.</P>
+<P>As with pens, you can select a number of standard patterns when creating a brush,
+as shown in Figure 8.2. In addition to these patterns, an additional style of brush,
+HS_BITMAP, uses a bitmap as the pattern for filling the specified area. This bitmap
+is limited in size to 8 pixels by 8 pixels, which is a smaller bitmap than normally
+used for toolbars and other small images. If you supply it with a larger bitmap,
+it takes only the upper-left corner, limiting it to an 8-by-8 square. You can create
+a bitmap brush by creating a bitmap resource for your application and assigning it
+an object ID. After you do this, you can create a brush with it by using the following
+code:</P>
+<P>
+<PRE>CBitmap m_bmpBitmap;
+// Load the image
+m_bmpBitmap.LoadBitmap(IDB_MYBITMAP);
+// Create the brush
+CBrush lBitmapBrush(&amp;m_bmpBitmap);
+</PRE>
+<P><A HREF="javascript:popUp('08fig02.gif')"><B>FIGURE 8.2.</B></A><B> </B><I>Standard
+brush patterns.</I></P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> If you want to create your own custom pattern for use as a brush,
+	you can create the pattern as an 8-by-8 bitmap and use the bitmap brush. This allows
+	you to extend the number of brush patterns far beyond the limited number of standard
+	patterns. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>The Bitmap Class</H4>
+<P>When you want to display images in your applications, you have a couple of options.
+You can add fixed bitmaps to your application, as resources with object IDs assigned
+to them and use static picture controls or an ActiveX control that displays images.
+You can also use the bitmap class, CBitmap, to exercise complete control over the
+image display. If you use the bitmap class, you can dynamically load bitmap images
+from files on the system disk, resizing the images as necessary to make them fit
+in the space you've allotted.</P>
+<P>If you add the bitmap as a resource, you can create an instance of the CBitmap
+class using the resource ID of the bitmap as the image to be loaded. If you want
+to load a bitmap from a file, you can use the LoadImage API call to load the bitmap
+from the file. After you load the bitmap, you can use the handle for the image to
+attach the image to the CBitmap class, as follows:</P>
+<P>
+<PRE>// Load the bitmap file
+HBITMAP hBitmap = (HBITMAP)::LoadImage(AfxGetInstanceHandle(),
+                    m_sFileName, IMAGE_BITMAP, 0, 0,
+                    LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+// Attach the loaded image to the CBitmap object.
+m_bmpBitmap.Attach(hBitmap);
+</PRE>
+<P>After you load the bitmap into the CBitmap object, you can create a second device
+context and select the bitmap into it. When you've created the second device context,
+you need to make it compatible with the primary device context before the bitmap
+is selected into it. Because device contexts are created by the operating system
+for a specific output device (screen, printer, and so on), you have to make sure
+that the second device context is also attached to the same output device as the
+first.</P>
+<P>
+<PRE>// Create a device context
+CDC dcMem;
+// Make the new device context compatible with the real DC
+dcMem.CreateCompatibleDC(dc);
+// Select the bitmap into the new DC
+dcMem.SelectObject(&amp;m_bmpBitmap);
+</PRE>
+<P>When you select the bitmap into a compatible device context, you can copy the
+bitmap into the regular display device context using the BitBlt function:</P>
+<P>
+<PRE>// Copy the bitmap to the display DC
+dc-&gt;BitBlt(10, 10, bm.bmWidth,
+                 bm.bmHeight, &amp;dcMem, 0, 0,
+                 SRCCOPY);
+</PRE>
+<P>You can also copy and resize the image using the StretchBlt function:</P>
+<P>
+<PRE>// Resize the bitmap while copying it to the display DC
+dc-&gt;StretchBlt(10, 10, (lRect.Width() - 20),
+                (lRect.Height() - 20), &amp;dcMem, 0, 0,
+</PRE>
+<H4>bm.bmWidth, bm.bmHeight, SRCCOPY);</H4>
+<P>By using the StretchBlt function, you can resize the bitmap so that it will fit
+in any area on the screen.</P>
+<P>
+<H3><A NAME="Heading3"></A>Mapping Modes and Coordinate Systems</H3>
+<P>When you are preparing to draw some graphics on a window, you can exercise a lot
+of control over the scale you are using and the area in which you can draw. You can
+control these factors by specifying the mapping mode and the drawing area.</P>
+<P>By specifying the mapping mode, you can control how the coordinates that you specify
+are translated into locations on the screen. The different mapping modes translate
+each point into a different distance. You can set the mapping mode by using the SetMapMode
+device context function:</P>
+<P>
+<PRE>dc-&gt;SetMapMode(MM_ANSIOTROPIC);
+</PRE>
+<P>The available mapping modes are listed in Table 8.2.</P>
+<P>
+<H4>TABLE 8.2. MAPPING MODES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Mode</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MM_ANSIOTROPIC		</TD>
+		<TD ALIGN="LEFT">Logical units are converted into arbitrary units with arbitrary axes.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MM_HIENGLISH		</TD>
+		<TD ALIGN="LEFT">Each logical unit is converted into 0.001 inch. Positive x is to the right, and positive
+			y is up.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MM_HIMETRIC		</TD>
+		<TD ALIGN="LEFT">Each logical unit is converted into 0.01 millimeter. Positive x is to the right,
+			and positive y is up.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MM_ISOTROPIC		</TD>
+		<TD ALIGN="LEFT">Logical units are converted into arbitrary units with equally scaled axes.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MM_LOENGLISH		</TD>
+		<TD ALIGN="LEFT">Each logical unit is converted into 0.01 inch. Positive x is to the right, and positive
+			y is up.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MM_LOMETRIC		</TD>
+		<TD ALIGN="LEFT">Each logical unit is converted into 0.1 millimeter. Positive x is to the right, and
+			positive y is up.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MM_TEXT		</TD>
+		<TD ALIGN="LEFT">Each logical unit is converted into 1 pixel. Positive x is to the right, and positive
+			y is down.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MM_TWIPS		</TD>
+		<TD ALIGN="LEFT">Each logical unit is converted into 1/20 of a point (approximately 1/1440 inch).
+			Positive x is to the right, and positive y is up.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>If you use either the MM_ANSIOTROPIC or MM_ISOTROPIC mapping modes, you can use
+either the SetWindowExt or SetViewportExt functions to specify the drawing area where
+your graphics should appear.</P>
+<P>
+<H2><A NAME="Heading4"></A>Creating a Graphics Application</H2>
+<P>To get a good understanding of how you can put all of this information to use,
+you'll build an application that incorporates a lot of what I've covered so far today.
+This application will have two independent windows, one with a number of options
+to choose for the shape, tool, and color to be displayed. The other window will act
+as a canvas, where all of the selected options will be drawn. The user can select
+whether to display lines, squares, circles, or a bitmap on the second window. The
+user can also specify the color and choose whether to display the pen or brush for
+the circles and squares.</P>
+<P>
+<H3><A NAME="Heading5"></A>Generating the Application Shell</H3>
+<P>As you have learned by now, the first step in building an application is generating
+the initial application shell. This shell provides the basic application functionality,
+displaying your first application dialog, along with all startup and shutdown functionality.</P>
+<P>For the application that you will build today, you need to start with a standard
+dialog-style application shell. You can create this for your application by starting
+a new AppWizard project, providing a suitable project name, such as Graphics. After
+you are in the AppWizard, specify that you are creating a dialog-style application.
+At this point, you can accept all of the default settings, although you won't need
+ActiveX support, and you can specify a more descriptive window title if you want.</P>
+<P>
+<H4>Designing the Main Dialog</H4>
+<P>After you make your way through the AppWizard, you're ready to start designing
+your primary dialog. This window will contain three groups of radio buttons: one
+group for specifying the drawing tool, the next to specify the drawing shape, and
+the third to spec-ify the color. Along with these groups of radio buttons, you'll
+have two buttons on the window: one to open a File Open dialog, for selecting a bitmap
+to be displayed, and the other to close the application.</P>
+<P>To add all these controls to your dialog, lay them out as shown in Figure 8.3
+and specify the control properties listed in Table 8.3.</P>
+<P><A HREF="javascript:popUp('08fig03.gif')"><B>FIGURE 8.3.</B></A><B> </B><I>The
+main dialog layout.</I></P>
+
+<P><I></I>
+<H4>TABLE 8.3. CONTROL PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Group Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Drawing Tool		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RTPEN		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Pen		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Group		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RTBRUSH		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Brush		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RTBITMAP		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">B&amp;itmap		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Group Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Drawing Shape		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RSLINE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Line		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Group		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RSCIRCLE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Circle		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RSSQUARE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Square		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Group Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Color		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RCBLACK		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Bl&amp;ack		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Group		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RCBLUE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Bl&amp;ue		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RCGREEN		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Green		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RCCYAN		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Cya&amp;n		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RCRED		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Red		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RCMAGENTA		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Magenta		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RCYELLOW		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Yellow		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RCWHITE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;White		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Command Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_BBITMAP		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Bi&amp;tmap		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Command Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_BEXIT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">E&amp;xit		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>When you finish designing your main dialog, you need to assign one variable to
+each of the groups of radio buttons. To do this, open the Class Wizard and assign
+one integer variable to each of the three radio button object IDs there. Remember
+that only the object IDs for the radio buttons with the Group option checked will
+appear in the Class Wizard. All of the radio buttons that follow will be assigned
+to the same variable, with sequential values, in the order of the object ID values.
+For this reason, it is important to create all of the radio buttons in each group
+in the order that you want their values to be sequenced.</P>
+<P>To assign the necessary variables to the radio button groups in your application,
+open the Class Wizard and add the variables in Table 8.4 to the objects in your dialog.</P>
+<P>
+<H4>TABLE 8.4. CONTROL VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+		<TD ALIGN="LEFT"><I>Category</I></TD>
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_RTPEN		</TD>
+		<TD ALIGN="LEFT">m_iTool		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_RSLINE		</TD>
+		<TD ALIGN="LEFT">m_iShape		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_RCBLACK		</TD>
+		<TD ALIGN="LEFT">m_iColor		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>While you have the Class Wizard open, you might want to switch back to the first
+tab and add an event-handler function to the Exit button, calling the OnOK function
+in the code for this button. You can compile and run your application now, making
+sure that you have all of the radio button groups defined correctly, that you can't
+select two or more buttons in any one group, and that you can select one button in
+each group without affecting either of the other two groups.</P>
+<P>
+<H4>Adding the Second Dialog</H4>
+<P>When you design the main dialog, you'll add the second window that you'll use
+as a canvas to paint your graphics on. This dialog will be a modeless dialog, which
+will remain open the entire time the application is running. You will put no controls
+on the dialog, providing a clean canvas for drawing.</P>
+<P>To create this second dialog, go to the Resources tab in the workspace pane. Right-click
+the Dialogs folder in the resource tree. Select Insert Dialog from the pop-up menu.
+When the new dialog is open in the window designer, remove all of the controls from
+the window. After you remove all of the controls, open the properties dialog for
+the window and uncheck the System Menu option on the second tab of properties. This
+will prevent the user from closing this dialog without exiting the application. You'll
+also want to give this dialog window an object ID that will describe its function,
+such as IDD_PAINT_DLG.</P>
+<P>After you finish designing the second dialog, create a new class for this window
+by opening the Class Wizard. When you try to open the Class Wizard, you'll be asked
+if you want to create a new class for the second dialog window. Leave this option
+at its default setting and click the OK button. When asked to specify the name of
+the new class on the next dialog, give the class a suitable name, such as CPaintDlg,
+and be sure that the base class is set to CDialog. After you click OK on this dialog
+and create the new class, you can close the Class Wizard.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> You need to make sure that the new dialog is selected when you try
+	to open the Class Wizard. If the dialog is not selected, and you've switched to another
+	object, or even some code in your application, the Class Wizard will not know that
+	you need a class for the second dialog in your application.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>Now that you have the second dialog defined, you need to add the code in the first
+dia-log window to open the second dialog. You can accomplish this by adding two lines
+of code to the OnInitDialog function in the first window's class. First, create the
+dialog using the Create method of the CDialog class. This function takes two arguments:
+the object ID of the dialog and a pointer to the parent window, which will be the
+main dialog. The second function will be the ShowWindow function, passing the value
+SW_SHOW as the only argument. This function displays the second dialog next to the
+first dialog. Add a couple of lines of variable initialization to make your OnInitDialog
+function resemble Listing 8.1.</P>
+<P>
+<H4>LISTING 8.1. THE OnInitDialog FUNCTION.</H4>
+<PRE>1:  BOOL CGraphicsDlg::OnInitDialog()
+2:  {
+3:      CDialog::OnInitDialog();
+4:
+.
+.
+.
+27:
+28:     // TODO: Add extra initialization here
+29:
+30:     ///////////////////////
+31:     // MY CODE STARTS HERE
+32:     ///////////////////////
+33:
+34:     // Initialize the variables and update the dialog window
+35:     m_iColor = 0;
+</PRE>
+
+<PRE>36: m_iShape = 0;</PRE>
+
+<PRE>37:     m_iTool = 0;
+38:     UpdateData(FALSE);
+39:
+40:     // Create the second dialog window
+41:     m_dlgPaint.Create(IDD_PAINT_DLG, this);
+42:     // Show the second dialog window
+43:     m_dlgPaint.ShowWindow(SW_SHOW);
+44:
+45:     ///////////////////////
+46:     // MY CODE ENDS HERE
+47:     ///////////////////////
+48:
+49:     return TRUE;  // return TRUE  unless you set the focus to a control
+50: }
+</PRE>
+<P>Before you can compile and run your application, you'll need to include the header
+for the second dialog class in the source code for the first dialog. You'll also
+need to add the second dialog class as a variable to the first--which is a simple
+matter of adding a member variable to the first dialog class, specifying the variable
+type as the class type, in this case CPaintDlg, giving the variable the name that
+you used in Listing 8.1, m_dlgPaint, and specifying the variable access as private.
+To include the header file in the first dialog, scroll to the top of the source code
+for the first dialog and add an include statement, as in Listing 8.2.</P>
+<P>
+<H4>LISTING 8.2. THE INCLUDE STATEMENT OF THE MAIN DIALOG.</H4>
+<PRE>1: // GraphicsDlg.cpp : implementation file
+2: //
+3:
+4: #include &quot;stdafx.h&quot;
+5: #include &quot;Graphics.h&quot;
+6: #include &quot;PaintDlg.h&quot;
+7: #include &quot;GraphicsDlg.h&quot;
+8:
+</PRE>
+<P>Conversely, you'll need to include the header file for the main dialog in the
+source code for the second dialog. You can edit this file, PaintDlg.cpp, making the
+include statements match those in Listing 8.2.</P>
+<P>If you compile and run your application, you should see your second dialog window
+open along with the first window. What you'll also noticed is that when you close
+the first dialog, and thus close the application, the second dialog window also closes,
+even though you didn't add any code to make this happen. The second dialog is a child
+window to the first dialog. When you created the second dialog, on line 41 of the
+code listing, you passed a pointer to the first dialog window as the parent window
+for the second window. This set up a parent-child relationship between these two
+windows. When the parent closes, so does the child. This is the same relationship
+the first dialog window has with all of the controls you placed on it. Each of those
+controls is a child window of the dialog. In a sense, what you've done is make the
+second dialog just another control on the first dialog.</P>
+<P>
+<H3><A NAME="Heading7"></A>Adding the Graphics Capabilities</H3>
+<P>Because all of the radio button variables are declared as public, the second dialog
+will be able to see and reference them as it needs to. You can place all of the graphic
+drawing functionality into the second dialog class. However, you do need to place
+some functionality into the first dialog to keep the variables synchronized and to
+tell the second dialog to draw its graphics. Accomplishing this is simpler than you
+might think.</P>
+<P>Whenever a window needs to be redrawn (it may have been hidden behind another
+window and come to the front or minimized or off the visible screen and now in view),
+the operating system triggers the dialog's OnPaint function. You can place all the
+functionality for drawing your graphics in this function and make persistent the
+graphics you display.</P>
+<P>Now that you know where to place your code to display the graphics, how can you
+cause the second dialog to call its OnPaint function whenever the user changes one
+of the selections on the first dialog? Well, you could hide and then show the second
+dialog, but that might look a little peculiar to the user. Actually, a single function
+will convince the second window that it needs to redraw its entire dialog. This function,
+Invalidate, requires no arguments and is a member function of the CWnd class, so
+it can be used on any window or control. The Invalidate function tells the window,
+and the operating system, that the display area of the window is no longer valid
+and that it needs to be redrawn. You can trigger the OnPaint function in the second
+dialog at will, without resorting to any awkward tricks or hacks.</P>
+<P>At this point, we have determined that all of the radio buttons can use the same
+functionality on their clicked events. You can set up a single event-handler function
+for the clicked event on all of the radio button controls. In this event function,
+you'll need to synchronize the class variables with the dialog controls by calling
+the UpdateData function and then tell the second dialog to redraw itself by calling
+its Invalidate function. You can write a single event handler that does these two
+things with the code in Listing 8.3.</P>
+<P>
+<H4>LISTING 8.3. THE OnRSelection FUNCTION.</H4>
+<PRE>1: void CGraphicsDlg::OnRSelection()
+2: {
+3:     // TODO: Add your control notification handler code here
+4:
+5:     // Synchronize the data
+6:     UpdateData(TRUE);
+7:     // Repaint the second dialog
+8:     m_dlgPaint.Invalidate();
+9: }
+</PRE>
+<H4>Drawing Lines</H4>
+<P>You can compile and run your application at this point, and the second dialog
+redraws itself whenever you choose a different radio button on the main dialog, but
+you wouldn't notice anything happening. At this point, you are triggering the redraws,
+but you haven't told the second dialog what to draw, which is the next step in building
+this application.</P>
+<P>The easiest graphics to draw on the second dialog will be different styles of
+lines because you already have some experience drawing them. What you'll want to
+do is create one pen for each of the different pen styles, using the currently selected
+color. After you have created all of the pens, you'll loop through the different
+pens, selecting each one in turn and drawing a line across the dialog with each one.
+Before you start this loop, you need to perform a few calculations to determine where
+each of the lines should be on the dialog, with their starting and stopping points.</P>
+<P>To begin adding this functionality to your application, you first add a color
+table, with one entry for each of the colors in the group of available colors on
+the first dialog. To create this color table, add a new member variable to the second
+dialog class, CPaintDlg, and specify the variable type as static const COLORREF,
+the name as m_crColors[8], and the access as public. Open the source code file for
+the second dialog class, and add the color table in Listing 8.4 near the top of the
+file before the class constructor and destructor.</P>
+<P>
+<H4>LISTING 8.4. THE COLOR TABLE.</H4>
+<PRE>1:  const COLORREF CPaintDlg::m_crColors[8] = {
+2:      RGB(   0,   0,   0),    // Black
+3:      RGB(   0,   0, 255),    // Blue
+4:      RGB(   0, 255,   0),    // Green
+5:      RGB(   0, 255, 255),    // Cyan
+6:      RGB( 255,   0,   0),    // Red
+7:      RGB( 255,   0, 255),    // Magenta
+8:      RGB( 255, 255,   0),    // Yellow
+9:      RGB( 255, 255, 255)     // White
+10: };
+11: /////////////////////////////////////////////////////////////////// 12: // CPaintDlg dialog
+.
+</PRE>
+
+<PRE>.</PRE>
+
+<PRE>. 
+</PRE>
+<P>With the color table in place, you can add a new function for drawing the lines.
+To keep the OnPaint function from getting too cluttered and difficult to understand,
+it makes more sense to place a limited amount of code in it to determine what should
+be drawn on the second dialog and then call other more specialized functions to draw
+the various shapes. With this in mind, you need to create a new member function for
+the second dialog class for drawing the lines. Declare this as a void function, and
+specify its declaration as DrawLine(CPaintDC *pdc, int iColor) and its access as
+private. You can edit this function, adding the code in Listing 8.5.</P>
+<P>
+<H4>LISTING 8.5. THE DrawLine FUNCTION.</H4>
+<PRE>1:  void CPaintDlg::DrawLine(CPaintDC *pdc, int iColor)
+2:  {
+3:      // Declare and create the pens
+4:      CPen lSolidPen (PS_SOLID, 1, m_crColors[iColor]);
+5:      CPen lDotPen (PS_DOT, 1, m_crColors[iColor]);
+6:      CPen lDashPen (PS_DASH, 1, m_crColors[iColor]);
+7:      CPen lDashDotPen (PS_DASHDOT, 1, m_crColors[iColor]);
+8:      CPen lDashDotDotPen (PS_DASHDOTDOT, 1, m_crColors[iColor]);
+9:      CPen lNullPen (PS_NULL, 1, m_crColors[iColor]);
+10:     CPen lInsidePen (PS_INSIDEFRAME, 1, m_crColors[iColor]);
+11:
+12:     // Get the drawing area
+13:     CRect lRect;
+14:     GetClientRect(lRect);
+15:     lRect.NormalizeRect();
+16:
+17:     // Calculate the distance between each of the lines
+18:     CPoint pStart;
+19:     CPoint pEnd;
+20:     int liDist = lRect.Height() / 8;
+21:     CPen *lOldPen;
+22:     // Specify the starting points
+23:     pStart.y = lRect.top;
+24:     pStart.x = lRect.left;
+25:     pEnd.y = pStart.y;
+26:     pEnd.x = lRect.right;
+27:     int i;
+28:     // Loop through the different pens
+29:     for (i = 0; i &lt; 7; i++)
+30:     {
+31:         // Which pen are we on?
+32:         switch (i)
+33:         {
+34:         case 0:    // Solid
+35:             lOldPen = pdc-&gt;SelectObject(&amp;lSolidPen); 
+36:             break;
+37:         case 1:    // Dot
+38:             pdc-&gt;SelectObject(&amp;lDotPen);
+39:             break;
+40:         case 2:    // Dash
+41:             pdc-&gt;SelectObject(&amp;lDashPen);
+42:             break;
+43:         case 3:    // Dash Dot
+44:             pdc-&gt;SelectObject(&amp;lDashDotPen);
+45:             break;
+46:         case 4:    // Dash Dot Dot
+47:             pdc-&gt;SelectObject(&amp;lDashDotDotPen);
+48:             break;
+49:         case 5:    // Null
+50:             pdc-&gt;SelectObject(&amp;lNullPen);
+51:             break;
+52:         case 6:    // Inside
+53:             pdc-&gt;SelectObject(&amp;lInsidePen);
+54:             break;
+55:         }
+56:         // Move down to the next position
+57:         pStart.y = pStart.y + liDist;
+58:         pEnd.y = pStart.y;
+59:         // Draw the line
+60:         pdc-&gt;MoveTo(pStart);
+61:         pdc-&gt;LineTo(pEnd);
+62:     }
+63:     // Select the original pen
+64:     pdc-&gt;SelectObject(lOldPen);
+65: }
+</PRE>
+<P>Now you need to edit the OnPaint function so that the OnLine function is called
+when it needs to be called. Add this function through the Class Wizard as an event-handler
+function for the WM_PAINT message. You'll notice that the generated code for this
+function creates a CPaintDC variable instead of the normal CDC class. The CPaintDC
+class is a descendent of the CDC device context class. It automatically calls the
+BeginPaint and EndPaint API functions that all Windows applications must call before
+drawing any graphics during the WM_PAINT event message processing. It can be treated
+just like a regular device context object, calling all of the same functions.</P>
+<P>When you are in the OnPaint function, you need to get a pointer to the parent
+window so that you can check the values of the variables tied to the groups of radio
+buttons to determine the color, tools, and shape to be drawn on the second dialog.
+This information tells you whether to call the DrawLine function or another function
+that you haven't written yet.</P>
+<P>To add this functionality to your application, add an event handler for the WM_PAINT
+message on the second dialog class, adding the code in Listing 8.6 to the function
+created in your class.</P>
+<P>
+<H4>LISTING 8.6. THE OnPaint FUNCTION.</H4>
+<PRE>1:  void CPaintDlg::OnPaint()
+2:  {
+3:      CPaintDC dc(this); // device context for painting
+4:
+5:      // TODO: Add your message handler code here
+6:
+7:      // Get a pointer to the parent window
+8:      CGraphicsDlg *pWnd = (CGraphicsDlg*)GetParent();
+9:      // Do we have a valid pointer?
+10:     if (pWnd)
+11:     {
+12:         // Is the tool a bitmap?
+13:         if (pWnd-&gt;m_iTool == 2)
+14:         {
+15:         }
+16:         else    // No, we're drawing a shape
+17:         {
+18:             // Are we drawing a line?
+19:             if (pWnd-&gt;m_iShape == 0)
+20:                 DrawLine(&amp;dc, pWnd-&gt;m_iColor);
+21:         }
+22:     }
+23:     // Do not call CDialog::OnPaint() for painting messages
+24:} 
+</PRE>
+<P>At this point, if you compile and run your application, you should be able to
+draw lines across the second dialog, as shown in Figure 8.4.</P>
+<P><A HREF="javascript:popUp('08fig04.gif')"><B>FIGURE 8.4.</B></A><B> </B><I>Drawing
+lines on the second dialog.</I></P>
+
+<P><I></I>
+<H4>Drawing Circles and Squares</H4>
+<P>Now that you have the basic structure in place, and you can see how you can change
+what is drawn on the second dialog at will, you are ready to add code to the second
+dialog to draw the circles and squares. To draw these figures, you use the Ellipse
+and Rectangle device context functions. These functions will use the currently selected
+pen and brush to draw these figures at the specified location. With both functions,
+you pass a CRect object to specify the rectangle in which to draw the specified figure.
+The Rectangle function fills the entire space specified, and the Ellipse function
+draws a circle or ellipse where the middle of each side of the rectangle touches
+the edge of the ellipse. Because these functions use both the pen and brush, you'll
+need to create and select an invisible pen and invisible brush to allow the user
+to choose either the pen or the brush. For the pen, you can use the null pen for
+this purpose, but for the brush, you'll need to create a solid brush the color of
+the window background (light gray).</P>
+<P>When you calculate the position for each of these figures, you need to take a
+different approach from what you used with the lines. With the lines, you were able
+to get the height of the window, divide it by 8, and then draw a line at each of
+the divisions from the left edge to the right edge. With the ellipses and rectangles,
+you'll need to divide the dialog window into eight even rectangles. The easiest way
+to do this is to create two rows of figures with four figures in each row. Leave
+a little space between each figure so that the user can see the different pens used
+to outline each figure.</P>
+<P>To add this functionality to your application, add a new function to the second
+dialog class. Specify the function type as void, the declaration as DrawRegion(CPaintDC
+*pdc, int iColor, int iTool, int iShape), and the access as private. Edit the code
+in this function, adding the code in Listing 8.7.</P>
+<P>
+<H4>LISTING 8.7. THE DrawRegion FUNCTION.</H4>
+<PRE>1:  void CPaintDlg::DrawRegion(CPaintDC *pdc, int iColor, int iTool, int 		  &Acirc;iShape)
+2:  {
+3:      // Declare and create the pens
+4:      CPen lSolidPen (PS_SOLID, 1, m_crColors[iColor]);
+5:      CPen lDotPen (PS_DOT, 1, m_crColors[iColor]);
+6:      CPen lDashPen (PS_DASH, 1, m_crColors[iColor]);
+7:      CPen lDashDotPen (PS_DASHDOT, 1, m_crColors[iColor]);
+8:      CPen lDashDotDotPen (PS_DASHDOTDOT, 1, m_crColors[iColor]);
+9:      CPen lNullPen (PS_NULL, 1, m_crColors[iColor]);
+10:     CPen lInsidePen (PS_INSIDEFRAME, 1, m_crColors[iColor]);
+11:
+12:     // Declare and create the brushes
+13:     CBrush lSolidBrush(m_crColors[iColor]);
+14:     CBrush lBDiagBrush(HS_BDIAGONAL, m_crColors[iColor]);
+15:     CBrush lCrossBrush(HS_CROSS, m_crColors[iColor]);
+16:     CBrush lDiagCrossBrush(HS_DIAGCROSS, m_crColors[iColor]);
+17:     CBrush lFDiagBrush(HS_FDIAGONAL, m_crColors[iColor]);
+18:     CBrush lHorizBrush(HS_HORIZONTAL, m_crColors[iColor]);
+19:     CBrush lVertBrush(HS_VERTICAL, m_crColors[iColor]);
+20:     CBrush lNullBrush(RGB(192, 192, 192));
+21:
+22:     // Calculate the size of the drawing regions
+23:     CRect lRect; 
+24:     GetClientRect(lRect);
+25:     lRect.NormalizeRect();
+26:     int liVert = lRect.Height() / 2;
+27:     int liHeight = liVert - 10;
+28:     int liHorz = lRect.Width() / 4;
+29:     int liWidth = liHorz - 10;
+30:     CRect lDrawRect;
+31:     CPen *lOldPen;
+32:     CBrush *lOldBrush;
+33:     int i;
+34:     // Loop through all of the brushes and pens
+35:     for (i = 0; i &lt; 7; i++)
+36:     {
+37:         switch (i) 
+38:         {
+39:         case 0:    // Solid
+40:             // Determine the location for this figure.
+41:             // Start the first row
+42:             lDrawRect.top = lRect.top + 5;
+43:             lDrawRect.left = lRect.left + 5;
+44:             lDrawRect.bottom = lDrawRect.top + liHeight;
+45:             lDrawRect.right = lDrawRect.left + liWidth;
+46:             // Select the appropriate pen and brush
+47:             lOldPen = pdc-&gt;SelectObject(&amp;lSolidPen);
+48:             lOldBrush = pdc-&gt;SelectObject(&amp;lSolidBrush);
+49:             break;
+50:         case 1:    // Dot - Back Diagonal
+51:             // Determine the location for this figure.
+52:             lDrawRect.left = lDrawRect.left + liHorz;
+53:             lDrawRect.right = lDrawRect.left + liWidth;
+54:             // Select the appropriate pen and brush
+55:             pdc-&gt;SelectObject(&amp;lDotPen);
+56:             pdc-&gt;SelectObject(&amp;lBDiagBrush);
+57:             break; 
+58:         case 2:    // Dash - Cross Brush
+59:             // Determine the location for this figure.
+60:             lDrawRect.left = lDrawRect.left + liHorz;
+61:             lDrawRect.right = lDrawRect.left + liWidth;
+62:             // Select the appropriate pen and brush
+63:             pdc-&gt;SelectObject(&amp;lDashPen);
+64:             pdc-&gt;SelectObject(&amp;lCrossBrush);
+65:             break;
+66:         case 3:    // Dash Dot - Diagonal Cross
+67:             // Determine the location for this figure.
+68:             lDrawRect.left = lDrawRect.left + liHorz;
+69:             lDrawRect.right = lDrawRect.left + liWidth;
+70:             // Select the appropriate pen and brush
+71:             pdc-&gt;SelectObject(&amp;lDashDotPen);
+72:             pdc-&gt;SelectObject(&amp;lDiagCrossBrush);
+73:             break;
+74:         case 4:    // Dash Dot Dot - Forward Diagonal
+75:             // Determine the location for this figure.
+76:             // Start the second row
+77:             lDrawRect.top = lDrawRect.top + liVert;
+78:             lDrawRect.left = lRect.left + 5;
+79:             lDrawRect.bottom = lDrawRect.top + liHeight;
+80:             lDrawRect.right = lDrawRect.left + liWidth;
+81:             // Select the appropriate pen and brush
+82:             pdc-&gt;SelectObject(&amp;lDashDotDotPen);
+83:             pdc-&gt;SelectObject(&amp;lFDiagBrush);
+84:             break;
+85:         case 5:    // Null - Horizontal
+86:             // Determine the location for this figure.
+87:             lDrawRect.left = lDrawRect.left + liHorz;
+88:             lDrawRect.right = lDrawRect.left + liWidth;
+89:             // Select the appropriate pen and brush
+90:             pdc-&gt;SelectObject(&amp;lNullPen);
+91:             pdc-&gt;SelectObject(&amp;lHorizBrush);
+92:             break;
+93:         case 6:    // Inside - Vertical
+94:             // Determine the location for this figure.
+95:             lDrawRect.left = lDrawRect.left + liHorz;
+96:             lDrawRect.right = lDrawRect.left + liWidth;
+97:             // Select the appropriate pen and brush
+98:             pdc-&gt;SelectObject(&amp;lInsidePen);
+99:             pdc-&gt;SelectObject(&amp;lVertBrush);
+100:            break;
+101:        }
+102:        // Which tool are we using?
+103:        if (iTool == 0)
+104:            pdc-&gt;SelectObject(lNullBrush);
+105:        else
+106:            pdc-&gt;SelectObject(lNullPen);
+107:        // Which shape are we drawing?
+108:        if (iShape == 1)
+109:            pdc-&gt;Ellipse(lDrawRect);
+110:        else
+111:            pdc-&gt;Rectangle(lDrawRect);
+112:    }
+113:    // Reset the original brush and pen
+114:    pdc-&gt;SelectObject(lOldBrush);
+115:    pdc-&gt;SelectObject(lOldPen);
+116:} 
+</PRE>
+<P>Now that you have the capability to draw the circles and squares in the second
+dialog, you'll need to call this function when the user has selected either of these
+two figures with either a pen or a brush. To do this, add the two lines starting
+at line 21 in Listing 8.8 to the OnPaint function.</P>
+<P>
+<H4>LISTING 8.8. THE MODIFIED OnPaint FUNCTION.</H4>
+<PRE>1:  void CPaintDlg::OnPaint()
+2:  {
+3:      CPaintDC dc(this); // device context for painting
+4:
+5:      // TODO: Add your message handler code here
+6:
+7:      // Get a pointer to the parent window
+8:      CGraphicsDlg *pWnd = (CGraphicsDlg*)GetParent();
+9:      // Do we have a valid pointer?
+10:     if (pWnd)
+11:     {
+12:         // Is the tool a bitmap?
+13:         if (pWnd-&gt;m_iTool == 2)
+14:         {
+15:         }
+16:         else    // No, we're drawing a shape
+17:         {
+18:             // Are we drawing a line?
+19:             if (m_iShape == 0)
+20:                 DrawLine(&amp;dc, pWnd-&gt;m_iColor);
+21:             else    // We're drawing a ellipse or rectangle
+22:                 DrawRegion(&amp;dc, pWnd-&gt;m_iColor, pWnd-&gt;m_iTool, 
+              &Acirc;pWnd-&gt;m_iShape);
+23:         }
+24:     }
+25:     // Do not call CDialog::OnPaint() for painting messages
+26:} 
+</PRE>
+<P>Now you should be able to compile and run your application and display not only
+lines, but also squares and circles, switching between displaying the outlines and
+the filled-in figure without any outline, as shown in Figure 8.5.</P>
+<P><A HREF="javascript:popUp('08fig05.gif')"><B>FIGURE 8.5.</B></A><B> </B><I>Drawing
+rectangles on the second dialog.</I></P>
+
+<P><I></I>
+<H4>Loading Bitmaps</H4>
+<P>Now that you can draw various graphic images on the second dialog window, all
+that's left is to add the functionality to load and display bitmaps. You could easily
+add the bitmaps to the resources in the application, give them their own object IDs,
+and then use the LoadBitmap and MAKEINTRESOURCE functions to load the bitmap into
+a CBitmap class object, but that isn't extremely useful when you start building your
+own applications. What would be really useful is the ability to load bitmaps from
+files on the computer disk. To provide this functionality, you use the LoadImage
+API function to load the bitmap images into memory and then attach the loaded image
+to the CBitmap object.</P>
+<P>To do this in your application, you can attach a function to the bitmap button
+on the first dialog that displays the File Open dialog to the user, allowing the
+user to select a bitmap to be displayed. You'll want to build a filter for the dialog,
+limiting the available files to bitmaps that can be displayed in the second dialog.
+After the user selects a bitmap, you'll get the file and path name from the dialog
+and load the bitmap using the LoadImage function. When you have a valid handle to
+the bitmap that was loaded into memory, you'll delete the current bitmap image from
+the CBitmap object. If there was a bitmap loaded into the CBitmap object, you'll
+detach the CBitmap object from the now deleted image. After you make sure that there
+isn't already an image loaded in the CBitmap object, you attach the image you just
+loaded into memory, using the Attach function. At this point, you want to invalidate
+the second dialog so that if it's displaying a bitmap, it displays the newly loaded
+bitmap.</P>
+<P>To support this functionality, you need to add a string variable to hold the bitmap
+name, and a CBitmap variable to hold the bitmap image, to the first dialog class.
+Add these two variables as listed in Table 8.5.</P>
+<P>
+<H4>TABLE 8.5. BITMAP VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+		<TD ALIGN="LEFT"><I>Access</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_sBitmap		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+		<TD ALIGN="LEFT">Public		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_bmpBitmap		</TD>
+		<TD ALIGN="LEFT">CBitmap		</TD>
+		<TD ALIGN="LEFT">Public		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>After you add the variables to the first dialog class, add an event-handler function
+to the clicked event of the Bitmap button using the Class Wizard. After you add this
+function, edit it, adding the code in Listing 8.9.</P>
+<P>
+<H4>LISTING 8.9. THE OnBbitmap FUNCTION.</H4>
+<PRE>1:  void CGraphicsDlg::OnBbitmap()
+2:  {
+3:      // TODO: Add your control notification handler code here
+4:
+5:      // Build a filter for use in the File Open dialog
+6:      static char BASED_CODE szFilter[] = &quot;Bitmap Files (*.bmp)|*.bmp||&quot;;
+7:      // Create the File Open dialog
+8:      CFileDialog m_ldFile(TRUE, &quot;.bmp&quot;, m_sBitmap,
+9:          OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, szFilter);
+10:
+11:     // Show the File Open dialog and capture the result
+12:     if (m_ldFile.DoModal() == IDOK)
+13:     {
+14:         // Get the filename selected
+15:         m_sBitmap = m_ldFile.GetPathName();
+16:         // Load the selected bitmap file
+17:         HBITMAP hBitmap = (HBITMAP) ::LoadImage(AfxGetInstanceHandle(),
+18:             m_sBitmap, IMAGE_BITMAP, 0, 0, 
+19:             LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+20:
+21:         // Do we have a valid handle for the loaded image?
+22:         if (hBitmap)
+23:         {
+24:             // Delete the current bitmap
+25:             if (m_bmpBitmap.DeleteObject())
+26:                 // If there was a bitmap, detach it
+27:                 m_bmpBitmap.Detach();
+28:             // Attach the currently loaded bitmap to the bitmap object
+29:             m_bmpBitmap.Attach(hBitmap);
+30:         }
+31:         // Invalidate the second dialog window
+32:         m_dlgPaint.Invalidate();
+33:     }
+34: }
+</PRE>
+<H4>Displaying Bitmaps</H4>
+<P>Now that you can load bitmaps into memory, you need to display them for the user.
+You need to copy the bitmap from the CBitmap object to a BITMAP structure, using
+the GetBitmap function, which will get the width and height of the bitmap image.
+Next, you'll create a new device context that is compatible with the screen device
+context. You'll select the bitmap into the new device context and then copy it from
+this second device context to the original device context, resizing it as it's copied,
+using the StretchBlt function.</P>
+<P>To add this functionality to your application, add a new member function to the
+second dialog class. Specify the function type as void, the function declaration
+as ShowBitmap(CPaintDC *pdc, CWnd *pWnd), and the function access as private. Edit
+the function, adding the code in Listing 8.10.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Notice that you have declared the window pointer being passed in
+	as a pointer to a CWnd object, instead of the class type of your main dialog. To
+	declare it as a pointer to the class type of the first dialog, you'd need to declare
+	the class for the first dialog before the class declaration for the second dialog.
+	Meanwhile, the first dialog requires that the second dialog class be declared first.
+	This affects the order in which the include files are added to the source code at
+	the top of each file. You cannot have both classes declared before the other; one
+	has to be first. Although there are ways to get around this problem, by declaring
+	a place holder for the second class before the declaration of the first class, it's
+	easier to cast the pointer as a pointer to the first dialog class in the function
+	in this instance. To learn how to declare a place holder for the second class, see
+	Appendix A, &quot;C++ Review.&quot;
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>LISTING 8.10. THE ShowBitmap FUNCTION.</H4>
+<PRE>1:  void CPaintDlg::ShowBitmap(CPaintDC *pdc, CWnd *pWnd)
+2:  {
+3:      // Convert the pointer to a pointer to the main dialog class
+4:      CGraphicsDlg *lpWnd = (CGraphicsDlg*)pWnd;
+5:      BITMAP bm;
+6:      // Get the loaded bitmap
+7:      lpWnd-&gt;m_bmpBitmap.GetBitmap(&amp;bm);
+8:      CDC dcMem;
+9:      // Create a device context to load the bitmap into
+10:     dcMem.CreateCompatibleDC(pdc);
+11:     // Select the bitmap into the compatible device context
+12:     CBitmap* pOldBitmap = (CBitmap*)dcMem.SelectObject 	      &Acirc;(lpWnd-&gt;m_bmpBitmap);
+13:     CRect lRect;
+14:     // Get the display area available
+15:     GetClientRect(lRect);
+16:     lRect.NormalizeRect();
+17:     // Copy and resize the bitmap to the dialog window
+18:     pdc-&gt;StretchBlt(10, 10, (lRect.Width() - 20),
+19:             (lRect.Height() - 20), &amp;dcMem, 0, 0,
+20:             bm.bmWidth, bm.bmHeight, SRCCOPY);
+21: }
+</PRE>
+<P>Now that you have the ability to display the currently selected bitmap on the
+dialog, you'll need to add the functionality to call this function to the OnPaint
+function in the second dialog. You can determine whether a bitmap has been specified
+by checking the value of the m_sBitmap variable on the first dialog. If this string
+is empty, there is no bitmap to be displayed. If the string is not empty, you can
+call the ShowBitmap function. To add this last bit of functionality to this application,
+edit the OnPaint function, adding lines 15 through 18 from Listing 8.11.</P>
+<P>
+<H4>LISTING 8.11. THE MODIFIED OnPaint FUNCTION.</H4>
+<PRE>1:  void CPaintDlg::OnPaint()
+2:  {
+3:      CPaintDC dc(this); // device context for painting
+4:
+5:      // TODO: Add your message handler code here
+6:
+7:      // Get a pointer to the parent window
+8:      CGraphicsDlg *pWnd = (CGraphicsDlg*)GetParent();
+9:      // Do we have a valid pointer?
+10:     if (pWnd)
+11:     {
+12:         // Is the tool a bitmap?
+13:         if (pWnd-&gt;m_iTool == 2)
+14:         {
+15:             // Is there a bitmap selected and loaded?
+16:             if (pWnd-&gt;m_sBitmap != &quot;&quot;)
+17:                 // Display it
+18:                 ShowBitmap(&amp;dc, pWnd);
+19:         }
+20:         else    // No, we're drawing a shape
+21:         {
+22:             // Are we drawing a line?
+23:             if (m_iShape == 0)
+24:                 DrawLine(&amp;dc, pWnd-&gt;m_iColor);
+25:             else    // We're drawing a ellipse or rectangle
+26:                 DrawRegion(&amp;dc, pWnd-&gt;m_iColor, pWnd-&gt;m_iTool, 
+27:                                 pWnd-&gt;m_iShape);
+28:         }
+29:     }
+30:     // Do not call CDialog::OnPaint() for painting messages
+31:} 
+</PRE>
+<P>At this point, you should be able to select a bitmap from your system and display
+it in the second dialog, as shown in Figure 8.6.</P>
+<P><A HREF="javascript:popUp('08fig06.gif')"><B>FIGURE 8.6.</B></A><B> </B><I>Showing
+a bitmap in the second dialog.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading9"></A>Summary</H2>
+<P>What a way to start the week! You learned a lot today. You learned how Windows
+uses device context objects to allow you to draw graphics in the same way every time,
+without having to worry about what hardware users might have in their computers.
+You learned about some of the basic GDI objects, such as pens and brushes, and how
+they are used to draw figures on windows and dialogs. You also learned how you can
+load bitmaps from the system disk and display them onscreen for the user to see.
+You learned about the different pen and brush styles and how you can use these to
+draw the type of figure you want to draw. You also learned how you can specify colors
+for use with pens and brushes so that you can control how images appear to the user.</P>
+<P>
+<H2><A NAME="Heading10"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q Why do I need to specify both a pen and a brush if I just want to display
+	one or the other?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> You are always drawing with both when you draw any object that is filled
+	in. The pen draws the outline, and the brush fills in the interior. You cannot choose
+	to use one or the other; you have to use both. If you only want to display one or
+	the other, you need to take special steps.
+	<P>
+	<DT></DT>
+	<DD><B>Q Why do all of the pen styles become solid when I increase the pen width
+	above 1?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> When you increase the pen width, you are increasing the size of the
+	dot that is used to draw with. If you remember Day 3, &quot;Allowing User Interaction--Integrating
+	the Mouse and Keyboard in Your Application,&quot; when you first tried to draw by
+	capturing each spot the mouse covered, all you drew were a bunch of dots. Well, when
+	you increase the size of the dots that you are drawing the line with, the gaps between
+	the dots are filled in from both sides, providing an unbroken line.
+	<P>
+</DL>
+
+<H2><A NAME="Heading11"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading12"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What are the three values that are combined to specify a color?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>What do you use to draw on windows without needing to know what graphics
+	card the user has?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What size bitmap can you use to make a brush from it?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>What event message is sent to a window to tell it to redraw itself?
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>How can you cause a window to repaint itself?
+	<P>
+</DL>
+
+<H3><A NAME="Heading13"></A>Exercises</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Make the second dialog window resizable, and make it adjust the figures
+	drawn on it whenever it's resized.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Add a bitmap brush to the set of brushes used to create the rectangles
+	and ellipses.
+</DL>
+
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch07/ch07.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch09/ch09.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

@@ -1,0 +1,1688 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 12 -- Adding Toolbars and Status Bars</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch11/ch11.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch13/ch13.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 12 -<BR>
+Adding Toolbars and Status Bars</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Toolbars, Status Bars, and Menus</A>
+	<LI><A HREF="#Heading2">Designing a Toolbar</A>
+	<UL>
+		<LI><A HREF="#Heading3">Creating a New Toolbar</A>
+		<LI><A HREF="#Heading4">Attaching the Toolbar to the Application Frame</A>
+		<LI><A HREF="#Heading5">Controlling the Toolbar Visibility</A>
+	</UL>
+	<LI><A HREF="#Heading6">Adding a Combo Box to a Toolbar</A>
+	<UL>
+		<LI><A HREF="#Heading7">Editing the Project Resources</A>
+		<LI><A HREF="#Heading8">Creating the Toolbar Combo Box</A>
+		<LI><A HREF="#Heading9">Handling the Toolbar Combo Box Events</A>
+		<LI><A HREF="#Heading10">Updating the Toolbar Combo Box</A>
+	</UL>
+	<LI><A HREF="#Heading11">Adding a New Status Bar Element</A>
+	<UL>
+		<LI><A HREF="#Heading12">Adding a New Status Bar Pane</A>
+		<LI><A HREF="#Heading13">Setting a Status Bar Pane Text</A>
+	</UL>
+	<LI><A HREF="#Heading14">Summary</A>
+	<LI><A HREF="#Heading15">Q&amp;A</A>
+	<LI><A HREF="#Heading16">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading17">Quiz</A>
+		<LI><A HREF="#Heading18">Exercises</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+When you created your SDI and MDI applications, they not only came with default menus
+already attached, but also they came with simple toolbars to go with the menus. These
+simple toolbars had the standard set of functions (New, Open, Save, Print, Cut, Copy,
+and Paste) that are on the toolbars of most Windows applications. Most applications
+don't limit their toolbars to just this standard selection of functions but have
+customized toolbars that reflect the specific functionality of the application.</P>
+
+<P>In addition to the toolbars, the SDI and MDI applications have a status bar at
+the bottom of the frame that provides textual descriptions of the toolbar buttons
+and menu entries. The status bar also has default areas that display whether the
+Caps, Num, and Scroll Lock keys are on.</P>
+<P>Today, you will learn</P>
+<P>
+
+<UL>
+	<LI>How to design your own toolbar.
+	<P>
+	<LI>How to attach your toolbar to the application frame.
+	<P>
+	<LI>How to show and hide your toolbar with a menu entry.
+	<P>
+	<LI>How to place a combo box on your toolbar.
+	<P>
+	<LI>How to display descriptions of your toolbar entries in the status bar.
+	<P>
+	<LI>How to add your own status bar elements.
+</UL>
+
+<H2><A NAME="Heading1"></A>Toolbars, Status Bars, and Menus</H2>
+<P>One of the driving intentions behind the development of Graphical User Interfaces
+(GUI) such as Windows was the goal of making computers easier to use and learn. In
+the effort to accomplish this goal, GUI designers stated that all applications should
+use a standard set of menus and that the menus should be organized in a standardized
+manner. When Microsoft designed the Windows operating system, it followed this same
+philosophy, using a standard set of menus organized in a standard order on most of
+its applications.</P>
+<P>A funny thing happened once Windows became widely used. The application designers
+found that new users still had a difficult time learning new applications and that
+advanced users found the menus cumbersome. As a result, the application designers
+invented toolbars as one solution to both problems.</P>
+<P>A toolbar is a small band attached to the window frame or a dialog window that
+is floating independent of the application frame. This band (or dialog) has a number
+of small buttons containing graphic images that can be used in place of the menus.
+The application designers place the most commonly used functions for their applications
+on these toolbars and do their best to design graphical images that illustrate the
+functions the buttons serve.</P>
+<P>Once advanced users learned what each of the toolbar buttons do, the toolbars
+were a hit. However, novice users still had problems learning what the toolbar does.
+As a result, the application designers went back to the drawing board to come up
+with ways to help the new user learn how use the toolbar buttons.</P>
+<P>One of the solutions was to use the information bar that many of them had begun
+placing at the bottom of application windows to provide detailed descriptions of
+both menu entries and toolbar buttons. One of the other solutions was to provide
+a little pop-up window with a short description of the button that appears whenever
+the mouse is positioned over the button for more than a couple of seconds. The first
+of these solutions became known as the status bar, and the second became known as
+tooltips. Both solutions are in common practice with most Windows applications today.</P>
+<P>If you want to design and use your own toolbars and status bars in your applications,
+you might think that Visual C++ provides plenty of support for your efforts and even
+makes it easy to implement. After all, Microsoft's own application developers have
+been in the forefront of developing these elements, and most, if not all, of Microsoft's
+Windows applications are developed using its own Visual C++. Well, you are correct
+in making that assumption, and today, you'll learn how to create your own custom
+toolbars and status bars for your applications.</P>
+<P>
+<H2><A NAME="Heading2"></A>Designing a Toolbar</H2>
+<P>For learning how to create your own toolbar, you will modify the application that
+you created on Day 10, &quot;Creating Single Document Interface Applications,&quot;
+the SDI drawing application, to add a toolbar for selecting the color to use in drawing.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Although the sample application you are working with today is an
+	extension to the application you built on Day 10, all file and class names have been
+	changed from Day10 to Toolbar. If you are making the changes in the Day 10 project,
+	then when the following text specifies that you make changes to the CToolbarDoc class,
+	you should make the changes to the CDay10Doc class. Likewise, when you are asked
+	to edit the Toolbar.rc file, you can edit the Day10.rc file.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>If all you want to do is add a few additional toolbar buttons to the default toolbar
+that the AppWizard creates when you start a new SDI or MDI application, you can pull
+up the toolbar in the Visual C++ designer through the Resource View in the workspace
+pane and begin adding new buttons. Just as in the Menu Designer, the end of the toolbar
+always has a blank entry, waiting for you to turn it into another toolbar button,
+as shown in Figure 12.1. All you have to do is select this blank button, drag it
+to the right if you want a separator between it and the button beside it, or drag
+it to a different position if you want it moved. After you have the button in the
+desired location, you paint an icon on the button that illustrates the function that
+the button will trigger. Finally, double-click the button in the toolbar view to
+open the button's properties dialog and give the button the same ID as the menu that
+it will trigger. The moment that you compile and run your application, you will have
+a new toolbar button that performs a menu selection that you chose. If you want to
+get rid of a toolbar button, just grab it on the toolbar view, and drag it off the
+toolbar.</P>
+<P><A HREF="javascript:popUp('12fig01tif.gif')"><B>FIGURE 12.1.</B></A><B> </B><I>The
+toolbar designer.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading3"></A>Creating a New Toolbar</H3>
+<P>To insert a new toolbar, right-click on the Toolbar folder and select Insert Toolbar
+from the pop-up menu. This creates an empty toolbar with a single blank button. As
+you start drawing an icon on each of the blank buttons in the toolbar, another blank
+button is added on the end.</P>
+<P>For use in your drawing application, fill eight buttons with the eight colors
+available in the drawing application.</P>
+<P>Once you draw icons on each of the buttons in your toolbar, double-click on the
+first button in the toolbar view. This should open the toolbar button properties
+dialog. In the ID field, enter (or select from the drop-down list) the ID of the
+menu that this toolbar button should trigger. In the Prompt field, enter the description
+that should appear in the status bar for this toolbar button. (If you entered a prompt
+for the menu, then this field is automatically populated with the menu description.)
+At the end of the status bar description, add \n and a short description to appear
+in the tooltips for the toolbar button.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> In C/C++, the \n string is a shorthand notation for &quot;begin a
+	new line.&quot; In the prompt for toolbar buttons and menu entries, this string is
+	used to separate the status bar descriptions of the menu entries and the tooltips
+	pop-up prompt that appears when the mouse is held over a toolbar button for a few
+	seconds. The first line of the prompt is used for the status bar description, and
+	the second line is used for the tooltips description. The tooltips description is
+	only used with the toolbars, so there's no reason to add this for menu entries that
+	will have no toolbar equivalents.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>For example, for the black button on the toolbar that you are creating for your
+drawing application, enter an ID of <B>ID_COLOR_BLACK</B> and a prompt of <B>Black
+drawing color\nBlack</B>, as shown in Figure 12.2.</P>
+<P><A HREF="javascript:popUp('12fig02tif.gif')"><B>FIGURE 12.2.</B></A><B> </B><I>The
+toolbar button properties dialog.</I></P>
+
+<P>Once you finish designing your toolbar and have icons on all of your buttons with
+the properties set for each button, you will change the toolbar ID. In the workspace
+pane, right-click the new toolbar that you just added and open its properties dialog.
+Change the toolbar ID to a descriptive name.</P>
+<P>As an example, for the color toolbar that you created for your drawing application,
+change the toolbar ID to IDR_TBCOLOR.</P>
+<P>
+<H3><A NAME="Heading4"></A>Attaching the Toolbar to the Application Frame</H3>
+<P>In the previous SDI and MDI applications, you didn't add any functionality that
+required you to touch the frame window. Well, because the toolbar is attached to
+the frame, you'll have to begin adding and modifying code in that module. If you
+open the CMainFrame class to the OnCreate function, you'll see where it's creating
+the existing toolbar and then later in this function where the toolbar is being attached
+to the frame.</P>
+<P>Before you can add your toolbar to the application frame, you need to add a variable
+to the CMainFrame class to hold the new toolbar. This variable of type CToolBar should
+be protected in accessibility.</P>
+<P>To add your color toolbar to your draw application, right-click the CMainFrame
+class in the Class View tab of the workspace pane. Select Add Member Variable from
+the pop-up menu, and specify the variable type as CToolBar, the name as m_wndColorBar,
+and the access as protected.</P>
+<P>After you add a variable for your toolbar, you need to add some code in the OnCreate
+function in the CMainFrame class to add the toolbar and attach it to the frame. Make
+the modifications in Listing 12.1 to add the color toolbar to your drawing application.</P>
+<P>
+<H4>LISTING 12.1. THE MODIFIED CMainFrame.OnCreate FUNCTION.</H4>
+<PRE> 1:  int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
+ 2: {
+ 3:     if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
+ 4:         return -1;
+ 5: 
+ 6:     if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT,
+                  &Acirc;WS_CHILD | WS_VISIBLE | CBRS_TOP
+ 7:         | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY |         &Acirc;CBRS_SIZE_DYNAMIC) ||
+ 8:         !m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
+ 9:     {
+10:         TRACE0(&quot;Failed to create toolbar\n&quot;);
+11:         return -1;      // fail to create
+12:     }
+13: 
+14:     ///////////////////////
+</PRE>
+<PRE>15:     // MY CODE STARTS HERE
+</PRE>
+<PRE>16:     ///////////////////////
+17: 
+18:     // Add the color toolbar
+19:     int iTBCtlID;
+20:     int i;
+21: 
+22:     // Create the Color Toolbar
+23:     if (!m_wndColorBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD |
+24:         WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS |
+25:         CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
+26:         !m_wndColorBar.LoadToolBar(IDR_TBCOLOR))
+27:     {
+28:         TRACE0(&quot;Failed to create toolbar\n&quot;);
+29:         return -1;      // fail to create
+30:     }
+31:     // Find the Black button on the toolbar
+32:     iTBCtlID = m_wndColorBar.CommandToIndex(ID_COLOR_BLACK);
+33:     if (iTBCtlID &gt;= 0)
+34:     {
+35:         // Loop through the buttons, setting them to act as radio                 &Acirc;buttons
+36:         for (i= iTBCtlID; i &lt; (iTBCtlID + 8); i++)
+37:             m_wndColorBar.SetButtonStyle(i, TBBS_CHECKGROUP);
+38:     }
+39: 
+40:     ///////////////////////
+41:     // MY CODE ENDS HERE
+42:     ///////////////////////
+43: 
+44:     if (!m_wndStatusBar.Create(this) ||
+45:         !m_wndStatusBar.SetIndicators(indicators,
+46:           sizeof(indicators)/sizeof(UINT)))
+47:     {
+48:         TRACE0(&quot;Failed to create status bar\n&quot;);
+49:         return -1;      // fail to create
+50:     }
+51: 
+52:     // TODO: Delete these three lines if you don't want the toolbar to
+53:     //  be dockable
+54:     m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
+55: 
+56:     ///////////////////////
+57:     // MY CODE STARTS HERE
+58:     ///////////////////////
+59: 
+60:     // Enable docking for the Color Toolbar
+61:     m_wndColorBar.EnableDocking(CBRS_ALIGN_ANY);
+62: 
+63:     ///////////////////////
+64:     // MY CODE ENDS HERE
+65:     ///////////////////////
+66: 
+67:     EnableDocking(CBRS_ALIGN_ANY);
+68:     DockControlBar(&amp;m_wndToolBar);
+69: 
+70:     ///////////////////////
+71:     // MY CODE STARTS HERE
+72:     ///////////////////////
+73: 
+74:     // Dock the Color Toolbar
+75:     DockControlBar(&amp;m_wndColorBar);
+76: 
+77:     ///////////////////////
+78:     // MY CODE ENDS HERE
+79:     ///////////////////////
+80: 
+81:     return 0;
+82: }
+</PRE>
+<H4>Creating the Toolbar</H4>
+<P>The first part of the code you added,</P>
+<P>
+<PRE>if (!m_wndColorBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD |
+    WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS |
+    CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
+    !m_wndColorBar.LoadToolBar(IDR_TBCOLOR))
+</PRE>
+<P>contains two separate functions that are necessary in creating a toolbar. The
+first function, CreateEx, creates the toolbar itself, whereas the second, LoadToolBar,
+loads the toolbar that you designed in the toolbar designer. The second function,
+LoadToolBar, requires a single argument, the ID for the toolbar that you want to
+create.</P>
+<P>The CreateEx function has several arguments that you can pass with the function.
+The first argument, and the only required argument, is a pointer to the parent window.
+In this case (which is normally the case), this argument is a pointer to the frame
+window to which the toolbar will be attached.</P>
+<P>The second argument is the style of controls on the toolbar that is to be created.
+Several toolbar control styles are available for use, some of which have been introduced
+with the last two versions of Internet Explorer. Table 12.1 lists the available styles.</P>
+<P>
+<H4>TABLE 12.1. TOOLBAR CONTROL STYLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Style</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_ALTDRAG		</TD>
+		<TD ALIGN="LEFT">Allows the user to move the toolbar by dragging it while holding down the Alt key.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_CUSTOMERASE		</TD>
+		<TD ALIGN="LEFT">Generates a NM_CUSTOMDRAW message when erasing the toolbar and button background,
+			allowing the programmer to choose when and whether to control the background erasing
+			process.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_FLAT		</TD>
+		<TD ALIGN="LEFT">Creates a flat toolbar. Button text appears under the bitmap image.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_LIST		</TD>
+		<TD ALIGN="LEFT">Button text appears to the right of the bitmap image.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_REGISTERDROP		</TD>
+		<TD ALIGN="LEFT">For use in dragging and dropping objects onto toolbar buttons.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_TOOLTIPS		</TD>
+		<TD ALIGN="LEFT">Creates a tooltip control that can be used to display descriptive text for the buttons.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_TRANSPARENT		</TD>
+		<TD ALIGN="LEFT">Creates a transparent toolbar.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_WRAPABLE		</TD>
+		<TD ALIGN="LEFT">Creates a toolbar that can have multiple rows of buttons.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The third argument is the style of the toolbar itself. This argument is normally
+a combination of window and control bar styles. Normally, only two or three window
+styles are used, and the rest of the toolbar styles are control bar styles. The list
+of the normally used toolbar styles appears in Table 12.2.</P>
+<P>
+<H4>TABLE 12.2. TOOLBAR STYLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Style</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WS_CHILD		</TD>
+		<TD ALIGN="LEFT">The toolbar is created as a child window.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WS_VISIBLE		</TD>
+		<TD ALIGN="LEFT">The toolbar will be visible when created.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_ALIGN_TOP		</TD>
+		<TD ALIGN="LEFT">Allows the toolbar to be docked to the top of the view area of the frame window.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_ALIGN_BOTTOM		</TD>
+		<TD ALIGN="LEFT">Allows the toolbar to be docked to the bottom of the view area of the frame window.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_ALIGN_LEFT		</TD>
+		<TD ALIGN="LEFT">Allows the toolbar to be docked to the left side of the view area of the frame window.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_ALIGN_RIGHT		</TD>
+		<TD ALIGN="LEFT">Allows the toolbar to be docked to the right side of the view area of the frame window.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_ALIGN_ANY		</TD>
+		<TD ALIGN="LEFT">Allows the toolbar to be docked to any side of the view area of the frame window.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_BORDER_TOP		</TD>
+		<TD ALIGN="LEFT">Places a border on the top edge of the toolbar when the top of the toolbar is not
+			docked.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_BORDER_BOTTOM		</TD>
+		<TD ALIGN="LEFT">Places a border on the bottom edge of the toolbar when the top of the toolbar is
+			not docked.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_BORDER_LEFT		</TD>
+		<TD ALIGN="LEFT">Places a border on the left edge of the toolbar when the top of the toolbar is not
+			docked.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_BORDER_RIGHT		</TD>
+		<TD ALIGN="LEFT">Places a border on the right edge of the toolbar when the top of the toolbar is not
+			docked.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_FLOAT_MULTI		</TD>
+		<TD ALIGN="LEFT">Allows multiple toolbars to be floated in a single miniframe window.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_TOOLTIPS		</TD>
+		<TD ALIGN="LEFT">Causes tooltips to be displayed for the toolbar buttons.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_FLYBY		</TD>
+		<TD ALIGN="LEFT">Causes status bar message text to be updated for the toolbar buttons at the same
+			time as the tooltips.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_GRIPPER		</TD>
+		<TD ALIGN="LEFT">Causes a gripper to be drawn on the toolbar.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The fourth argument, which you did not provide in your code, is the size of the
+toolbar borders. This argument is passed as a standard CRect rectangle class to provide
+the length and height desired for the toolbar. The default value is 0 for all of
+the rectangle dimensions, thus resulting in a toolbar with no borders.</P>
+<P>The fifth and final argument, which you also did not provide in your code, is
+the toolbar's child window ID. This defaults to AFX_IDW_TOOLBAR, but you can specify
+any defined ID that you need or want to use for the toolbar.</P>
+<P>
+<H4>Setting the Button Styles</H4>
+<P>After you create the toolbar, there is a curious bit of code:</P>
+<P>
+<PRE>// Find the Black button on the toolbar
+iTBCtlID = m_wndColorBar.CommandToIndex(ID_COLOR_BLACK);
+if (iTBCtlID &gt;= 0)
+{
+    // Loop through the buttons, setting them to act as radio buttons
+    for (i= iTBCtlID; i &lt; (iTBCtlID + 8); i++)
+        m_wndColorBar.SetButtonStyle(i, TBBS_CHECKGROUP);
+}
+</PRE>
+<P>The first line in this code snippet uses the CommandToIndex toolbar function to
+locate the control number of the ID_COLOR_BLACK button. If you design your toolbar
+in the order of colors that you used on the menu, this should be the first control,
+with a index of 0. It's best to use the CommandToIndex function to locate the index
+of any toolbar button that you need to alter, just in case it's not where you expect
+it to be. This function returns the index of the toolbar control specified, and you
+use this as a starting point to specify the button style of each of the color buttons.</P>
+<P>In the loop, where you are looping through each of the eight color buttons on
+the toolbar, you use the SetButtonStyle function to control the behavior of the toolbar
+buttons. The first argument to this function is the index of the button that you
+are changing. The second argument is the style of button that you want for the toolbar
+button specified. In this case, you are specifying that each of the buttons be TBBS_CHECKGROUP
+buttons, which makes them behave like radio buttons, where only one of the buttons
+in the group can be selected at any time. The list of the available button styles
+is in Table 12.3.</P>
+<P>
+<H4>TABLE 12.3. TOOLBAR BUTTON STYLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Style</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_AUTOSIZE		</TD>
+		<TD ALIGN="LEFT">The button's width will be calculated based on the text on the button.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_BUTTON		</TD>
+		<TD ALIGN="LEFT">Creates a standard push button.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_CHECK		</TD>
+		<TD ALIGN="LEFT">Creates a button that acts like a check box, toggling between the pressed and unpressed
+			state.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_CHECKGROUP		</TD>
+		<TD ALIGN="LEFT">Creates a button that acts like a radio button, remaining in the pressed state until
+			another button in the group is pressed. This is actually the combination of the TBSTYLE_CHECK
+			and TBSTYLE_GROUP button styles.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_DROPDOWN		</TD>
+		<TD ALIGN="LEFT">Creates a drop-down list button.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_GROUP		</TD>
+		<TD ALIGN="LEFT">Creates a button that remains pressed until another button in the group is pressed.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_NOPREFIX		</TD>
+		<TD ALIGN="LEFT">The button text will not have an accelerator prefix associated with it.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">TBSTYLE_SEP		</TD>
+		<TD ALIGN="LEFT">Creates a separator, making a small gap between the buttons on either side.		</TD>
+	</TR>
+</TABLE>
+
+<H4>Docking the Toolbar</H4>
+<P>The last thing that you do in the code that you add to the OnCreate function in
+the CMainFrame class is the following:</P>
+<P>
+<PRE>// Enable docking for the Color Toolbar
+m_wndColorBar.EnableDocking(CBRS_ALIGN_ANY);
+EnableDocking(CBRS_ALIGN_ANY);  // (AppWizard generated line)
+// Dock the Color Toolbar
+DockControlBar(&amp;m_wndColorBar);
+</PRE>
+<P>In the first of these lines, you called the EnableDocking toolbar function. This
+function enables the toolbar for docking with the frame window. The value passed
+to this toolbar function must match the value passed in the following EnableDocking
+function that is called for the frame window. The available values for these functions
+are listed in Table 12.4. These functions enable the borders of the toolbar, and
+the frame window, for docking. If these functions are not called, then you will not
+be able to dock the toolbar with the frame window. If a specific side is specified
+in these functions for use in docking, and the sides do not match, you will not be
+able to dock the toolbar with the frame.</P>
+<P>
+<H4>TABLE 12.4. TOOLBAR DOCKING SIDES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Style</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_ALIGN_TOP		</TD>
+		<TD ALIGN="LEFT">Allows the toolbar to be docked to the top of the view area of the frame window.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_ALIGN_BOTTOM		</TD>
+		<TD ALIGN="LEFT">Allows the toolbar to be docked to the bottom of the view area of the frame window.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_ALIGN_LEFT		</TD>
+		<TD ALIGN="LEFT">Allows the toolbar to be docked to the left side of the view area of the frame window.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_ALIGN_RIGHT		</TD>
+		<TD ALIGN="LEFT">Allows the toolbar to be docked to the right side of the view area of the frame window.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_ALIGN_ANY		</TD>
+		<TD ALIGN="LEFT">Allows the toolbar to be docked to any side of the view area of the frame window.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBRS_FLOAT_MULTI		</TD>
+		<TD ALIGN="LEFT">Allows multiple toolbars to be floated in a single miniframe window.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">The toolbar will not be able to dock with the frame.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The final function that you added was a frame window function, DockControlBar,
+which is passed the address of the toolbar variable. This function physically docks
+the toolbar to the frame window. Because all of this code appears in the OnCreate
+function for the frame window, the toolbar is docked before the user sees either
+the window or the toolbar.</P>
+<P>Now, after adding all of this code to the OnCreate function of the CMainFrame
+class, if you compile and run your application, you'll find a working color toolbar
+that you can use to select the drawing color, as shown in Figure 12.3.</P>
+<P><A HREF="javascript:popUp('12fig03tif.gif')"><B>FIGURE 12.3.</B></A><B> </B><I>The
+color toolbar on the drawing program.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading5"></A>Controlling the Toolbar Visibility</H3>
+<P>Now that you have your color toolbar on the frame of your drawing application,
+it would be nice to be able to show and hide it just as you can the default toolbar
+and status bar through the View menu. This is simple enough functionality to add,
+but it doesn't necessarily work the way you might expect it to.</P>
+<P>The first thing you need to do is add a menu entry to toggle the visibility of
+the color bar. Do this through the Menu Designer, adding a new menu entry on the
+View menu. Specify the menu properties as shown in Table 12.5.</P>
+<P>
+<H4>TABLE 12.5. COLOR BAR MENU PROPERTIES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">ID_VIEW_COLORBAR		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Color Bar		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Prompt		</TD>
+		<TD ALIGN="LEFT">Show or hide the colorbar\nToggle ColorBar		</TD>
+	</TR>
+</TABLE>
+
+<H4>Updating the Menu</H4>
+<P>To determine whether the toolbar is visible or hidden, you can get the current
+style of the toolbar and mask out for the WS_VISIBLE style flag. If the flag is in
+the current toolbar style, then the toolbar is visible. By placing this evaluation
+into the SetCheck function in the UPDATE_COMMAND_UI event message handler, you can
+check and uncheck the color bar menu entry as needed.</P>
+<P>To add this functionality to your drawing program, add an event handler for the
+UPDATE_COMMAND_UI event message on the ID_VIEW_COLOR menu. Be sure to add this event-handler
+function into the CMainFrame class. (You're still making all of your coding changes
+so far in the frame class.) Edit the event-handler function, adding the code in Listing
+12.2.</P>
+<P>
+<H4>LISTING 12.2. THE MODIFIED CMainFrame.OnUpdateViewColorbar FUNCTION.</H4>
+<PRE> 1: void CMainFrame::OnUpdateViewColorbar(CCmdUI* pCmdUI)
+ 2: {
+ 3:     // TODO: Add your command update UI handler code here
+ 4:     ///////////////////////
+ 5:     // MY CODE STARTS HERE
+ 6:     ///////////////////////
+ 7: 
+ 8:     // Check the state of the color toolbar
+ 9:     pCmdUI-&gt;SetCheck(((m_wndColorBar.GetStyle() &amp; WS_VISIBLE) != 0));
+10: 
+</PRE>
+<PRE>11:     ///////////////////////
+</PRE>
+<PRE>12:     // MY CODE ENDS HERE
+13:     ///////////////////////
+14: }
+</PRE>
+<H4>Toggling the Toolbar Visibility</H4>
+<P>Because the CToolBar class is derived from the CWnd class (via the CControlBar
+class), you might think that you could call the ShowWindow function on the toolbar
+itself to show and hide the toolbar. Well, you can, but the background for the toolbar
+will not be hidden along with the toolbar. All the user would notice is the toolbar
+buttons appearing and disappearing. (Of course, this might be the effect you are
+after, but your users might not like it.)</P>
+<P>Instead, you use a frame window function, ShowControlBar, to show and hide the
+toolbar. This function takes three arguments. The first argument is the address for
+the toolbar variable. The second argument is a boolean, specifying whether to show
+the toolbar. (TRUE shows the toolbar; FALSE hides the toolbar.) Finally, the third
+argument specifies whether to delay showing the toolbar. (TRUE delays showing the
+toolbar; FALSE shows the toolbar immediately.)</P>
+<P>Once a toolbar is toggled on or off, you need to call another frame window function,
+RecalcLayout. This function causes the frame to reposition all of the toolbars, status
+bars, and anything else that is within the frame area. This is the function that
+causes the color toolbar to move up and down if you toggle the default toolbar on
+and off.</P>
+<P>To add this functionality to your drawing program, add an event handler for the
+COMMAND event message on the ID_VIEW_COLOR menu. Be sure to add this event-handler
+function into the CMainFrame class. (You're still making all of your coding changes
+so far in the frame class.) Edit the event-handler function, adding the code in Listing
+12.3.</P>
+<P>
+<H4>LISTING 12.3. THE MODIFIED CMainFrame.OnViewColorbar FUNCTION.</H4>
+<PRE> 1: void CMainFrame::OnViewColorbar()
+ 2: {
+ 3:     // TODO: Add your command handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8:     BOOL bVisible;
+ 9: 
+10:     // Check the state of the color toolbar
+11:     bVisible = ((m_wndColorBar.GetStyle() &amp; WS_VISIBLE) != 0);
+12: 
+13:     // Toggle the color bar
+14:     ShowControlBar(&amp;m_wndColorBar, !bVisible, FALSE);
+15:     // Reshuffle the frame layout
+16:     RecalcLayout();
+17: 
+18:     ///////////////////////
+19:     // MY CODE ENDS HERE
+20:     ///////////////////////
+21: }
+</PRE>
+<P>At this point, after compiling and running your application, you should be able
+to toggle your color toolbar on and off using the View menu.</P>
+<P>
+<H2><A NAME="Heading6"></A>Adding a Combo Box to a Toolbar</H2>
+<P>It's commonplace now to use applications that have more than just buttons on toolbars.
+Look at the Visual C++ Developer Studio, for example. You've got combo boxes that
+enable you to navigate through your code by selecting the class, ID, and function
+to edit right on the toolbar. So how do you add a combo box to a toolbar? It's not
+available in the toolbar designer; all you have there are buttons that you can paint
+icons on. You can't add a combo box to any toolbar by using any of the Visual C++
+wizards. You have to write a little C++ code to do it.</P>
+<P>To learn how to add a combo box to a toolbar, you'll add a combo box to the color
+toolbar you just created. The combo box will be used to select the width of the pen
+the user will use to draw images. (If you haven't added the support for different
+drawing widths from the exercise at the end of Day 10, you might want to go back
+and add that now.)</P>
+<P>
+<H3><A NAME="Heading7"></A>Editing the Project Resources</H3>
+<P>To add a combo box to your toolbar, the first thing that you need to do is what
+Visual C++ was designed to prevent you from having to do. You need to edit the resource
+file yourself. You cannot do this through the Visual C++ Developer Studio. If you
+try to open the resource file in the Developer Studio, you will be popped into the
+Resource View tab of the workspace pane, editing the resource file through the various
+resource editors and designers. No, you'll have to edit this file in another editor,
+such as Notepad.</P>
+<P>Close Visual C++, the only way to guarantee that you don't write over your changes.
+Open Notepad and navigate to your project directory. Open the resource file, which
+is named after the project with a .rc filename extension. Once you open this file
+in Notepad, scroll down until you find the toolbar definitions. (You can search for
+the word &quot;toolbar.&quot;) Once you've found the toolbar definitions, go to the
+end of the Color toolbar definition and add two separator lines at the bottom of
+the toolbar definition.</P>
+<P>For instance, to make these changes to your drawing application, you need to navigate
+to the Toolbar project directory and then open the Toolbar.rc file. (If you are adding
+these toolbars to the MDI drawing application, you need to look for the Day11.rc
+file.) Search for the toolbar section, and then add two SEPARATOR lines just before
+the end of the IDR_TBCOLOR section, as shown in Listing 12.4. Once you add these
+two lines, save the file, exit Notepad, and restart Visual C++, reloading the project.</P>
+<P>
+<H4>LISTING 12.4. THE MODIFIED PROJECT RESOURCE FILE (Toolbar.rc).</H4>
+<PRE> 1: //////////////////////////////////////////////////////////////////////
+ 2: //
+ 3: // Toolbar
+ 4: //
+ 5: 
+ 6: IDR_MAINFRAME TOOLBAR DISCARDABLE  16, 15
+ 7: BEGIN
+ 8:     BUTTON      ID_FILE_NEW
+ 9:     BUTTON      ID_FILE_OPEN
+10:     BUTTON      ID_FILE_SAVE
+11:     SEPARATOR
+12:     BUTTON      ID_EDIT_CUT
+13:     BUTTON      ID_EDIT_COPY
+14:     BUTTON      ID_EDIT_PASTE
+15:     SEPARATOR
+16:     BUTTON      ID_FILE_PRINT
+17:     BUTTON      ID_APP_ABOUT
+18: END
+19: 
+20: IDR_TBCOLOR TOOLBAR DISCARDABLE  16, 15
+21: BEGIN
+22:     BUTTON      ID_COLOR_BLACK
+23:     BUTTON      ID_COLOR_BLUE
+24:     BUTTON      ID_COLOR_GREEN
+25:     BUTTON      ID_COLOR_CYAN
+26:     BUTTON      ID_COLOR_RED
+27:     BUTTON      ID_COLOR_MAGENTA
+28:     BUTTON      ID_COLOR_YELLOW
+29:     BUTTON      ID_COLOR_WHITE
+30:     SEPARATOR
+31:     SEPARATOR
+32: END</PRE>
+<P>You added these two SEPARATOR lines in the toolbar definition so that the second
+separator can act as a place holder for the combo box that you are going to add to
+the toolbar. There are two reasons that you had to make this edit by hand and not
+use the Visual C++ toolbar designer. The first reason is that the toolbar designer
+would not allow you to add more than one separator to the end of the toolbar. The
+second reason is that, if you don't add anything else on the end of your toolbar
+after the separator, the toolbar designer decides that the separator is a mistake
+and removes it for you. In other words, the Visual C++ toolbar designer does not
+allow you to add the place holder for the combo box to your toolbar.</P>
+<P>Next, you need to add the text strings that you will load into your combo box.
+To add these strings, you need to open the string table in the Resource View of the
+workspace pane. Here you find all of the strings that you entered as prompts in various
+properties dialogs. This table has a number of IDs, the values of those IDs, and
+textual strings that are associated with those IDs, as shown in Figure 12.4. You'll
+need to add the strings to be placed into your toolbar combo box in the string table;
+each line in the drop-down list must have a unique ID and entry in the strings table.</P>
+<P><A HREF="javascript:popUp('12fig04tif.gif')"><B>FIGURE 12.4.</B></A><B> </B><I>The
+string table editor.</I></P>
+
+<P>For instance, to add the strings for the combo box that you will be adding to
+the color toolbar, insert a new string, either by selecting Insert|New String from
+the menu or by right-clicking the string table and selecting New String from the
+pop-up menu.</P>
+<P>In the String properties dialog, specify a string ID for the string and then enter
+the string to appear in the drop-down list. Close the properties dialog to add the
+string. For the strings in the Width combo box that you are going to add to the color
+toolbar, add the strings in Table 12.6.</P>
+<P>
+<H4>TABLE 12.6. WIDTH TOOLBAR COMBO BOX STRINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>ID</I></TD>
+		<TD ALIGN="LEFT"><I>Caption</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDS_WIDTH_VTHIN		</TD>
+		<TD ALIGN="LEFT">Very Thin		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDS_WIDTH_THIN		</TD>
+		<TD ALIGN="LEFT">Thin		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDS_WIDTH_MEDIUM		</TD>
+		<TD ALIGN="LEFT">Medium		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDS_WIDTH_THICK		</TD>
+		<TD ALIGN="LEFT">Thick		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDS_WIDTH_VTHICK		</TD>
+		<TD ALIGN="LEFT">Very Thick		</TD>
+	</TR>
+</TABLE>
+
+<H3><A NAME="Heading8"></A>Creating the Toolbar Combo Box</H3>
+<P>Before you can add the combo box to the color toolbar, you need to create a combo
+box variable that you can use for the combo box. Because you are not able to add
+this combo box through any of the designers, you need to add it as a variable to
+the CMainFrame class.</P>
+<P>To add the combo box variable to the main frame class for the color toolbar, select
+the Class View tab in the workspace pane. Right-click the CMainFrame class and select
+Add Member Variable from the pop-up menu. Specify the variable type as CComboBox,
+the name as m_ctlWidth, and the access as protected.</P>
+<P>Once you add the combo box variable to the main frame class, you need to perform
+a series of actions, all once the toolbar has been created:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Set the width and the ID of the combo box place holder on the toolbar
+	to the width and ID of the combo box.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Get the position of the toolbar placeholder and use it to size and
+	position the combo box.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Create the combo box, specifying the toolbar as the parent window of
+	the combo box.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Load the strings into the drop-down list on the combo box.
+	<P>
+</DL>
+
+<P>To organize this so that it doesn't get too messy, it might be advisable to move
+the creation of the color toolbar to its own function that can be called from the
+OnCreate function of the main frame class. To create this function, right-click the
+CMainFrame class in the workspace pane and select Add Member Function from the pop-up
+menu. Specify the function type as BOOL, the function description as CreateColorBar,
+and the access as public. Edit the new function, adding the code in Listing 12.5.</P>
+<P>
+<H4>LISTING 12.5. THE CMainFrame CreateColorBar FUNCTION.</H4>
+<PRE> 1: BOOL CMainFrame::CreateColorBar()
+ 2: {
+ 3:     int iTBCtlID;
+ 4:     int i;
+ 5: 
+ 6:     if (!m_wndColorBar.CreateEx(this, TBSTYLE_FLAT,
+                  &Acirc;WS_CHILD | WS_VISIBLE | CBRS_TOP
+ 7:         | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY |             &Acirc;CBRS_SIZE_DYNAMIC) ||
+ 8:         !m_wndColorBar.LoadToolBar(IDR_TBCOLOR))
+ 9:     {
+10:         TRACE0(&quot;Failed to create toolbar\n&quot;);
+11:         return FALSE;      // fail to create
+12:     }
+13:     iTBCtlID = m_wndColorBar.CommandToIndex(ID_COLOR_BLACK);
+14:     if (iTBCtlID &gt;= 0)
+15:     {
+16:         for (i= iTBCtlID; i &lt; (iTBCtlID + 8); i++)
+17:             m_wndColorBar.SetButtonStyle(i, TBBS_CHECKGROUP);
+18:     }
+19:     // Add the Combo
+20:     int nWidth = 100;
+21:     int nHeight = 125;
+22: 
+23:     // Configure the combo place holder
+24:     m_wndColorBar.SetButtonInfo(9, IDC_CBWIDTH, TBBS_SEPARATOR,         &Acirc;nWidth);
+25: 
+26:     // Get the colorbar height
+27:     CRect rect;
+28:     m_wndColorBar.GetItemRect(9, &amp;rect);
+29:     rect.bottom = rect.top + nHeight;
+30: 
+31:     // Create the combo box
+32:     m_ctlWidth.Create(WS_CHILD | WS_VISIBLE | WS_VSCROLL |
+33:         CBS_DROPDOWNLIST, rect, &amp;m_wndColorBar, IDC_CBWIDTH);
+34: 
+35:     //  Fill the combo box
+36:     CString szStyle;
+37:     if (szStyle.LoadString(IDS_WIDTH_VTHIN))
+38:         m_ctlWidth.AddString((LPCTSTR)szStyle);
+39:     if (szStyle.LoadString(IDS_WIDTH_THIN))
+40:         m_ctlWidth.AddString((LPCTSTR)szStyle);
+</PRE>
+<PRE>41:     if (szStyle.LoadString(IDS_WIDTH_MEDIUM))
+</PRE>
+<PRE>42:         m_ctlWidth.AddString((LPCTSTR)szStyle);
+43:     if (szStyle.LoadString(IDS_WIDTH_THICK))
+44:         m_ctlWidth.AddString((LPCTSTR)szStyle);
+45:     if (szStyle.LoadString(IDS_WIDTH_VTHICK))
+46:         m_ctlWidth.AddString((LPCTSTR)szStyle);
+47: 
+48:     return TRUE;
+49: }
+</PRE>
+<P>On line 24 in Listing 12.5, you specify that the combo box should be created using
+the object ID IDC_CBWIDTH. This object ID is used to identify the combo box when
+the combo box sends an event message to the application or when you need to specify
+what list entry is displayed in the edit field. However, this object ID doesn't exist
+in your application. Before you can compile the application, you'll need to add this
+ID to the project resource IDs, just as you did on Day 4, &quot;Working with Timers.&quot;
+To add this ID to your project, select the Resource view in the workspace pane. Select
+the top of the resource tree and right-click the mouse to trigger the context menu.
+Select Resource Symbols from the pop-up menu and add the object ID IDC_CBWIDTH. Make
+sure that you add the new object ID with a unique numerical value so that it won't
+conflict with any other objects in use in your application.</P>
+<P>
+<H4>Configuring the Placeholder</H4>
+<P>After creating the toolbar and configuring all of the toolbar buttons, the first
+thing you need to do is to configure the separator that is acting as the place holder
+for the combo box you are about to create. You do this with the SetButtonInfo toolbar
+function, as follows:</P>
+<P>
+<PRE>m_wndColorBar.SetButtonInfo(9, IDC_CBWIDTH, TBBS_SEPARATOR, nWidth);
+</PRE>
+<P>This function takes four arguments. The first argument is the current index of
+the control in the toolbar--in this case, the tenth control in the toolbar (eight
+color buttons and two separators). The second argument is the new ID of the toolbar
+control. This is the ID that will be placed in the event message queue when a control
+event occurs. The third argument is the type of toolbar control this control should
+be. The fourth and final argument is somewhat deceptive. If you look at the function
+documentation, the fourth argument is the new index of the control in the toolbar.
+This is the position to which the control will be moved. However, if the control
+is a separator, this argument specifies the width of the control and doesn't move
+it anywhere. Because this toolbar control is a separator, this argument has the effect
+of setting it to be as wide as the combo box that you are going to create.</P>
+<P>
+<H4>Getting the Toolbar Combo Box Position</H4>
+<P>Now that you have configured the toolbar separator as the place holder for the
+combo box, you need to get the position of the combo box place holder on the toolbar
+so that you can use it to set the position of the combo box:</P>
+<P>
+<PRE>m_wndColorBar.GetItemRect(9, &amp;rect);
+rect.bottom = rect.top + nHeight;
+</PRE>
+<P>In the first line, you called the toolbar function GetItemRect to get the position
+and size of the placeholder for the combo box. In the next line, you added the height
+of the drop-down list to the height that the combo box will eventually be.</P>
+<P>
+<H4>Creating the Combo Box</H4>
+<P>Now that you've got a place holder sized correctly, and you have the position
+and size for the combo box, it's time to create the combo box. You do this with the
+Create combo box function, as follows:</P>
+<P>
+<PRE>m_ctlWidth.Create(WS_CHILD | WS_VISIBLE | WS_VSCROLL |
+    CBS_DROPDOWNLIST, rect, &amp;m_wndColorBar, IDC_CBWIDTH);
+</PRE>
+<P>The first argument to the combo box Create function is the combo box style. Normally,
+several style flags are combined to create a combination style value. Table 12.7
+lists the flags that you can use in this value.</P>
+<P>
+<H4>TABLE 12.7. COMBO BOX STYLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Style</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WS_CHILD		</TD>
+		<TD ALIGN="LEFT">Designates this as a child window (required).		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WS_VISIBLE		</TD>
+		<TD ALIGN="LEFT">Makes the combo box visible.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WS_DISABLED		</TD>
+		<TD ALIGN="LEFT">Disables the combo box.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WS_VSCROLL		</TD>
+		<TD ALIGN="LEFT">Adds vertical scrolling to the drop-down list.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WS_HSCROLL		</TD>
+		<TD ALIGN="LEFT">Adds horizontal scrolling to the drop-down list.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WS_GROUP		</TD>
+		<TD ALIGN="LEFT">Groups controls.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WS_TABSTOP		</TD>
+		<TD ALIGN="LEFT">Includes the combo box in the tabbing order.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBS_AUTOHSCROLL		</TD>
+		<TD ALIGN="LEFT">Automatically scrolls the text in the edit control to the right when the user types
+			a character at the end of the line. This allows the user to enter text wider than
+			the edit control into the combo box.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBS_DROPDOWN		</TD>
+		<TD ALIGN="LEFT">Similar to CBS_SIMPLE, but the list is not displayed unless the user selects the
+			icon next to the edit control.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBS_DROPDOWNLIST		</TD>
+		<TD ALIGN="LEFT">Similar to CBS_DROPDOWN, but the edit control is replaced with a static-text item
+			displaying the currently selected item in the list.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBS_HASSTRINGS		</TD>
+		<TD ALIGN="LEFT">The owner of the list box is responsible for drawing the list box contents. The list
+			box items consist of strings.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBS_OEMCONVERT		</TD>
+		<TD ALIGN="LEFT">Text entered in the edit control is converted from ANSI to the OEM character set
+			and then back to ANSI.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBS_OWNERDRAWFIXED		</TD>
+		<TD ALIGN="LEFT">The owner of the list box is responsible for drawing the list box contents. The contents
+			of the list are fixed in height.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBS_OWNERDRAWVARIABLE		</TD>
+		<TD ALIGN="LEFT">The owner of the list box is responsible for drawing the list box contents. The contents
+			of the list are variable in height.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBS_SIMPLE		</TD>
+		<TD ALIGN="LEFT">The list box is displayed at all times.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBS_SORT		</TD>
+		<TD ALIGN="LEFT">Automatically sorts the strings in the list box.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBS_DISABLENOSCROLL		</TD>
+		<TD ALIGN="LEFT">List shows a disabled scrollbar when there are not enough items in the list to require
+			scrolling.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CBS_NOINTEGRALHEIGHT		</TD>
+		<TD ALIGN="LEFT">Specifies that the combo box is exactly the size specified.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The second argument is the rectangle that the combo box is to occupy. This argument
+is the position within the parent window--in this case, the toolbar--that the combo
+box will stay in. It will move with the parent window (the toolbar), staying in this
+position the entire time.</P>
+<P>The third argument is a pointer to the parent window. This is the address of the
+color toolbar variable.</P>
+<P>The fourth argument is the object ID for the combo box.</P>
+<P>
+<H4>Populating the Combo Box</H4>
+<P>The final action that you have to do in creating the combo box on the color toolbar
+is populate the drop-down list with the available items that the user can select
+from. You do this with the combination of two functions:</P>
+<P>
+<PRE>if (szStyle.LoadString(IDS_WIDTH_VTHIN))
+    m_ctlWidth.AddString((LPCTSTR)szStyle);
+</PRE>
+<P>The first function is a CString function, LoadString. This function takes a string
+ID and loads the string matching the ID from the string table. The second function
+is a combo box function, AddString, which adds the string passed in as an argument
+to the drop-down list. By calling this function combination for each of the elements
+that should be in the drop-down list, you can populate the combo box from the application
+string table.</P>
+<P>
+<H4>Updating the OnCreate Function</H4>
+<P>After moving all of the code to create the color toolbar to a separate function,
+you can update the OnCreate function so that it calls the CreateColorBar function
+where it used to create the color toolbar, as in Listing 12.6.</P>
+<P>
+<H4>LISTING 12.6. THE MODIFIED CMainFrame.OnCreate FUNCTION.</H4>
+<PRE> 1:  int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
+ 2: {
+ 3:     if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
+ 4:         return -1;
+ 5: 
+ 6:     if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT,
+                  &Acirc;WS_CHILD | WS_VISIBLE | CBRS_TOP
+ 7:         | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY |             &Acirc;CBRS_SIZE_DYNAMIC) ||
+ 8:         !m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
+ 9:     {
+10:         TRACE0(&quot;Failed to create toolbar\n&quot;);
+11:         return -1;      // fail to create
+12:     }
+13: 
+14:     ///////////////////////
+15:     // MY CODE STARTS HERE
+16:     ///////////////////////
+17: 
+18:     // Add the color toolbar
+19:     if (!CreateColorBar())
+20:     {
+21:         TRACE0(&quot;Failed to create color toolbar\n&quot;);
+22:         return -1;      // fail to create
+23:     }
+24: 
+25:     ///////////////////////
+26:     // MY CODE ENDS HERE
+27:     ///////////////////////
+28: 
+29:     if (!m_wndStatusBar.Create(this) ||
+30:         !m_wndStatusBar.SetIndicators(indicators,
+31:           sizeof(indicators)/sizeof(UINT)))
+32:     {
+33:         TRACE0(&quot;Failed to create status bar\n&quot;);
+34:         return -1;      // fail to create
+35:     }
+36: 
+37:     // TODO: Delete these three lines if you don't want the toolbar to
+38:     //  be dockable
+39:     m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
+40: 
+41:     ///////////////////////
+42:     // MY CODE STARTS HERE
+43:     ///////////////////////
+44: 
+45:     // Enable docking for the Color Toolbar
+46:     m_wndColorBar.EnableDocking(CBRS_ALIGN_ANY);
+47: 
+48:     ///////////////////////
+49:     // MY CODE ENDS HERE
+50:     ///////////////////////
+51: 
+</PRE>
+<PRE>52:     EnableDocking(CBRS_ALIGN_ANY);
+</PRE>
+<PRE>53:     DockControlBar(&amp;m_wndToolBar);
+54: 
+55:     ///////////////////////
+56:     // MY CODE STARTS HERE
+57:     ///////////////////////
+58: 
+59:     // Dock the Color Toolbar
+60:     DockControlBar(&amp;m_wndColorBar);
+61: 
+62:     ///////////////////////
+63:     // MY CODE ENDS HERE
+64:     ///////////////////////
+65: 
+66:     return 0;
+67: }
+</PRE>
+<P>Now when you compile and run your application, you should have a combo box on
+the end of your color toolbar, as in Figure 12.5. However, the combo box doesn't
+do anything yet.</P>
+<P><A HREF="javascript:popUp('12fig05tif.gif')"><B>FIGURE 12.5.</B></A><B> </B><I>The
+color toolbar with a width combo box.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading9"></A>Handling the Toolbar Combo Box Events</H3>
+<P>Adding an event handler for the combo box is fairly simple, although it does have
+to be done by hand (because the Class Wizard doesn't even know that the combo box
+exists). You have to add an ON_CBN_SELCHANGE entry into the message map and then
+add the actual message-handler function into the CMainFrame class.</P>
+<P>To start with, add the message-handler function by selecting the CMainFrame class
+in the workspace pane and selecting New Member Function from the pop-up menu. Enter
+the function type as afx_msg void, the function definition as OnSelChangeWidth, and
+the access as protected. Edit the new function as in Listing 12.7.</P>
+<P>
+<H4>LISTING 12.7. THE OnSelChangeWidth FUNCTION.</H4>
+<PRE> 1: void CMainFrame::OnSelChangeWidth()
+ 2: {
+ 3:     // Get the new combo selection
+ 4:     int nIndex = m_ctlWidth.GetCurSel();
+ 5:     if (nIndex == CB_ERR)
+ 6:         return;
+ 7: 
+ 8:     // Get the active document
+ 9:     CToolbarDoc* pDoc = (CToolbarDoc*)GetActiveDocument();
+10:     // Do we have a valid document?
+11:     if (pDoc)
+12:         // Set the new drawing width
+13:         pDoc-&gt;SetWidth(nIndex);
+14: 
+15: }
+</PRE>
+<P>In this function, you first get the current selection from the combo box. Remember
+that the entries were added in order, and the CBS_SORT flag was not specified in
+the combo box creation, so the selection index numbers should correspond to the widths
+in the document. As a result, you can get a pointer to the current document instance,
+using the GetActiveDocument function, and then pass the new width to the document
+using its SetWidth function.</P>
+<P>For the combo box selection changes to call this message-handler function, you
+need to add the appropriate entry to the CMainFrame message map. Scroll to the top
+of the CMainFrame source code until you find the message map section. Add line 12
+in Listing 12.8 to the message map.</P>
+<P>
+<H4>LISTING 12.8. THE MODIFIED CMainFrame MESSAGE MAP.</H4>
+<PRE> 1:///////////////////////////////////////////////////////////////////////
+ 2: // CMainFrame
+ 3: 
+ 4: IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
+ 5: 
+ 6: BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
+ 7:     //{{AFX_MSG_MAP(CMainFrame)
+ 8:     ON_WM_CREATE()
+ 9:     ON_COMMAND(ID_VIEW_COLORBAR, OnViewColorbar)
+10:     ON_UPDATE_COMMAND_UI(ID_VIEW_COLORBAR, OnUpdateViewColorbar)
+11:     //}}AFX_MSG_MAP
+12:     ON_CBN_SELCHANGE(IDC_CBWIDTH, OnSelChangeWidth)
+13: END_MESSAGE_MAP()
+</PRE>
+<P>This message map entry</P>
+<P>
+<PRE>ON_CBN_SELCHANGE(IDC_CBWIDTH, OnSelChangeWidth)
+</PRE>
+<P>specifies that on combo box selection change events with the object ID of the
+color toolbar combo box, the OnSelChangeWidth function should be called. Now if you
+compile and run your application, you should be able to change the drawing width
+with the combo box on the color toolbar.</P>
+<P>
+<H3><A NAME="Heading10"></A>Updating the Toolbar Combo Box</H3>
+<P>The one remaining problem with the combo box is that it needs to be updated if
+the user selects a new value from the menu instead of the combo box. One of the most
+efficient methods of doing this is to set the current selection in the combo box
+when any of the menu selections are triggered. This requires a function in the main
+frame class that can be called from the document class to accomplish this action.
+All the function in the main frame needs to do is to set the current selection in
+the combo box.</P>
+<P>To implement this function in the main frame, add a new member function to the
+CMainFrame class, specifying the function type as void, the definition as UpdateWidthCB(int
+nIndex), and the access as public. Once you add this function, edit the function
+as in Listing 12.9.</P>
+<P></P>
+
+<P><B>Listing 12.9. </B>The CMAINFRAME.UPDATEWIDTHCB function. 
+<PRE>1: void CMainFrame::UpdateWidthCB(int nIndex)
+2: {
+3:     // Set the new selection in the combo box
+4:     m_wndColorBar.m_ctlWidth.SetCurSel(nIndex);
+5: }
+</PRE>
+<P>This function uses a single combo box function, SetCurSel, which sets the current
+selection in the combo box drop-down list to the entry specified with the index number.
+The edit control of the combo box is updated with the new selected list entry. If
+an index number that doesn't exist in the drop-down list is supplied to the combo
+box, then the function returns an error.</P>
+<P>On the document side, you need to call this function in the main frame whenever
+the appropriate menu event-handling functions are called. Because this could occur
+in sev- eral functions, it makes the most sense to enclose the necessary functionality
+in a single function. This function needs to get a pointer to the view associated
+with the document and then, through the view, get a pointer to the frame, which can
+then be used to call the UpdateWidthCB function that you just added to the main frame
+class.</P>
+<P>To add this function to your application, select the CToolbarDoc class in the
+workspace pane, and select Add Member Function from the pop-up menu. Specify void
+as the function type, UpdateColorbar(int nIndex) as the function definition, and
+private as the function access. Edit the function as in Listing 12.10.</P>
+<P>
+<H4>LISTING 12.10. THE CToolbarDoc.UpdateColorbar FUNCTION.</H4>
+<PRE> 1: void CToolbarDoc::UpdateColorbar(int nIndex)
+ 2: {
+ 3:     // Get the position of the first view
+ 4:     POSITION pos = GetFirstViewPosition();
+ 5:     // Did we get a valid position?
+ 6:     if (pos != NULL)
+ 7:     {
+ 8:         // Get a pointer to the view in that position
+ 9:         CView* pView = GetNextView(pos);
+10:         // Do we have a valid pointer to the view?
+11:         if (pView)
+12:         {
+13:             // Get a pointer to the frame through the view
+14:             CMainFrame* pFrame = (CMainFrame*)pView-&Acirc;GetTopLevelFrame();
+15:             // Did we get a pointer to the frame?
+16:             if (pFrame)
+17:                 // Update the combo box on the color toolbar
+18:                 // through the frame
+19:                 pFrame-&gt;UpdateWidthCB(nIndex);
+20:         }
+21:     }
+22: }
+</PRE>
+<P>This function traces through the path that you have to follow to get to the application
+frame from the document class. The first thing that you did was get the position
+of the first view associated with the document, using the GetFirstViewPosition function.
+A document may have multiple views open at the same time, and this function returns
+the position of the first of those views.</P>
+<P>The next function, GetNextView, returns a pointer to the view specified by the
+position. This function also updates the position variable to point to the next view
+in the list of views associated with the current document.</P>
+<P>Once you have a pointer to the view, you can call the window function, GetTopLevelFrame,
+which returns a pointer to the application frame window. You have to call this function
+through the view because the document is not descended from the CWnd class, although
+the view is.</P>
+<P>Once you have a pointer to the frame window, you can use this pointer to call
+the function you created earlier to update the combo box on the toolbar. Now if you
+call this new function from the Width menu command event handlers, as in Listing
+12.11, the combo box that you placed on the color toolbar is automatically updated
+to reflect the currently selected drawing width, regardless of whether the width
+was selected from the combo box or the pull-down menu.</P>
+<P>
+<H4>LISTING 12.11. AN UPDATED WIDTH MENU COMMAND EVENT HANDLER.</H4>
+<PRE>1: void CToolbarDoc::OnWidthVthin()
+2: {
+3:     // TODO: Add your command handler code here
+4:     // Set the new width
+5:     m_nWidth = 0;
+6:     // Update the combo box on the color toolbar
+7:     UpdateColorbar(0);
+8: }
+</PRE>
+<H2><A NAME="Heading11"></A>Adding a New Status Bar Element</H2>
+<P>Earlier today, you learned how to specify status bar messages and tooltips for
+both toolbar buttons and menus. What if you want to use the status bar to provide
+the user with more substantial information? What if, as in the Visual C++ Developer
+Studio, you want to provide information about what the user is doing, where he is
+in the document he is editing, or the mode that the application is in? This information
+goes beyond the Caps, Num, and Scroll lock keys that Visual C++ automatically reports
+on the status bar.</P>
+<P>It's actually easy to add additional panes to the status bar, as well as take
+away the panes that are already there. To learn just how easy a change this is, you
+will add a new pane to the status bar in your drawing application that will display
+the color currently in use.</P>
+<P>
+<H3><A NAME="Heading12"></A>Adding a New Status Bar Pane</H3>
+<P>Before you add a new status bar pane, you need to add a new entry to the application
+string table for use in the status bar pane. This string table entry will perform
+two functions for the status bar pane. The first thing it will do is provide the
+object ID for the status bar pane. You will use this ID for updating the pane as
+you need to update the text in the pane. The second function this string table entry
+will perform is size the pane. To size the pane correctly, you need to provide a
+caption for the string table entry that is at least as wide as the widest string
+that you will place in the status bar pane.</P>
+<P>Add a new string to your application string table, using the same steps you used
+earlier when adding the text for the combo box you placed on the color toolbar. Specify
+the string ID as ID_INDICATOR_COLOR and the caption as MAGENTA (the widest string
+that you will put into the status bar pane).</P>
+<P>A small section in the first part of the main frame source code defines the status
+bar layout. This small table contains the object IDs of the status bar panes as table
+elements, in the order in which they are to appear from left to right on the status
+bar.</P>
+<P>To add the color pane to the status bar, add the ID of the color pane to the status
+bar indicator table definition, just after the message map in the source-code file
+for the main frame. Place the color pane ID in the table definition in the position
+that you want it to be on the status bar, as in line 18 of Listing 12.12.</P>
+<P>
+<H4>LISTING 12.12. A MODIFIED STATUS BAR INDICATOR TABLE DEFINITION.</H4>
+<PRE> 1:///////////////////////////////////////////////////////////////////////
+ 2: // CMainFrame
+ 3: 
+ 4: IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
+ 5: 
+ 6: BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
+ 7:     //{{AFX_MSG_MAP(CMainFrame)
+ 8:     ON_WM_CREATE()
+</PRE>
+<PRE> 9:     ON_COMMAND(ID_VIEW_COLORBAR, OnViewColorbar)
+</PRE>
+<PRE>10:     ON_UPDATE_COMMAND_UI(ID_VIEW_COLORBAR, OnUpdateViewColorbar)
+11:     //}}AFX_MSG_MAP
+12:     ON_CBN_SELCHANGE(IDC_CBWIDTH, OnSelChangeWidth)
+13: END_MESSAGE_MAP()
+14: 
+15: static UINT indicators[] =
+16: {
+17:     ID_SEPARATOR,           // status line indicator
+18:     ID_INDICATOR_COLOR,
+19:     ID_INDICATOR_CAPS,
+20:     ID_INDICATOR_NUM,
+21:     ID_INDICATOR_SCRL,
+22: };
+23: 
+24:///////////////////////////////////////////////////////////////////////
+25: // CMainFrame construction/destruction
+</PRE>
+<P>If you want to drop any of the lock key indicators from the status bar, just remove
+them from the indicators table definition. If you examine the OnCreate function,
+where the status bar is created (just after the toolbars are created), you'll see
+where this table is used to create the status bar with the following code:</P>
+<P>
+<PRE>if (!m_wndStatusBar.Create(this) ||
+    !m_wndStatusBar.SetIndicators(indicators,
+      sizeof(indicators)/sizeof(UINT)))
+</PRE>
+<P>Once the status bar is created, the SetIndicators function is called on the status
+bar to add the panes as they are defined in the indicators table. The strings associated
+with the IDs in the indicators table are used to initialize the panes and set their
+size. If you compile and run your application at this point, you see the new color
+pane on the status bar with the caption from the string table displayed within.</P>
+<P>
+<H3><A NAME="Heading13"></A>Setting a Status Bar Pane Text</H3>
+<P>Once you've added the pane to the status bar, you can let the UPDATE_COMMAND_UI
+event do all the updating of the pane. All you need to do is add an event handler
+for this event on the object ID of the pane and use this event to set the pane text.
+Because the status bar is always visible, the UPDATE_COMMAND_UI event for the panes
+on the status bar is triggered every time that the application is idle. This means
+that it is triggered after the application is finished processing just about every
+keystroke and mouse movement. In almost a week, on Day 18, &quot;Doing Multiple Tasks
+at One Time--Multitasking,&quot; you will learn more about how often and when any
+tasks that are performed when the application is idle are triggered.</P>
+<P>In the event handler, you need to create a string containing the name of the current
+color (or whatever other text you want to display in the status bar pane). Next,
+you have to make sure that the pane is enabled. Finally, you need to set the text
+of the pane to the string that you have created.</P>
+<P>To implement this in your application, you need to create an UPDATE_COMMAND_UI
+event handler. Once again, the Class Wizard does not know about the status bar pane,
+so you have to create the message handler and add it to the message map yourself.
+To create the message handler, add a new member function to the document class (CToolbarDoc)
+with a type of afx_msg void, a definition of OnUpdateIndicatorColor (CCmdUI *pCmdUI),
+and an access of protected. Edit the newly created function, adding the code in Listing
+12.13.</P>
+<P>
+<H4>LISTING 12.13. THE OnUpdateIndicatorColor FUNCTION.</H4>
+<PRE> 1: void CToolbarDoc::OnUpdateIndicatorColor(CCmdUI *pCmdUI)
+ 2: {
+ 3:     CString strColor;
+ 4: 
+ 5:     // What is the current color?
+ 6:     switch (m_nColor)
+ 7:     {
+ 8:     case 0:    // Black
+ 9:         strColor = &quot;BLACK&quot;;
+10:         break;
+11:     case 1:    // Blue
+12:         strColor = &quot;BLUE&quot;;
+13:         break;
+14:     case 2:    // Green
+15:         strColor = &quot;GREEN&quot;;
+16:         break;
+17:     case 3:    // Cyan
+18:         strColor = &quot;CYAN&quot;;
+19:         break;
+20:     case 4:    // Red
+21:         strColor = &quot;RED&quot;;
+22:         break;
+23:     case 5:    // Magenta
+24:         strColor = &quot;MAGENTA&quot;;
+25:         break;
+26:     case 6:    // Yellow
+27:         strColor = &quot;YELLOW&quot;;
+28:         break;
+29:     case 7:    // White
+30:         strColor = &quot;WHITE&quot;;
+31:         break;
+32:     }
+33:     // Enable the status bar pane
+34:     pCmdUI-&gt;Enable(TRUE);
+35:     // Set the text of the status bar pane
+36:     // to the current color
+37:     pCmdUI-&gt;SetText(strColor);
+38: }
+</PRE>
+<P>In this function, you followed three steps exactly: You created a string with
+the current color name, made sure that the pane was enabled, and set the pane text
+to the string that you had created.</P>
+<P>Now, to make sure that your new message handler is called when it is supposed
+to be, you need to add an ON_UPDATE_COMMAND_UI entry to the message map at the top
+of the document source code file, as specified in Listing 12.14.</P>
+<P>
+<H4>LISTING 12.14. THE MODIFIED CToolbarDoc MESSAGE MAP.</H4>
+<PRE> 1:///////////////////////////////////////////////////////////////////////
+</PRE>
+<PRE> 2: // CToolbarDoc
+ 3: 
+ 4: IMPLEMENT_DYNCREATE(CToolbarDoc, CDocument)
+ 5: 
+ 6: BEGIN_MESSAGE_MAP(CToolbarDoc, CDocument)
+ 7:     ON_UPDATE_COMMAND_UI(ID_INDICATOR_COLOR, OnUpdateIndicatorColor)
+ 8:     //{{AFX_MSG_MAP(CToolbarDoc)
+ 9:     ON_UPDATE_COMMAND_UI(ID_WIDTH_VTHIN, OnUpdateWidthVthin)
+10: .
+11: .
+12:     ON_COMMAND(ID_WIDTH_VTHIN, OnWidthVthin)
+13:     //}}AFX_MSG_MAP
+14: END_MESSAGE_MAP()
+</PRE>
+<P>After adding the message handler and message map entry, you should now be able
+to compile and run your application and see the color status bar pane automatically
+updated to reflect the current drawing color, as shown in Figure 12.6.</P>
+<P><A HREF="javascript:popUp('12fig06tif.gif')"><B>FIGURE 12.6.</B></A><B> </B><I>The
+drawing application with the current color displayed in the status bar.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading14"></A>Summary</H2>
+<P>You learned quite a bit today. (Is this becoming a trend?) You learned how to
+design and create your own toolbars. Along with learning how to design toolbars,
+you learned how to specify status bar prompts for the toolbar buttons and menus,
+along with tooltips text that will display after holding the mouse over toolbar buttons
+for a couple of seconds. You learned how to create these toolbars and how to attach
+them to the application frame. You also learned how you can control whether the toolbar
+is visible from a menu entry.</P>
+<P>Next you learned how to place a combo box on a toolbar so that you can provide
+your application users with the same level of convenience that you have when using
+many popular software packages. In learning how to add this combo box to the toolbar,
+you learned how to create a combo box in code, without having to depend on the dialog
+designers to create combo boxes, and how to populate the combo box drop-down list
+with text entries. Then, you learned how to tie the combo box into your application
+by adding event handlers for the combo box events and how to update the combo box
+to reflect changes made through the application menus.</P>
+<P>Finally, you learned how to add your own panes to the status bar and how you can
+update the pane to reflect the current status of the application.</P>
+<P>
+<H2><A NAME="Heading15"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q In some applications, toolbars have the option of showing text, as in Internet
+	Explorer. How can I add text to my toolbar buttons?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> Unfortunately, the toolbar designer provides no way to add text to the
+	toolbar buttons. This means that you have to add the text to the buttons in your
+	application code, much in the same way that you had to specify for all of the color
+	toolbar buttons to behave as radio buttons. You use the SetButtonText function to
+	set the text on each toolbar button individually. This function takes two arguments:
+	The first is the index number of the button, and the second is the text for the button.
+	If you really want to place text on the toolbar buttons, you also have to resize
+	the toolbar to allow the room for the text to be displayed.
+	<P>
+	<DT></DT>
+	<DD><B>Q I made some changes to the color toolbar in the toolbar designer, and now
+	I get an assertion error every time I try to run my application. What happened?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> The problem is that the toolbar designer found the separators you added
+	to the resource file as place holders for the combo box. The toolbar designer assumed
+	that these were mistakes and removed them for you. The error that you are getting
+	occurs because you are trying to work with a control in the color toolbar that doesn't
+	exist. To fix this problem, reopen the resource file in Notepad and again add the
+	two separators at the end of the color toolbar definition. Then, reload the project
+	into Visual C++ and recompile the application.
+	<P>
+	<DT></DT>
+	<DD><B>Q The combo box on my toolbars looks too big. How can I get it to fit within
+	the toolbar a little better?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> To make the combo box fit within the toolbar like the combo boxes in
+	the Visual C++ Developer Studio, you need to do a couple of things. First, lower
+	the top of the combo box by 3; this places a small border between the top of the
+	combo box and the edge of the toolbar. Next, set the font in the combo box to a smaller
+	font that will fit within the toolbar better. You can experiment with fonts and pitches
+	until you have a font that you like for the combo box in the toolbar.
+	<P>
+	<DT></DT>
+	<DD><B>Q How can I set the text in the first section of the status bar other than
+	by using menu and toolbar prompts?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> You can use SetWindowText to set the text in the first pane of the status
+	bar. As a default setting, the first pane in the status bar is a separator that automatically
+	expands to fill the width of the status bar with the other panes right-justified
+	on the bar. The SetWindowText function, called on the status bar variable, sets the
+	text in the first pane only. If you want to set the text in any other pane, at any
+	other time than in the ON_UPDATE_COMMAND_UI event handler, you can use the SetPaneText
+	function. There are two ways that you can set the text in the main part of the status
+	bar. The first is like this:
+	<P>
+</DL>
+
+<PRE>CString myString = &quot;This is my string&quot;
+m_wndStatusBar.SetWindowText(myString);
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD>The other method is
+	<P>
+</DL>
+
+<PRE>CString myString = &quot;This is my string&quot;
+m_wndStatusBar.SetPaneText(0, myString);
+</PRE>
+<H2><A NAME="Heading16"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading17"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>How do you tie a toolbar button to a menu entry that triggers that
+	same function?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>How do you make sure that a toolbar can be docked with the frame window?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>How can you remove the Num Lock status indicator from the status bar?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Why do you have to edit the resource file to add a combo box to a toolbar?
+	<P>
+</DL>
+
+<H3><A NAME="Heading18"></A>Exercises</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Add another pane to the status bar to display the current width selected.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Add a button to the main toolbar that can be used to toggle the color
+	toolbar on and off, as in Figure 12.7.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('12fig07tif.gif')"><B>FIGURE 12.7.</B></A><B> </B><I>The
+color toolbar on/off button.</I></P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch11/ch11.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch13/ch13.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

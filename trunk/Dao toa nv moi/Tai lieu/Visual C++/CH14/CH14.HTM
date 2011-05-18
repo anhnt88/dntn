@@ -1,0 +1,1450 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 14 -- Retrieving Data from an ODBC Database8</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch13/ch13.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch15/ch15.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 14 -<BR>
+Retrieving Data from an ODBC Database</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Database Access and ODBC</A>
+	<UL>
+		<LI><A HREF="#Heading2">The Open Database Connector (ODBC) Interface</A>
+		<LI><A HREF="#Heading3">The CRecordset Class</A>
+	</UL>
+	<LI><A HREF="#Heading4">Creating a Database Application Using ODBC</A>
+	<UL>
+		<LI><A HREF="#Heading5">Preparing the Database</A>
+		<LI><A HREF="#Heading6">Creating the Application Shell</A>
+		<LI><A HREF="#Heading7">Designing the Main Form</A>
+		<LI><A HREF="#Heading8">Adding New Records</A>
+		<LI><A HREF="#Heading9">Deleting Records</A>
+	</UL>
+	<LI><A HREF="#Heading10">Summary</A>
+	<LI><A HREF="#Heading11">Q&amp;A</A>
+	<LI><A HREF="#Heading12">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading13">Quiz</A>
+		<LI><A HREF="#Heading14">Exercise</A>
+	</UL>
+	<LI><A HREF="#Heading15">In Review</A>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+A large number of applications use a database. Everything from a personal organizer
+to a large, corporate personnel system uses a database to store and maintain all
+the records that the applications use and manipulate. Visual C++ provides you with
+four different technologies for using and accessing databases in your applications,
+Data Access Objects (DAO), ODBC, OLE DB, and ActiveX Data Objects (ADO). Today and
+tomorrow, you'll learn about two of these technologies, how they differ, and how
+you can use them in your own applications. Today, you will learn</P>
+
+<P>
+
+<UL>
+	<LI>How the ODBC interface allows you to use a consistent way to access a database.
+	<P>
+	<LI>How Visual C++ uses the CRecordset class to provide access to an ODBC data source.
+	<P>
+	<LI>How you can create a simple database application using the Wizards in Visual
+	C++.
+	<P>
+	<LI>How you can add and delete records from an ODBC database in Visual C++.
+</UL>
+
+<H2><A NAME="Heading1"></A>Database Access and ODBC</H2>
+<P>Most business applications work with data. They maintain, manipulate, and access
+records of data that are stored in databases. If you build business applications,
+odds are that you will need to be able to access a database with your applications.
+The question is, which database?</P>
+<P>There are a number of databases on the market. If you need to create a single-user
+application that is self-contained on a single computer, you can use any one of numerous
+PC-based databases, such as Microsoft's Access, FoxPro, or Borland's Paradox. If
+you are building applications that need to access large, shared databases, you are
+probably using an SQL-based (Structured Query Language) database such as SQL Server
+or Oracle. All of these databases provide the same basic functionality, maintaining
+records of data. Each will allow you to retrieve several records or a single record,
+depending on your needs. They'll all let you add, update, or delete records as needed.
+Any of these data- bases will be able to serve your application's needs, so you should
+be able to use any database for one application and then switch to another for the
+next application, based on the needs of the application and which database is most
+suited for the specific application needs (or your employer's whim).</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> To be completely honest, there are numerous differences between the
+	various databases that are available today. Each of these databases has specific
+	strengths and weaknesses, making one more suitable for a specific situation than
+	another. However, a discussion of the differences between any of these databases
+	is beyond the scope of this book. For the discussions of databases today and tomorrow,
+	you can assume that all of these databases are functionally equal and interchangeable.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>The problem that you will encounter when you switch from one database to another
+is that each database requires you to use a different interface for accessing the
+database. Therefore, you have to learn and use a whole new set of programming techniques
+and functions for each database that you need to work with. This is the problem that
+the ODBC interface was designed to correct.</P>
+<P>
+<H3><A NAME="Heading2"></A>The Open Database Connector (ODBC) Interface</H3>
+<P>Microsoft saw the incompatibility between database interfaces as a problem. Each
+database had its own application development language that was well integrated with
+the database but didn't work with any other database. This presented a problem to
+any developer who needed to use one database for an application and then a different
+database for the next application. The developer had to learn the specific development
+language for each of the databases and couldn't use any languages that she already
+knew. For programmers to work with any database with the programming language of
+the developer's choice, they needed a standardized interface that works with every
+database.</P>
+<P>The Open Database Connector (ODBC) interface is implemented as a standard, SQL-based
+interface that is an integral part of the Windows operating system. Behind this interface
+are plug-ins for each database that take the ODBC function calls and convert them
+into calls to the specific interface for that database. The ODBC interface also uses
+a central set of database connection configurations, with a standardized way of specifying
+and maintaining them. This setup allows programmers to learn and use a single database
+interface for all databases. This also allowed programming language vendors to add
+ODBC support into their languages and development tools to make database access all
+but transparent.</P>
+<P>
+<H3><A NAME="Heading3"></A>The CRecordset Class</H3>
+<P>In the Visual C++ development environment, most of the ODBC functionality has
+been encapsulated into two classes, CRecordset and CDatabase. The CDatabase class
+contains the database connection information and can be shared across an entire application.
+The CRecordset class encapsulates a set of records from the database. The CRecordset
+class allows you to specify a SQL query to be run, and the CRecordset class will
+run the query and maintain the set of records that are returned by the database.
+You can modify and update the records in the record set, and your changes will be
+passed back to the database. You can add or delete records from the record set, and
+those same actions can be passed back to the database.</P>
+<P>
+<H4>Connecting to the Database</H4>
+<P>Before the CRecordset class can perform any other functions, it has to be connected
+to a database. This is accomplished through the use of the CDatabase class. You don't
+need to create or set the CDatabase instance; the first instance of the CRecordset
+class does this for you. When you create an application using the AppWizard and choose
+to include ODBC database support, the AppWizard includes the database connection
+information in the first CRecordset-derived class that it creates. When this CRecordset
+class is created without being passed a CDatabase object, it uses the default connection
+information, which was added by the AppWizard, to create its own database connection.</P>
+<P>
+<H4>Opening and Closing the Record Set</H4>
+<P>Once the CRecordset object is created and connected to the database, you need
+to open the record set to retrieve the set of records from the database. Do this
+by calling the Open member function of the CRecordset object. You can call this function
+without any arguments if you want to take the default values for everything, including
+the SQL statement to be executed.</P>
+<P>The first argument to the Open function is the record set type. The default value
+for this, AFX_DB_USE_DEFAULT_TYPE, is to open the record set as a snapshot set of
+records. Table 14.1 lists the four types of record set types. Only two of these record
+set types are available in the AppWizard when you are specifying the data source.</P>
+<P>
+<H4>TABLE 14.1. RECORD SET TYPES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRecordset::dynaset		</TD>
+		<TD ALIGN="LEFT">A set of records that can be refreshed by calling the Fetch function so that changes
+			made to the record set by other users can be seen.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRecordset::snapshot		</TD>
+		<TD ALIGN="LEFT">A set of records that cannot be refreshed without closing and then reopening the
+			record set.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRecordset::dynamic		</TD>
+		<TD ALIGN="LEFT">Very similar to the CRecordset::dynaset type, but it is not available in many ODBC
+			drivers.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRecordset::forwardOnly		</TD>
+		<TD ALIGN="LEFT">A read-only set of records that can only be scrolled from the first to the last record.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The second argument to the Open function is the SQL statement that is to be executed
+to populate the record set. If a NULL is passed for this argument, the default SQL
+statement that was created by the AppWizard is executed.</P>
+<P>The third argument is a set of flags that you can use to specify how the set of
+records is to be retrieved into the record set. Most of these flags require an in-depth
+understanding of the ODBC interface so you understand how the flags can and should
+be used in your applications. Because of this, I'll discuss only a few of these flags
+in Table 14.2.</P>
+<P>
+<H4>TABLE 14.2. RECORD SET OPEN FLAGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Flag</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRecordset::none		</TD>
+		<TD ALIGN="LEFT">The default value for this argument; specifies that no options affect how the record
+			set is opened and used.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRecordset::appendOnly		</TD>
+		<TD ALIGN="LEFT">This flag prevents the user from being able to edit or delete any of the existing
+			records in the record set. The user will only be able to add new records to the set
+			of records. You cannot use this option with the CRecordset::readOnly flag.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRecordset::readOnly		</TD>
+		<TD ALIGN="LEFT">This flag specifies that the record set is read-only and no changes can be made by
+			the user. You cannot use this option with the CRecordset::appendOnly flag.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Once the user finishes working with the record set, you can call the Close function
+to close the record set and free any resources used by the record set. The Close
+function doesn't take any arguments.</P>
+<P>
+<H4>Navigating the Record Set</H4>
+<P>Once you have a set of records retrieved from the database, you need to be able
+to navigate the set of records (unless the set has only one record). The CRecordset
+class provides several functions for navigating the record set, allowing you to move
+the user to any record. Table 14.3 lists the functions that you use to navigate the
+record set.</P>
+<P>
+<H4>TABLE 14.3. RECORD SET NAVIGATION FUNCTIONS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Function</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MoveFirst		</TD>
+		<TD ALIGN="LEFT">Moves to the first record in the set.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MoveLast		</TD>
+		<TD ALIGN="LEFT">Moves to the last record in the set.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MoveNext		</TD>
+		<TD ALIGN="LEFT">Moves to the next record in the set.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MovePrev		</TD>
+		<TD ALIGN="LEFT">Moves to the previous record in the set.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Move		</TD>
+		<TD ALIGN="LEFT">Can be used to move a specific number of records from the current record or from
+			the first record in the set.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">SetAbsolutePosition		</TD>
+		<TD ALIGN="LEFT">Moves to the specified record in the set.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IsBOF		</TD>
+		<TD ALIGN="LEFT">Returns TRUE if the current record is the first record in the set.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IsEOF		</TD>
+		<TD ALIGN="LEFT">Returns TRUE if the current record is the last record in the set.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">GetRecordCount		</TD>
+		<TD ALIGN="LEFT">Returns the number of records in the set.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Of all of these navigation and informational functions, only two, Move and SetAbsolutePosition,
+take any arguments. The SetAbsolutePosition function takes a single numeric argument
+to specify the row number of the record toward which to navigate. If you pass 0,
+it navigates to the beginning-of-file (BOF) position, whereas 1 takes you to the
+first record in the set. You can pass negative numbers to this function to cause
+it to count backward from the last record in the set. (For example, -1 takes you
+to the last record in the set, -2 to the next-to-last record, and so on.)</P>
+<P>The Move function takes two arguments. The first argument is the number of rows
+to move. This can be a positive or negative number; a negative number indicates a
+backward navigation through the record set. The second argument specifies how you
+will move through the set of rows. The possible values for the second argument are
+listed in Table 14.4 with descriptions of how they affect the navigation.</P>
+<P>
+<H4>TABLE 14.4. MOVE NAVIGATION TYPES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">SQL_FETCH_RELATIVE		</TD>
+		<TD ALIGN="LEFT">Moves the specified number of rows from the current row.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">SQL_FETCH_NEXT		</TD>
+		<TD ALIGN="LEFT">Moves to the next row, ignoring the number of rows specified. The same as calling
+			the MoveNext function.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">SQL_FETCH_PRIOR		</TD>
+		<TD ALIGN="LEFT">Moves to the previous row, ignoring the number of rows specified. The same as calling
+			the MovePrev function.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">SQL_FETCH_FIRST		</TD>
+		<TD ALIGN="LEFT">Moves to the first row, ignoring the number of rows specified. The same as calling
+			the MoveFirst function.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">SQL_FETCH_LAST		</TD>
+		<TD ALIGN="LEFT">Moves to the last row, ignoring the number of rows specified. The same as calling
+			the MoveLast function.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">SQL_FETCH_ABSOLUTE		</TD>
+		<TD ALIGN="LEFT">Moves the specified number of rows from the start of the set of rows. The same as
+			calling the SetAbsolutePosition function.		</TD>
+	</TR>
+</TABLE>
+
+<H4>Adding, Deleting, and Updating Records</H4>
+<P>Navigating a set of records from a database is only part of what you need to be
+able to do. You also need to be able to add new records to the record set, edit and
+update existing records, and delete records. These actions are all possible through
+the various functions that the CRecordset class provides. The functions that you
+will use to provide this functionality to the user are listed in Table 14.5.</P>
+<P>
+<H4>TABLE 14.5. RECORD SET EDITING FUNCTIONS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Function</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">AddNew		</TD>
+		<TD ALIGN="LEFT">Adds a new record to the record set.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Delete		</TD>
+		<TD ALIGN="LEFT">Deletes the current record from the record set.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit		</TD>
+		<TD ALIGN="LEFT">Allows the current record to be edited.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Update		</TD>
+		<TD ALIGN="LEFT">Saves the current changes to the database.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Requery		</TD>
+		<TD ALIGN="LEFT">Reruns the current SQL query to refresh the record set.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>None of these functions takes any arguments. However, some of them require following
+a few specific steps to get them to work correctly.</P>
+<P>To add a new record to the database, you can call the AddNew function. The next
+thing that you need to do is set default values in any of the fields that require
+values, such as the key fields. Next, you must call the Update function to add the
+new record to the database. If you try to navigate to another record before calling
+the Update function, the new record will be lost. Once you save the new record, you
+need to call the Requery function to refresh the record set so that you can navigate
+to the new record and let the user edit it. This sequence of function calls typically
+looks like the following:</P>
+<P>
+<PRE>// Add a new record to the record set
+m_pSet.AddNew();
+// Set the key field on the new record
+m_pSet.m_AddressID = m_lNewID;
+// Save the new record to the database
+m_pSet.Update();
+// Refresh the record set
+m_pSet.Requery();
+// Move to the new record
+m_pSet.MoveLast();
+</PRE>
+<P>When you need to delete the current record, you can simply call the Delete function.
+Once you delete the current record, you need to navigate to another record so the
+user isn't still looking at the record that was just deleted. Once you delete the
+current record, there is no current record until you navigate to another one. You
+do not need to explicitly call the Update function because the navigation functions
+call it for you. This allows you to write the following code to delete the current
+record:</P>
+<P>
+<PRE>// Delete the current record
+m_pSet.Delete();
+// Move to the previous record
+m_pSet.MovePrev();
+</PRE>
+<P>Finally, to allow the user to edit the current record, you need to call the Edit
+function. This allows you to update the fields in the record with the new values
+entered by the user or calculated by your application. Once all changes are made
+to the current record, you need to call the Update function to save the changes:</P>
+<P>
+<PRE>// Allow the user to edit the current record
+m_pSet.Edit();
+// Perform all data exchange, updating the fields in the recordset
+.
+.
+// Save the user's changes to the current record
+m_pSet.Update();
+</PRE>
+<P>You might be wondering how you get to the fields in the records to update them.
+When the AppWizard creates the CRecordset-derived class for your application, it
+adds all the fields in the records that will be in the record set as member variables
+in order of the record set class. As a result, you can access the member variables
+in order to access and manipulate the data elements in the database records that
+are members of the record set.</P>
+<P>
+<H2><A NAME="Heading4"></A>Creating a Database Application Using ODBC</H2>
+<P>For the sample application that you will build today, you'll create an SDI application
+with ODBC database support. The application will retrieve records from an ODBC database,
+allowing the user to edit and update any of the records. You'll also add function-
+ality to enable the user to add new records to the database and to delete records
+from the database.</P>
+<P>
+<H3><A NAME="Heading5"></A>Preparing the Database</H3>
+<P>Before you can begin building an application that uses a database, you need a
+database to use with your application. Almost every database that you can purchase
+for your applications comes with tools for creating a new database. You'll need to
+use these tools to create your database and then use the ODBC administrator to configure
+an ODBC data source for your new database.</P>
+<P>For the sample application in this chapter, I used Access 95 to create a new database.
+I used the Access Database Wizard to create the database, choosing the Address Book
+database template as the database to be created. When the Database Wizard started,
+I selected the default set of fields for including in the database and selected the
+option to include sample data, as shown in Figure 14.1. I then accepted the rest
+of the default settings offered in the Database Wizard.</P>
+<P><A HREF="javascript:popUp('14fig01.gif')"><B>FIGURE 14.1.</B></A><B> </B><I>Including
+sample data in the database.</I></P>
+
+<P>Once you create the database, you need to configure an ODBC data source to point
+to the database you just created. To do this, run the ODBC Administrator, which is
+in the Control Panel on your computer.</P>
+<P>Once in the ODBC Administrator, you'll add a new data source. You can do this
+by clicking the Add button, as shown in Figure 14.2. This opens another dialog, which
+allows you to select the database driver for the new data source, as shown in Figure
+14.3. For the sample application that you will build today, because the database
+was created using Access, select the Microsoft Access Driver and click the Finish
+button.</P>
+<P><A HREF="javascript:popUp('14fig03.gif')"><B>FIGURE 14.2.</B></A><B> </B><I>The
+ODBC Data Source Administrator.</I></P>
+
+<P><A HREF="javascript:popUp('14fig04.gif')"><B>FIGURE 14.3.</B></A><B> </B><I>The
+Create New Data Source dialog.</I></P>
+
+<P>In the ODBC Microsoft Access Setup dialog, shown in Figure 14.4, you'll provide
+a short, simple name for the data source. Your application will use this name to
+specify the ODBC data source configuration to use for the database connection, so
+it should reflect the function that the database will be serving, or it should be
+similar to the name of the application that will be using this database. For the
+purposes of the sample application database, name your data source <B>TYVCDB</B>
+(for Teach Yourself Visual C++ Database) and enter a description for the database
+in the next field.</P>
+
+<P>Once you enter a name and description for the data source, you need to specify
+where the database is. Click the Select button and then specify the Access database
+that you created. Once you finish configuring the ODBC data source for your database,
+click the OK button to add the new data source to the ODBC Administrator. You can
+click the OK button to finish the task and close the ODBC Administrator because you
+are now ready to turn your attention to building your application.</P>
+
+<P><A HREF="javascript:popUp('14fig05.gif')"><B>FIGURE 14.4.</B></A><B> </B><I>The
+ODBC Microsoft Access 97 Setup dialog.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading6"></A>Creating the Application Shell</H3>
+<P>For the sample application that you will build today, you'll create a standard
+SDI-style application with database support. First, start a new project, selecting
+the AppWizard, and give your application a suitable name, such as DbOdbc.</P>
+<P>On the first AppWizard form, specify that you want to build an SDI application.
+On the second AppWizard form, specify that you want to include Database view with
+file support. Click the Data Source button to specify which data source you will
+use in your application. In the Database Options dialog, specify that you are using
+an ODBC data source, and select the ODBC configuration from the list that you configured
+for your Access database, as shown in Figure 14.5. You can set the record set type
+to either Snapshot or Dynaset.</P>
+<P><A HREF="javascript:popUp('14fig06.gif')"><B>FIGURE 14.5.</B></A><B> </B><I>The
+Database Options dialog.</I></P>
+
+<P>Once you click the OK button, another dialog opens, presenting you with the available
+tables in the database you selected. Select the Addresses table, as shown in Figure
+14.6, and click the OK button to close this dialog and return to the AppWizard.</P>
+<P>You can continue through the rest of the AppWizard, accepting all of the default
+settings. When you reach the final AppWizard step, you'll notice that the AppWizard
+is going to create an extra class. If you select this class, you'll see that it is
+derived from the CRecordset class, and it is the record set class for your application.
+You'll also notice that the view class is derived from the CRecordView class, which
+is a descendent of the CFormView class, with some added support for database functionality.</P>
+<P><A HREF="javascript:popUp('14fig07.gif')"><B>FIGURE 14.6.</B></A><B> </B><I>The
+Select Database Tables dialog.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading7"></A>Designing the Main Form</H3>
+<P>Once you create the application shell, you need to design the main form that will
+be used for viewing and editing the database records. You can design this form using
+the standard controls that are part of Visual C++, without adding any special ActiveX
+controls. For designing the main form in your sample application, lay out the main
+form as shown in Figure 14.7, and configure the controls with the properties specified
+in Table 14.6.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> If you want to save a little time when building the example, you can
+	leave out most of the controls and database fields from the application. The key
+	fields that you'll need to include are ID, First and Last Names, Birthdate, and Send
+	Card. If you want to leave out the other fields from the application, that's fine.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>TABLE 14.6. CONTROL PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">ID:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EID		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">First Name:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EFNAME		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Last Name:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_ELNAME		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Spouse Name:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_ESNAME		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Address:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EADDR		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Multiline		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">City:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_ECITY		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">State:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_ESTATE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Zip:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EZIP		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Country:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_ECOUNTRY		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">E-Mail:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EEMAIL		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Home Phone:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EHPHONE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Work Phone:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EWPHONE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Extension:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EWEXT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Fax:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">
+			<PRE>Edit Box</PRE>
+		</TD>
+		<TD ALIGN="LEFT">
+			<PRE>ID</PRE>
+		</TD>
+		<TD ALIGN="LEFT">
+			<PRE>IDC_EFAX</PRE>
+		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Birthdate:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDOB		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Check Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_CBCARD		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Send Card		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Notes:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_ENOTES		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Multiline		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+</TABLE>
+</P>
+<P><A HREF="javascript:popUp('14fig08.gif')"><B>FIGURE 14.7.</B></A><B> </B><I>The
+main form design.</I></P>
+
+<P>Once you have added and configured all the controls on the main form for your
+application, you're ready to begin associating the controls with database fields.
+When you click the Member Variables tab of the Class Wizard and select a control
+to add a variable for, you'll notice that the Add Member Variable dialog has a drop-down
+combo box where you enter the variable name. If you click the arrow to drop down
+the list, you'll find that it's filled with the fields in the record set, as shown
+in Figure 14.8. This enables you to attach the database fields directly to the controls
+on the form. To attach the database fields to the controls on your application form,
+add the variables specified in Table 14.7.</P>
+<P><A HREF="javascript:popUp('14fig09.gif')"><B>FIGURE 14.8.</B></A><B> </B><I>The
+Add Member Variable dialog with record set fields.</I></P>
+
+<P><I></I>
+<H4>TABLE 14.7. CONTROL VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_CBCARD		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_SendCard		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EADDR		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_Address		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_ECITY		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_City		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_ECOUNTRY		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_Country		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EEMAIL		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_EmailAddress		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EFAX		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_FaxNumber		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EFNAME		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_FirstName		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EHPHONE		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_HomePhone		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EID		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_AddressID		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_ELNAME		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_LastName		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_ENOTES		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_Notes		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_ESNAME		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_SpouseName		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_ESTATE		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_StateOrProvince		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EWEXT		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_WorkExtension		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EWPHONE		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_WorkPhone		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EZIP		</TD>
+		<TD ALIGN="LEFT">m_pSet-&gt;m_PostalCode		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>You probably noticed when it was time to attach a database field to the birthdate
+control that the birthday field is missing from the list of database fields. If you
+look at the record set class in the class view and expand its tree, you'll notice
+that the birthdate field is included as one of the database fields, but it's not
+available in the list of available columns for use with the controls. Double-click
+on the birthdate field in the record set class to view its definition. You'll notice
+that the m_Birthdate variable is declared as a CTime variable. This is the reason
+that it's not available in the list of database fields that can be attached to controls.
+There isn't a macro or function you can call for exchanging data between a control
+and a CTime variable. This is also a problem because the CTime variable type cannot
+handle dates before December 31, 1969. To use this database field, you'll need to
+change its definition from a CTime to a COleDateTime variable type, as in line 17
+in Listing 14.1. Once you change the variable type of this database field, you will
+be able to attach it to the IDC_EDOB control.</P>
+<P>
+<H4>LISTING 14.1. THE DATABASE FIELD VARIABLE DECLARATIONS.</H4>
+<PRE>1:  // Field/Param Data
+2:      //{{AFX_FIELD(CTestdb5Set, CRecordset)
+3:      long    m_AddressID;
+4:      CString    m_FirstName;
+5:      CString    m_LastName;
+6:      CString    m_SpouseName;
+7:      CString    m_Address;
+8:      CString    m_City;
+9:      CString    m_StateOrProvince;
+10:     CString    m_PostalCode;
+11:     CString    m_Country;
+12:     CString    m_EmailAddress;
+13:     CString    m_HomePhone;
+14:     CString    m_WorkPhone;
+15:     CString    m_WorkExtension;
+16:     CString    m_FaxNumber;
+17:     COleDateTime    m_Birthdate;
+18:     BOOL    m_SendCard;
+19:     CString    m_Notes;
+20: //}}AFX_FIELD</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Normally, you do not want to edit the portions of code in your applications
+	that are created and maintained by the various wizards. The change I outline here
+	is one of the few exceptions to this rule. This obstacle could possibly be considered
+	a bug in the Visual C++ AppWizard, although it's technically not a bug. You can convert
+	the date/time database field to sev- eral variable types when creating a class variable
+	to represent that field. CTime is one of these variable types; COleDateTime is another.
+	Because these are both equally valid choices, and the functions that populate this
+	variable can work with either, making this change is possible without dire consequences.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>Once you make the change to the variable type for the m_Birthdate variable in
+the record set class (CDbOdbcSet), and attach this database field to the Birthdate
+control on the form, you might think that you are ready to compile and run your application.
+Unfortunately, your application will not compile. You'll get a compiler error stating
+that the DDX_FieldText cannot convert the COleDateTime variable type. What you need
+to do is add the code to perform this conversion yourself. Return to the Class Wizard
+and delete the variable that you added to the IDC_EDOB control. Add a new variable
+to this control. Specify that the variable is type COleDateTime, and give the variable
+a name such as m_oledtDOB. Pull up the DoDataExchange function in the view class,
+CDbOdbcView, into the editor, and add lines 4 through 6 and lines 26 through 28 to
+the function, as shown in Listing 14.2.</P>
+<P>
+<H4>LISTING 14.2. THE CDbOdbcView DoDataExchange FUNCTION.</H4>
+<PRE>1:  void CDbOdbcView::DoDataExchange(CDataExchange* pDX)
+2:  {
+3:      CRecordView::DoDataExchange(pDX);
+4:      // Copy the DOB from the record set to the view variable
+5:      if (pDX-&gt;m_bSaveAndValidate == FALSE)
+6:          m_oledtDOB = m_pSet-&gt;m_Birthdate;
+7:      //{{AFX_DATA_MAP(CTestdb5View)
+8:      DDX_FieldText(pDX, IDC_EID, m_pSet-&gt;m_AddressID, m_pSet);
+9:      DDX_FieldText(pDX, IDC_EFNAME, m_pSet-&gt;m_FirstName, m_pSet);
+10:     DDX_FieldText(pDX, IDC_ELNAME, m_pSet-&gt;m_LastName, m_pSet);
+11:     DDX_FieldText(pDX, IDC_ESNAME, m_pSet-&gt;m_SpouseName, m_pSet);
+12:     DDX_FieldText(pDX, IDC_ESTATE, m_pSet-&gt;m_StateOrProvince, m_pSet);
+13:     DDX_FieldText(pDX, IDC_ECITY, m_pSet-&gt;m_City, m_pSet);
+14:     DDX_FieldText(pDX, IDC_EADDR, m_pSet-&gt;m_Address, m_pSet);
+15:     DDX_FieldCheck(pDX, IDC_CBCARD, m_pSet-&gt;m_SendCard, m_pSet);
+16:     DDX_FieldText(pDX, IDC_ECOUNTRY, m_pSet-&gt;m_Country, m_pSet);
+17:     DDX_FieldText(pDX, IDC_EEMAIL, m_pSet-&gt;m_EmailAddress, m_pSet);
+18:     DDX_FieldText(pDX, IDC_EFAX, m_pSet-&gt;m_FaxNumber, m_pSet);
+19:     DDX_FieldText(pDX, IDC_EHPHONE, m_pSet-&gt;m_HomePhone, m_pSet);
+20:     DDX_FieldText(pDX, IDC_ENOTES, m_pSet-&gt;m_Notes, m_pSet);
+21:     DDX_FieldText(pDX, IDC_EWEXT, m_pSet-&gt;m_WorkExtension, m_pSet);
+22:     DDX_FieldText(pDX, IDC_EWPHONE, m_pSet-&gt;m_WorkPhone, m_pSet);
+23:     DDX_FieldText(pDX, IDC_EZIP, m_pSet-&gt;m_PostalCode, m_pSet);
+24:     DDX_Text(pDX, IDC_EDOB, m_oledtDOB);
+25:     //}}AFX_DATA_MAP
+26:     // Copy the DOB variable back from the view variable to the record         &Acirc;set
+27:     if (pDX-&gt;m_bSaveAndValidate == TRUE)
+28:         m_pSet-&gt;m_Birthdate = m_oledtDOB;
+29: }
+</PRE>
+<P>In addition to the above change, you have to remove the initialization of the
+m_Birthdate variable in the set class. This is also code that was added by the AppWizard,
+and once again you have to break the rules by modifying the code that you are never
+supposed to touch. To make this change, you can take the simple approach by commenting
+out the initialization of this variable in the set class constructor, in line 19
+of Listing 14.3.</P>
+<P>
+<H4>LISTING 14.3. THE CDbOdbcSet CONSTRUCTOR.</H4>
+<PRE>1: CDbOdbcSet::CDbOdbcSet(CDatabase* pdb)
+2:      : CRecordset(pdb)
+3:  {
+4:      //{{AFX_FIELD_INIT(CTestdb5Set)
+5:      m_AddressID = 0;
+6:      m_FirstName = _T(&quot;&quot;);
+7:      m_LastName = _T(&quot;&quot;);
+8:      m_SpouseName = _T(&quot;&quot;);
+9:      m_Address = _T(&quot;&quot;);
+10:     m_City = _T(&quot;&quot;);
+11:     m_StateOrProvince = _T(&quot;&quot;);
+12:     m_PostalCode = _T(&quot;&quot;);
+13:     m_Country = _T(&quot;&quot;);
+14:     m_EmailAddress = _T(&quot;&quot;);
+15:     m_HomePhone = _T(&quot;&quot;);
+16:     m_WorkPhone = _T(&quot;&quot;);
+17:     m_WorkExtension = _T(&quot;&quot;);
+18:     m_FaxNumber = _T(&quot;&quot;);
+19:     //m_Birthdate = 0;
+20:     m_SendCard = FALSE;
+21:     m_Notes = _T(&quot;&quot;);
+22:     m_nFields = 17;
+23:     //}}AFX_FIELD_INIT
+24:     m_nDefaultType = dynaset;
+25: }
+</PRE>
+<P>Now compile and run your application once again. You'll find that you have a fully
+functioning database application that retrieves a set of records from the database
+and allows you to scroll through them and make changes to the data, as shown in Figure
+14.9.</P>
+<P>
+<H3><A NAME="Heading8"></A>Adding New Records</H3>
+<P>You've already created a fully functioning database application without writing
+a single line of code. However, a few functions are missing. Most database applications
+let the user add new records to the database. To add a new record to the database,
+you'll want to figure out what the next ID number should be, so you'll scroll to
+the last record in the set to get the ID and then increment it by one. Next, you'll
+call the AddNew function to add a new record, set the ID field to the new ID you
+calculated, and then call the Update function to save the new record. Finally, you'll
+call the Requery function to refresh the set of records and then scroll to the last
+record in the set to let the user enter data into the new record.</P>
+<P><A HREF="javascript:popUp('14fig10.gif')"><B>FIGURE 14.9.</B></A><B> </B><I>The
+running appli- cation.</I></P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> Because the ID field in the database in defined as an AutoIncrement
+	field, you do not normally specify your own ID for the field. However, because the
+	record set is creating a new record with the ID field, you need to assign a valid
+	ID to the record or you won't be able to add it to the database. The method used
+	in this application will not work with any multiuser database because each person
+	would generate the same IDs for new records. In this situation, a centralized method
+	for generating new IDs, such as a counter field in the database, is a better solution.
+	The other option is to create a SQL statement to insert a new record into the database
+	that was missing the ID field. This allows the auto-increment functionality to work
+	correctly.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>To add this functionality to your application, start by adding a function to your
+record set class to determine the next ID number to be used. Add a member function
+to the record set class, CDbOdbcSet. Specify the function type as long, the function
+declaration as GetMaxID, and the access as public. Edit the function, adding the
+code in Listing 14.4.</P>
+<P>
+<H4>LISTING 14.4. THE CDbOdbcSet GetMaxID FUNCTION.</H4>
+<PRE>1: long CDbOdbcSet::GetMaxID()
+2: {
+3:     // Move to the last record
+4:     MoveLast();
+5:     // return the ID of this record
+6:     return m_AddressID;
+7: }
+</PRE>
+<P>Next, you'll need a menu entry that the user can select to add a new record to
+the database. Add a new menu entry to the Record menu. Configure the new menu entry
+with the properties in Table 14.8.</P>
+<P>
+<H4>TABLE 14.8. MENU PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Menu Entry		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDM_RECORD_NEW		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">N&amp;ew Record		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Prompt		</TD>
+		<TD ALIGN="LEFT">Add a new record\nNew Record		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Using the Class Wizard, add an event-handler function for the COMMAND event message
+for this menu to the view class, CDbOdbcView. Edit this function, adding the code
+in Listing 14.5.</P>
+<P>
+<H4>LISTING 14.5. THE CDbOdbcView OnRecordNew FUNCTION.</H4>
+<PRE>1:  void CDbOdbcView::OnRecordNew() 
+2:  {
+3:      // TODO: Add your command handler code here
+4:      // Get a pointer to the record set
+5:      CRecordset* pSet = OnGetRecordset();
+6:      // Make sure that any changes to the current record
+7:      // have been saved
+8:      if (pSet-&gt;CanUpdate() &amp;&amp; !pSet-&gt;IsDeleted())
+9:      {
+10:         pSet-&gt;Edit();
+11:         if (!UpdateData())
+12:             return;
+13:
+14:         pSet-&gt;Update();
+15:     }
+16:     // Get the ID for the new record
+17:     long m_lNewID = m_pSet-&gt;GetMaxID() + 1;
+18:     // Add the new record
+19:     m_pSet-&gt;AddNew();
+20:     // Set the ID in the new record
+21:     m_pSet-&gt;m_AddressID = m_lNewID;
+22:     // Save the new record
+23:     m_pSet-&gt;Update();
+24:     // Refresh the record set
+25:     m_pSet-&gt;Requery();
+26:     // Move to the new record
+27:     m_pSet-&gt;MoveLast();
+28:     // Update the form
+29:     UpdateData(FALSE);
+30: }
+</PRE>
+<P>Add a new toolbar button for the New Record menu, and then compile and run your
+application. You should be able to add new records to the database, entering the
+data you want into the records.</P>
+<P>
+<H3><A NAME="Heading9"></A>Deleting Records</H3>
+<P>The only functionality remaining is the ability to delete the current record from
+the database. You'll need to add another menu entry to trigger this action. Once
+the action is triggered, you'll verify that the user really does want to delete the
+current record and then call the Delete function to remove the record. Once the record
+has been deleted, you'll call the MovePrev function to navigate to the previous record
+in the set.</P>
+<P>To add this functionality to your application, you'll need a menu entry that the
+user can select to delete the current record from the database. Add a new menu entry
+to the Record menu. Configure the new menu entry with the properties in Table 14.9.</P>
+<P>
+<H4>TABLE 14.9. MENU PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">
+			<PRE>Menu Entry</PRE>
+		</TD>
+		<TD ALIGN="LEFT">
+			<PRE>ID</PRE>
+		</TD>
+		<TD ALIGN="LEFT">
+			<PRE>IDM_RECORD_DELETE</PRE>
+		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Delete Record		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Prompt		</TD>
+		<TD ALIGN="LEFT">Delete the current record\nDelete Record		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Using the Class Wizard, add an event-handler function for the COMMAND event message
+for this menu to the view class, CDbOdbcView. Edit this function, adding the code
+in Listing 14.6.</P>
+<P>
+<H4>LISTING 14.6. THE CDbOdbcView OnRecordDelete FUNCTION.</H4>
+<PRE>1:  void CTestdb5View::OnRecordDelete() 
+2:  {
+3:      // TODO: Add your command handler code here
+4:      // Make sure the user wants to delete this record
+5:      if (MessageBox(&quot;Are you sure you want to delete this record?&quot;,
+6:              &quot;Delete this record?&quot;, MB_YESNO | MB_ICONQUESTION) ==                   &Acirc;IDYES)
+7:      {
+8:          // Delete the record
+9:          m_pSet-&gt;Delete();
+10:         // Move to the previous record
+11:         m_pSet-&gt;MovePrev();
+12:         // Update the form
+13:         UpdateData(FALSE);
+14:     }
+15: }
+</PRE>
+<P>Add another button to the toolbar and associate it with the IDM_RECORD_DELETE
+menu ID so that the user can delete the current record without having to go to the
+menu. If you compile and run your application at this point, you'll have a full-function
+database application in which you can add, edit, and delete records, as shown in
+Figure 14.10.</P>
+<P><A HREF="javascript:popUp('14fig11.gif')"><B>FIGURE 14.10.</B></A><B> </B><I>The
+completed application.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading10"></A>Summary</H2>
+<P>Today, you learned how you can use the ODBC interface to build database applications
+that can be easily run against any database you might need to use. You saw how the
+CRecordset class provides you with a substantial amount of functionality so that
+you can provide database functionality in your applications. You also saw how the
+AppWizard provides you with a large amount of database functionality without your
+typing a single line of code.</P>
+<P>Tomorrow, you will learn about Microsoft's newest database access technology,
+ActiveX Data Objects, and how this can be combined with the ODBC interface to make
+your database access even easier.</P>
+<P>
+<H2><A NAME="Heading11"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q Why would I want to use the ODBC interface instead of the Data Access Objects?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> The Data Access Objects (DAO) use the Microsoft Jet database engine
+	to perform all of the database access. This adds at least a megabyte of overhead
+	to your application, and if you're using a SQL-based database, the database is already
+	doing all of the work that the Jet engine is doing for you. What's more, the Jet
+	database engine uses the ODBC interface to access any SQL-based databases. As a result,
+	unless you are using PC-based databases, such as Access, FoxPro, or Paradox, you
+	get better performance from going directly to the ODBC interface yourself.
+	<P>
+	<DT></DT>
+	<DD><B>Q How can I add different record sets in an MDI application?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> You can add additional CRecordset-derived classes through the New Class
+	Wizard in an MDI application project. You need to specify that the new class is an
+	MFC class and that its base class is the CRecordset class. The New Class Wizard will
+	have you specify the data source, just as the AppWizard had you do when creating
+	the shell for today's application. Once you create the record set class, you can
+	create a new view class the same way, specifying the base class as CRecordView. Once
+	you click the OK button, the New Class Wizard asks you to specify which of the record
+	set classes to use with the new record view class.
+	<P>
+</DL>
+
+<H2><A NAME="Heading12"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading13"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What does ODBC stand for?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>What functions can you use to navigate the record set in a CRecordset
+	object?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What view class should you use with an ODBC application?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>What sequence of functions do you need to call to add a new record
+	to a record set?
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>What function do you need to call before the fields in the CRecordset
+	object can be updated with any changes?
+	<P>
+</DL>
+
+<H3><A NAME="Heading14"></A>Exercise</H3>
+<P>Add a menu entry and dialog to let the user indicate the record number to move
+to, and then move to that record.</P>
+<P>
+<H2><A NAME="Heading15"></A>In Review</H2>
+<P>Now that you've finished the second week, you should be getting very comfortable
+working with Visual C++. You should be beginning to understand how you can use the
+MFC class hierarchy to provide a substantial amount of existing functionality in
+your applications. You should also be starting to understand how much supporting
+infrastructure your applications start with when you use the Visual C++ wizards to
+construct as much of your application as you can.</P>
+<P>This is a good time to take a little break and try some of the things that you've
+learned on your own. Build an MDI application, using a custom document type that
+you've come up with yourself. See how you can save and restore the document, as well
+as maintain it. Practicing on your own is key to cementing your understanding of
+what you've learned in this book. This will help you identify any areas that you
+might need to go back and read again, as well as those areas where you feel comfortable
+enough to not review.</P>
+<P>By this time, you should have a good understanding of the Document/View architecture
+and how it can be used to maintain the separation of the data from the representation
+of the data that is displayed for the user. You've used this model for both Single
+Document Interface (SDI) and Multiple Document Interface (MDI) style applications,
+and you've used it for reading and writing files to the disk drive. This model is
+one of the main building blocks of MFC applications built with Visual C++. You should
+know where to place any initialization information for a new set of data and where
+to clean up when closing a set of data.</P>
+<P>You should also have a good understanding of how the SDI and MDI application styles
+are alike and how they differ from each other and from the dialog application style.
+You should have a good idea of when an application you are building should use one
+of these styles and when it should use a different style. You should be able to create
+your own SDI and MDI applications, as you need to, without any significant problems.
+If you've got any questions about either of these areas, you might want to take another
+look at Days 10 and 11 to review how the Document/View architecture works in both
+SDI and MDI style applications.</P>
+<P>You should understand how, in SDI and MDI style applications, you can save and
+restore complex data structures in files on the system hard drive. You should be
+able to create mixed-type objects that you create and maintain in the document object
+in your applications, be able to use the Serialize function with the CArchive object
+to write the objects to a file, and then be able to restore the objects at a later
+time. If you are having any trouble understanding how this works or are running into
+any problems trying to implement this functionality in your own applications, review
+Day 13.</P>
+<P>Along with reading and writing files, you also have learned how you can design
+and build toolbars for use in your SDI and MDI applications. At this point, you should
+be completely comfortable with designing and creating your own toolbars and using
+them in your applications. You should understand the importance of matching the toolbar
+button ID to the ID of the menu for which the toolbar will be used as a substitute.
+You should also have a basic understanding of creating and using your own customized
+status bar elements in SDI and MDI applications. You should understand how you can
+use the UPDATE_COMMAND_UI event message to evaluate and alter the status of menu,
+toolbar, and status bar elements, relieving you of all the work of setting each of
+these elements, and how to maintain their appearance and status yourself. If you
+aren't clear on how you can do any of these things, you might want to go back over
+Day 12 one more time.</P>
+<P>You've seen how you can build a simple database application, pulling data from
+a database through the ODBC interface. You should have a basic understanding of how
+you can build database applications using this approach, how to maintain the data,
+how to add new records, and how to delete records. You should know how all the database
+interaction is directed through the record set class and how you can directly control
+the data through this object. If you're not sure of some of this, you might want
+to look back at Day 14 for a quick refresher.</P>
+<P>You learned how easy it is to add ActiveX controls to your projects and how Visual
+C++ builds C++ classes around the control, enabling you to interact with the control
+as if it were just another C++ object. You should have a good grasp of how to add
+any ActiveX control (armed with the documentation for the control) to your application
+and interact with it in a seamless manner. You should be able to declare a variable
+for the control, set the control's properties, call its methods, and react to its
+events just as if it were a standard part of the Visual C++ development environment.
+If you aren't sure how you can do some of this, you might want to go back and reread
+Day 9.</P>
+<P>Finally, you started this week by learning how to draw graphics on the windows
+of your applications. You learned how to draw lines, circles, and squares, using
+a variety of pens and brushes. You even learned how you can make a customized brush
+from a bitmap. You learned how you can load a bitmap image from a file and display
+it for the user to see. But most importantly, you learned about the device context
+and how it is used to draw all these features on the windows of your applications.
+You should be able to use these and other figure drawing device context methods to
+draw any image you might want to draw on the window for the user to see and interact
+with. If you are unsure about how you can do this, you probably want to look back
+at Day 8 once more.</P>
+<P>By this time, you have built up quite a set of programming skills with Visual
+C++. You are probably ready to tackle most of the smaller programming tasks you might
+encounter--and maybe even a few not-so-small tasks. At this point, you are well on
+your way to becoming an accomplished Visual C++ programmer. That said--now is not
+the time to stop because there's still more to be learned. There's only one more
+week to go, so tallyho!</P>
+
+<P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch13/ch13.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch15/ch15.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

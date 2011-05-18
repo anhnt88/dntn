@@ -1,0 +1,1343 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 5 -- Getting User Feedback--Adding Dialog Boxes to Your Application</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch04/ch04.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch06/ch06.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 5 -<BR>
+Getting User Feedback--Adding Dialog Boxes to Your Application</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Using Pre-existing (or System) Dialog Windows</A>
+	<UL>
+		<LI><A HREF="#Heading2">Using Message Boxes</A>
+		<LI><A HREF="#Heading3">Using Common Dialogs</A>
+	</UL>
+	<LI><A HREF="#Heading4">Creating Your Own Dialog Windows</A>
+	<UL>
+		<LI><A HREF="#Heading5">Creating the Dialog Window</A>
+		<LI><A HREF="#Heading6">Using the Dialog in Your Application</A>
+	</UL>
+	<LI><A HREF="#Heading7">Summary</A>
+	<LI><A HREF="#Heading8">Q&amp;A</A>
+	<LI><A HREF="#Heading9">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading10">Quiz</A>
+		<LI><A HREF="#Heading11">Exercises</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+With most applications that you might use, there are numerous situations where the
+application asks you for information--how you want the application configured or
+whether you want to save your work before exiting, for example. In most of these
+situations, the application opens a new window to ask these questions. These windows
+are called dialog windows.</P>
+
+<P>Dialog windows typically have one or more controls and some text explaining what
+information the program needs from you. Dialog windows typically do not have a large
+blank work area, as you find in the main windows of a word processor or a programming
+editor. All the applications that you have built in the preceding days have been
+dialog windows, and your projects will continue to be dialog windows for the next
+few days.</P>
+<P>All the dialogs that you have created up to now have been single window dialog
+applications. Today you are going to learn</P>
+<P>
+
+<UL>
+	<LI>How to use dialog windows in a more flexible way.
+	<P>
+	<LI>How to call other dialog windows and take the information entered by the user
+	on these windows back to the main application window for use in the application.
+	<P>
+	<LI>How to use both standard dialogs, such as the message boxes you used in previous
+	days and custom dialogs that you have created.
+</UL>
+
+<H2><A NAME="Heading1"></A>Using Pre-existing (or System) Dialog Windows</H2>
+<P>The Windows operating system provides a number of pre-existing dialog windows.
+Simple dialog windows, also known as message boxes, present the user with a message
+and provide one to three buttons to click. More complex dialogs, such as the File
+Open, Save, or Print dialogs, are also provided with Windows. These system (or common)
+dialogs are created and used with a combination of a variable declaration of a C++
+class and a series of interactions with the class instance.</P>
+<P>
+<H3><A NAME="Heading2"></A>Using Message Boxes</H3>
+<P>As you learned in the previous days, using message boxes is as simple as making
+a single function call, passing the message text as the only argument. This results
+in a message box that displays the message to the user with an icon and gives the
+user one button to click to acknowledge the message. As you probably know from using
+other Windows software, you have a whole range of other message box possibilities
+with various button combinations and various icons that can be displayed.</P>
+<P>
+<H4>The MessageBox Function</H4>
+<P>As you have seen in previous days, the MessageBox function can be passed one or
+two arguments. The first argument is the message to be displayed to the user. The
+second argument, which is completely optional, is displayed in the title bar on the
+message box. You can use a third argument, which is also optional, to specify the
+buttons to be presented to the user and the icon to be displayed beside the message.
+In addition to this third argument, the MessageBox function returns a result value
+that indicates which button was clicked by the user. Through the combination of the
+third argument and the return value, the MessageBox function can provide a whole
+range of functionality in your Visual C++ applications.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> If you use the third argument to the MessageBox function to specify
+	the buttons or the icon to be presented to the user, the second argument (the message
+	box title) is no longer optional. You must provide a value for the title bar of the
+	message box.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>The button combinations that you can use in the MessageBox function are limited.
+You do not have the freedom to make up your own button combination. If you get to
+the point where you need to make up your own, you have to create a custom dialog
+window that looks like a message box. The button combinations that you can use are
+listed in Table 5.1.</P>
+<P>
+<H4>TABLE 5.1. MESSAGEBOX BUTTON COMBINATION IDS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">Buttons		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MB_ABORTRETRYIGNORE		</TD>
+		<TD ALIGN="LEFT">Abort, Retry, Ignore		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MB_OK		</TD>
+		<TD ALIGN="LEFT">OK		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MB_OKCANCEL		</TD>
+		<TD ALIGN="LEFT">OK, Cancel		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MB_RETRYCANCEL		</TD>
+		<TD ALIGN="LEFT">Retry, Cancel		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MB_YESNO		</TD>
+		<TD ALIGN="LEFT">Yes, No		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MB_YESNOCANCEL		</TD>
+		<TD ALIGN="LEFT">Yes, No, Cancel		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>To specify the icon to be displayed, you can add the icon ID to the button combination
+ID. The icons that are available are listed in Table 5.2. If you want to specify
+either the icon or the button combination, and you want to use the default for the
+other, you can just specify the one ID that you want to use.</P>
+<P>
+<H4>TABLE 5.2. MESSAGEBOX ICON IDS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">Icon		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MB_ICONINFORMATION		</TD>
+		<TD ALIGN="LEFT">Informational icon		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MB_ICONQUESTION		</TD>
+		<TD ALIGN="LEFT">Question mark icon		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MB_ICONSTOP		</TD>
+		<TD ALIGN="LEFT">Stop sign icon		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">MB_ICONEXCLAMATION		</TD>
+		<TD ALIGN="LEFT">Exclamation mark icon		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>When you do specify a button combination, you want to capture the return value
+so that you can determine which button the user clicked. The return value is defined
+as an integer data type; the return value IDs are listed in Table 5.3.</P>
+<P>
+<H4>TABLE 5.3. MESSAGEBOX RETURN VALUE IDS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">Button Clicked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDABORT		</TD>
+		<TD ALIGN="LEFT">Abort		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDRETRY		</TD>
+		<TD ALIGN="LEFT">Retry		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDIGNORE		</TD>
+		<TD ALIGN="LEFT">Ignore		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDYES		</TD>
+		<TD ALIGN="LEFT">Yes		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDNO		</TD>
+		<TD ALIGN="LEFT">No		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDOK		</TD>
+		<TD ALIGN="LEFT">OK		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">
+			<PRE>IDCANCEL</PRE>
+		</TD>
+		<TD ALIGN="LEFT">
+			<PRE>Cancel</PRE>
+		</TD>
+	</TR>
+</TABLE>
+
+<H4>Creating a Dialog Application</H4>
+<P>To get a good understanding of how you can use the MessageBox function in your
+applications to get information from the user, you will build a simple application
+that uses the MessageBox function in a couple of different ways. Your application
+will have two separate buttons that call two different versions of the MessageBox
+function so that you can see the differences and similarities between the various
+options of the function. Later in the day, you will add a standard File Open dialog
+so that you can see how the standard dialogs can be used to allow the user to specify
+a filename or perform other standard functions. Finally, you will create a custom
+dialog that allows the user to enter a few different types of values, and you will
+see how you can read these values from the main application dialog after the user
+has closed the custom dialog.</P>
+<P>To start this application, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Create a new MFC AppWizard workspace project, naming it Dialogs.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Choose the same settings as for the previous days' applications, giving
+	the application a title of Dialogs.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Lay out the main application dialog as shown in Figure 5.1 using the
+	properties in Table 5.4.
+	<P>
+</DL>
+
+<H4>TABLE 5.4. CONTROL PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Object		</TD>
+		<TD ALIGN="LEFT">Property		</TD>
+		<TD ALIGN="LEFT">Setting		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Command Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_YESNOCANCEL		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Yes, No, Cancel		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Command Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_ABORTRETRYIGNORE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Abort, Retry, Ignore		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Command Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_FILEOPEN		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;File Open		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Command Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_BCUSTOMDIALOG		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Custom Dialog		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Command Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_BWHICHOPTION		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Which Option?		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Disabled		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Command Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EXIT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">E&amp;xit		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Dialog Results:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RESULTS		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Multiline		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Auto Vscroll		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+</TABLE>
+</P>
+<P><A HREF="javascript:popUp('05fig01.gif')"><B>FIGURE 5.1.</B></A> <I>The application
+main dialog layout.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>4. </B>Using the Class Wizard, attach variables to the controls as listed
+	in Table 5.5.
+	<P>
+</DL>
+
+<H4>TABLE 5.5. CONTROL VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Object		</TD>
+		<TD ALIGN="LEFT">Name		</TD>
+		<TD ALIGN="LEFT">Category		</TD>
+		<TD ALIGN="LEFT">Type		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_RESULTS		</TD>
+		<TD ALIGN="LEFT">m_sResults		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_BWHICHOPTION		</TD>
+		<TD ALIGN="LEFT">m_cWhichOption		</TD>
+		<TD ALIGN="LEFT">Control		</TD>
+		<TD ALIGN="LEFT">CButton		</TD>
+	</TR>
+</TABLE>
+</P>
+
+<DL>
+	<DT><B></B></DT>
+	<DD><B>5. </B>Using the Class Wizard, attach code to the Exit button to close the
+	application, as on previous days.
+	<P>
+</DL>
+
+<H4>Coding the Message Box Dialogs</H4>
+<P>For the first command button (the Yes, No, Cancel button), create a function on
+the clicked event using the Class Wizard, just as you did on previous days. Edit
+the function on this button, adding the code in Listing 5.1.</P>
+<P>
+<H4>LISTING 5.1. THE OnYesnocancel FUNCTIONS.</H4>
+<PRE> 1: void CDialogsDlg::OnYesnocancel() 
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     int iResults; // This variable will capture the button selection
+10: 
+11:     // Ask the user
+12:     iResults = MessageBox(&quot;Press the Yes, No, or Cancel button&quot;,
+13:                 &quot;Yes, No, Cancel Dialog&quot;, 
+14:                 MB_YESNOCANCEL | MB_ICONINFORMATION);
+15: 
+16:     // Determine which button the user clicked
+17:     // Give the user a message showing which button was clicked
+18:     switch (iResults)
+19:     {
+20:     case IDYES:    // The Yes button?
+21:         m_sResults = &quot;Yes! Yes! Yes!&quot;;
+22:         break;
+23:     case IDNO:    // The No button?
+24:         m_sResults = &quot;No, no, no, no, no.&quot;;
+25:         break;
+26:     case IDCANCEL:    // The Cancel button?
+27:         m_sResults = &quot;Sorry, canceled.&quot;;
+28:         break;
+29:     }
+30: 
+31:     // Update the dialog
+32:     UpdateData(FALSE);
+33: 
+34:     ///////////////////////
+35:     // MY CODE ENDS HERE
+36:     ///////////////////////
+</PRE>
+
+<PRE>37: }</PRE>
+<P>If you compile and run your application, you can see how selecting the different
+buttons on the message box can determine the next course of action in your application.
+If you add a function to the clicked event of the Abort, Retry, Ignore button using
+the Class Wizard and enter the same code as in Listing 5.1, substituting the MB_ABORTRETRYIGNORE
+and MB_ICONQUESTION values and changing the prompts and messages, you can see how
+this other button combination can be used in the same way.</P>
+<P>Both of these control event functions are virtually the same. In each function,
+there is an integer variable declared to capture the return value from the MessageBox
+function. Next, the MessageBox function is called with a message to be displayed
+to the user, a title for the message box, and a combination of a button combination
+ID and an icon ID.</P>
+<P>When the return value is captured from the MessageBox function, that value is
+passed through a switch statement to determine which value was returned. A message
+is displayed to the user to indicate which button was clicked on the message box.
+You can just as easily use one or two if statements to control the program execution
+based on the user's selection, but the return value being an integer lends itself
+to using a switch statement.</P>
+<P>If you compile and run your application at this point, you can click either of
+the top two buttons and see a message box, as in Figure 5.2. When you click one of
+the message box buttons, you see a message in the edit box on the main dialog, indicating
+which button you selected, as in Figure 5.3.</P>
+<P><A HREF="javascript:popUp('05fig02.gif')"><B>FIGURE 5.2.</B></A><B> </B><I>The
+MessageBox with three choices.</I></P>
+
+<P><A HREF="javascript:popUp('05fig03.gif')"><B>FIGURE 5.3.</B></A> <I>A message
+is displayed based on which button was clicked.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading3"></A>Using Common Dialogs</H3>
+<P>Using common dialogs is not quite as simple and easy as using the MessageBox function,
+but it's still quite easy. The Microsoft Foundation Classes (MFC) provides several
+C++ classes for common Windows dialogs. These classes are listed in Table 5.6.</P>
+<P>
+<H4>TABLE 5.6. COMMON DIALOG CLASSES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Class		</TD>
+		<TD ALIGN="LEFT">Dialog Type		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileDialog		</TD>
+		<TD ALIGN="LEFT">File selection		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFontDialog		</TD>
+		<TD ALIGN="LEFT">Font selection		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CColorDialog		</TD>
+		<TD ALIGN="LEFT">Color selection		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CPageSetupDialog		</TD>
+		<TD ALIGN="LEFT">Page setup for printing		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CPrintDialog		</TD>
+		<TD ALIGN="LEFT">Printing		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFindReplaceDialog		</TD>
+		<TD ALIGN="LEFT">Find and Replace		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The common dialogs encapsulated in these classes are the standard dialogs that
+you use every day in most Windows applications to open and save files, configure
+printing options, print, perform find and replace on documents, and so on. In addition
+to these choices, a series of OLE common dialog classes provide several common functions
+to OLE or ActiveX components and applications.</P>
+<P>All these dialogs are used in the same manner, although the individual properties
+and class functions vary according to the dialog functionality. To use one of these
+dialogs, you must follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Declare a variable of the class type.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Set any properties that need to be configured before displaying the
+	dialog to the user.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Call the DoModal method of the class to display the dialog to the user.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Capture the return value of the DoModal method to determine whether
+	the user clicked the OK or Cancel button.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>If the user clicks the OK button, read any properties that the user
+	may have set when using the dialog.
+	<P>
+</DL>
+
+<P>To better understand how this works, you'll add the CFileDialog class to your
+application. To do this, add a function to the clicked message on the File Open button
+using the Class Wizard. Edit this function, adding the code in Listing 5.2.</P>
+<P>
+<H4>LISTING 5.2. THE OnFileopen FUNCTION.</H4>
+<PRE> 1: void CDialogsDlg::OnFileopen() 
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     CFileDialog m_ldFile(TRUE);
+10: 
+11:     // Show the File open dialog and capture the result
+12:     if (m_ldFile.DoModal() == IDOK)
+13:     {
+14:         // Get the filename selected
+15:         m_sResults = m_ldFile.GetFileName();
+16:         // Update the dialog
+17:         UpdateData(FALSE);
+18:     }
+19: 
+20:     ///////////////////////
+21:     // MY CODE ENDS HERE
+22:     ///////////////////////
+</PRE>
+
+<PRE>23: }</PRE>
+<P>In this code, the first thing that you do is declare an instance of the CFileDialog
+class. This instance is passed TRUE as an argument to the class constructor. This
+tells the class that it is a File Open dialog. If you pass it FALSE, it displays
+as a File Save dialog. There's no real functional difference between these two, only
+a visual difference. You can pass many more arguments to the constructor, specifying
+the file extensions to show, the default starting file and location, and filters
+to use when displaying the files. All the rest of these constructor arguments have
+default values, so you don't have to supply any of them.</P>
+<P>After creating the instance of the File Open dialog, you call its DoModal function.
+This is a member function of the CDialog ancestor class, and it is available in all
+dialog windows. The DoModal function displays the File Open dialog to the user, as
+shown in Figure 5.4. The return value of the DoModal function is examined to determine
+which button the user clicked. If the user clicks the Open button, the IDOK value
+is returned, as with the MessageBox function. This is how you can determine whether
+your application needs to take any action on what the user selected with the dialog
+window.</P>
+<P><A HREF="javascript:popUp('05fig04.gif')"><B>FIGURE 5.4.</B></A><B> </B><I>The
+File Open dialog.</I></P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> There are two modes in which a dialog window can be displayed to
+	the user. The first is as a modal window. A modal window halts all other user interaction
+	while it is displayed. The user cannot do anything else in the application until
+	the dialog is closed. A good example of a modal dialog window is a message box where
+	the user cannot continue working with the application until she clicks one of the
+	buttons on the message box.<BR>
+	The second mode in which a dialog window can be displayed to the user is as a modeless
+	window. A modeless window can be open while the user is doing something else in the
+	application, and it doesn't prevent the user from performing other tasks while the
+	dialog is visible. Good examples of a modeless dialog window are the Find and Find
+	and Replace dialogs in Microsoft Word. These dialog windows can be open and displayed
+	on the screen while you are still editing the document that you are searching.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>To display the name of the file selected, you set the m_sResults variable to the
+return value from the GetFileName method of the CFileDialog class. This method returns
+only the filename without the directory path or drive name, as shown in Figure 5.5.
+You can use other class methods for getting the directory path (GetPathName) or file
+extension (GetFileExt).</P>
+<P><A HREF="javascript:popUp('05fig05.gif')"><B>FIGURE 5.5.</B></A><B> </B><I>Displaying
+the selected filename.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading4"></A>Creating Your Own Dialog Windows</H2>
+<P>Now you have an understanding of using standard dialogs. What if you need to create
+a custom dialog for your application? This task is fairly simple to do because it
+is mostly a combination of the process that you have already used to create and use
+the main dialog windows in all your applications and the methods you employed to
+use the common dialogs. You have to work through a few additional steps, but they
+are few and you should be comfortable with them soon.</P>
+<P>
+<H3><A NAME="Heading5"></A>Creating the Dialog Window</H3>
+<P>For the custom dialog that you will add to your application, you will provide
+the user with a edit box in which to enter some text and a group of radio buttons
+from which the user can select one. When the user clicks the OK button, your application
+will display the text entered by the user in the display area of the main application
+dialog window. There is another button that the user can, can click to display which
+one of the radio buttons was selected. This exercise enables you to see how you can
+use custom dialog windows to gather information from the user and how you can read
+the user's selections after the dialog window is closed.</P>
+<P>To create a custom dialog for your application, you need to</P>
+<P>
+
+<UL>
+	<LI>Add another dialog to your application resources.
+	<P>
+	<LI>Design the dialog window layout.
+	<P>
+	<LI>Declare the base class from which the dialog will be inherited.
+	<P>
+	<LI>Attach variables to the controls on the dialog.
+</UL>
+
+<P>After doing these things, your custom dialog will be ready for your application.
+To accomplish these tasks, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select the Resource View tab in the project workspace pane.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Right-click the Dialogs folder, and select Insert Dialog from the pop-up
+	menu.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Right-click the new dialog in the resource tree view, and select Properties
+	from the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Change the object ID for the new dialog to IDD_MESSAGEDLG.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>When editing the new dialog window, do not delete the OK and Cancel
+	buttons. Move them to the location shown in Figure 5.6.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('05fig06.gif')"><B>FIGURE 5.6.</B></A><B> </B><I>The
+custom dialog window layout.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>6. </B>Design the rest of the window using the object properties in Table
+	5.7.
+	<P>
+</DL>
+
+<H4>TABLE 5.7. THE CUSTOM DIALOG CONTROL PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">
+			<H4>Object
+		</TD>
+		<TD ALIGN="LEFT">
+			<H4>Property
+		</TD>
+		<TD ALIGN="LEFT">
+			<H4>Setting
+		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Enter a &amp;message:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_MESSAGE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Multiline		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Auto Vscroll		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Group Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Select an Option		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_OPTION1		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Option 1		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Group		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_OPTION2		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">O&amp;ption 2		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_OPTION3		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Op&amp;tion 3		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_OPTION4		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Opt&amp;ion 4		</TD>
+	</TR>
+</TABLE>
+</P>
+
+<DL>
+	<DT><B></B></DT>
+	<DD><B>7. </B>After you design the dialog, open the Class Wizard. You see the dialog
+	in Figure 5.7.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('05fig07.gif')"><B>FIGURE 5.7.</B></A><B> </B><I>The
+Adding a Class dialog.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>8. </B>Leave the selection on this dialog at the default setting of Create
+	a New Class and click OK. Another dialog appears to allow you to specify the name
+	for the new class and the base class from which it is inherited.
+	<P>
+	<DT></DT>
+	<DD><B>9. </B>Enter the class name CMsgDlg into the Name field, and make sure that
+	the Base Class is set to CDialog, as shown in Figure 5.8.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('05fig08.gif')"><B>FIGURE 5.8.</B></A><B> </B><I>The
+New Class dialog.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>10. </B>Click OK, leaving the other settings on this dialog at their defaults.
+	<P>
+	<DT></DT>
+	<DD><B>11. </B>Once the Class Wizard opens, attach the variables to the controls
+	on the new dialog as specified in Table 5.8.
+	<P>
+</DL>
+
+<H4>TABLE 5.8. CONTROL VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Object		</TD>
+		<TD ALIGN="LEFT">Name		</TD>
+		<TD ALIGN="LEFT">Category		</TD>
+		<TD ALIGN="LEFT">Type		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_MESSAGE		</TD>
+		<TD ALIGN="LEFT">m_sMessage		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_OPTION1		</TD>
+		<TD ALIGN="LEFT">m_iOption		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>You should notice two things in the way that you configured the control properties
+and variables in the custom dialog. First, you should have selected the Group property
+on only the first of the radio buttons. This designates that all the radio buttons
+following that one belong to a single group, where only one of the radio buttons
+may be selected at a time. If you select the Group property on all the radio buttons,
+they are all independent of each other, allowing you to select all the buttons simultaneously.
+This property makes them behave somewhat like check boxes, but the primary difference
+is that the user would find it difficult to uncheck one of these controls due to
+the default behavior where one radio button in each group is always checked. The
+other difference is in their appearance; the radio buttons have round selection areas
+instead of the square areas of check boxes.</P>
+<P>The other thing to notice is that you declared a single integer variable for the
+one radio button with the Group property checked. This variable value is controlled
+by which radio button is selected. The first radio button causes this variable to
+have a value of 0, the second sets this variable to 1, and so on. Likewise, if you
+want to automatically select a particular radio button, you can set this variable
+to one less than the sequence number of the radio button in the group of radio buttons.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Because this is the C++ programming language, all numbering begins
+	with 0, not 1. Therefore, the first position in an array or a set of controls is
+	position 0. The second position is position 1. The third position is number 2, and
+	so on.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>You have now finished all that you need to do to the second dialog window to make
+it ready for use. You would expect to need an UpdateData or two in the code behind
+the dialog, but because you didn't remove the OK and Cancel buttons from the dialog,
+the UpdateData call is already performed when the user clicks the OK button. As a
+result, you don't have to touch any code in this second dialog, only in the first
+dialog.</P>
+<P>
+<H3><A NAME="Heading6"></A>Using the Dialog in Your Application</H3>
+<P>Now that your custom dialog is ready for your application, using it is similar
+to the way that you use the common dialogs that are built into Windows. First, you
+have to declare an instance of the custom dialog class, which calls the class constructor
+and creates an instance of the class. Next, you call the dialog's DoModal method
+and capture the return value of that function. Finally, you read the values of the
+variables that you associated with the controls on the dialog.</P>
+<P>
+<H4>Creating the Dialog Instance</H4>
+<P>Before you can use your custom dialog in your application, you have to make your
+main dialog window aware of the custom dialog, its variables, and methods and how
+your main dialog can interact with your custom dialog. You accomplish this by including
+the header file for your custom dialog in the main source file for your main application
+dialog. Follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select the File View tab on the workspace pane.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Expand the Dialog Files and Source Files folders.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Double-click the DialogsDlg.cpp file. This opens the source code file
+	for the main application dialog in the editing area of Developer Studio.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Scroll to the top of the source code file where the #include statements
+	are located, and add an include for the MsgDlg.h file before the DialogsDlg.h file,
+	as in Listing 5.3.
+	<P>
+</DL>
+
+<H4>LISTING 5.3. THE HEADER FILE INCLUDES.</H4>
+<PRE> 1: // DialogsDlg.cpp : implementation file
+ 2: //
+ 3: 
+ 4: #include &quot;stdafx.h&quot;
+ 5: #include &quot;Dialogs.h&quot;
+ 6: #include &quot;MsgDlg.h&quot;
+ 7: #include &quot;DialogsDlg.h&quot;
+ 8: 
+ 9: #ifdef _DEBUG
+10: #define new DEBUG_NEW
+11: #undef THIS_FILE
+12: static char THIS_FILE[] = __FILE__;
+13: #endif
+14: 
+15:///////////////////////////////////////////////////////////////////////
+</PRE>
+
+<PRE>16: // CAboutDlg dialog used for App About</PRE>
+<P>It is important that you place the #include statement for the MsgDlg.h file before
+the #include statement for the DialogsDlg.h file. The reason is that you will be
+adding a variable declaration for your custom dialog to the main dialog class in
+the main dialog's header file. If the MsgDlg.h header file is included after the
+header file for the main dialog, the compiler will complain loudly and will refuse
+to compile your application until you move the #include of the MsgDlg.h file above
+the #include of the DialogsDlg.h file.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> The #include statement is what is known as a compiler directive in
+	the C and C++ programming languages. What it tells the compiler to do is read the
+	contents of the file named into the source code that is being compiled. It is used
+	to separate class, structure, and function declarations into a file that can be included
+	in any source code that needs to be aware of the information in the header file.
+	For more information on how the #include statements work, and why you use them, see
+	Appendix A, &quot;C++ Review.&quot;
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>Now that you have made your main application dialog aware of the custom dialog
+that you created, you need to declare a variable of your custom dialog. Follow these
+steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select the Class View tab in the workspace pane.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Right-click the CDialogsDlg class to bring up the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Select Add Member Variable from the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Specify the Variable Type as CMsgDlg, the Variable Name as m_dMsgDlg,
+	and the Access as Private. Click OK to add the variable to your main dialog.
+	<P>
+</DL>
+
+<P>If you expand the CDialogsDlg class in the tree view, you should see the instance
+of your custom dialog as a member of the main application dialog class. This means
+that you are ready to begin using the custom dialog in your application.</P>
+<P>
+<H4>Calling the Dialog and Reading the Variables</H4>
+<P>Now that you have added your custom dialog to the main application dialog as a
+variable that is always available, not just as a local variable available only within
+a single function (as with the CFileDialog variable), you can add code to use the
+dialog. To do this, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Open the Class Wizard and add a function to the clicked event message
+	of the IDC_BCUSTOMDIALOG button.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Add a function for the clicked event message (BN_CLICKED) for the IDC_
+	BWHICHOPTION button.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Edit the OnBcustomdialog function, adding the code in Listing 5.4.
+	<P>
+</DL>
+
+<H4>LISTING 5.4. THE OnBcustomdialog FUNCTION.</H4>
+<PRE> 1: void CDialogsDlg::OnBcustomdialog() 
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Show the message dialog and capture the result
+10:     if (m_dMsgDlg.DoModal () == IDOK)
+11:     {
+12:         // The user checked OK, display the message the
+13:         // user typed in on the message dialog
+14:         m_sResults = m_dMsgDlg.m_sMessage;
+15:         // Update the dialog
+16:         UpdateData(FALSE);
+17:         // Enable the Which Option button
+18:         m_cWhichOption.EnableWindow(TRUE);
+19:     }
+20: 
+21:     ///////////////////////
+22:     // MY CODE ENDS HERE
+23:     ///////////////////////
+</PRE>
+
+<PRE>24: }</PRE>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>4. </B>Edit the OnBwhichoption function, adding the code in Listing 5.5.
+	<P>
+</DL>
+
+<H4>LISTING 5.5. THE OnBwhichoption FUNCTION.</H4>
+<PRE> 1: void CDialogsDlg::OnBwhichoption() 
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Determine which radio button was selected, and display
+10:     // a message for the user to show which one was selected.
+11:     switch(m_dMsgDlg.m_iOption)
+12:     {
+13:     case 0:    // Was it the first radio button?
+14:         m_sResults = &quot;The first option was selected.&quot;;
+15:         break;
+16:     case 1:    // Was it the second radio button?
+17:         m_sResults = &quot;The second option was selected.&quot;;
+18:         break;
+19:     case 2:    // Was it the third radio button?
+20:         m_sResults = &quot;The third option was selected.&quot;;
+21:         break;
+22:     case 3:    // Was it the fourth radio button?
+23:         m_sResults = &quot;The fourth option was selected.&quot;;
+24:         break;
+25:     default:    // Were none of the radio buttons selected?
+26:         m_sResults = &quot;No option was selected.&quot;;
+27:         break;
+28:     }
+29: 
+30:     // Update the dialog
+31:     UpdateData(FALSE);
+32: 
+33:     ///////////////////////
+34:     // MY CODE ENDS HERE
+35:     ///////////////////////
+</PRE>
+
+<PRE>36:</PRE>
+<P>In the first listing, you called the DoModal method of the custom dialog, which
+displayed the dialog for the user, waiting for the user to click one of the two buttons
+on the dialog, as in Figure 5.9. If the user clicks the OK button, you copy the message
+the user typed in the custom dialog into the edit box variable to be displayed to
+the user. After updating the dialog display with the new variable values, you enable
+the Which Option button, as shown in Figure 5.10. If the user clicks the Cancel button,
+none of this is done. The dialog display is not changed.</P>
+<P><A HREF="javascript:popUp('05fig09.gif')"><B>FIGURE 5.9.</B></A> <I>The custom
+dialog allows the user to enter a message.</I></P>
+
+<P><A HREF="javascript:popUp('05fig10.gif')"><B>FIGURE 5.10.</B></A><B> </B><I>The
+message entered on the custom dialog is displayed for the user.</I></P>
+
+<P>When the user clicks the Which Option button, you pass the radio button variable
+on the custom dialog to a switch statement, selecting a message that tells the user
+which radio button was selected, as shown in Figure 5.11. Notice that in both of
+these functions, you can access the control variables on the custom dialog directly
+from the main dialog. That is because the Class Wizard automatically declares the
+variables associated with controls as public, making them completely accessible outside
+the dialog class. You can change this by placing a private: access specifier where
+the public: access specifier is. You don't want to place anything after the //{{AFX_DATA
+line, where the variables are declared, because the variables are declared within
+an MFC Class Wizard macro, which enables the Developer Studio wizards to locate and
+manipulate the variables as needed without interfering with the Visual C++ compiler
+when you compile your application.</P>
+<P><A HREF="javascript:popUp('05fig11.gif')"><B>FIGURE 5.11.</B></A><B> </B><I>The
+option selected on the custom dialog is displayed for the user.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading7"></A>Summary</H2>
+<P>Today you learned how you can use additional dialog windows in your application
+to provide interactive experience for your users. You learned about the options available
+to you with the simple MessageBox function, how you can provide your users a variety
+of button combinations, and how you can determine which button the user selects.
+You saw how you can use this information to determine which path to take in your
+application logic.</P>
+<P>You also learned about some of the common dialogs that are built into the Windows
+operating systems and how they have been encapsulated into C++ classes in the MFC
+class library. You learned how you can use the File Open dialog to present the user
+with the standard file selection dialog and how you can determine which file the
+user selected.</P>
+<P>Finally, you learned how you can design your own additional dialogs that you can
+add to your applications to get information from the user and how you can capture
+that information and use it in your application.</P>
+<P>
+<H2><A NAME="Heading8"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD>Q There was no code added to the custom dialog. Do I have to design my custom
+	dialogs this way, or can I add code to them?
+	<P>
+	<DT></DT>
+	<DD>A The custom dialog windows are no different from the main dialog windows that
+	you have been using in all your applications so far. If you need to control the behavior
+	of the dialog on an interactive basis, you can put as much code into the dialog as
+	you need. You didn't add any code to the custom dialog today because there wasn't
+	any need to add any code. The only functionality that the dialog needed to perform
+	was calling the UpdateData function before closing, which is automatically done by
+	the OnOK function. Because you did not delete the OK and Cancel buttons, you already
+	had this functionality built in.
+	<P>
+	<DT></DT>
+	<DD>Q What happens if I specify two or more button combinations in the same MessageBox
+	function call?
+	<P>
+	<DT></DT>
+	<DD>A Nothing happens. Your application compiles just fine, but when the MessageBox
+	function is called, nothing happens. The message box does not open, and the user
+	does not get to answer the question you are presenting.
+	<P>
+	<DT></DT>
+	<DD>Q How can I integrate the File Open dialog into my application where it opens
+	in a specific directory that I specify?
+	<P>
+	<DT></DT>
+	<DD>A The CFileDialog class has a public property called m_ofn. This property is
+	a structure that contains numerous attributes of the File Open dialog, including
+	the initial directory. This structure is defined as the OPENFILENAME structure in
+	Listing 5.6.
+	<P>
+</DL>
+
+<H4>LISTING 5.6. THE OPENFILENAME STRUCTURE.</H4>
+<PRE> 1: typedef struct tagOFN { // ofn 
+ 2:     DWORD         lStructSize; 
+ 3:     HWND          hwndOwner; 
+ 4:     HINSTANCE     hInstance; 
+ 5:     LPCTSTR       lpstrFilter; 
+ 6:     LPTSTR        lpstrCustomFilter; 
+ 7:     DWORD         nMaxCustFilter; 
+ 8:     DWORD         nFilterIndex; 
+ 9:     LPTSTR        lpstrFile; 
+10:     DWORD         nMaxFile; 
+11:     LPTSTR        lpstrFileTitle; 
+12:     DWORD         nMaxFileTitle; 
+13:     LPCTSTR       lpstrInitialDir; 
+14:     LPCTSTR       lpstrTitle; 
+15:     DWORD         Flags; 
+16:     WORD          nFileOffset; 
+17:     WORD          nFileExtension; 
+18:     LPCTSTR       lpstrDefExt; 
+19:     DWORD         lCustData; 
+20:     LPOFNHOOKPROC lpfnHook; 
+21:     LPCTSTR       lpTemplateName; 
+</PRE>
+
+<PRE>22: } OPENFILENAME;</PRE>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD>You can set any of these attributes before calling the DoModal class method to
+	control the behavior of the File Open dialog. For instance, if you set the starting
+	directory to C:\Temp before calling the DoModal method, as in Listing 5.7, the File
+	Open dialog opens in that directory.
+	<P>
+</DL>
+
+<H4>LISTING 5.7. THE REVISED OnFileopen FUNCTION.</H4>
+<PRE> 1: void CDialogsDlg::OnFileopen() 
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     CFileDialog m_ldFile(TRUE);
+10: 
+11:     // Initialize the starting directory
+12:     m_ldFile.m_ofn.lpstrInitialDir = &quot;C:\\Temp\\&quot;;
+13: 
+14:     // Show the File open dialog and capture the result
+15:     if (m_ldFile.DoModal() == IDOK)
+16:     {
+17:         // Get the filename selected
+18:         m_sResults = m_ldFile.GetFileName();
+19:         // Update the dialog
+20:         UpdateData(FALSE);
+21:     }
+22: 
+23:     ///////////////////////
+24:     // MY CODE ENDS HERE
+25:     ///////////////////////
+</PRE>
+
+<PRE>26: }</PRE>
+<P>
+<H2><A NAME="Heading9"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading10"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What are the possible return codes that your application might receive
+	from the MessageBox function call when you specify the MB_RETRYCANCEL button combination?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>What are the common dialogs that are built into the Windows operating
+	systems that are defined as MFC classes?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What is the difference between a modal dialog and a modeless dialog?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>How can you display a File Save dialog for the user instead of the
+	File Open dialog that you did have in your application?
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>Why did you not need to create any functions and add any code to your
+	custom dialog?
+	<P>
+</DL>
+
+<H3><A NAME="Heading11"></A>Exercises</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Modify your application so that it includes the directory with the
+	filename in the application. (Hint: The GetFileName function returns the path and
+	filename that was selected in the File Open dialog.)
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Add a button on the custom dialog that calls the MessageBox function
+	with a Yes or No selection. Pass the result back to the main application dialog.
+</DL>
+
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch04/ch04.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch06/ch06.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

@@ -1,0 +1,192 @@
+<Screen
+	CID = "2071736569"
+	AppID = "2"
+	AppVer = "4.1.109.0"
+	DocID = ""
+	HasCanvas = "1"
+	Width = "800"
+	Height = "600"
+	NextCID = "6"
+	RepresentativeRefID = "0"
+	UseDefRepresentative = "1">
+	<Elements
+		CID = "1">
+		<Element
+			CID = "170401648"
+			Type = "HorizontalTabBar"
+			X = "0"
+			Y = "23"
+			Width = "798"
+			Height = "434"
+			Flags = "0"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "5"
+			LeftMargin = "0"
+			RightMargin = "0"
+			SelectedTab = "0"
+			IsProportional = "1"
+			IsFullWidth = "0"
+			IsReversed = "0"
+			EnableSimSelect = "1"
+			Mirror = "0"
+			TabMarginLeft = "0"
+			TabMarginRight = "0"
+			TabMarginTop = "0"
+			TabMarginBottom = "0">
+			<TabBarItem
+				ItemID = "1"
+				Text = "Thông tin tác nghiệp"
+				IsDisabled = "0"/>
+			<TabBarItem
+				ItemID = "2"
+				Text = "Checklist"
+				IsDisabled = "0"/>
+			<TabBarItem
+				ItemID = "3"
+				Text = "Ghi chú"
+				IsDisabled = "0"/>
+		</Element>
+		<Element
+			CID = "170419125"
+			Type = "TabPanel"
+			X = "705"
+			Y = "-498"
+			Width = "626"
+			Height = "441"
+			Flags = "0"
+			TabOrientation = "Top"
+			MarginLeft = "10"
+			MarginRight = "10"
+			MarginTop = "10"
+			MarginBottom = "10"/>
+		<Element
+			CID = "170407994"
+			Type = "NavigationSwitchPlaceholder"
+			X = "2"
+			Y = "47"
+			Width = "792"
+			Height = "410"
+			Flags = "0"
+			Alignment = "TopLeft"
+			AlignTo = "AnchorBox"/>
+		<Element
+			CID = "832641156"
+			Type = "Component"
+			X = "-1189"
+			Y = "485"
+			Width = "797"
+			Height = "441"
+			Flags = "3"
+			BackgroundColour = "255,255,255,0,6"
+			FileID = "3D118C66-E45C-4DE1-9C0EA673973E6648"
+			RootPath = "$Container"
+			Filename = "Ghi chú.gui"
+			Background = "Transparent"
+			HorzAlign = "Left"
+			VertAlign = "Top"
+			MaintainSize = "0"/>
+		<Element
+			CID = "1487083885"
+			Type = "Component"
+			X = "-36"
+			Y = "549"
+			Width = "794"
+			Height = "446"
+			Flags = "3"
+			BackgroundColour = "255,255,255,0,6"
+			FileID = "CDB0B028-00C5-4831-8927ABCAB03F29F9"
+			RootPath = "$Container"
+			Filename = "Checklist.gui"
+			Background = "Transparent"
+			HorzAlign = "Left"
+			VertAlign = "Top"
+			MaintainSize = "0"/>
+	</Elements>
+	<Connections
+		CID = "2">
+		<Connection
+			CID = "170414997"
+			Layer = "DesignElements"
+			Trigger = "LeftClick"
+			Type = "Navigation"
+			SubType = "ModelessSwitch"
+			SourceSubItemID = "1"
+			SourceRefID = "170401648"
+			TargetRefID = "170419125"
+			ConLineWidth = "2"
+			ConLineColour = "0,0,0,0,0"/>
+		<Connection
+			CID = "170409662"
+			Layer = "Overlays"
+			Trigger = "LeftClick"
+			Type = "PlaceholderLink"
+			SubType = ""
+			SourceSubItemID = ""
+			SourceRefID = "170407994"
+			TargetRefID = "170419125"
+			ConLineWidth = "2"
+			ConLineColour = "128,128,128,0,0"/>
+		<Connection
+			CID = "832663656"
+			Layer = "DesignElements"
+			Trigger = "LeftClick"
+			Type = "Navigation"
+			SubType = "ModelessSwitch"
+			SourceSubItemID = "3"
+			SourceRefID = "170401648"
+			TargetRefID = "832641156"
+			ConLineWidth = "2"
+			ConLineColour = "0,0,0,0,0"/>
+		<Connection
+			CID = "832636691"
+			Layer = "Overlays"
+			Trigger = "LeftClick"
+			Type = "PlaceholderLink"
+			SubType = ""
+			SourceSubItemID = ""
+			SourceRefID = "170407994"
+			TargetRefID = "832641156"
+			ConLineWidth = "2"
+			ConLineColour = "128,128,128,0,0"/>
+		<Connection
+			CID = "1487081030"
+			Layer = "DesignElements"
+			Trigger = "LeftClick"
+			Type = "Navigation"
+			SubType = "ModelessSwitch"
+			SourceSubItemID = "2"
+			SourceRefID = "170401648"
+			TargetRefID = "1487083885"
+			ConLineWidth = "2"
+			ConLineColour = "0,0,0,0,0"/>
+		<Connection
+			CID = "1487083888"
+			Layer = "Overlays"
+			Trigger = "LeftClick"
+			Type = "PlaceholderLink"
+			SubType = ""
+			SourceSubItemID = ""
+			SourceRefID = "170407994"
+			TargetRefID = "1487083885"
+			ConLineWidth = "2"
+			ConLineColour = "128,128,128,0,0"/>
+	</Connections>
+	<Groups
+		CID = "3"/>
+	<SelectionGroups
+		CID = "4"/>
+	<Notes
+		CID = "5">
+		<Note
+			CID = "2071751717"
+			Name = "Description"
+			NextCID = "2">
+			<Text
+				CID = "1">
+				
+			</Text>
+		</Note>
+	</Notes>
+</Screen>

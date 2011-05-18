@@ -1,0 +1,1208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 2 -- Using Controls in Your Application</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch01/ch01.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch03/ch03.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 2 -<BR>
+Using Controls in Your Application</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">The Basic Windows Controls</A>
+	<UL>
+		<LI><A HREF="#Heading2">The Static Text Control</A>
+		<LI><A HREF="#Heading3">The Edit Box Control</A>
+		<LI><A HREF="#Heading4">The Command Button Control</A>
+		<LI><A HREF="#Heading5">The Check Box Control</A>
+		<LI><A HREF="#Heading6">The Radio Button Control</A>
+		<LI><A HREF="#Heading7">The Drop-Down List Box Control</A>
+	</UL>
+	<LI><A HREF="#Heading8">Adding Controls to Your Window</A>
+	<UL>
+		<LI><A HREF="#Heading9">Creating the Application Shell and Dialog Layout</A>
+		<LI><A HREF="#Heading10">Specifying the Control Tab Order</A>
+	</UL>
+	<LI><A HREF="#Heading11">Attaching Variables to Your Controls</A>
+	<LI><A HREF="#Heading12">Attaching Functionality to the Controls</A>
+	<UL>
+		<LI><A HREF="#Heading13">Closing the Application</A>
+		<LI><A HREF="#Heading14">Showing the User's Message</A>
+		<LI><A HREF="#Heading15">Clearing the User's Message</A>
+		<LI><A HREF="#Heading16">Disabling and Hiding the Message Controls</A>
+		<LI><A HREF="#Heading17">Running Another Application</A>
+	</UL>
+	<LI><A HREF="#Heading18">Summary</A>
+	<LI><A HREF="#Heading19">Q&amp;A</A>
+	<LI><A HREF="#Heading20">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading21">Quiz</A>
+		<LI><A HREF="#Heading22">Exercises</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+Some of the things that you will find in just about every Windows application are
+buttons, check boxes, text fields, and drop-down list boxes. These are known as controls,
+and many of these controls are built into the operating system itself. With Visual
+C++, using these common controls is as easy as placing them on a dialog window with
+a drag-and-drop window design method. Today you are going to learn</P>
+
+<UL>
+	<LI>What the basic controls in Visual C++ are
+	<P>
+	<LI>How to declare and attach variables to a controls
+	<P>
+	<LI>How to synchronize the values between a control and a variable
+	<P>
+	<LI>How to specify the order users navigate around your application windows
+	<P>
+	<LI>How to trigger actions with controls
+	<P>
+	<LI>How to manipulate and alter the appearance of controls (while your application
+	is running)
+</UL>
+
+<H2><A NAME="Heading1"></A>The Basic Windows Controls</H2>
+<P>Several standard controls are built into the Windows operating system, including
+such things as sliders, tree and list controls, progress bars, and so on. However,
+today you will work with a half dozen controls that appear in just about every Windows
+application:</P>
+
+<UL>
+	<LI>Static text
+	<P>
+	<LI>Edit box
+	<P>
+	<LI>Command button
+	<P>
+	<LI>Check box
+	<P>
+	<LI>Radio button
+	<P>
+	<LI>Drop-down list box (also known as a combo box)
+</UL>
+
+<P>These and other controls are readily available for use in Visual C++ applications.
+They can be found on the controls palette in the Dialog Painter editor in the Developer
+Studio, as shown in Figure 2.1.</P>
+<P><A HREF="javascript:popUp('02fig01.gif')"><B>FIGURE 2.1.</B></A><B> </B><I>The
+standard controls available on the Control palette.</I></P>
+<P>
+<H3><A NAME="Heading2"></A>The Static Text Control</H3>
+<P>You use the static text control to present text to the user. The user will not
+be able to change the text or otherwise interact with the control. Static text is
+intended as a read-only control. However, you can easily change the text displayed
+by the control as your application is running through the code you create for your
+application.</P>
+<P>
+<H3><A NAME="Heading3"></A>The Edit Box Control</H3>
+<P>An edit box allows the user to enter or change text. The edit box is one of the
+primary tools for allowing the user to enter specific information that your application
+needs. It is a control that allows the user to type a specific amount of text, which
+you can capture and use for any needed purpose. The edit box accepts plain text only;
+no formatting is available to the user.</P>
+<P>
+<H3><A NAME="Heading4"></A>The Command Button Control</H3>
+<P>A command button is a button that the user can press to trigger some action. Command
+buttons have a textual label that can give users some idea of what will happen when
+they click that button. Buttons can also have images as part of the button, allowing
+you to place an image on the button--alone or along with a textual description--to
+convey what the button does.</P>
+<P>
+<H3><A NAME="Heading5"></A>The Check Box Control</H3>
+<P>A check box is a square that the user can click to check (&yen;) or uncheck. The
+check box control is used to turn a particular value on and off. They are basically
+on/off switches with an occasional third, in-between state. You normally use check
+boxes to control discrete, on/off-type variables.</P>
+<P>
+<H3><A NAME="Heading6"></A>The Radio Button Control</H3>
+<P>A radio button is a circle that the user can click to fill with a black spot.
+The radio button is similar to the check box control, but it is used in a group of
+two or more where only one of the values can be in the on state at a time. You normally
+use radio buttons in groups of at least three, surrounded by a group box. The group
+box allows each group of radio buttons to be independent so that only one radio button
+in each group can be in the on state at any time.</P>
+<P>
+<H3><A NAME="Heading7"></A>The Drop-Down List Box Control</H3>
+<P>A drop-down list box, or combo control, is an edit box with a list of available
+values attached. You use the drop-down list box to provide a list of choices, from
+which the user may select one value from the list. Sometimes, the user is given the
+option of typing in his own value when a suitable one isn't provided in the list.</P>
+<P>
+<H2><A NAME="Heading8"></A>Adding Controls to Your Window</H2>
+<P>The application you are going to build today will have a number of controls on
+a single dialog window, as shown in Figure 2.2. These controls have a number of different
+functions. At the top of the window is an edit field where the user can enter a message
+that displays in a message box when he or she clicks the button beside the field.
+Below this edit field are two buttons that either populate the edit field with a
+default message or clear the edit field. Below these buttons is a drop-down list
+box that contains a list of standard Windows applications. When the user selects
+one of these programs and then clicks the button beside the drop-down list, the selected
+program will run. Next are two groups of check boxes that affect the controls you
+add to the top half of the dialog: the controls for displaying a user message and
+the controls for running another program. The left set of check boxes will enable
+and disable each group of controls you provide. The right set of check boxes will
+show and hide each group of controls. At the bottom of the dialog box is a button
+that can be clicked to close the application.</P>
+<P><A HREF="javascript:popUp('02fig02.gif')"><B>FIGURE 2.2.</B></A><B> </B><I>Today's
+application will use a number of standard controls.</I></P>
+<P>
+<H3><A NAME="Heading9"></A>Creating the Application Shell and Dialog Layout</H3>
+<P>Using what you learned yesterday, create a new application shell and design the
+application dialog layout as follows:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Create a new AppWizard workspace project, calling the project <B>Day2</B>.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Use the same settings in the AppWizard as you used yesterday; specify
+	the dialog title <B>Visual C++ Controls</B>.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>After you create the application shell, lay out the main dialog as
+	shown earlier in Figure 2.2.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Configure the control properties as specified in Table 2.1.
+	<P>
+</DL>
+
+<H4>TABLE 2.1. PROPERTY SETTINGS FOR THE CONTROLS ON THE APPLICATION DIALOG.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_STATIC</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">This is an example of a Visual C++ Application using a number of controls.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_STATICMSG</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">Enter a &amp;Message:</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_STATICPGM</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">Run a &amp;Program:</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_MSG</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Button</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_SHWMSG</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">&amp;Show Message</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Button</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_DFLTMSG</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">&amp;Default Message</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Button</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_CLRMSG</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">&amp;Clear Message</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Button</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_RUNPGM</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">&amp;Run Program</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Button</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_EXIT</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">E&amp;xit</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Combo Box</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_PROGTORUN</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Group Box</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_STATIC</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">Enable Actions</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Group Box</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_STATIC</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">Show Actions</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Check Box</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_CKENBLMSG</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">&amp;Enable Message Action</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Check Box</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_CKENBLPGM</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">E&amp;nable Program Action</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Check Box</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_CKSHWMSG</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">S&amp;how Message Action</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Check Box</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDC_CKSHWPGM</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">Sh&amp;ow Program Action</TD>
+	</TR>
+</TABLE>
+
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> When adding a combo box control to the window, it is important
+	that you click and drag the area for the control as large as you want the drop-down
+	list to be. After you draw the control on the window, you can resize the width of
+	the control as you would normally expect to do. To resize how far the list drops
+	down, you need to click the arrow, as if you were trying to trigger the drop-down
+	list while the application was running. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+
+<DL>
+	<DT></DT>
+	<DD><B>5. </B>After you place all these controls on the dialog window and configure
+	all their properties, reopen the properties dialog for the combo box that you placed
+	on the window. On the Data tab of the properties dialog, enter the following values,
+	using a Control+Enter key combination to add the second and third items, as shown
+	in Figure 2.3.
+	<P>
+</DL>
+
+
+<UL>
+	<LI>Notepad
+	<P>
+	<LI>Paint
+	<P>
+	<LI>Solitaire
+</UL>
+
+<P><A HREF="javascript:popUp('02fig03.gif')"><B>FIGURE 2.3.</B></A><B> </B><I>Use
+the properties dialog to add entries in the combo box's drop-down list.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading10"></A>Specifying the Control Tab Order</H3>
+<P>Now that you have all the controls laid out on the window, you need to make sure
+that the user navigates in the order you want if he or she uses the Tab key to move
+around the window. You can specify the tab order by following these steps:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select either the dialog window or one of the controls on the window
+	in the editing area of the Developer Studio.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Choose Layout | Tab Order from the menu. By turning on the Tab Order,
+	you see a number beside each of the controls on the window. The numbers indicate
+	the order in which the dialog will be navigated, as shown in Figure 2.4.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('02fig04.gif')"><B>FIGURE 2.4.</B></A><B> </B><I>Turning
+on Tab Order shows the order in which the dialog will be navigated.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>3. </B>Using the mouse, click each of the number boxes in the order that you
+	want the user to navigate the window. The controls will renumber themselves to match
+	the order in which you selected them.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Once you specify the tab order, select Layout | Tab Order once again
+	to return to the layout editor.
+	<P>
+</DL>
+
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Any static text that has a mnemonic should appear just before
+	the control that accompanies the text in the tab order. Because the user cannot interact
+	with the static text, when the user chooses the mnemonic, the focus will go directly
+	to the next control in the tab order. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>A mnemonic is the underlined character in the caption on a button, check box,
+menu, or other control label. The user can press this underlined character and the
+Alt key at the same time to go directly to that control or to trigger the clicked
+event on the control. You specify a mnemonic by placing an ampersand (&amp;) in front
+of the character to be used as the mnemonic when you type the Caption value. It is
+important to make certain that you do not use the same mnemonic more than once on
+the same window, or set of menus, because the user can get confused when choosing
+a mnemonic doesn't result in the action that he or she expects.</P>
+<P>One last thing that you want to do before getting into the details of the application
+code is check your mnemonics to make certain that there are no conflicts in your
+controls. Follow these steps:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select the dialog window or one of the controls in the layout editor.
+	Right-click the mouse and select Check Mnemonics.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>If there are no conflicts in your mnemonics, Visual C++ returns a message
+	box dialog, letting you know that there are no conflicts (see Figure 2.5).
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('02fig05.gif')"><B>Figure 2.5.</B></A><B> </B><I>The
+mnemonic checker tells you whether there are conflicts.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>3. </B>If any conflicts exist, the dialog indicates the conflicting letter
+	and gives you the option of automatically selecting the controls containing the conflicting
+	mnemonics, as in Figure 2.6.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('02fig06.gif')"><B>FIGURE 2.6.</B></A><B> </B><I>Duplicate
+mnemonics can be automatically selected.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading11"></A>Attaching Variables to Your Controls</H2>
+<P>At this point, if you've programmed using Visual Basic or PowerBuilder, you probably
+figure that you're ready to start slinging some code. Well, with Visual C++, it's
+not quite the same process. Before you can begin coding, you have to assign variables
+to each of the controls that will have a value attached--everything except the static
+text and the command buttons. You will interact with these variables when you write
+the code for your application. The values that the user enters into the screen controls
+are placed into these variables for use in the application code. Likewise, any values
+that your application code places into these variables are updated in the controls
+on the window for the user to see.</P>
+<P>How do you declare these variables and associate them with the controls that you
+placed on the window? Follow these steps:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Open the Class Wizard, as you learned yesterday.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Select the Member Variables tab, as shown in Figure 2.7.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('02fig07.gif')"><B>FIGURE 2.7.</B></A><B> </B><I>The
+Member Variables tab on the Class Wizard is where you add variables to controls.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>3. </B>Select the ID of one of the controls that you need to attach a variable
+	to, such as IDC_MSG.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Click the Add Variable button.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>In the Add Member Variable dialog, enter the variable name, specifying
+	the category and variable type, as shown in Figure 2.8. Click OK.
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>Repeat steps 3 through 5 for all the other controls for which you need
+	to add variables. You should add the variables for your application as listed in
+	Table 2.2.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('02fig08.gif')"><B>FIGURE 2.8.</B></A><B> </B><I>Adding
+a variable to a control.</I></P>
+
+<P><I></I>
+<H4>TABLE 2.2. VARIABLES FOR APPLICATION CONTROLS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Control</I></TD>
+		<TD ALIGN="LEFT"><I>Variable Name</I></TD>
+		<TD ALIGN="LEFT"><I>Category</I></TD>
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_MSG</TD>
+		<TD ALIGN="LEFT">m_strMessage</TD>
+		<TD ALIGN="LEFT">Value</TD>
+		<TD ALIGN="LEFT">CString</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_PROGTORUN</TD>
+		<TD ALIGN="LEFT">m_strProgToRun</TD>
+		<TD ALIGN="LEFT">Value</TD>
+		<TD ALIGN="LEFT">CString</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_CKENBLMSG</TD>
+		<TD ALIGN="LEFT">m_bEnableMsg</TD>
+		<TD ALIGN="LEFT">Value</TD>
+		<TD ALIGN="LEFT">BOOL</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_CKENBLPGM</TD>
+		<TD ALIGN="LEFT">m_bEnablePgm</TD>
+		<TD ALIGN="LEFT">Value</TD>
+		<TD ALIGN="LEFT">BOOL</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_CKSHWMSG</TD>
+		<TD ALIGN="LEFT">m_bShowMsg</TD>
+		<TD ALIGN="LEFT">Value</TD>
+		<TD ALIGN="LEFT">BOOL</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_CKSHWPGM</TD>
+		<TD ALIGN="LEFT">m_bShowPgm</TD>
+		<TD ALIGN="LEFT">Value</TD>
+		<TD ALIGN="LEFT">BOOL</TD>
+	</TR>
+</TABLE>
+
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> All these variables are prefixed with m_ because they are class
+	member variables. This is an MFC naming convention. After the m_, a form of Hungarian
+	notation is used, in which the next few letters describe the variable type. In this
+	case, b means boolean, and str indicates that the variable is a string. You'll see
+	this naming convention in use in this book and other books about programming with
+	Visual C++ and MFC. Following this naming convention will make your code more readable
+	for other programmers; knowing the convention will make it easier for you to read
+	other programmer's code as well. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+
+<DL>
+	<DT></DT>
+	<DD><B>7. </B>After you add all the necessary variables, click the OK button to close
+	the Class Wizard.
+	<P>
+</DL>
+
+<H2><A NAME="Heading12"></A>Attaching Functionality to the Controls</H2>
+<P>Before you begin adding code to all the controls on your application window, you
+need to add a little bit of code to initialize the variables, setting starting values
+for most of them. Do this by following these steps:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Using the Class Wizard, on the Message Maps tab, select the OnInitDialog
+	function in the list of member functions. You can do this by finding the function
+	in the Member Functions list, or by selecting the CDay2Dlg object in the list of
+	object IDs and then selecting the WM_INITDIALOG message in the messages list, as
+	shown in Figure 2.9.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('02fig09.gif')"><B>FIGURE 2.9.</B></A><B> </B><I>You
+can use the Class Wizard to locate existing functions.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>2. </B>Click Edit Code to be taken to the source code for the OnInitDialog
+	function.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Find the TODO marker, which indicates where to begin adding your code,
+	and add the code in Listing 2.1.
+	<P>
+</DL>
+
+<H4>LISTING 2.1. DAY2DLG.CPP--THE OnInitDialog FUNCTION IS WHERE YOU NEED TO ADD
+INITIALIZATION CODE.</H4>
+<PRE> 1: BOOL CDay2Dlg::OnInitDialog()
+ 2: {
+ 3:     CDialog::OnInitDialog();
+ 4: 
+ 5: .
+ 6: .
+ 7: .
+ 8: 
+ 9:     // TODO: Add extra initialization here
+10: 
+11:     ///////////////////////
+12:     // MY CODE STARTS HERE
+13:     ///////////////////////
+14: 
+15:     // Put a default message in the message edit
+16:     m_strMessage = &quot;Place a message here&quot;;
+17: 
+18:     // Set all of the check boxes to checked
+19:     m_bShowMsg = TRUE;
+20:     m_bShowPgm = TRUE;
+21:     m_bEnableMsg = TRUE;
+22:     m_bEnablePgm = TRUE;
+23: 
+24:     // Update the dialog with the values
+25:     UpdateData(FALSE);
+26: 
+27:     ///////////////////////
+28:     // MY CODE ENDS HERE
+29:     ///////////////////////
+30: 
+31:     return TRUE;  // return TRUE  unless you set the focus to a 			&Acirc;control
+</PRE>
+
+<PRE>32: }</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> There is more code in the OnInitDialog function than has been
+	included in Listing 2.1. I won't include all the code for every function in the code
+	listings throughout this book as a means of focusing on the code that you need to
+	add or modify (and as a means of keeping this book down to a reasonable size). You
+	are welcome to look at the code that has been left out, to learn what it is and what
+	it does, as you build your understanding of MFC and Visual C++.
+<HR>
+<BR>
+	<STRONG></STRONG></P>
+
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> If you've programmed in C or C++ before, you've noticed that
+	you are setting the value of the m_strMessage variable in a very un-C-like manner.
+	It looks more like how you would expect to set a string variable in Visual Basic
+	or PowerBuilder. That's because this variable is a CString type variable. The CString
+	class enables you to work with strings in a Visual C++ application in much the same
+	way that you would work with strings in one of these other programming languages.
+	However, because this is the C++ programming language, you still need to add a semicolon
+	at the end of each command. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>This initialization code is simple. You are setting an initial message in the
+edit box that you will use to display messages for the user. Next, you are setting
+all the check boxes to the checked state. It's the last line of the code you added
+to this function that you really need to notice.</P>
+<P>The UpdateData function is the key to working with control variables in Visual
+C++. This function takes the data in the variables and updates the controls on the
+screen with the variable values. It also takes the data from the controls and populates
+the attached variables with any values changed by the user. This process is controlled
+by the argument passed into the UpdateData function. If the argument is FALSE, the
+values in the variables are passed to the controls on the window. If the argument
+is TRUE, the variables are updated with whatever appears in the controls on the window.
+As a result, which value you pass this function depends on which direction you need
+to update. After you update one or more variables in your code, then you need to
+call UpdateData, passing it FALSE as its argument. If you need to read the variables
+to get their current value, then you need to call UpdateData with a TRUE value before
+you read any of the variables. You'll get the hang of this as you add more code to
+your application.</P>
+<P>
+<H3><A NAME="Heading13"></A>Closing the Application</H3>
+<P>The first thing that you want to take care of is making sure that the user can
+close your application. Because you deleted the OK and Cancel buttons and added a
+new button for closing the application window, you need to place code into the function
+called by the Exit button to close the window. To do this, follow these steps:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Using the Class Wizard, add a function for the IDC_EXIT object on the
+	BN_CLICKED message, as you learned to do yesterday.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Click the Edit Code button to take you to the new function that you
+	just added.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Enter the code in Listing 2.2.
+	<P>
+</DL>
+
+<H4>LISTING 2.2. DAY2DLG.CPP--THE OnExit FUNCTION.</H4>
+<PRE> 1: void CDay2Dlg::OnExit()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Exit the program
+10:     OnOK();
+11: 
+12:     ///////////////////////
+13:     // MY CODE ENDS HERE
+14:     ///////////////////////
+</PRE>
+
+<PRE>15: }</PRE>
+<P>A single function call within the OnExit function closes the Window and exits
+the application. Where did this OnOK function come from, and why didn't you have
+to call it in yesterday's application? Two functions, OnOK and OnCancel, are built
+into the ancestor CDialog class from which your CDay2Dlg class is inherited. In the
+CDialog class, the message map already has the object IDs of the OK and Cancel buttons
+attached to the OnOK and OnCancel buttons so that buttons with these IDs automatically
+call these functions. If you had specified the Exit button's object ID as IDOK, you
+would not have needed to add any code to the button unless you wanted to override
+the base OnOK functionality.</P>
+<P>
+<H3><A NAME="Heading14"></A>Showing the User's Message</H3>
+<P>Showing the message that the user typed into the edit box should be easy because
+it's similar to what you did in yesterday's application. You can add a function to
+the Show Message button and call the MessageBox function, as in Listing 2.3.</P>
+<P>
+<H4>LISTING 2.3. DAY2DLG.CPP--THE OnShwmsg FUNCTION DISPLAYS THE USER MESSAGE.</H4>
+<PRE> 1: void CDay2Dlg::OnShwmsg()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Display the message for the user
+10:     MessageBox(m_strMessage);
+11: 
+12:     ///////////////////////
+13:     // MY CODE ENDS HERE
+14:     ///////////////////////
+</PRE>
+
+<PRE>15: }</PRE>
+<P>If you compile and run the application at this point, you'll see one problem with
+this code. It displays the string that you initialized the m_strMessage variable
+within the OnInitDialog function. It doesn't display what you type into the edit
+box. This happens because the variable hasn't been updated with the contents of the
+control on the window yet. You need to call UpdateData, passing it a TRUE value,
+to take the values of the controls and update the variables before calling the MessageBox
+function. Alter the OnShwmsg function as in Listing 2.4.</P>
+<P>
+<H4>LISTING 2.4. DAY2DLG.CPP--UPDATED OnShwmsg FUNCTION.</H4>
+<PRE> 1: void CDay2Dlg::OnShwmsg()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Update the message variable with what the user entered
+10:     UpdateData(TRUE);
+11: 
+12:     // Display the message for the user
+13:     MessageBox(m_strMessage);
+14: 
+15:     ///////////////////////
+16:     // MY CODE ENDS HERE
+17:     ///////////////////////
+</PRE>
+
+<PRE>18: }</PRE>
+<P>Now if you compile and run your application, you should be able to display the
+message you type into the edit box, as shown in Figure 2.10.</P>
+<P><A HREF="javascript:popUp('02fig10.gif')"><B>FIGURE 2.10.</B></A><B> </B><I>The
+message entered in the edit box is displayed to the user.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading15"></A>Clearing the User's Message</H3>
+<P>If the user prefers the edit box to be cleared before he or she types a message,
+you can attach a function to the Clear Message button to clear the contents. You
+can add this function through the Class Wizard in the usual way. The functionality
+is a simple matter of setting the m_strMessage variable to an empty string and then
+updating the controls on the window to reflect this. The code to do this is in Listing
+2.5.</P>
+<P>
+<H4>LISTING 2.5. DAY2DLG.CPP--THE OnClrmsg FUNCTION.</H4>
+<PRE> 1: void CDay2Dlg::OnClrmsg()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Clear the message
+10:     m_strMessage = &quot;&quot;;
+11: 
+12:     // Update the screen
+13:     UpdateData(FALSE);
+14: 
+15:     ///////////////////////
+16:     // MY CODE ENDS HERE
+17:     ///////////////////////
+</PRE>
+
+<PRE>18: }</PRE>
+<P>
+<H3><A NAME="Heading16"></A>Disabling and Hiding the Message Controls</H3>
+<P>The last thing that you want to do with the message controls is add functionality
+to the Enable Message Action and Show Message Action check boxes. The first of these
+check boxes enables or disables the controls dealing with displaying the user message.
+When the check box is in a checked state, the controls are all enabled. When the
+check box is in an unchecked state, all those same controls are disabled. In a likewise
+fashion, the second check box shows and hides this same set of controls. The code
+for these two functions is in Listing 2.6.</P>
+<P>
+<H4>LISTING 2.6. DAY2DLG.CPP--THE FUNCTIONS FOR THE ENABLE AND SHOW MESSAGE ACTIONS
+CHECK BOXES.</H4>
+<PRE> 1: void CDay2Dlg::OnCkenblmsg()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Get the current values from the screen
+10:     UpdateData(TRUE);
+11: 
+12:     // Is the Enable Message Action check box checked?
+13:     if (m_bEnableMsg == TRUE)
+14:     {
+15:         // Yes, so enable all controls that have anything
+16:         // to do with showing the user message
+17:         GetDlgItem(IDC_MSG)-&gt;EnableWindow(TRUE);
+18:         GetDlgItem(IDC_SHWMSG)-&gt;EnableWindow(TRUE);
+19:         GetDlgItem(IDC_DFLTMSG)-&gt;EnableWindow(TRUE);
+20:         GetDlgItem(IDC_CLRMSG)-&gt;EnableWindow(TRUE);
+21:         GetDlgItem(IDC_STATICMSG)-&gt;EnableWindow(TRUE);
+22:     }
+23:     else
+24:     {
+25:         // No, so disable all controls that have anything
+26:         // to do with showing the user message
+27:         GetDlgItem(IDC_MSG)-&gt;EnableWindow(FALSE);
+28:         GetDlgItem(IDC_SHWMSG)-&gt;EnableWindow(FALSE);
+29:         GetDlgItem(IDC_DFLTMSG)-&gt;EnableWindow(FALSE);
+30:         GetDlgItem(IDC_CLRMSG)-&gt;EnableWindow(FALSE);
+31:         GetDlgItem(IDC_STATICMSG)-&gt;EnableWindow(FALSE);
+32:     }
+33: 
+34:     ///////////////////////
+35:     // MY CODE ENDS HERE
+36:     ///////////////////////
+37: }
+38: 
+39: void CDay2Dlg::OnCkshwmsg()
+40: {
+41:     // TODO: Add your control notification handler code here
+42: 
+43:     ///////////////////////
+44:     // MY CODE STARTS HERE
+45:     ///////////////////////
+46: 
+47:     // Get the current values from the screen
+48:     UpdateData(TRUE);
+49: 
+50:     // Is the Show Message Action check box checked?
+51:     if (m_bShowMsg == TRUE)
+52:     {
+53:         // Yes, so show all controls that have anything
+54:         // to do with showing the user message
+55:         GetDlgItem(IDC_MSG)-&gt;ShowWindow(TRUE);
+56:         GetDlgItem(IDC_SHWMSG)-&gt;ShowWindow(TRUE);
+57:         GetDlgItem(IDC_DFLTMSG)-&gt;ShowWindow(TRUE);
+58:         GetDlgItem(IDC_CLRMSG)-&gt;ShowWindow(TRUE);
+59:         GetDlgItem(IDC_STATICMSG)-&gt;ShowWindow(TRUE);
+60:     }
+61:     else
+62:     {
+63:         // No, so hide all controls that have anything
+64:         // to do with showing the user message
+65:         GetDlgItem(IDC_MSG)-&gt;ShowWindow(FALSE);
+66:         GetDlgItem(IDC_SHWMSG)-&gt;ShowWindow(FALSE);
+67:         GetDlgItem(IDC_DFLTMSG)-&gt;ShowWindow(FALSE);
+68:         GetDlgItem(IDC_CLRMSG)-&gt;ShowWindow(FALSE);
+69:         GetDlgItem(IDC_STATICMSG)-&gt;ShowWindow(FALSE);
+70:     }
+71: 
+72:     ///////////////////////
+73:     // MY CODE ENDS HERE
+74:     ///////////////////////
+</PRE>
+
+<PRE>75: }</PRE>
+<P>By now, you should understand the first part of these functions. First, you update
+the variables with the current values of the controls on the window. Next, you check
+the value of the boolean variable attached to the appropriate check box. If the variable
+is TRUE, you want to enable or show the control. If the variable if FALSE, you want
+to disable or hide the control.</P>
+<P>At this point, the code begins to be harder to understand. The first function,
+GetDlgItem, is passed the ID of the control that you want to change. This function
+returns the object for that control. You can call this function to retrieve the object
+for any of the controls on the window while your application is running. The next
+part of each command is where a member function of the control object is called.
+The second function is a member function of the object returned by the first function.
+If you are not clear on how this works, then you might want to check out Appendix
+A, &quot;C++ Review,&quot; to brush up on your C++.</P>
+<P>The second functions in these calls, EnableWindow and ShowWindow, look like they
+should be used on windows, not controls. Well, yes, they should be used on windows;
+they happen to be members of the CWnd class, which is an ancestor of the CDialog
+class from which your CDay2Dlg class is inherited. It just so happens that, in Windows,
+all controls are themselves windows, completely separate from the window on which
+they are placed. This allows you to treat controls as windows and to call windows
+functions on them. In fact, all the control classes are inherited from the CWnd class,
+revealing their true nature as windows.</P>
+<P>If you compile and run your application now, you can try the Enable and Show Message
+Action check boxes. They should work just fine, as shown in Figure 2.11.</P>
+<P><A HREF="javascript:popUp('02fig11.gif')"><B>FIGURE 2.11.</B></A><B> </B><I>The
+user message controls can now be disabled.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading17"></A>Running Another Application</H3>
+<P>The last major piece of functionality to be implemented in your application is
+for the set of controls for running another program. If you remember, you added the
+names of three Windows applications into the combo box, and when you run your application,
+you can see these application names in the drop-down list. You can select any one
+of them, and the value area on the combo box is updated with that application name.
+With that part working as it should, you only need to add code to the Run Program
+button to actually get the value for the combo box and run the appropriate program.
+Once you create the function for the Run Program button using the Class Wizard, add
+the code in Listing 2.7 to the function.</P>
+<P>
+<H4>LISTING 2.7. DAY2DLG.CPP--THE OnRunpgm FUNCTION STARTS OTHER WINDOWS APPLICATIONS.</H4>
+<PRE> 1: void CDay2Dlg::OnRunpgm()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Get the current values from the screen
+10:     UpdateData(TRUE);
+11: 
+12:     // Declare a local variable for holding the program name
+13:     CString strPgmName;
+14: 
+15:     // Copy the program name to the local variable
+16:     strPgmName = m_strProgToRun;
+17: 
+18:     // Make the program name all uppercase
+19:     strPgmName.MakeUpper();
+20: 
+21:     // Did the user select to run the Paint program?
+22:     if (strPgmName == &quot;PAINT&quot;)
+23:         // Yes, run the Paint program
+24:         WinExec(&quot;pbrush.exe&quot;, SW_SHOW);
+25: 
+26:     // Did the user select to run the Notepad program?
+27:     if (strPgmName == &quot;NOTEPAD&quot;)
+28:         // Yes, run the Notepad program
+29:         WinExec(&quot;notepad.exe&quot;, SW_SHOW);
+30: 
+31:     // Did the user select to run the Solitaire program?
+32:     if (strPgmName == &quot;SOLITAIRE&quot;)
+33:         // Yes, run the Solitaire program
+34:         WinExec(&quot;sol.exe&quot;, SW_SHOW);
+35: 
+36:     ///////////////////////
+37:     // MY CODE ENDS HERE
+38:     ///////////////////////
+</PRE>
+
+<PRE>39: }</PRE>
+<P>As you expect, the first thing that you do in this function is call UpdateData
+to populate the variables with the values of the controls on the window. The next
+thing that you do, however, might seem a little pointless. You declare a new CString
+variable and copy the value of the combo box to it. Is this really necessary when
+the value is already in a CString variable? Well, it depends on how you want your
+application to behave. The next line in the code is a call to the CString function
+MakeUpper, which converts the string to all uppercase. If you use the CString variable
+that is attached to the combo box, the next time that UpdateData is called with FALSE
+as the argument, the value in the combo box is converted to uppercase. Considering
+that this is likely to happen at an odd time, this is probably not desirable behavior.
+That's why you use an additional CString in this function.</P>
+<P>Once you convert the string to all uppercase, you have a series of if statements
+that compare the string to the names of the various programs. When a match is found,
+the WinExec function is called to run the application. Now, if you compile and run
+your application, you can select one of the applications in the drop-down list and
+run it by clicking the Run Program button.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>CAUTION:</STRONG> It is important to understand the difference in C and C++
+	between using a single equal sign (=) and a double equal sign (==). The single equal
+	sign performs an assignment of the value on the right side of the equal sign to the
+	variable on the left side of the equal sign. If a constant is on the left side of
+	the equal sign, your program will not compile, and you'll get a nice error message
+	telling you that you cannot assign the value on the right to the constant on the
+	left. The double equal sign (==) is used for comparison. It is important to make
+	certain that you use the double equal sign when you want to compare two values because
+	if you use a single equal sign, you alter the value of the variable on the left.
+	This confusion is one of the biggest sources of logic bugs in C/C++ programs. 
+<HR>
+</P>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> The WinExec function is an obsolete Windows function. You
+	really should use the CreateProcess function instead. However, the CreateProcess
+	function has a number of arguments that are difficult to understand this early in
+	programming using Visual C++. The WinExec function is still available and is implemented
+	as a macro that calls the CreateProcess function. This allows you to use the much
+	simpler WinExec function to run another application while still using the function
+	that Windows wants you to use.<BR>
+	Another API function that can be used to run another application is the ShellExecute
+	function. This function was originally intended for opening or printing files, but
+	can also be used to run other programs. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H2><A NAME="Heading18"></A>Summary</H2>
+<P>Today, you learned how you can use standard windows controls in a Visual C++ application.
+You learned how to declare and attach variables to each of these controls and how
+to synchronize the values between the controls and the variables. You also learned
+how you can manipulate the controls by retrieving the control objects using their
+object ID and how you can manipulate the control by treating it as a window. You
+also learned how to specify the tab order of the controls on your application windows,
+thus enabling you to control how users navigate your application windows. Finally,
+you learned how to attach application functionality to the controls on your application
+window, triggering various actions when the user interacts with various controls.
+As an added bonus, you learned how you can run other Windows applications from your
+own application.</P>
+<P>
+<H2><A NAME="Heading19"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q When I specified the object IDs of the controls on the window, three controls
+	had the same ID, IDC_STATIC. These controls were the text at the top of the window
+	and the two group boxes. The other two static text controls started out with this
+	same ID until I changed them. How can these controls have the same ID, and why did
+	I have to change the ID on the two static texts where I did change them?</B>
+	<P>
+	<DT></DT>
+	<DD><B>A</B> All controls that don't normally have any user interaction, such as
+	static text and group boxes, are by default given the same object ID. This works
+	fine as long as your application doesn't need to perform any actions on any of these
+	controls. If you do need to interact with one of these controls, as you did with
+	the static text prompts for the edit box and combo box, then you need to give that
+	control a unique ID. In this case, you needed the unique ID to be able to retrieve
+	the control object so that you could enable or disable and show or hide the control.
+	You also need to assign it a unique ID if you want to attach a variable to the control
+	so that you could dynamically alter the text on the control.
+	<P>
+	<DT></DT>
+	<DD>The application behaves in a somewhat unpredictable way if you try to alter any
+	of the static controls that share the same ID. As a general rule of thumb, you can
+	allow static controls to share the same object ID if you are not going to alter the
+	controls at all. If you might need to perform any interaction with the controls,
+	then you need to assign each one a unique object ID.
+	<P>
+	<DT></DT>
+	<DD><B>Q Is there any other way to manipulate the controls, other than retrieving
+	the control objects using their object IDs?</B>
+	<P>
+	<DT></DT>
+	<DD><B>A</B> You can declare variables in the Control category. This basically gives
+	you an object that is the control's MFC class, providing you with a direct way of
+	altering and interacting with the control. You can then call all of the CWnd class
+	functions on the control, as you did to enable or disable and show or hide the controls
+	in your application, or you can call the control class methods, enabling you to do
+	things in the code that are specific to that type of control. For instance, if you
+	add another variable to the combo box control and specify that it is a Control category
+	variable, you can use it to add items to the drop-down list on the control.
+	<P>
+</DL>
+
+<H2><A NAME="Heading20"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises appear in Appendix B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading21"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Why do you need to specify the tab order of the controls on your application
+	windows?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>How can you include a mnemonic in a static text field that will take
+	the user to the edit box or combo box beside the text control?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Why do you need to give unique object IDs to the static text fields
+	in front of the edit box and combo boxes?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Why do you need to call the UpdateData function before checking the
+	value of one of the controls?
+	<P>
+</DL>
+
+<H3><A NAME="Heading22"></A>Exercises</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Add code to the Default Message button to reset the edit box to say
+	Enter a message here.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Add code to enable or disable and show or hide the controls used to
+	select and run another application.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Extend the code in the OnRunpgm function to allow the user to enter
+	his own program name to be run.
+</DL>
+
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch01/ch01.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch03/ch03.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

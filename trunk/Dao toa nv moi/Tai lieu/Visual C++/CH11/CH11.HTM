@@ -1,0 +1,604 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 11 -- Creating Multiple Document Interface Applications8</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch10/ch10.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch12/ch12.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 11 -<BR>
+Creating Multiple Document Interface Applications</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">What Is an MDI Application?</A>
+	<LI><A HREF="#Heading2">Creating an MDI Drawing Program</A>
+	<UL>
+		<LI><A HREF="#Heading3">Building the Application Shell</A>
+		<LI><A HREF="#Heading4">Building the Drawing Functionality</A>
+		<LI><A HREF="#Heading5">Adding Menu Handling Functionality</A>
+	</UL>
+	<LI><A HREF="#Heading6">Adding a Context Menu</A>
+	<LI><A HREF="#Heading7">Summary</A>
+	<LI><A HREF="#Heading8">Q&amp;A</A>
+	<LI><A HREF="#Heading9">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading10">Quiz</A>
+		<LI><A HREF="#Heading11">Exercise</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+Today, you will learn how to build Multiple Document Interface (MDI) applications
+using Visual C++. You will be able to build applications that allow users to work
+on multiple documents at one time, switching between the windows of the application
+to do their work. In this chapter, you will learn</P>
+
+<P>
+
+<UL>
+	<LI>The difference between SDI and MDI applications.
+	<P>
+	<LI>How to create an MDI application.
+	<P>
+	<LI>How to send multiple menu entries to a single event-handling function.
+	<P>
+	<LI>How to add a context menu to a Document/View style application.
+</UL>
+
+<H2><A NAME="Heading1"></A>What Is an MDI Application?</H2>
+<P>As far as coding an MDI application with Visual C++, there's little difference
+between creating an SDI and an MDI application. However, when you get deeper into
+the two application styles, you'll find quite a few differences. Although an SDI
+application allows the user to work on only one document at a time, it also normally
+limits the user to working on a specific type of document. MDI applications not only
+enable the user to work on multiple documents at the same time, but also MDI applications
+can allow the user to work on multiple types of documents.</P>
+<P>An MDI application uses a window-in-a-window style, where there is a frame window
+around one or more child windows. This is a common application style with many popular
+software packages, including Word and Excel.</P>
+<P>Architecturally, an MDI application is similar to an SDI application. In fact,
+with a simple MDI application, the only difference is the addition of a second frame
+class to the other classes that the AppWizard creates, as shown in Figure 11.1. As
+you can see, the Document/View architecture is still very much the approach you use
+for developing MDI applications as well as SDI applications.</P>
+<P><A HREF="javascript:popUp('11fig01.gif')"><B>FIGURE 11.1.</B></A><B> </B><I>The
+MDI Document/ View architecture.</I></P>
+
+<P>When you create an MDI application, you will create just one more class than you
+created with an SDI application. The classes are</P>
+<P>
+
+<UL>
+	<LI>The CWinApp derived class
+	<P>
+	<LI>The CMDIFrameWnd derived class
+	<P>
+	<LI>The CMDIChildWnd derived class
+	<P>
+	<LI>The CDocument derived class
+	<P>
+	<LI>The CView derived class
+</UL>
+
+<P>The two MDI derived classes, CMDIFrameWnd (the CMainFrame class in your project)
+and CMDIChildWnd (the CChildFrame class in your project), are the only two classes
+that are different from the SDI application that you created.</P>
+<P>The first of these two classes, the CMDIFrameWnd-derived CMainFrame, is the main
+frame of the application. It provides an enclosed space on the desktop within which
+all application interaction takes place. This frame window is the frame to which
+the menu and toolbars are attached.</P>
+<P>The second of these two classes, the CMDIChildWnd-derived CChildFrame class, is
+the frame that holds the CView class. It is the frame that passes messages and events
+to the view class for processing or display.</P>
+<P>In a sense, the functionality of the frame class in the SDI application has been
+split into these two classes in an MDI application. There is additional support for
+running multiple child frames with their own document/view class instances at the
+same time.</P>
+<P>
+<H2><A NAME="Heading2"></A>Creating an MDI Drawing Program</H2>
+<P>To get a good understanding of just how alike the Document/View architectures
+are for the SDI and MDI applications, today you will implement that same drawing
+application that you created yesterday, only this time as an MDI application.</P>
+<P>
+<H3><A NAME="Heading3"></A>Building the Application Shell</H3>
+<P>To create the application shell for today's application, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Create a new AppWizard project. Name the project <B>Day11</B>.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>On the first step of the AppWizard, select Multiple Documents, as shown
+	in Figure 11.2.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('11fig02.gif')"><B>FIGURE 11.2.</B></A><B> </B><I>Specifying
+an MDI application.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>3. </B>Use the default values on the second step of the AppWizard.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>On the third step of the AppWizard, uncheck the support for ActiveX
+	Controls.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>On the fourth step of the AppWizard, leave all the default values.
+	Click the Advanced button.
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>In the Advanced Options dialog, enter a three-letter file extension
+	for the files that your application will generate (for example, dhc or dvp). Click
+	the Close button to close the dialog and then click Next to move to the next step
+	of the AppWizard.
+	<P>
+	<DT></DT>
+	<DD><B>7. </B>Use the default settings on the fifth step of the AppWizard.
+	<P>
+	<DT></DT>
+	<DD><B>8. </B>On the sixth and final AppWizard step, leave the base class as CView
+	and click Finish. The AppWizard generates the application shell.
+	<P>
+</DL>
+
+<H3><A NAME="Heading4"></A>Building the Drawing Functionality</H3>
+<P>Because you are creating the same application that you created yesterday, only
+as an MDI application this time, you need to add the same functionality to the application
+that you added yesterday. To save time, and to reemphasize how alike these two application
+architectures are, perform the same steps you did yesterday to create the CLine class
+and add the functionality to the CDay11Doc and CDay11View classes. Add the support
+into the CDay11Doc and CLine classes for selecting colors and widths, but do not
+add any menu event message handlers or create the color menu. When you finish adding
+all that functionality, you should have an application in which you can open multiple
+drawings, all drawing with only the color black.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>CAUTION:</STRONG> Because you haven't created the menus yet, and the color initialization
+	uses the color menu IDs, you will probably have to hard-code the initialization of
+	the color to 0 to get your application to compile. Once you add the color menu, the
+	menu IDs should have been added, so you will be able to return to using the IDs in
+	your code. For the time being, change the line of code in the OnNewDocument function
+	in the CDay11Doc class from
+	<PRE>    m_nColor = ID_COLOR_BLACK - ID_COLOR_BLACK;</PRE>
+
+</BLOCKQUOTE>
+
+<PRE></PRE>
+
+
+<BLOCKQUOTE>
+	<P>to<BR>
+	m_nColor = 0;<BR>
+	You will also need to make the same sort of change to the GetColor function because
+	it uses one of the color menu IDs also.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading5"></A>Adding Menu Handling Functionality</H3>
+<P>Now that you've got all the functionality in your application, you would probably
+like to add the color menu so you can use all those available colors in your drawings.
+When you expand the Resource View tree and look in the Menu folder, you'll find not
+one, but two menus defined. Which one do you add the color menu to?</P>
+<P>The IDR_MAINFRAME menu is the menu that is available when no child windows are
+open. If you run your application and close all child windows, you'll see the menu
+change, removing all the menus that apply to child windows. Once you open another
+document, either by creating a new document or by opening an existing document, the
+menu changes back, returning all the menus that apply to the documents.</P>
+<P>The IDR_DAY11TYPE menu is the menu that appears when a child window is open. This
+menu contains all the functions that apply to documents. Therefore, this is the menu
+that you need to add the color menu to. Add the color menu by following the same
+directions as yesterday, using the same menu properties.</P>
+<P>Once you add all the menus, you need to add the menu event handlers. Today, you
+are going to take a different approach to implementing the menu event handlers than
+you did yesterday. The Q&amp;A section at the end of yesterday's chapter had a discussion
+of using a single event-handler function for all the color menus. That is what you
+are going to implement today. Unfortunately, the Class Wizard doesn't understand
+how to route multiple menu event messages to the same function correctly, so you're
+going to implement this yourself by following these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Open the Day11Doc.h header file.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Scroll down toward the bottom of the header file until you find the
+	protected section where the AFX_MSG message map is declared (search for //{{AFX_MSG(CDay11Doc)).
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Add the function declarations in Listing 11.1 before the line that
+	you searched for. (The string that you searched for is the beginning marker for the
+	Class Wizard maintained message map. Anything you place between it and the end marker,
+	//}}AFX_MSG, is likely to be removed or corrupted by the Class Wizard.)
+	<P>
+</DL>
+
+<H4>LISTING 11.1. THE EVENT-HANDLER DECLARATIONS IN Day11Doc.h.</H4>
+<PRE>.
+.
+.
+ 1: #ifdef _DEBUG
+ 2:     virtual void AssertValid() const;
+ 3:     virtual void Dump(CDumpContext&amp; dc) const;
+ 4: #endif
+ 5: 
+ 6: protected:
+ 7: 
+ 8: // Generated message map functions
+ 9: protected:
+10:     afx_msg void OnColorCommand(UINT nID);
+11:     afx_msg void OnUpdateColorUI(CCmdUI* pCmdUI);
+12:     //{{AFX_MSG(CDay11Doc)
+13:        // NOTE - the ClassWizard will add and remove member functions &Acirc;here.
+14:        //    DO NOT EDIT what you see in these blocks of generated &Acirc;code !
+15:     //}}AFX_MSG
+16:     DECLARE_MESSAGE_MAP()
+17: private:
+18:     UINT m_nColor;
+19:     CObArray m_oaLines;
+</PRE>
+
+<PRE>20: };</PRE>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>4. </B>Open the Day11Doc.cpp source-code file.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>Search for the line BEGIN_MESSAGE_MAP and add the lines in Listing
+	11.2 just after it. It's important that this code be between the BEGIN_MESSAGE_MAP
+	line and the //{{AFX_MSG_MAP line. If these commands are between the //{{AFX_MSG_MAP
+	and //}}AFX_MSG_MAP lines, then the Class Wizard will remove or corrupt them.
+	<P>
+</DL>
+
+<H4>LISTING 11.2. THE EVENT-HANDLER MESSAGE MAP ENTRIES IN Day11Doc.cpp.</H4>
+<PRE> 1: //////////////////////////////////////////////////////////////////////
+ 2: // CDay11Doc
+ 3: 
+ 4: IMPLEMENT_DYNCREATE(CDay11Doc, CDocument)
+ 5: 
+ 6: BEGIN_MESSAGE_MAP(CDay11Doc, CDocument)
+ 7:     ON_COMMAND_RANGE(ID_COLOR_BLACK, ID_COLOR_WHITE, OnColorCommand)
+ 8:     ON_UPDATE_COMMAND_UI_RANGE(ID_COLOR_BLACK, ID_COLOR_WHITE, &Acirc;OnUpdateColorUI)
+ 9:     //{{AFX_MSG_MAP(CDay11Doc)
+10:         // NOTE - the ClassWizard will add and remove mapping macros &Acirc;here.
+11:         //    DO NOT EDIT what you see in these blocks of generated &Acirc;code!
+12:     //}}AFX_MSG_MAP
+13: END_MESSAGE_MAP()
+14: 
+15: const COLORREF CDay11Doc::m_crColors[8] = {
+16:     RGB(   0,   0,   0),    // Black
+17:     RGB(   0,   0, 255),    // Blue
+18: .
+19: .
+</PRE>
+
+<PRE>20: .</PRE>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>6. </B>Scroll to the bottom of the file and add the two event message handler
+	functions in Listing 11.3.
+	<P>
+</DL>
+
+<H4>LISTING 11.3. THE COLOR MENU EVENT-HANDLER FUNCTIONS.</H4>
+<PRE> 1: void CDay11Doc::OnColorCommand(UINT nID)
+ 2: {
+ 3:     // Set the current color
+ 4:     m_nColor = nID - ID_COLOR_BLACK;
+ 5: }
+ 6: 
+ 7: void CDay11Doc::OnUpdateColorUI(CCmdUI* pCmdUI)
+ 8: {
+ 9:     // Determine if the menu entry should be checked
+10:     pCmdUI-&gt;SetCheck(GetColor() == pCmdUI-&gt;m_nID ? 1 : 0);
+</PRE>
+
+<PRE>11: }</PRE>
+<P>In Listing 11.1, the two function declarations that you added are specified as
+event message handlers by the afx_msg function type declarations. These type of function
+declarations need to have protected access. Otherwise, they are virtually identical
+to any other class member function declaration.</P>
+<P>In Listing 11.2, the two message map entries, ON_COMMAND_RANGE and ON_UPDATE_COMMAND_UI_RANGE,
+are standard message map entries, but the Class Wizard does not support or understand
+them. If you examine the message map entries from the previous day's applications,
+you will notice that there are ON_COMMAND and ON_UPDATE_COMMAND_UI message map entries.
+These macros have two arguments, the message ID and the event-handler function name
+that should be called for the event message. These new message map entries function
+in the same way, but they have two event ID arguments instead of one. The two event
+ID arguments mark the two ends of a range of event IDs that should be passed to the
+function specified. These two event IDs should be the first and last menu entries
+you created when building the color menu.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> The message map is a mechanism used by Visual C++ and MFC to easily
+	specify event messages and the functions that should be called to handle the event.
+	These message-map commands are converted by the Visual C++ compiler into a fast and
+	efficient map for calling the appropriate event functions when a message is received
+	by the application. Whenever you add a function through the Class Wizard, you are
+	not only adding the function to the code, but you are also adding an entry into the
+	message map for that class.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>When you use the ON_COMMAND_RANGE message-map entry, the event message ID is automatically
+passed as an argument to the event-handler function. This allows you to create the
+function in Listing 11.3 to handle the color selection event messages. If you compile
+and run your application at this point, you should find that the color selection
+functionality is all working just as it did yesterday, as shown in Figure 11.3.</P>
+<P><A HREF="javascript:popUp('11fig03.gif')"><B>FIGURE 11.3.</B></A><B> </B><I>Running
+the MDI application.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading6"></A>Adding a Context Menu</H2>
+<P>In most Windows applications, you can right-click the mouse and what is known
+as a context menu, or pop-up menu, appears. Back on Day 6, &quot;Creating Menus for
+Your Application,&quot; you implemented a simple pop-up menu. However, there is a
+mechanism for creating and using these context menus when Windows thinks that the
+menu should be opened. This process allows you to add context menus that behave more
+consistently with other Windows applications (and if Microsoft changes how the context
+menus are triggered with a new version of Windows, yours will still behave according
+to the Windows standard).</P>
+<P>An event message WM_CONTEXTMENU is passed to the event queue when the right mouse
+button is released or when the context menu button is pressed (if you have a newer
+Windows-enabled keyboard with the context menu button). If you place an event-handler
+function on the WM_CONTEXTMENU event message, you can display a pop-up menu with
+confidence that you are showing it at the appropriate time.</P>
+<P>To add the context menu to your application, you create a new menu for use as
+the context menu. To do this, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>In the Resource View tab on the workspace pane, right-click the Menu
+	folder.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Select Insert Menu from the pop-up menu (or should I say context menu).
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Select the new menu (still in the workspace pane), open its properties
+	dialog, and name the menu IDR_CONTEXTMENU.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>In the Menu Designer, specify the top-level menu caption as a single
+	space. This causes Visual C++ to add the first entry in the drop-down portion of
+	the menu.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>In the first drop-down menu entry, specify the caption as &amp;Width
+	and check the Pop-up check box. (This causes the ID combo box to be disabled and
+	an arrow to display beside the caption, along with another menu entry to the right
+	of the menu entry you are modifying.)
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>Do not add any menu entries into the Width cascading menu at this time
+	(that is left for an exercise at the end of the chapter). Instead, select the menu
+	entry below the Width entry and open its properties dialog. Specify the caption as
+	&amp;Colors and check the Pop-up check box.
+	<P>
+	<DT></DT>
+	<DD><B>7. </B>In the colors cascading menu, add the color menu entries as you did
+	for the IDR_DAY11TYPE menu, using the same property settings. You can select the
+	ID from the drop-down list of IDs, if you would rather search for them instead of
+	type. When you finish, your menu should look like the one in Figure 11.4.
+	<P>
+	<DT></DT>
+	<DD><B>8. </B>Select the Class View tab in the workspace pane.
+	<P>
+	<DT></DT>
+	<DD><B>9. </B>Select the CDay11View class. Open the Class Wizard by selecting View|ClassWizard
+	from the menu.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('11fig04.gif')"><B>FIGURE 11.4.</B></A><B> </B><I>The
+context menu design.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>10. </B>Add a function for the WM_CONTEXTMENU event message on the CDay11View
+	class.
+	<P>
+	<DT></DT>
+	<DD><B>11. </B>Edit the function, adding the code in Listing 11.4.
+	<P>
+</DL>
+
+<H4>LISTING 11.4. THE CDay11View OnContextMenu FUNCTION.</H4>
+<PRE> 1: void CDay11View::OnContextMenu(CWnd* pWnd, CPoint point)
+ 2: {
+ 3:     // TODO: Add your message handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     CMenu menu;
+10: 
+11:     // Load the context menu
+12:     menu.LoadMenu(IDR_CONTEXTMENU);
+13:     // Get the first sub menu (the real menu)
+14:     CMenu *pContextMenu = menu.GetSubMenu(0);
+15: 
+16:     // Display the context menu for the user
+17:     pContextMenu-&gt;TrackPopupMenu(TPM_LEFTALIGN | 
+18:         TPM_LEFTBUTTON | TPM_RIGHTBUTTON,
+19:         point.x, point.y, AfxGetMainWnd());
+20: 
+21:     ///////////////////////
+22:     // MY CODE ENDS HERE
+23:     ///////////////////////
+</PRE>
+
+<PRE>24: }</PRE>
+<P>This code should all look familiar to you from what you learned on Day 6. If you
+compile and run your application now, you should be able to click your right mouse
+button on the child window and change your drawing color from the context menu that
+opened, as shown in Figure 11.5.</P>
+<P><A HREF="javascript:popUp('11fig05.gif')"><B>FIGURE 11.5.</B></A><B> </B><I>Using
+the context menu to change drawing colors.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading7"></A>Summary</H2>
+<P>That wasn't too bad; was it? After yesterday, you probably needed the easy day
+today, along with all the review of what you did yesterday to help it all sink in.
+But you did get to learn some new things today. You learned about MDI applications,
+what they are, and how they differ from SDI applications. You learned how you could
+take a series of menus and use a single event-handler function for all of them. You
+also learned how you can create a menu specifically for use as a pop-up context menu
+and how you can integrate it into an MDI application.</P>
+<P>
+<H2><A NAME="Heading8"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q Because it's basically the same code to create an MDI or SDI application,
+	why would I want to create an SDI application? Why wouldn't I want to make all my
+	applications MDI applications?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> It depends on the application and how it's going to be used. You probably
+	use both types of applications on a daily basis. If you are writing a memo or working
+	on a spreadsheet, you are probably using an MDI application. If you are browsing
+	the World Wide Web, your Web browser is most likely an SDI application. A simple
+	text editor such as Notepad would probably be more difficult for the user as an MDI
+	style application, but as an SDI application, it's just about right (for the task
+	it handles). Certain applications make more sense implemented as an SDI application
+	than as an MDI application. You need to think through how your application is going
+	to be used and determine which model it's more suited for.
+	<P>
+	<DT></DT>
+	<DD><B>Q Some entries on my color menu are changing to the wrong color. How can I
+	determine the problem?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> The problem is that the color menu IDs are probably not in sequential
+	order or are out of order. You can check them by right-clicking on the Day11 resources
+	in the Resource View tab of the workspace pane. Select Resource Symbols from the
+	pop-up menu to display a list of the IDs and the numbers assigned to them in alphabetical
+	order. Start with the Black ID and make sure that the numbers increase by 1 without
+	skipping any numbers. Be sure to check these IDs in the order that the colors appear
+	on the menu (and in the color table in the Day11Doc.cpp file), not in the alphabetical
+	order in which they are displayed in this list. If you find some errors, you have
+	to close Visual C++ and open the Resource.h file in a text editor to renumber the
+	IDs correctly. Once you make the corrections (be sure to delete any duplicates),
+	save your corrections, restart Visual C++, and recompile your application. The color
+	menu should work correctly.
+	<P>
+</DL>
+
+<H2><A NAME="Heading9"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading10"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What are the five base classes that are used in MDI applications?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Why do you have to place the ON_COMMAND_RANGE message map entry outside
+	the section maintained by the Class Wizard?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What argument does ON_COMMAND_RANGE pass to the event function?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>What event message should you use to display a pop-up menu?
+	<P>
+</DL>
+
+<H3><A NAME="Heading11"></A>Exercise</H3>
+<P>Add the pull-down and context menus for the width, using the same pen widths as
+yesterday.</P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch10/ch10.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch12/ch12.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

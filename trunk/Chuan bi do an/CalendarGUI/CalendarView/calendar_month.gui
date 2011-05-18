@@ -1,0 +1,74 @@
+<Screen
+	CID = "117135637"
+	AppID = "2"
+	AppVer = "4.2.116.0"
+	DocID = ""
+	HasCanvas = "1"
+	Width = "640"
+	Height = "480"
+	NextCID = "6"
+	RepresentativeRefID = "0"
+	UseDefRepresentative = "1">
+	<Elements
+		CID = "1">
+		<Element
+			CID = "234703057"
+			Type = "WebPanel"
+			X = "208"
+			Y = "185"
+			Width = "242"
+			Height = "23"
+			Flags = "0"
+			TextColour = "255,255,255,0,10"
+			HeaderLineColour = "171,168,151,0,11"
+			HeaderFillColour = "61,149,255,0,28"
+			HeaderGradientColour = "61,149,255,0,28"
+			BoxLineColour = "61,149,255,0,28"
+			BoxFillColour = "61,149,255,0,28"
+			BoxGradientColour = "255,255,255,0,0"
+			Typeface = ""
+			FontAttributes = "1"
+			TextSize = "Normal"
+			MarginLeft = "0"
+			MarginRight = "0"
+			MarginTop = "0"
+			MarginBottom = "0"
+			Text = "Lịch ôn thi"
+			HasHeader = "1"
+			HasSeparatorLine = "1"
+			HeaderHeight = "18"
+			TextMargin = "16"
+			HeaderLineWidth = "0"
+			BoxLineWidth = "1"
+			HeaderFill = "Solid"
+			BoxFill = "Solid"
+			CornerStyleTL = "Round"
+			CornerStyleTR = "Round"
+			CornerStyleBL = "Round"
+			CornerStyleBR = "Round"
+			CornerSizeTL = "Medium"
+			CornerSizeTR = "Medium"
+			CornerSizeBL = "Medium"
+			CornerSizeBR = "Medium"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+	</Elements>
+	<Connections
+		CID = "2"/>
+	<Groups
+		CID = "3"/>
+	<SelectionGroups
+		CID = "4"/>
+	<Notes
+		CID = "5">
+		<Note
+			CID = "117140918"
+			Name = "Description"
+			NextCID = "2">
+			<Text
+				CID = "1">
+				
+			</Text>
+		</Note>
+	</Notes>
+</Screen>

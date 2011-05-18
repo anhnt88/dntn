@@ -1,0 +1,30 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: CppSQLiteDemoExt - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\AnhNTB\LOCALS~1\Temp\RSPAA.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /I "..\Common" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"D:\Anhntb\Dropbox\Dropbox\Thuc tap\Tim hieu SQL lite\New Folder\3.1\CppSQLiteDemoExt\CppSQLite3DemoExt.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\AnhNTB\LOCALS~1\Temp\RSPAA.tmp" 
+Creating command line "link.exe ..\Common\sqlite3.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/CppSQLiteDemoExt.pdb" /debug /machine:I386 /out:"Debug/CppSQLiteDemoExt.exe" /pdbtype:sept  ".\Debug\CppSQLite3.obj" ".\Debug\CppSQLite3DemoExt.obj" "
+<h3>Output Window</h3>
+Compiling...
+CppSQLite3DemoExt.cpp
+Linking...
+Creating command line "bscmake.exe /nologo /o"Debug/CppSQLiteDemoExt.bsc"  ".\Debug\CppSQLite3.sbr" ".\Debug\CppSQLite3DemoExt.sbr""
+Creating browse info file...
+<h3>Output Window</h3>
+
+
+
+<h3>Results</h3>
+CppSQLiteDemoExt.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

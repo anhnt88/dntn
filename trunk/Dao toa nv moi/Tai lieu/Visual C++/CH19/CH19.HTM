@@ -1,0 +1,946 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 19 -- Building Your Own Widgets--Creating ActiveX Controls</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch18/ch18.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch20/ch20.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 19 -<BR>
+Building Your Own Widgets--Creating ActiveX Controls</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">What Is an ActiveX Control?</A>
+	<UL>
+		<LI><A HREF="#Heading2">Properties</A>
+		<LI><A HREF="#Heading3">Methods</A>
+		<LI><A HREF="#Heading4">Events</A>
+	</UL>
+	<LI><A HREF="#Heading5">Creating an ActiveX Control</A>
+	<UL>
+		<LI><A HREF="#Heading6">Building the Control Shell</A>
+		<LI><A HREF="#Heading7">Modifying the CModArt Class</A>
+		<LI><A HREF="#Heading8">Adding Properties</A>
+		<LI><A HREF="#Heading9">Designing and Building the Property Page</A>
+		<LI><A HREF="#Heading10">Adding Basic Control Functionality</A>
+		<LI><A HREF="#Heading11">Adding Methods</A>
+		<LI><A HREF="#Heading12">Testing the Control</A>
+	</UL>
+	<LI><A HREF="#Heading13">Summary</A>
+	<LI><A HREF="#Heading14">Q&amp;A</A>
+	<LI><A HREF="#Heading15">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading16">Quiz</A>
+		<LI><A HREF="#Heading17">Exercises</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+The software industry has seen a revolution over the past couple years. How software
+is built and packaged has moved from a model where all applications are large, monolithic
+pieces of executable code to a model where most applications consist of small building
+blocks. These small building blocks, often called components, can be created using
+any of several different languages and can take many different forms. One of the
+most popular components is the ActiveX control. If you know how to create your own
+ActiveX controls, you can build your own components and provide them to other programmers.
+Today, you will learn</P>
+
+<P>
+
+<UL>
+	<LI>How to use the Visual C++ wizards to build ActiveX controls.
+	<P>
+	<LI>How to add properties and methods to your controls using the Class Wizard.
+	<P>
+	<LI>How to test your control using the tools provided with Visual C++.
+</UL>
+
+<H2><A NAME="Heading1"></A>What Is an ActiveX Control?</H2>
+<P>An ActiveX control is a set of functionality packaged in a COM (Component Object
+Model) object. This COM object is self-contained, although it does not have the ability
+to run by itself. An ActiveX control can only run within a ActiveX container, such
+as a Visual C++ or Visual Basic application.</P>
+<P>As you learned on Day 9, &quot;Adding ActiveX Controls to Your Application,&quot;
+ActiveX controls provide a series of interfaces used by the container application
+to trigger the various sets of functionality contained in the control. Many of these
+interfaces are used for triggering events in the control or in the containing application.
+Others are for specifying the property page of the control or for communicating whether
+the control has been activated. All in all, so many interfaces are built into most
+ActiveX controls that coding the functionality for each of these interfaces yourself
+would take quite some time. Luckily, the Visual C++ App and Class Wizards add much
+of this functionality for you, allowing you to focus on the specific functionality
+that the control is supposed to have.</P>
+<P>Among the aspects of the control you create that you still must plan yourself
+are what properties, methods, and events you will expose for your control. You can
+add these elements to your control through the Class Wizard, but if any of the properties
+or events require special code on your part, then you must add it yourself. As should
+be expected with any methods that you add to your controls, you have to supply all
+of the code. The Class Wizard will add the surrounding structure and code to allow
+the containing application to see and call the method, just as it will add all the
+code necessary to call any event handlers for your applications.</P>
+<P>
+<H3><A NAME="Heading2"></A>Properties</H3>
+<P>Properties are attributes of controls that are visible to, and often modifiable
+by, the container application. The four basic types of properties are ambient, extended,
+stock, and custom. Ambient properties are provided by the container application to
+the control--such things as background color or the default font to be used--so that
+the control looks like part of the container application. Extended properties are
+not actually properties of the control but instead are provided and implemented by
+the container application, such as tab order. The control may extend these properties
+somewhat; for example, if the control contains two or more standard controls, it
+may control the tab order within the overall control, returning the tab order control
+to the application once the control has completed its internal tab order. Stock properties
+are implemented by the ActiveX control development kit, such as control font or control
+background color. The final type of properties, custom properties, are what you are
+most concerned with because these properties are specific to your control and are
+directly related to the functionality of your control.</P>
+<P>You can specify any properties you need in your control using the Automation tab
+on the Class Wizard. When you add a new property to your control through the Class
+Wizard, you'll specify several aspects of the property.</P>
+<P>The first aspect is the external property name, which is the name shown to the
+containing application for the property. Another aspect that you can specify is the
+internal variable name, which is used in your code, but only if the property is implemented
+as a member variable. You also specify the variable type for the property.</P>
+<P>If you specify that the property is to be implemented as a member variable (the
+property is a member variable of the control class), then you can specify the name
+of the notification function, which is called when the property is changed by the
+containing application. If the property is not a member variable of the control class,
+you need to specify that it is altered and viewed through Get and Set methods, where
+the containing application calls a Get method to get the current value of the property
+and calls a Set method to change the value of the property. If the property is maintained
+through Get and Set methods, then you can specify the names of these two methods.</P>
+<P>For all these aspects of a property, the Add Property dialog suggests appropriate
+names for everything once you enter the external name for the property. If you want
+to accept the default names, the only things you need to specify are the external
+name, the type, and whether the property is a member variable or uses Get and Set
+methods. If you choose a stock property from the list of available stock properties,
+the rest of the elements are automatically specified for you. Once you specify all
+of this information, the Class Wizard adds all of the necessary code and variables
+to your control project.</P>
+<P>
+<H3><A NAME="Heading3"></A>Methods</H3>
+<P>Methods are functions in the control that can be called by the container application.
+These functions are made available to other applications through the IDispatch interface,
+which we discussed on Day 9. Because of the way the IDispatch works in calling the
+methods in a control, the variables passed to the method have to be packaged in a
+structure that is passed to the control. This structure is machine independent so
+that it doesn't matter whether your control is running with Windows 95/98 on an Intel
+Pentium II or on a Windows NT with a MIPS or Alpha processor; the structure will
+look the same. It is the responsibility of each side of the function call to convert
+the parameters as necessary to fit them into the structure correctly or to extract
+them from the structure. This process of packaging the method parameters is called
+marshaling.</P>
+<P>When you add a new method to your control through the Class Wizard on the Automation
+tab, the Class Wizard adds all of the necessary code to perform the marshaling of
+the parameters, as well as all other supporting functionality, including building
+the IDispatch interface and table.</P>
+<P>When you add a new method to your control through the Class Wizard, you are asked
+to provide the external name for the method called by the container application.
+Your method will get a default internal name, which you can override by entering
+your own internal name. Other aspects of your control methods that you have to specify
+are the method's return type and the parameters for the method. Once you finish entering
+all this information, the Class Wizard adds all the necessary code to the control.</P>
+<P>
+<H3><A NAME="Heading4"></A>Events</H3>
+<P>Events are notification messages that are sent from the control to the container
+application. They are intended to notify the application that a certain event has
+happened, and the application can take action on that event if desirable. You can
+trigger two types of events from your control, stock or custom events. Stock events
+are implemented by the ActiveX control development kit and are available as function
+calls within the control. These stock events enable you to trigger events in the
+container application for mouse or keyboard events, errors, or state changes.</P>
+<P>Along with the stock events, you can add your own custom events to be triggered
+in the container application. These events should be related to the specific functionality
+of your control. You can specify arguments to be passed with the event to the container
+application so that the application can have the data it needs for reacting to the
+event message.</P>
+<P>When you need to trigger any of these events, all you do is call the internal
+event function that fires the event, passing all the necessary parameters to the
+function. The Class Wizard will have added all of the necessary code to trigger the
+event message from the internal function call.</P>
+<P>Events are one of the three elements that you do not add to your controls through
+the Automation tab in the Class Wizard. Events are added through the ActiveX Events
+tab in the Class Wizard.</P>
+<P>
+<H2><A NAME="Heading5"></A>Creating an ActiveX Control</H2>
+<P>The ActiveX control that you will build as the example today is the squiggle drawing
+module that you packaged as a library module and then as DLLs on Day 16, &quot;Creating
+Your Own Classes and Modules,&quot; and Day 17, &quot;Sharing Your Functionality
+with Other Applications--Creating DLLs.&quot; In converting this module into an ActiveX
+control, you'll expose the maximum number of squiggles that the control will draw,
+as well as the maximum length of the squiggles, as properties that the container
+application can set. Every time the control is clicked, you'll program it to create
+a new squiggle drawing. You'll also add a method to load a squiggle drawing into
+the control that was created with the previous versions of the squiggle module. Finally,
+you'll have the control fire an event to let the container application know that
+the control has loaded the drawing.</P>
+<P>
+<H3><A NAME="Heading6"></A>Building the Control Shell</H3>
+<P>You've probably noticed by now that one of the options on the new project dialog
+is an MFC ActiveX Control Wizard. This is another project wizard just like the AppWizard
+for creating application and DLL projects. You can use it to build a shell for any
+ActiveX controls that you want to build. It will create all of the necessary files
+and configure the project so that the compiler will build an ActiveX control when
+you compile.</P>
+<P>When you start the Control Wizard, you are asked some simple questions about your
+control project, such as how many controls will be in the project and whether the
+controls will have runtime licenses.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Runtime licenses are a means of making sure that the user of your
+	control has purchased a license to use the control. Controls developed for selling
+	to developers often have runtime licenses. The license prevents use of a control
+	by users who haven't paid for it. When you use the control in an application, either
+	the runtime license for the control is installed in the user's registry by the install
+	routine or the runtime license is compiled into the application. These means prevent
+	someone from using the control to build new applications.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>In the second step of the Control Wizard, the questions get a little more involved
+but are still fairly easy to answer. In this step, you can click the Edit Names button
+to provide the control with descriptive names for the user. At the bottom of the
+Control Wizard, you'll find a combo box that lists a number of window classes that
+you can subclass in your control. If you want to create a special edit box that performs
+some special edits on anything the user types into the box, you choose EDIT from
+the list of window classes in the drop-down portion of this combo box. If you choose
+to click the Advanced button, the questions about your project require a fairly thorough
+understanding of ActiveX controls.</P>
+<P>To begin the sample control project today, start a new project, selecting the
+MFC ActiveX Control Wizard and giving the project a suitable name, such as Squiggle,
+as shown in Figure 19.1.</P>
+<P><B>FIGURE 19.1. </B><I>Starting an ActiveX control project.</I></P>
+
+<P>Leave all the options with their default settings in the first Control Wizard
+step because you'll create only a single control today, and you won't need to include
+any runtime licensing. On the second Control Wizard step, click the Edit Names button
+and make sure that the type name is sufficiently descriptive of the control. Click
+OK to approve the names, returning to the second Control Wizard step. If you had
+specified in the first step that you were creating multiple controls, then you would
+choose each control in the drop-down list beside the Edit Names button, specifying
+the names for each individual control in the project. You can leave the rest of the
+options in the Control Wizard at their default settings for this sample project.</P>
+<P>
+<H3><A NAME="Heading7"></A>Modifying the CModArt Class</H3>
+<P>Once you create the control shell, copy the Line and ModArt files from the library
+module project directory, the project you built on Day 16. Load all four of these
+files into the control project, adding the CLine and CModArt classes to the project.</P>
+<P>The primary changes that you need to make to the CModArt class for your control
+is setting the maximum number of squiggles and length of squiggles variables that
+can be exposed as control properties. To be able to implement this, you'll add two
+member variables to the CModArt class, one to control the length of the squiggles
+and the other to control the number of squiggles. Add these two variables to the
+CModArt class as in Table 19.1.</P>
+<P>
+<H4>TABLE 19.1. MEMBER VARIABLES FOR CModArt CLASS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+		<TD ALIGN="LEFT"><I>Access</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_iLength		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+		<TD ALIGN="LEFT">Private		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_iSegments		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+		<TD ALIGN="LEFT">Private		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>You need to provide a way for these variables to be retrieved and updated from
+the exposed properties. This means that you'll need functions for getting the current
+value, and for setting the new value, for each of these variables. To add these functions
+for the m_iLength variable, add a member function to the CModArt class, specifying
+the type as int, the declaration as GetLength, and the access as public. Edit the
+function with the code in Listing 19.1.</P>
+<P>
+<H4>LISTING 19.1. THE CModArt GetLength FUNCTION.</H4>
+<PRE>1: int CModArt::GetLength()
+2: {
+3:     // Return the current value for the m_iLength variable
+4:     return m_iLength;
+5: }</PRE>
+<P>Next, add another member function to the CModArt class, specifying the function
+type as void, the declaration as SetLength(int iLength), and the access as public.
+Edit this function, adding the code in Listing 19.2.</P>
+<P>
+<H4>LISTING 19.2. THE CModArt SetLength FUNCTION.</H4>
+<PRE>1: void CModArt::SetLength(int iLength)
+2: {
+3:     // Set the current value for the m_iLength variable
+4:     m_iLength = iLength;
+5: }</PRE>
+<P>Add the same two functions for the m_iSegments variable so that it can also be
+exposed as a property of the control.</P>
+<P>Now that you have made these two properties available for the control, you'll
+make sure that they have been initialized to reasonable values before the control
+is used. To initialize these values, modify the CModArt constructor as in Listing
+19.3.</P>
+<P>
+<H4>LISTING 19.3. THE MODIFIED CModArt CONSTRUCTOR.</H4>
+<PRE>1: CModArt::CModArt()
+2: {
+3:     // Initialize the random number generator
+4:     srand((unsigned)time(NULL));
+5:     // Initialize the property variables
+6:     m_iLength = 200;
+7:     m_iSegments = 50;
+8: }</PRE>
+<P>Finally, you'll modify the two function that create the squiggle drawings so that
+they use these variables instead of the hard-coded values that they currently use.
+To modify the NewDrawing function, replace the maximum number of squiggles in line
+7 with the variable m_iSegments, as in Listing 19.4.</P>
+<P>
+<H4>LISTING 19.4. THE MODIFIED CModArt NewDrawing FUNCTION.</H4>
+<PRE> 1: void CModArt::NewDrawing()
+ 2: {
+ 3:     int lNumLines;
+ 4:     int lCurLine;
+ 5:
+ 6:     // Determine how many lines to create
+ 7:     lNumLines = rand() % m_iSegments;
+ 8:     // Are there any lines to create?
+ 9:     if (lNumLines &gt; 0)
+10:     {
+11:         // Loop through the number of lines
+12:         for (lCurLine = 0; lCurLine &lt; lNumLines; lCurLine++)
+13:         {
+14:             // Create the new line
+15:             NewLine();
+16:         }
+17:     }
+18: }</PRE>
+<P>Finally, replace the maximum length of each squiggle with the m_iLength variable
+on line 20 in the NewLine function, as in Listing 19.5.</P>
+<P>
+<H4>LISTING 19.5. THE MODIFIED CModArt NewLine FUNCTION.</H4>
+<PRE> 1: void CModArt::NewLine()
+ 2: {
+ 3:     int lNumLines;
+.
+.
+.
+18:
+19:     // Determine the number of parts to this squiggle
+20:     lNumLines = rand() % m_iLength;
+21:     // Are there any parts to this squiggle?
+.
+.
+.
+67: }</PRE>
+<P>You have made all of the necessary modifications to the CModArt and CLine classes
+for your ActiveX control. Now you have to add an instance of the CModArt class to
+the control class as a member variable. Add a new member variable to the control
+class, CSquiggleCtrl, specifying its type as CModArt, its name as m_maDrawing, and
+its access as private. You also need to include the header file for the CModArt class
+in the control class source code file, so open this file, scroll to the top of the
+file, and add an include statement for the ModArt.h file, as in Listing 19.6.</P>
+<P>
+<H4>LISTING 19.6. THE CSquiggleCtrl INCLUDES.</H4>
+<PRE>1: // SquiggleCtl.cpp : Implementation of the CSquiggleCtrl ActiveX Control class.
+2:
+3: #include &quot;stdafx.h&quot;
+4: #include &quot;Squiggle.h&quot;
+5: #include &quot;SquiggleCtl.h&quot;
+6: #include &quot;SquigglePpg.h&quot;
+7: #include &quot;ModArt.h&quot;</PRE>
+<P>
+<H3><A NAME="Heading8"></A>Adding Properties</H3>
+<P>Because the two variables that you added to the CModArt class are not variables
+of the control class (CSquiggleCtrl), you will probably want to add Get and Set methods
+to set and retrieve the property value. If these two variables were members of the
+control class, you could add them through the Class Wizard as member variables. You
+would still know when and if the variables had been changed because you would have
+a notification method in the control class that would be called when the property
+values are changed. However, because they are members of an internal class, you'll
+want to exercise a little more control over their values.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> Even if the variables that you want to expose are member variables
+	of the control class, you might still want to use the Get and Set methods for accessing
+	the variables as control properties. Using the Get and Set methods allow you to add
+	validation on the new value for the properties so that you can make certain that
+	the container application is setting an appropriate value to the property.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>To add these properties to your control, open the Class Wizard and select the
+Automation tab, as in Figure 19.2. Click on the Add Property button to add the first
+property. In the Add Property dialog, enter the external name that you want your
+property to have, such as SquiggleLength, and specify the type as short (the int
+type is not available, only short and long). Click the Get/Set methods radio button,
+and the dialog enters function names for these two methods, as in Figure 19.3. Click
+OK to add this property.</P>
+<P><B>FIGURE 19.2. </B><I>The Class Wizard Automation tab.</I></P>
+
+<P><B>FIGURE 19.3. </B><I>The Add Property dialog.</I></P>
+
+<P>Click the Edit Code button to add the code for the Get and Set methods. In each
+method, you'll call the Get and Set functions that you added to the CModArt class
+to control access to the length variable. Edit these two methods as shown in Listing
+19.7.</P>
+<P>
+<H4>LISTING 19.7. THE CSquiggleCtrl Get/SetSquiggleLength FUNCTIONS.</H4>
+<PRE>1:  short CSquiggleCtrl::GetSquiggleLength()
+2:  {
+3:      // TODO: Add your property handler here
+4:      // Return the result from the GetLength function
+5:      return m_maDrawing.GetLength();
+6:  }
+7:
+ 8: void CSquiggleCtrl::SetSquiggleLength(short nNewValue)
+ 9: {
+10:     // TODO: Add your property handler here
+11:     // Set the new length value
+12:     m_maDrawing.SetLength(nNewValue);
+13:     SetModifiedFlag();
+14: }</PRE>
+<P>Add another property for the number of squiggles in a drawing by following the
+same steps, substituting an appropriate property name, such as NumberSquiggles.</P>
+<P>One last property you might want to add to your control is a boolean property
+that the container application could use to keep the control from creating any new
+drawings and to keep the current drawing visible. Add a new property through the
+Class Wizard, giving it a suitable name such as KeepCurrentDrawing, and specify the
+type as BOOL. Leave this property set as a member variable and click OK. The Class
+Wizard automatically adds the variable to the control class, along with all of the
+necessary code to maintain the variable.</P>
+<P>
+<H3><A NAME="Heading9"></A>Designing and Building the Property Page</H3>
+<P>You need to provide a property page with your control that developers can use
+when they are working with your control. This property page will provide the users
+with a means of setting the properties of the control, even if their own development
+tools do not provide them with a facility to get to these properties in any way other
+than with code.</P>
+<P>Adding a property page to your control is pretty easy. If you select the Resources
+view tab in the workspace and expand the dialog folder, you'll see a dialog for your
+control's property page already in the folder. Open this dialog, and you'll find
+that it's a standard dialog window that you can design using the standard controls
+available in the dialog designer. To design the property page for your sample control,
+lay out the property page dialog as shown in Figure 19.4, using the property settings
+in Table 19.2.</P>
+<P><B>FIGURE 19.4. </B><I>The control property page layout.</I></P>
+
+<P><I></I>
+<H4>TABLE 19.2. CONTROL PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Object		</TD>
+		<TD ALIGN="LEFT">Property		</TD>
+		<TD ALIGN="LEFT">Setting		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Maximum Number of Squiggles:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_ENBRSQUIG		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Maximum Length of Squiggles:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_ELENSQUIG		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Check Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_CMAINTDRAW		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Maintain Current Drawing		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Once you add all the controls and specify their properties, open the Class Wizard
+to add variables for these controls. When you add a variable to one of the controls
+on the property page dialog, you'll notice an additional combo box on the Add Member
+Variable dialog. This new combo box is for the external name of the property that
+the variable should be tied to in the control. The drop-down list on this combo box
+is a list of all of the standard properties that you might want to tie the property
+page control to, but if you are tying it to a custom property, you have to enter
+the property name yourself, as shown in Figure 19.5.</P>
+<P><B>FIGURE 19.5. </B><I>The Add Member Variable dialog.</I></P>
+
+<P>Add variables to the controls on the property page for your control, tying them
+to the control's properties, as specified in Table 19.3.</P>
+<P>
+<H4>TABLE 19.3. CONTROL VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+		<TD ALIGN="LEFT"><I>Category</I></TD>
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_CMAINTDRAW		</TD>
+		<TD ALIGN="LEFT">m_bKeepDrawing		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">BOOL		</TD>
+		<TD ALIGN="LEFT">KeepCurrentDrawing		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_ELENSQUIG		</TD>
+		<TD ALIGN="LEFT">m_iLenSquig		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+		<TD ALIGN="LEFT">SquiggleLength		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_ENBRSQUIG		</TD>
+		<TD ALIGN="LEFT">m_iNbrSquiggles		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+		<TD ALIGN="LEFT">NumberSquiggles		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Click the OK button to add all these variables to the control property page class.</P>
+<P>
+<H3><A NAME="Heading10"></A>Adding Basic Control Functionality</H3>
+<P>The basic functionality that your control needs is the ability to respond to mouse
+clicks by generating a new drawing. To control this behavior, you'll add a second
+boolean variable to the control class so that the OnDraw function knows that a mouse
+click has been triggered. The easiest place to get the drawing area of the control
+is the OnDraw function, so this is where the new drawing needs to be generated. Do
+you want the control to generate a new drawing every time the user moves the application
+using your control in front of another application? Probably not. You will most likely
+want a greater amount of control over the behavior of the control, so it makes sense
+to add this second boolean variable. Add a member variable to the control class (CSquiggleCtrl),
+specifying the variable type as BOOL, the variable name as m_bGenNewDrawing, and
+the variables access as private.</P>
+<P>Before you start adding the code to perform all the various tasks, it's important
+that you initialize all the member variables in the control class. This consists
+of the member variable property, m_keepCurrentDrawing, and the member variable that
+you just added, m_bGenNewDrawing. You'll want your control to generate a new drawing
+right off the bat, and you probably don't want it to maintain any drawings, unless
+the container application explicitly specifies that a drawing is to be maintained.
+You'll set these two variables accordingly in the control class constructor, as shown
+in Listing 19.8.</P>
+<P>
+<H4>LISTING 19.8. THE CSquiggleCtrl CONSTRUCTOR.</H4>
+<PRE>1: CSquiggleCtrl::CSquiggleCtrl()
+2: {
+3:     InitializeIIDs(&amp;IID_DSquiggle, &amp;IID_DSquiggleEvents);
+4:
+5:     // TODO: Initialize your control's instance data here.
+6:     // Initialize the variables
+7:     m_bGenNewDrawing = TRUE;
+8:     m_keepCurrentDrawing = FALSE;
+9: }</PRE>
+<P>Next, you'll add the code to generate and display the squiggle drawings. The place
+to add this functionality is the OnDraw function in the control class. This function
+is called every time that the control needs to draw itself, whether it was hidden
+or something triggered the redrawing by calling the Invalidate function on the control.
+Once in the OnDraw function, you'll determine whether you need to generate a new
+drawing or just draw the existing drawing. Another thing to keep in mind is that
+you are responsible for drawing the entire area that the control occupies. This means
+that you need to draw the background of the squiggle drawing, or else the squiggles
+will be drawn on top of whatever was displayed in that same spot on the screen. (Who
+knows? That might be the effect you are looking for.) To add this functionality to
+your control, edit the OnDraw function in the control class, adding the code in Listing
+19.9.</P>
+<P>
+<H4>LISTING 19.9. THE CSquiggleCtrl OnDraw FUNCTION.</H4>
+<PRE> 1: void CSquiggleCtrl::OnDraw(
+ 2:             CDC* pdc, const CRect&amp; rcBounds, const CRect&amp; rcInvalid)
+ 3: {
+ 4:     // TODO: Replace the following code with your own drawing code.
+ 5:     //pdc-&gt;FillRect(rcBounds, CBrush::FromHandle((HBRUSH)
+                &Acirc;GetStockObject(WHITE_BRUSH)));
+ 6:     //pdc-&gt;Ellipse(rcBounds);
+ 7:     // Do we need to generate a new drawing?
+ 8:     if (m_bGenNewDrawing)
+ 9:     {
+10:         // Set the drawing area for the new drawing
+11:         m_maDrawing.SetRect(rcBounds);
+12:         // Clear out the old drawing
+13:         m_maDrawing.ClearDrawing();
+14:         // Generate the new drawing
+15:         m_maDrawing.NewDrawing();
+16:         // Reset the control flag
+17:         m_bGenNewDrawing = FALSE;
+18:     }
+19:     // Fill in the background
+20:     pdc-&gt;FillRect(rcBounds, 
+21:         CBrush::FromHandle((HBRUSH)GetStockObject(WHITE_BRUSH)));
+22:     // Draw the squiggle drawing
+23:     m_maDrawing.Draw(pdc);
+24: }</PRE>
+<P>Finally, you'll trigger the control to generate a new drawing whenever the control
+is clicked. This requires adding an event handler for the control's OnClick event.
+First, however, you'll add a stock method to the control to make sure that it receives
+the OnClick event message. To add this stock method, open the Class Wizard and select
+the Automation tab. Add a new method to the control class, selecting the DoClick
+method from the drop-down list of stock methods that can be added to your control,
+as shown in Figure 19.6. Click the OK button to add the method to your control, and
+then select the Message Maps tab in the Class Wizard. Select the OnClick event message
+from the list of available event messages, and add a function to handle this event
+message. Edit the code for the OnClick event handler, adding the code in Listing
+19.10.</P>
+<P><B>FIGURE 19.6. </B><I>The Add Method dialog.</I></P>
+
+<P><I></I>
+<H4>LISTING 19.10. THE CSquiggleCtrl OnClick FUNCTION.</H4>
+<PRE> 1: void CSquiggleCtrl::OnClick(USHORT iButton)
+ 2: {
+ 3:     // TODO: Add your specialized code here and/or call the base class
+ 4:     // Can we generate a new drawing?
+ 5:     if (!m_keepCurrentDrawing)
+ 6:     {
+ 7:         // Set the flag so a new drawing will be generated
+ 8:         m_bGenNewDrawing = TRUE;
+ 9:         // Invalidate the control to trigger the OnDraw function
+10:         Invalidate();
+11:     }
+12:     COleControl::OnClick(iButton);
+13: }</PRE>
+<P>In the OnClick function, you check to see whether you could generate a new drawing
+or maintain the current drawing. If you could generate a new drawing, you set the
+m_bGenNewDrawing flag to TRUE and invalidated the control, which triggers the OnDraw
+function.</P>
+<P>
+<H3><A NAME="Heading11"></A>Adding Methods</H3>
+<P>Remember the functionality that you are going to give your control: One of the
+functions is loading a squiggle drawing created with the version of the Squiggle
+module that you created on Day 16. To add this functionality, you'll add a method
+to the control that the container application can call to pass a filename to be loaded.
+You've already added one method to your application, a stock method. Adding a custom
+method is similar, but you have to provide a little more information to the Add Method
+dialog.</P>
+<P>In the method to load an existing drawing, you'll create a CFile object for the
+filename that was passed as a parameter. The CFile constructor will take the filename
+and the flag CFile::modeRead to let it know that you are opening the file for reading
+only. Once you create the CFile object, you'll create a CArchive object to read the
+file. The CArchive constructor will take the CFile object that you just created and
+the CArchive::load flag to tell it that it needs to load the file. At this point,
+you can pass the CArchive object to the drawing object's Serialize function and let
+it read and load the drawing. Once the drawing is loaded, you need to display the
+drawing by invalidating the control. Before you invalidate the control, you probably
+want to make sure that the m_bGenNewDrawing flag is set to FALSE so that the drawing
+you just loaded won't be overwritten.</P>
+<P>To add this functionality to your control, open the Class Wizard and select the
+Automation tab. Click the Add Method button to add a custom method. Enter the external
+method name in the first combo box; in this case, call it LoadDrawing. The internal
+name will automatically be generated based on the external name you entered. Next,
+specify the return type as BOOL so that you can let the container application know
+whether you were able to load the drawing. Finally, add a single parameter to the
+parameter list, giving it a name such as sFileName and specifying its type as LPCTSTR
+(the CString type is not available, but the LPCTSTR type is compatible), as shown
+in Figure 19.7. Click the OK button to add the method to your control. Once you add
+the method, click the Edit Code button to edit the method, adding the code in Listing
+19.11.</P>
+<P><B>FIGURE 19.7. </B><I>The Add custom Method dialog.</I></P>
+
+<P><I></I>
+<H4>LISTING 19.11. THE CSquiggleCtrl LoadDrawing FUNCTION.</H4>
+<PRE> 1: BOOL CSquiggleCtrl::LoadDrawing(LPCTSTR sFileName)
+ 2: {
+ 3:     // TODO: Add your dispatch handler code here
+ 4:     try
+ 5:     {
+ 6:         // Create a CFile object
+ 7:         CFile lFile(sFileName, CFile::modeRead);
+ 8:         // Create a CArchive object to load the file
+ 9:         CArchive lArchive(&amp;lFile, CArchive::load);
+10:         // Load the file
+11:         m_maDrawing.Serialize(lArchive);
+12:         // Make sure that the loaded drawing won't be overwritten
+13:         m_bGenNewDrawing = FALSE;
+14:         // Draw the loaded drawing
+15:         Invalidate();
+16:     }
+17:     catch (CFileException err)
+18:     {
+19:         return FALSE;
+20:     }
+21:     return TRUE;
+22: }</PRE>
+<H3><BR>
+<B>Adding Events</B></H3>
+<P>The final part of building your control is adding the events that your control
+will trigger in the container application. When using your control, the user will
+be able to add code to be triggered on these events. Adding these events to your
+control is done through the ActiveX Events tab of the Class Wizard. If you want to
+add a stock event to be triggered by your control, then you just click the Add Event
+button and select a stock event from the drop-down list of stock events. If you need
+to add a custom event to your control, then in the Add Event dialog, instead of selecting
+a stock event, you enter the name of your custom event. At the bottom of the Add
+Event dialog is an area for adding parameters that you can pass from your control
+to the container application with the event.</P>
+<P>For the sample control, you'll add one event, a custom event to let the application
+know that the drawing file specified has been loaded. To add this event, open the
+Class Wizard and select the ActiveX Events tab, as shown in Figure 19.8. Click the
+Add Event button to add the event. Enter the name for your custom event, FileLoaded.
+You'll notice that the Add Event dialog automatically builds an internal name for
+the event, in this case, FireFileLoaded, as shown in Figure 19.9. This internal name
+is the name for the function that you need to call in your code when you want to
+trigger this event. Click the OK button to add this event. To add a stock event,
+select the desired stock event from the drop-down list of stock events, and click
+the OK button to add this second event.</P>
+<P>Now that you've added your event to your control, you need to make the necessary
+changes to the code to trigger this event at the appropriate places. You'll trigger
+your event at the end of your LoadDrawing function, assuming that you are able to
+load the drawing correctly. Add this additional functionality to the LoadDrawing
+function, as shown in line 17 of Listing 19.12.</P>
+<P><B>FIGURE 19.8. </B><I>The ActiveX Events tab of the Class Wizard.</I></P>
+
+<P><B>FIGURE 19.9. </B><I>The Add Event dialog.</I></P>
+
+<P><I></I>
+<H4>LISTING 19.12. THE MODIFIED CSquiggleCtrl LoadDrawing FUNCTION.</H4>
+<PRE> 1: BOOL CSquiggleCtrl::LoadDrawing(LPCTSTR sFileName)
+ 2: {
+ 3:     // TODO: Add your dispatch handler code here
+ 4:     try
+ 5:     {
+ 6:         // Create a CFile object
+ 7:         CFile lFile(sFileName, CFile::modeRead);
+ 8:         // Create a CArchive object to load the file
+ 9:         CArchive lArchive(&amp;lFile, CArchive::load);
+10:         // Load the file
+11:         m_maDrawing.Serialize(lArchive);
+12:         // Make sure that the loaded drawing won't be overwritten
+13:         m_bGenNewDrawing = FALSE;
+14:         // Draw the loaded drawing
+15:         Invalidate();
+16:         // Fire the FileLoaded event
+17:         FireFileLoaded();
+18:     }
+19:     catch (CFileException err)
+20:     {
+21:         return FALSE;
+22:     }
+23:     return TRUE;
+24: }</PRE>
+<P>
+<H3><A NAME="Heading12"></A>Testing the Control</H3>
+<P>Now you are ready to compile and begin testing your control. Before you run to
+the store to pick up a copy of Visual Basic, you already have a tool just for testing
+ActiveX controls. On the Tools menu is one entry labeled ActiveX Control Test Container.
+This is a utility that is designed specifically for testing ActiveX controls that
+you have built. Once you compile your control, run the ActiveX Control Test Container
+to test your control.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> If Visual C++ is unable to register your control, but is able to compile
+	it, you might need to register your control yourself. You can do this by selecting
+	Tools | Register Control from the menu. This will register the compiled control in
+	the Registry database.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>When you first start the test container, you see a blank area where your control
+will appear. You need to insert your control into this container area by selecting
+Edit | Insert New Control. This will open the Insert Control dialog, as shown in
+Figure 19.10. Select your control from the list of available controls and click the
+OK button to add your control to the container area, as shown in Figure 19.11.</P>
+<P><B>FIGURE 19.10. </B><I>The Insert Control dialog.</I></P>
+
+<P>Now that you have your control loaded into the test container, you can play with
+it, resize it, click it, and check when it generates a new drawing and when it just
+redraws the existing drawing. If you trigger any events for your control, you'll
+see the event that your control fired in the bottom pane of the test container so
+that you can watch as each of the events you added to your control are triggered.</P>
+<P><B>FIGURE 19.11. </B><I>The squiggle control in the test container.</I></P>
+
+<P>With your control selected, if you select Edit | Properties from the menu, you'll
+open the property page that you designed for your control, allowing you to modify
+the various properties of the control so that you can see whether they work correctly,
+as shown in Figure 19.12.</P>
+<P><B>FIGURE 19.12. </B><I>The Squiggle Control Properties page.</I></P>
+
+<P>Finally, to test the methods that you added to your control, select Control |
+Invoke Methods. This opens the Invoke Methods dialog, as shown in Figure 19.13. In
+here, you can select from the list of available methods in your control, entering
+each of the parameters required for the methods, and then click the Invoke button
+to call that method. You can watch as your methods are called and your control responds.</P>
+<P><B>FIGURE 19.13. </B><I>The Invoke Methods dialog.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading13"></A>Summary</H2>
+<P>Today, you learned how you can use the tools and wizards in Visual C++ to build
+ActiveX controls with little effort on your part. You learned how you can create
+the shell of the control project using the Control Wizard. You also learned how you
+can use the Class Wizard to add properties, methods, and events to your control.
+You saw how you can design a property page for your control and how you can use the
+Class Wizard to attach the controls on this dialog to the properties you defined
+for your control without having to add any code. Finally, you learned how you can
+use the ActiveX Control Test Container to test your control, triggering all the functionality
+by using the tools of this utility.</P>
+<P>
+<H2><A NAME="Heading14"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q How do I change the icon that appears in the toolbox for my control?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> In the Resource View tab of the workspace pane, open the Bitmap folder.
+	You should find a single bitmap in this folder. This image is displayed in the toolbox
+	for your control when you add it to a Visual C++ or Visual Basic project. You should
+	edit this bitmap so that it displays the image that you want to represent your control.
+	<P>
+	<DT></DT>
+	<DD><B>Q Why does my control have an About box?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> If you are building ActiveX controls that will be used by other developers,
+	whether you sell the control or give it away, you probably want to include some way
+	of indicating that you wrote the control, and that you, or your employer, owns the
+	copyright on the control. This acts as a legal identification on the control so that
+	whoever obtains your control cannot turn around and sell it as his creation.
+	<P>
+</DL>
+
+<H2><A NAME="Heading15"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading16"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What are the three aspects of a control that are visible to the container
+	application?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Why do you need to design a property page for your control?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What are the four types of properties that a control might have?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>What happens to the parameters that are passed to the methods of a
+	control?
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>What tool can you use to test your controls?
+	<P>
+</DL>
+
+<H3><A NAME="Heading17"></A>Exercises</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Add a method to your control to enable the container application to
+	trigger the generation of a new squiggle drawing.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Add a method to your control to save a squiggle drawing. Use the CFile::modeWrite
+	and CArchive::store flags when creating the CFile and CArchive objects.
+</DL>
+
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch18/ch18.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch20/ch20.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

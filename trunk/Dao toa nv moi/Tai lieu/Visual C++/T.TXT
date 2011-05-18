@@ -1,0 +1,261 @@
+
+---------- APF.HTM
+<P><A HREF="javascript:popUp('33fig01.gif')"><B>FIGURE F.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('33fig02.gif')"><B>FIGURE F.2.</B></A><B> </B><I>The
+
+---------- APE.HTM
+<P><A HREF="javascript:popUp('30fig01r.gif')"><B>FIGURE E.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('30fig02.gif')"><B>FIGURE E.2.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('30fig03.gif')"><B>FIGURE E.3.</B></A><B> </B><I>Source
+<P><A HREF="javascript:popUp('30fig04.gif')"><B>FIGURE E.4.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('30fig05.gif')"><B>FIGURE E.5.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('30fig06.gif')"><B>FIGURE E.6.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('30fig07.gif')"><B>FIGURE E.7.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('30fig08r.gif')"><B>FIGURE E.8.</B></A><B> </B><I>Adding
+<P><A HREF="javascript:popUp('30fig09.gif')"><B>FIGURE E.9.</B></A><B> </B><I>Adding
+<P><A HREF="javascript:popUp('30fig10r.gif')"><B>FIGURE E.10.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('30fig11r.gif')"><B>FIGURE E.11.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('30fig12.gif')"><B>FIGURE E.12.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('30fig13.gif')"><B>FIGURE E.13.</B></A><B> </B><I>Using
+<P><A HREF="javascript:popUp('30fig14.gif')"><B>FIGURE E.14.</B></A><B> </B><I>Windows
+<P><A HREF="javascript:popUp('30fig15.gif')"><B>FIGURE E.15.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('30fig16.gif')"><B>FIGURE E.16.</B></A><B> </B><I>The
+
+---------- APD.HTM
+<P><A HREF="javascript:popUp('29fig01.gif')"><B>FIGURE D.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('29fig02.gif')"><B>FIGURE D.2.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('29fig03.gif')"><B>FIGURE D.3.</B></A><B> </B><I>The
+
+---------- APC.HTM
+<P><A HREF="javascript:popUp('23fig01.gif')"><B>FIGURE C.1.</B></A><B> </B><I>Graphical
+<P><A HREF="javascript:popUp('23fig02.gif')"><B>FIGURE C.2.</B></A><B> </B><I>Print
+<P><A HREF="javascript:popUp('23fig03.gif')"><B>FIGURE C.3.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('23fig04.gif')"><B>FIGURE C.4.</B></A><B> </B><I>The
+
+---------- APB.HTM
+
+---------- APA.HTM
+<P><A HREF="javascript:popUp('0afig01.gif')"><B>FIGURE A.1.</B></A><B> </B><I>Setting
+<P><A HREF="javascript:popUp('0afig02.gif')"><B>FIGURE A.2.</B></A><B> </B><I>Setting
+<P><A HREF="javascript:popUp('0afig03.gif')"><B>FIGURE A.3.</B></A><B> </B><I>Setting
+<P><A HREF="javascript:popUp('0afig04.gif')"><B>FIGURE A.4.</B></A><B> </B><I>Selecting
+<P><A HREF="javascript:popUp('0afig05.gif')"><B>FIGURE A.5.</B></A><B> </B><I>HELLO
+<P><A HREF="javascript:popUp('0afig06.gif')"><B>FIGURE A.6.</B></A><B> </B><I>Global.cpp--using
+<P><A HREF="javascript:popUp('0afig07.gif')"><B>FIGURE A.7.</B></A><B> </B><I>Global.cpp--global
+<P><A HREF="javascript:popUp('0afig08.gif')"><B>FIGURE A.8.</B></A><B> </B><I>Using
+<P><A HREF="javascript:popUp('0afig09.gif')"><B>FIGURE A.9.</B></A><B> </B><I>Passing
+<P><A HREF="javascript:popUp('0afig10.gif')"><B>FIGURE A.10.</B></A><B> </B><I>Structure
+<P><A HREF="javascript:popUp('0afig11.gif')"><B>FIGURE A.11.</B></A><B> </B><I>Output
+<P><A HREF="javascript:popUp('0afig12.gif')"><B>FIGURE A.12.</B></A><B> </B><I>Inheritance
+<P><A HREF="javascript:popUp('0afig13.gif')"><B>FIGURE A.13.</B></A><B> </B><I>Vehicle
+
+---------- CH21.HTM
+<P><A HREF="javascript:popUp('21fig01.gif')"><B>FIGURE 21.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('21fig02.gif')"><B>FIGURE 21.2.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('21fig03.gif')"><B>FIGURE 21.3.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('21fig04.gif')"><B>FIGURE 21.4.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('21fig05.gif')"><B>FIGURE 21.5.</B></A><B> </B><I>Browsing
+<P><A HREF="javascript:popUp('21fig06.gif')"><B>FIGURE 21.6.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('21fig07.gif')"><B>FIGURE 21.7.</B></A><B> </B><I>The
+
+---------- CH20.HTM
+<P><A HREF="javascript:popUp('20fig01.gif')"><B>FIGURE 20.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('20fig02.gif')"><B>FIGURE 20.2.</B></A><B> </B><I>Ports
+<P><A HREF="javascript:popUp('20fig03.gif')"><B>FIGURE 20.3.</B></A><B> </B><I>Including
+<P><A HREF="javascript:popUp('20fig04.gif')"><B>FIGURE 20.4.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('20fig05.gif')"><B>FIGURE 20.5.</B></A><B> </B><I>Changing
+<P><A HREF="javascript:popUp('20fig06.gif')"><B>FIGURE 20.6.</B></A><B> </B><I>Connecting
+<P><A HREF="javascript:popUp('20fig07.gif')"><B>FIGURE 20.7.</B></A><B> </B><I>Sending
+<P><A HREF="javascript:popUp('20fig08.gif')"><B>FIGURE 20.8.</B></A> <I>Closing the
+
+---------- CH19.HTM
+
+---------- CH18.HTM
+<P><A HREF="javascript:popUp('18fig01.gif')"><B>FIGURE 18.1.</B></A><B> </B><I>Two
+<P><A HREF="javascript:popUp('18fig02.gif')"><B>FIGURE 18.2.</B></A><B> </B><I>Two
+<P><A HREF="javascript:popUp('18fig03.gif')"><B>FIGURE 18.3.</B></A><B> </B><I>Three
+<P><A HREF="javascript:popUp('18fig04.gif')"><B>FIGURE 18.4.</B></A><B> </B><I>Three
+<P><A HREF="javascript:popUp('18fig05.gif')"><B>FIGURE 18.5.</B></A><B> </B><I>Multiple
+<P><A HREF="javascript:popUp('18fig06.gif')"><B>FIGURE 18.6.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('18fig07.gif')"><B>FIGURE 18.7.</B></A><B> </B><I>On
+<P><A HREF="javascript:popUp('18fig08.gif')"><B>FIGURE 18.8.</B></A><B> </B><I>On
+<P><A HREF="javascript:popUp('18fig09.gif')"><B>FIGURE 18.9.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('18fig10.gif')"><B>FIGURE 18.10.</B></A><B> </B><I>Application
+<P><A HREF="javascript:popUp('18fig11.gif')"><B>FIGURE 18.11.</B></A><B> </B><I>Processor
+<P><A HREF="javascript:popUp('18fig12.gif')"><B>FIGURE 18.12.</B></A><B> </B><I>Processor
+
+---------- CH17.HTM
+<P><A HREF="javascript:popUp('17fig01.gif')"><B>FIGURE 17.1.</B></A><B> </B><I>Selecting
+<P><A HREF="javascript:popUp('17fig02.gif')"><B>FIGURE 17.2.</B></A><B> </B><I>Specifying
+<P><A HREF="javascript:popUp('17fig03.gif')"><B>FIGURE 17.3.</B></A><B> </B><I>Starting
+
+---------- CH16.HTM
+<P><A HREF="javascript:popUp('16fig01.gif')"><B>FIGURE 16.1.</B></A><B> </B><I>Specifying
+<P><A HREF="javascript:popUp('16fig02.gif')"><B>FIGURE 16.2.</B></A><B> </B><I>Specifying
+<P><A HREF="javascript:popUp('16fig03.gif')"><B>FIGURE 16.3.</B></A><B> </B><I>Specifying
+<P><A HREF="javascript:popUp('16fig04.gif')"><B>FIGURE 16.4.</B></A><B> </B><I>Adding
+<P><A HREF="javascript:popUp('16fig05.gif')"><B>FIGURE 16.5.</B></A><B> </B><I>Creating
+<P><A HREF="javascript:popUp('16fig06.gif')"><B>FIGURE 16.6.</B></A><B> </B><I>Run
+<P><A HREF="javascript:popUp('16fig07.gif')"><B>FIGURE 16.7.</B></A><B> </B><I>The
+
+---------- CH15.HTM
+<P><A HREF="javascript:popUp('15fig01.gif')"><B>FIGURE 15.1.</B></A><B> </B><I>Adding
+<P><A HREF="javascript:popUp('15fig02.gif')"><B>FIGURE 15.2.</B></A><B> </B><I>Specifying
+<P><A HREF="javascript:popUp('15fig03.gif')"><B>FIGURE 15.3.</B></A><B> </B><I>Specifying
+<P><A HREF="javascript:popUp('15fig04.gif')"><B>FIGURE 15.4.</B></A><B> </B><I>Specifying
+<P><A HREF="javascript:popUp('15fig05.gif')"><B>FIGURE 15.5.</B></A><B> </B><I>A
+<P><A HREF="javascript:popUp('15fig06.gif')"><B>FIGURE 15.6.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('15fig07.gif')"><B>FIGURE 15.7.</B></A><B> </B><I>The
+
+---------- CH14.HTM
+<P><A HREF="javascript:popUp('14fig01.gif')"><B>FIGURE 14.1.</B></A><B> </B><I>Including
+<P><A HREF="javascript:popUp('14fig03.gif')"><B>FIGURE 14.2.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('14fig04.gif')"><B>FIGURE 14.3.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('14fig05.gif')"><B>FIGURE 14.4.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('14fig06.gif')"><B>FIGURE 14.5.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('14fig07.gif')"><B>FIGURE 14.6.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('14fig08.gif')"><B>FIGURE 14.7.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('14fig09.gif')"><B>FIGURE 14.8.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('14fig10.gif')"><B>FIGURE 14.9.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('14fig11.gif')"><B>FIGURE 14.10.</B></A><B> </B><I>The
+
+---------- CH13.HTM
+<P><A HREF="javascript:popUp('13fig01.gif')"><B>FIGURE 13.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('13fig02tif.gif')"><B>FIGURE 13.2.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('13fig03tif.gif')"><B>FIGURE 13.3.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('13fig04tif.gif')"><B>FIGURE 13.4.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('13fig05tif.gif')"><B>FIGURE 13.5.</B></A><B> </B><I>The
+
+---------- CH12.HTM
+<P><A HREF="javascript:popUp('12fig01tif.gif')"><B>FIGURE 12.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('12fig02tif.gif')"><B>FIGURE 12.2.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('12fig03tif.gif')"><B>FIGURE 12.3.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('12fig04tif.gif')"><B>FIGURE 12.4.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('12fig05tif.gif')"><B>FIGURE 12.5.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('12fig06tif.gif')"><B>FIGURE 12.6.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('12fig07tif.gif')"><B>FIGURE 12.7.</B></A><B> </B><I>The
+
+---------- CH11.HTM
+<P><A HREF="javascript:popUp('11fig01.gif')"><B>FIGURE 11.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('11fig02.gif')"><B>FIGURE 11.2.</B></A><B> </B><I>Specifying
+<P><A HREF="javascript:popUp('11fig03.gif')"><B>FIGURE 11.3.</B></A><B> </B><I>Running
+<P><A HREF="javascript:popUp('11fig04.gif')"><B>FIGURE 11.4.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('11fig05.gif')"><B>FIGURE 11.5.</B></A><B> </B><I>Using
+
+---------- CH10.HTM
+
+---------- CH09.HTM
+<P><A HREF="javascript:popUp('09fig01.gif')"><B>FIGURE 9.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('09fig02.gif')"><B>FIGURE 9.2.</B></A><B> </B><I>An
+<P><A HREF="javascript:popUp('09fig03.gif')"><B>FIGURE 9.3.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('09fig04.gif')"><B>FIGURE 9.4.</B></A><B> </B><I>Visual
+<P><A HREF="javascript:popUp('09fig05.gif')"><B>FIGURE 9.5.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('09fig06.gif')"><B>FIGURE 9.6.</B></A><B> </B><I>ActiveX
+<P><A HREF="javascript:popUp('09fig07.gif')"><B>FIGURE 9.7.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('09fig08.gif')"><B>FIGURE 9.8.</B></A><B> </B><I>The
+
+---------- CH08.HTM
+<P><A HREF="javascript:popUp('08fig01.gif')"><B>FIGURE 8.1.</B></A><B> </B><I>Windows
+<P><A HREF="javascript:popUp('08fig02.gif')"><B>FIGURE 8.2.</B></A><B> </B><I>Standard
+<P><A HREF="javascript:popUp('08fig03.gif')"><B>FIGURE 8.3.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('08fig04.gif')"><B>FIGURE 8.4.</B></A><B> </B><I>Drawing
+<P><A HREF="javascript:popUp('08fig05.gif')"><B>FIGURE 8.5.</B></A><B> </B><I>Drawing
+<P><A HREF="javascript:popUp('08fig06.gif')"><B>FIGURE 8.6.</B></A><B> </B><I>Showing
+
+---------- CH07.HTM
+<P><A HREF="javascript:popUp('07fig01.gif')"><B>FIGURE 7.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('07fig02.gif')"><B>FIGURE 7.2.</B></A><B> </B><I>Listing
+<P><A HREF="javascript:popUp('07fig03.gif')"><B>FIGURE 7.3.</B></A><B> </B><I>Displaying
+<P><A HREF="javascript:popUp('07fig04.gif')"><B>FIGURE 7.4.</B></A><B> </B><I>Displaying
+<P><A HREF="javascript:popUp('07fig05.gif')"><B>FIGURE 7.5.</B></A><B> </B><I>Displaying
+
+---------- CH06.HTM
+<P><A HREF="javascript:popUp('06fig01.gif')"><B>FIGURE 6.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('06fig02a.gif')"><B>FIGURE 6.2.</B></A><B> </B><I>An
+<P><A HREF="javascript:popUp('06fig02.gif')"><B>FIGURE 6.3.</B></A><B> </B><I>Specifying
+<P><A HREF="javascript:popUp('06fig03.gif')"><B>FIGURE 6.4.</B></A><B> </B><I>Attaching
+<P><A HREF="javascript:popUp('06fig04.gif')"><B>FIGURE 6.5.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('06fig05.gif')"><B>FIGURE 6.6.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('06fig06.gif')"><B>FIGURE 6.7.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('06fig07.gif')"><B>FIGURE 6.8.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('06fig08.gif')"><B>FIGURE 6.9.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('06fig09.gif')"><B>FIGURE 6.10.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('06fig10.gif')"><B>FIGURE 6.11.</B></A><B> </B><I>The
+
+---------- CH05.HTM
+<P><A HREF="javascript:popUp('05fig01.gif')"><B>FIGURE 5.1.</B></A> <I>The application
+<P><A HREF="javascript:popUp('05fig02.gif')"><B>FIGURE 5.2.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('05fig03.gif')"><B>FIGURE 5.3.</B></A> <I>A message
+<P><A HREF="javascript:popUp('05fig04.gif')"><B>FIGURE 5.4.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('05fig05.gif')"><B>FIGURE 5.5.</B></A><B> </B><I>Displaying
+<P><A HREF="javascript:popUp('05fig06.gif')"><B>FIGURE 5.6.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('05fig07.gif')"><B>FIGURE 5.7.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('05fig08.gif')"><B>FIGURE 5.8.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('05fig09.gif')"><B>FIGURE 5.9.</B></A> <I>The custom
+<P><A HREF="javascript:popUp('05fig10.gif')"><B>FIGURE 5.10.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('05fig11.gif')"><B>FIGURE 5.11.</B></A><B> </B><I>The
+
+---------- CH04.HTM
+<P><A HREF="javascript:popUp('04fig01.gif')"><B>FIGURE 4.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('04fig02.gif')"><B>FIGURE 4.2.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('04fig03.gif')"><B>FIGURE 4.3.</B></A><B> </B><I>Adding
+<P><A HREF="javascript:popUp('04fig04.gif')"><B>FIGURE 4.4.</B></A><B> </B><I>A running
+<P><A HREF="javascript:popUp('04fig05.gif')"><B>FIGURE 4.5.</B></A><B> </B><I>Specifying
+<P><A HREF="javascript:popUp('04fig06.gif')"><B>FIGURE 4.6.</B></A><B> </B><I>A running
+<P><A HREF="javascript:popUp('04fig07.gif')"><B>FIGURE 4.7.</B></A><B> </B><I>The
+
+---------- CH03.HTM
+<P><A HREF="javascript:popUp('03fig01.gif')"><B>FIGURE 3.1.</B></A><B> </B><I>Drawing
+<P><A HREF="javascript:popUp('03fig03.gif')"><B>FIGURE 3.2.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('03fig04.gif')"><B>FIGURE 3.3.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('03fig05.gif')"><B>FIGURE 3.4.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('03fig06.gif')"><B>FIGURE 3.5.</B></A><B> </B><I>Changing
+<P><A HREF="javascript:popUp('03fig07.gif')"><B>FIGURE 3.6.</B></A><B> </B><I>Defining
+<P><A HREF="javascript:popUp('03fig08.gif')"><B>FIGURE 3.7.</B></A><B> </B><I>Drawing
+
+---------- CH02.HTM
+<P><A HREF="javascript:popUp('02fig01.gif')"><B>FIGURE 2.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('02fig02.gif')"><B>FIGURE 2.2.</B></A><B> </B><I>Today's
+<P><A HREF="javascript:popUp('02fig03.gif')"><B>FIGURE 2.3.</B></A><B> </B><I>Use
+<P><A HREF="javascript:popUp('02fig04.gif')"><B>FIGURE 2.4.</B></A><B> </B><I>Turning
+<P><A HREF="javascript:popUp('02fig05.gif')"><B>Figure 2.5.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('02fig06.gif')"><B>FIGURE 2.6.</B></A><B> </B><I>Duplicate
+<P><A HREF="javascript:popUp('02fig07.gif')"><B>FIGURE 2.7.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('02fig08.gif')"><B>FIGURE 2.8.</B></A><B> </B><I>Adding
+<P><A HREF="javascript:popUp('02fig09.gif')"><B>FIGURE 2.9.</B></A><B> </B><I>You
+<P><A HREF="javascript:popUp('02fig10.gif')"><B>FIGURE 2.10.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('02fig11.gif')"><B>FIGURE 2.11.</B></A><B> </B><I>The
+
+---------- CH01.HTM
+<P><A HREF="javascript:popUp('01fig01.gif')"><B>FIGURE 1.1.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('01fig02.gif')"><B>FIGURE 1.2.</B></A><B> </B><I>Toolbar
+<P><A HREF="javascript:popUp('01fig03.gif')"><B>FIGURE 1.3.</B></A><B> </B><I>Example
+<P><A HREF="javascript:popUp('01fig04.gif')"><B>FIGURE 1.4.</B></A><B> </B><I>Your
+<P><A HREF="javascript:popUp('01fig05.gif')"><B>FIGURE 1.5.</B></A><B> </B><I>If
+<P><A HREF="javascript:popUp('01fig06.gif')"><B>FIGURE 1.6.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('01fig07.gif')"><B>FIGURE 1.7.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('01fig08.gif')"><B>FIGURE 1.8.</B></A><B> </B><I>Your
+<P><A HREF="javascript:popUp('01fig09.gif')"><B>FIGURE 1.9.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('01fig10.gif')"><B>FIGURE 1.10.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('01fig11.gif')"><B>FIGURE 1.11.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('01fig12.gif')"><B>FIGURE 1.12.</B></A><B> </B><I>Positioning
+<P><A HREF="javascript:popUp('01fig13.gif')"><B>FIGURE 1.13.</B></A><B> </B><I>Right-clicking
+<P><A HREF="javascript:popUp('01fig14.gif')"><B>FIGURE 1.14.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('01fig15.gif')"><B>FIGURE 1.15.</B></A><B> </B><I>Positioning
+<P><A HREF="javascript:popUp('01fig16.gif')"><B>FIGURE 1.16.</B></A><B> </B><I>Running
+<P><A HREF="javascript:popUp('01fig17.gif')"><B>FIGURE 1.17.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('01fig18.gif')"><B>FIGURE 1.18.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('01fig19.gif')"><B>FIGURE 1.19.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('01fig20.gif')"><B>FIGURE 1.20.</B></A><B> </B><I>Source
+<P><A HREF="javascript:popUp('01fig21.gif')"><B>FIGURE 1.21.</B></A><B> </B><I>Now
+<P><A HREF="javascript:popUp('01fig22.gif')"><B>FIGURE 1.22.</B></A><B> </B><I>The
+<P><A HREF="javascript:popUp('01fig23.gif')"><B>FIGURE 1.23.</B></A> <I>Your own
+<P><A HREF="javascript:popUp('01fig24.gif')"><B>FIGURE 1.24.</B></A><B> </B><I>Your
+<P><A HREF="javascript:popUp('01fig25.gif')"><B>FIGURE 1.25.</B></A><B> </B><I>Turning
+<P><A HREF="javascript:popUp('01fig26.gif')"><B>FIGURE 1.26.</B></A><B> </B><I>The
+
+---------- FM.HTM
+
+---------- INDEX.HTM
+
+---------- COPY.HTM

@@ -1,0 +1,1345 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 20 -- Internet Applications and Network Communications</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch19/ch19.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch21/ch21.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 20 -<BR>
+Internet Applications and Network Communications</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">How Do Network Communications Work?</A>
+	<UL>
+		<LI><A HREF="#Heading2">Sockets, Ports, and Addresses</A>
+		<LI><A HREF="#Heading3">Creating a Socket</A>
+		<LI><A HREF="#Heading4">Making a Connection</A>
+		<LI><A HREF="#Heading5">Sending and Receiving Messages</A>
+		<LI><A HREF="#Heading6">Closing the Connection</A>
+		<LI><A HREF="#Heading7">Socket Events</A>
+		<LI><A HREF="#Heading8">Detecting Errors</A>
+	</UL>
+	<LI><A HREF="#Heading9">Building a Networked Application</A>
+	<UL>
+		<LI><A HREF="#Heading10">Creating the Application Shell</A>
+		<LI><A HREF="#Heading11">Inheriting from the CAsyncSocket Class</A>
+		<LI><A HREF="#Heading12">Connecting the Application</A>
+		<LI><A HREF="#Heading13">Sending and Receiving</A>
+		<LI><A HREF="#Heading14">Ending the Connection</A>
+	</UL>
+	<LI><A HREF="#Heading15">Summary</A>
+	<LI><A HREF="#Heading16">Q&amp;A</A>
+	<LI><A HREF="#Heading17">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading18">Quiz</A>
+		<LI><A HREF="#Heading19">Exercise</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+Thanks in part to the explosion in popularity of the Internet, more applications
+have the ability to communicate with other applications over networks, including
+the Internet. With Microsoft building networking capabilities into its operating
+systems, starting with Windows NT and Windows 95, these capabilities are becoming
+commonplace in all sorts of applications.</P>
+
+<P>Some applications perform simple networking tasks such as checking with a Web
+site to see whether there are any updates to the program and giving the user the
+option of updating her copy of the program. Some word processing applications will
+format documents as Web pages, giving the user the option of loading the pages onto
+the Web server. You've got computer games that allow the user to play against another
+person halfway around the world instead of just competing against the game itself.</P>
+<P>Applications can have any number of networking functions, and they all are built
+around the Winsock interface. If you know and understand how to program using the
+Winsock interface and the MFC Winsock classes, this entire realm of application programming
+is open to you, expanding your programming options considerably. Today, you will
+learn</P>
+<P>
+
+<UL>
+	<LI>How applications use the Winsock interface to perform network communications
+	between two or more computers.
+	<P>
+	<LI>The difference between a client and a server application and the role each plays
+	in establishing a communications link.
+	<P>
+	<LI>How the MFC Winsock classes simplify the process of writing Internet applications.
+	<P>
+	<LI>How you can create your own Winsock class, descended from the MFC Winsock classes,
+	to easily build an event-driven, networking application.
+</UL>
+
+<H2><A NAME="Heading1"></A>How Do Network Communications Work?</H2>
+<P>Most applications that communicate over a network, whether it's the Internet or
+a small office network, use the same principles and functionality to perform their
+communication. One application sits on a computer, waiting for another application
+to open a communication connection. This application is &quot;listening&quot; for
+this connection request, much like you listen for the phone to ring if you are expecting
+someone to call.</P>
+<P>Meanwhile, another application, most likely on another computer (but not necessarily),
+tries to connect to the first application. This attempt to open a connection is similar
+to calling someone on the telephone. You dial the number and hope that the other
+person is listening for the phone on the other end. As the person making the call,
+you have to know the phone number of the person you are calling. If you don't know
+the phone number, you can look it up using the person's name. Likewise, the application
+trying to connect to the first application has to know the network location, or address,
+of the first application.</P>
+<P>Once the connection is made between the two applications, messages can pass back
+and forth between the two applications, much like you can talk to the person on the
+other end of the phone. This connection is a two-way communications channel, with
+both sides sending information, as shown in Figure 20.l.</P>
+<P><A HREF="javascript:popUp('20fig01.gif')"><B>FIGURE 20.1.</B></A><B> </B><I>The
+basic socket connection process.</I></P>
+
+<P>Finally, once one or both sides have finished their sides of the conversation,
+the connection is closed, much like you hang up the phone after you have finished
+talking to the person you called. Once the connection is closed from either side,
+the other side can detect it and close its side, just like you can tell if the person
+on the other end of the phone has hung up on you or if you've been disconnected by
+some other means. This is a basic explanation of how network communications work
+between two or more applications.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> This is a basic description of how network communications work with
+	the TCP/IP network protocol, which is the primary network protocol over the Internet.
+	Many other network protocols use a subtle variation on this description. Other protocols,
+	such as the UDP protocol, are more like radio broadcasts, where there is no connection
+	between the two applications; one sends messages, and the other is responsible for
+	making sure that it receives all of the messages. These protocols are more involved
+	than we have the luxury to discuss today. If you want to learn more about network
+	protocols and how they work, many books cover this one topic and look at the various
+	Internet applications and how they communicate over the connections they establish.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading2"></A>Sockets, Ports, and Addresses</H3>
+<P>The basic object used by applications to perform most network communications is
+called a socket. Sockets were first developed on UNIX at the University of California
+at Berkley. Sockets were designed so that most network communications between applications
+could be performed in the same way that these same applications would read and write
+files. Sockets have progressed quite a bit since then, but the basics of how they
+work are still the same.</P>
+<P>During the days of Windows 3.<I>x</I>, before networking was built into the Windows
+operating system, you could buy the network protocols required for network communications
+from numerous different companies. Each of these companies had a slightly different
+way that an application performed network communications. As a result, any applications
+that performed network communications had a list of the different networking software
+that the application would work with. Many application developers were not happy
+with this situation. As a result, all the networking companies, including Microsoft,
+got together and developed the Winsock (Windows Sockets) API. This provided all application
+developers with a consistent API to perform all network communications, regardless
+of the networking software used.</P>
+<P>When you want to read or write a file, you must use a file object to point to
+the file. Although this was hidden from you in most of the Visual C++ applications
+so far, with the ActiveX control you created yesterday, you had to work through the
+steps of creating the file object for reading and writing. A socket is similar; it
+is an object used to read and write messages that travel between applications.</P>
+<P>Making a socket connection to another application does require a different set
+of information than opening a file. To open a file, you need to know the file's name
+and location. To open a socket connection, you need to know the computer on which
+the other application is running and the port on which it's listening. A port is
+like a phone extension, and the computer address is like the phone number. If you
+call someone at a large office building, you may dial the main office number, but
+then you need to specify the extension number. Likewise, ports are used to route
+network communications (see Figure 20.2). As with the phone number, there are means
+of looking up the port number, if you don't already know what it is, but this requires
+your computer to be configured with the information about which port the connecting
+application is listening on. If you specify the wrong computer address or port number,
+you may get a connection to a different application; with making the phone call,
+someone other than the person you called may answer the phone call. You also may
+not get an answer at all if there is no application listening at the other end.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Only one application may be listening on any specific port on a single
+	computer. Although numerous applications may listen for connection requests on a
+	single computer at the same time, each of these applications must listen on a different
+	port.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading3"></A>Creating a Socket</H3>
+<P>When you build applications with Visual C++, you can use the MFC Winsock classes
+to add network communications capabilities with relative ease. The base class, CAsyncSocket,
+provides complete, event-driven socket communications. You can create your own descendent
+socket class that captures and responds to each of these events.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>CAUTION:</STRONG> This discussion of socket communications assumes that you check
+	the AppWizard option for adding support for Windows Sockets. This adds supporting
+	functionality to the application that is not discussed here.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P><A HREF="javascript:popUp('20fig02.gif')"><B>FIGURE 20.2.</B></A><B> </B><I>Ports
+are used to route network communications to the correct application.</I></P>
+
+<P>To create a socket that you can use in your application, the first thing you need
+to do is declare a variable of CAsyncSocket (or your descendent class) as a class
+member for one of the main application classes:</P>
+<P>
+<PRE>class CMyDlg : public CDialog
+{
+.
+.
+.
+private:
+    CAsyncSocket m_sMySocket;
+};
+</PRE>
+<P>Before you can begin using the socket object, you must call its Create method.
+This actually creates the socket and prepares it for use. How you call the Create
+method depends on how you will be using the socket. If you will be using the socket
+to connect to another application, as the one placing the call (the client), then
+you do not need to pass any parameters to the Create method:</P>
+<P>
+<PRE>if (m_sMySocket.Create())
+{
+    // Continue on
+}
+else
+    // Perform error handling here
+</PRE>
+<P>However, if the socket is going to be listening for another application to connect
+to it, waiting for the call (the server), then you need to pass at least the port
+number on which the socket should be listening:</P>
+<P>
+<PRE>if (m_sMySocket.Create(4000))
+{
+    // Continue on
+}
+else
+    // Perform error handling here
+</PRE>
+<P>You can include other parameters in the Create method call, such as the type of
+socket to create, the events that the socket should respond to, and the address that
+the socket should listen on (in case the computer has more than one network card).
+All these options require a more thorough understanding of sockets than we'll be
+able to cover today.</P>
+<P>
+<H3><A NAME="Heading4"></A>Making a Connection</H3>
+<P>Once you create a socket, you are ready to open a connection with it. Three steps
+go along with opening a single connection. Two of these steps take place on the server,
+the application listing for the connection, and the third step takes place on the
+client, the one making the call.</P>
+<P>For the client, opening the connection is a simple matter of calling the Connect
+method. The client has to pass two parameters to the Connect method: the computer
+name, or network address, and the port of the application to connect to. The Connect
+method could be used in the following two ways:</P>
+<P>
+<PRE>if (m_sMySocket.Connect(&quot;thatcomputer.com&quot;, 4000))
+{
+    // Continue on
+}
+else
+    // Perform error handling here
+</PRE>
+<P>The second form is</P>
+<P>
+<PRE>if (m_sMySocket.Connect(&quot;178.1.25.82&quot;, 4000))
+{
+    // Continue on
+}
+else
+    // Perform error handling here
+</PRE>
+<P>Once the connection is made, an event is triggered to let your application know
+that it is connected or that there were problems and the connection couldn't be made.
+(I'll cover how these events work in the section &quot;Socket Events,&quot; later
+in this chapter.)</P>
+<P>For the server, or listening, side of the connection, the application first must
+tell the socket to listen for incoming connections by calling the Listen method.
+The Listen method takes only a single argument, which you do not need to supply.
+This parameter specifies the number of pending connections that can be queued, waiting
+for the connection to be completed. By default this value is 5, which is the maximum.
+The Listen method can be called as follows:</P>
+<P>
+<PRE>if (m_sMySocket.Listen())
+{
+    // Continue on
+}
+else
+    // Perform error handling here
+</PRE>
+<P>Whenever another application is trying to connect to the listening application,
+an event is triggered to let the application know that the connection request is
+there. The listening application must accept the connection request by calling the
+Accept method. This method requires the use of a second CAsyncSocket variable, which
+is connected to the other application. Once a socket is placed into listen mode,
+it stays in listen mode. Whenever connection requests are received, the listening
+socket creates another socket, which is connected to the other application. This
+second socket should not have the Create method called for it because the Accept
+method creates the socket. You call the Accept method as follows:</P>
+<P>
+<PRE>if (m_sMySocket.Accept(m_sMySecondSocket))
+{
+    // Continue on
+}
+else
+    // Perform error handling here
+</PRE>
+<P>At this point, the connecting application is connected to the second socket on
+the listening application.</P>
+<P>
+<H3><A NAME="Heading5"></A>Sending and Receiving Messages</H3>
+<P>Sending and receiving message through a socket connection gets slightly involved.
+Because you can use sockets to send any kind of data, and they don't care what the
+data is, the functions to send and receive data expect to be passed a pointer to
+a generic buffer. For sending data, this buffer should contain the data to be sent.
+For receiving data, this buffer will have the received data copied into it. As long
+as you are sending and receiving strings and text, you can use fairly simple conversions
+to and from CStrings with these buffers.</P>
+<P>To send a message through a socket connection, you use the Send method. This method
+requires two parameters and has a third, optional parameter that can be used to control
+how the message is sent. The first parameter is a pointer to the buffer that contains
+the data to be sent. If your message is in a CString variable, you can use the LPCTSTR
+operator to pass the CString variable as the buffer. The second parameter is the
+length of the buffer. The method returns the amount of data that was sent to the
+other application. If an error occurs, the Send function returns SOCKET_ERROR. You
+can use the Send method as follows:</P>
+<P>
+<PRE>CString strMyMessage;
+int iLen;
+int iAmtSent;
+.
+.
+.
+iLen = strMyMessage.GetLength();
+iAmtSent = m_sMySocket.Send(LPCTSTR(strMyMessage), iLen);
+if (iAmtSent == SOCKET_ERROR)
+{
+    // Do some error handling here
+}
+else
+{
+    // Everything's fine
+}
+</PRE>
+<P>When data is available to be received from the other application, an event is
+triggered on the receiving application. This lets your application know that it can
+receive and process the message. To get the message, the Receive method must be called.
+This method takes the same parameters as the Send method with a slight difference.
+The first parameter is a pointer to a buffer into which the message may be copied.
+The second parameter is the size of the buffer. This tells the socket how much data
+to copy (in case more is received than will fit into the buffer). Like the Send method,
+the Receive method will return the amount that was copied into the buffer. If an
+error occurs, the Receive method also returns SOCKET_ERROR. If the message your application
+is receiving is a text message, it can be copied directly into a CString variable.
+This allows you to use the Receive method as follows:</P>
+<P>
+<PRE>char *pBuf = new char[1025];
+int iBufSize = 1024;
+int iRcvd;
+CString strRecvd;
+iRcvd = m_sMySocket.Receive(pBuf, iBufSize);
+if (iRcvd == SOCKET_ERROR)
+{
+    // Do some error handling here
+}
+else
+{
+    pBuf[iRcvd] = NULL;
+    strRecvd = pBuf;
+    // Continue processing the message
+}
+</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> When receiving text messages, it's always a good idea to place a NULL
+	in the buffer position just after the last character received, as in the preceding
+	example. There may be garbage characters in the buffer that your application might
+	interpret as part of the message if you don't add the NULL to truncate the string.
+<HR>
+
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> The Close function is one of the few CAsyncSocket methods that does
+	not return any status code. For all the previous member functions that we have examined,
+	you can capture the return value to determine if an error has occurred.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading6"></A>Closing the Connection</H3>
+<P>Once your application has finished all of its communications with the other application,
+it can close the connection by calling the Close method. The Close method doesn't
+take any parameters, and you use it as follows:</P>
+<P>
+<PRE>m_sMySocket.Close();
+</PRE>
+<H3><A NAME="Heading7"></A>Socket Events</H3>
+<P>The primary reason that you create your own descendent class of CAsyncSocket is
+that you want to capture the events that are triggered when messages are received,
+connections are completed, and so on. The CAsyncSocket class has a series of functions
+that are called for each of these various events. These functions all use the same
+definition--the function name is the only difference--and they are intended to be
+overridden in descendent classes. All of these functions are declared as protected
+members of the CAsyncSocket class and probably should be declared as protected in
+your descendent classes. The functions all have a single integer parameter, which
+is an error code that should be checked to make sure that no error has occurred.
+Table 20.1 lists these event functions and the events they signal.</P>
+<P>
+<H4>TABLE 20.1. CAsyncSocket OVERRIDABLE EVENT-NOTIFICATION FUNCTIONS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Function</I></TD>
+		<TD ALIGN="LEFT"><I>Event Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">OnAccept		</TD>
+		<TD ALIGN="LEFT">This function is called on a listening socket to signal that a connection request
+			from another application is waiting to be accepted.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">OnClose		</TD>
+		<TD ALIGN="LEFT">This function is called on a socket to signal that the application on the other end
+			of the connection has closed its socket or that the connection has been lost. This
+			should be followed by closing the socket that received this notification.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">OnConnect		</TD>
+		<TD ALIGN="LEFT">This function is called on a socket to signal that the connection with another application
+			has been completed and that the application can now send and receive messages through
+			the socket.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">OnReceive		</TD>
+		<TD ALIGN="LEFT">This function is called to signal that data has been received through the socket
+			connection and that the data is ready to be retrieved by calling the Receive function.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">OnSend		</TD>
+		<TD ALIGN="LEFT">This function is called to signal that the socket is ready and available for sending
+			data. This function is called right after the connection has been completed. Usually,
+			the other time that this function is called is when your application has passed the
+			Send function more data than can be sent in a single packet. In this case, this is
+			a signal that all of the data has been sent, and the application can send the next
+			buffer-full of data.		</TD>
+	</TR>
+</TABLE>
+
+<H3><A NAME="Heading8"></A>Detecting Errors</H3>
+<P>Whenever any of the CAsyncSocket member functions return an error, either FALSE
+for most functions or SOCKET_ERROR on the Send and Receive functions, you can call
+the GetLastError method to get the error code. This function returns only error codes,
+and you have to look up the translation yourself. All the Winsock error codes are
+defined with constants, so you can use the constants in your code to determine the
+error message to display for the user, if any. You can use the GetLastError function
+as follows:</P>
+<P>
+<PRE>int iErrCode;
+iErrCode = m_sMySocket.GetLastError();
+switch (iErrCode)
+{
+case WASNOTINITIALISED:
+.
+.
+.
+}
+</PRE>
+<H2><A NAME="Heading9"></A>Building a Networked Application</H2>
+<P>For the sample application that you will build today, you'll create a simple dialog
+application that can function as either the client or server in a Winsock connection.
+This will allow you to run two copies of the sample application, one for each end
+of the connection, on the same computer or to copy the application to another computer
+so that you can run the two copies on separate computers and see how you can pass
+messages across a network. Once the application has established a connection with
+another application, you will be able to enter text messages and send them to the
+other application. When the message has been sent, it will be added to a list of
+messages sent. Each message that is received will be copied into another list of
+all messages received. This will allow you to see the complete list of what is sent
+and received. It will also allow you to compare what one copy of the application
+has sent and what the other has received. (The two lists should be the same.)</P>
+<P>
+<H3><A NAME="Heading10"></A>Creating the Application Shell</H3>
+<P>For today's sample application, just to keep things simple, you'll create a dialog-style
+application. Everything that you are doing in today's application can be done in
+an SDI or MDI application just as easily as with a dialog-style application. By using
+a dialog-style application today, we are getting everything that might distract from
+the basic socket functionality (such as questions about whether the socket variable
+belongs in the document or view class, how much of the application functionality
+belongs in which of these two classes, and so on) away from the sample application.</P>
+<P>To start today's sample application, create a new MFC AppWizard project, giving
+the project a suitable name, such as Sock. On the first step of the AppWizard, specify
+that the application will be a dialog-based application. On the second step of the
+AppWizard, specify that the application should include support for Windows Sockets,
+as in Figure 20.3. You can accept the default settings for the rest of the options
+in the AppWizard.</P>
+<P>
+<H3><B>Window Layout and Startup Functionality</B></H3>
+<P>Once you create your application shell, you can lay out the main dialog for your
+application. On this dialog, you'll need a set of radio buttons to specify whether
+the application is running as the client or server. You'll also need a couple of
+edit boxes for the computer name and port that the server will be listening on. Next,
+you'll need a command button to start the application listening on the socket or
+opening the connection to the server, and a button to close the connection. You'll
+also need an edit box for entering the message to be sent to the other application
+and a button to send the message. Finally, you'll need a couple of list boxes into
+which you can add each of the messages sent and received. Place all these controls
+on the dialog, as shown in Figure 20.4, setting all of the control properties as
+specified in Table 20.2.</P>
+<P><A HREF="javascript:popUp('20fig03.gif')"><B>FIGURE 20.3.</B></A><B> </B><I>Including
+sockets support.</I></P>
+
+<P><A HREF="javascript:popUp('20fig04.gif')"><B>FIGURE 20.4.</B></A><B> </B><I>The
+main dialog layout.</I></P>
+
+<P><I></I>
+<H4>TABLE 20.2. CONTROL PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Group Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATICTYPE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Socket Type		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RCLIENT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Client		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Group		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Radio Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_RSERVER		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Server		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATICNAME		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Server &amp;Name:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_ESERVNAME		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATICPORT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Server &amp;Port:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_ESERVPORT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Command Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_BCONNECT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">C&amp;onnect		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Command Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_BCLOSE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">C&amp;lose		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Disabled		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATICMSG		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Message:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Disabled		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EMSG		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Disabled		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Command Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_BSEND		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">S&amp;end		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Disabled		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Sent:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">List Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_LSENT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Tab Stop		</TD>
+		<TD ALIGN="LEFT">Unchecked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Sort		</TD>
+		<TD ALIGN="LEFT">Unchecked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Selection		</TD>
+		<TD ALIGN="LEFT">None		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Received:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">List Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_LRECVD		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Tab Stop		</TD>
+		<TD ALIGN="LEFT">Unchecked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Sort		</TD>
+		<TD ALIGN="LEFT">Unchecked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Selection		</TD>
+		<TD ALIGN="LEFT">None		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Once you have the dialog designed, open the Class Wizard to attach variables to
+the controls on the dialog, as specified in Table 20.3.</P>
+<P>
+<H4>TABLE 20.3. CONTROL VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+		<TD ALIGN="LEFT"><I>Category</I></TD>
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_BCONNECT		</TD>
+		<TD ALIGN="LEFT">m_ctlConnect		</TD>
+		<TD ALIGN="LEFT">Control		</TD>
+		<TD ALIGN="LEFT">CButton		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EMSG		</TD>
+		<TD ALIGN="LEFT">m_strMessage		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_ESERVNAME		</TD>
+		<TD ALIGN="LEFT">m_strName		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_ESERVPORT		</TD>
+		<TD ALIGN="LEFT">m_iPort		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_LRECVD		</TD>
+		<TD ALIGN="LEFT">m_ctlRecvd		</TD>
+		<TD ALIGN="LEFT">Control		</TD>
+		<TD ALIGN="LEFT">CListBox		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_LSENT		</TD>
+		<TD ALIGN="LEFT">m_ctlSent		</TD>
+		<TD ALIGN="LEFT">Control		</TD>
+		<TD ALIGN="LEFT">CListBox		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_RCLIENT		</TD>
+		<TD ALIGN="LEFT">m_iType		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>So that you can reuse the Connect button to place the server application into
+listen mode, you'll add a function to the clicked event message for both radio buttons,
+changing the text on the command button depending on which of the two is currently
+selected. To add this functionality to your application, add a function to the BN_CLICKED
+event message for the IDC_RCLIENT control ID, naming the function OnRType. Add the
+same function to the BN_CLICKED event message for the IDC_RSERVER control ID. Edit
+this function, adding the code in Listing 20.1.</P>
+<P>
+<H4>LISTING 20.1. THE CSockDlg OnRType FUNCTION.</H4>
+<PRE> 1: void CSockDlg::OnRType()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4:     // Sync the controls with the variables
+ 5:     UpdateData(TRUE);
+ 6:     // Which mode are we in?
+ 7:     if (m_iType == 0)    // Set the appropriate text on the button
+ 8:         m_ctlConnect.SetWindowText(&quot;C&amp;onnect&quot;);
+ 9:     else
+10:         m_ctlConnect.SetWindowText(&quot;&amp;Listen&quot;);
+11: }
+</PRE>
+<P>Now, if you compile and run your application, you should be able to select one
+and then the other of these two radio buttons, and the text on the command button
+should change to reflect the part the application will play, as in Figure 20.5.</P>
+<P><A HREF="javascript:popUp('20fig05.gif')"><B>FIGURE 20.5.</B></A><B> </B><I>Changing
+the button text.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading11"></A>Inheriting from the CAsyncSocket Class</H3>
+<P>So that you will be able to capture and respond to the socket events, you'll create
+your own descendent class from CAsyncSocket. This class will need its own versions
+of the event functions, as well as a means of passing this event to the dialog that
+the object will be a member of. So that you can pass each of these events to the
+dialog-class level, you'll add a pointer to the parent dialog class as a member variable
+of your socket class. You'll use this pointer to call event functions for each of
+the socket events that are member functions of the dialog, after checking to make
+sure that no errors have occurred (of course).</P>
+<P>To create this class in your application, select Insert | New Class from the menu.
+In the New Class dialog, leave the class type with the default value of MFC Class.
+Enter a name for your class, such as CMySocket, and select CAsyncSocket from the
+list of available base classes. This is all that you can specify on the New Class
+dialog, so click the OK button to add this new class to your application.</P>
+<P>Once you have created the socket class, add a member variable to the class to
+serve as a pointer to the parent dialog window. Specify the variable type as CDialog*,
+the variable name as m_pWnd, and the access as private. You also need to add a method
+to the class to set the pointer, so add a member function to your new socket class.
+Specify the function type as void, the declaration as SetParent(CDialog* pWnd), and
+the access as public. Edit this new function, setting the pointer passed as a parameter
+to the member variable pointer, as in Listing 20.2.</P>
+<P>
+<H4>LISTING 20.2. THE CMySocket SetParent FUNCTION.</H4>
+<PRE> 1: void CMySocket::SetParent(CDialog *pWnd)
+ 2: {
+ 3:     // Set the member pointer
+ 4:     m_pWnd = pWnd;
+ 5: }
+</PRE>
+<P>The only other thing that you need to do to your socket class is add the event
+functions, which you'll use to call similarly named functions on the dialog class.
+To add a function for the OnAccept event function, add a member function to your
+socket class. Specify the function type as void, the function declaration as OnAccept(int
+nErrorCode), and the access as protected and check the virtual check box. Edit this
+function, adding the code in Listing 20.3.</P>
+<P>
+<H4>LISTING 20.3. The CMySocket OnAccept FUNCTION.</H4>
+<PRE> 1: void CMySocket::OnAccept(int nErrorCode)
+ 2: {
+ 3:     // Were there any errors?
+ 4:     if (nErrorCode == 0)
+ 5:         // No, call the dialog's OnAccept function
+ 6:         ((CSockDlg*)m_pWnd)-&gt;OnAccept();
+ 7: }
+</PRE>
+<P>Add similar functions to your socket class for the OnConnect, OnClose, OnReceive,
+and OnSend functions, calling same-named functions in the dialog class, which you'll
+add later. After you've added all these functions, you'll need to include the header
+file for your application dialog in your socket class, as in line 7 of Listing 20.4.</P>
+<P>
+<H4>LISTING 20.4. THE CMySocket INCLUDES.</H4>
+<PRE>1: // MySocket.cpp: implementation file
+2: //
+3:
+4: #include &quot;stdafx.h&quot;
+5: #include &quot;Sock.h&quot;
+6: #include &quot;MySocket.h&quot;
+7: #include &quot;SockDlg.h&quot;
+</PRE>
+<P>Once you've added all the necessary event functions to your socket class, you'll
+add a variable of your socket class to the dialog class. For the server functionality,
+you'll need two variables in the dialog class, one to listen for connection requests
+and the other to be connected to the other application. Because you will need two
+socket objects, add two member variables to the dialog class (CSockDlg). Specify
+the type of both variables as your socket class (CMySocket) and the access for both
+as private. Name one variable m_sListenSocket, to be used for listening for connection
+requests, and the other m_sConnectSocket, to be used for sending messages back and
+forth.</P>
+<P>Once you've added the socket variables, you'll add the initialization code for
+all the variables. As a default, set the application type to client, the server name
+as loopback, and the port to 4000. Along with these variables, you'll set the parent
+dialog pointers in your two socket objects so that they point to the dialog class.
+You can do this by adding the code in Listing 20.5 to the OnInitDialog function in
+the dialog class.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> The computer name loopback is a special name used in the TCP/IP network
+	protocol to indicate the computer you are working on. It's an internal computer name
+	that is resolved to the network address 127.0.0.1. This is a computer name and address
+	that is commonly used by applications that need to connect to other applications
+	running on the same computer.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>LISTING 20.5. THE CSockDlg OnInitDialog FUNCTION.</H4>
+<PRE> 1: BOOL CSockDlg::OnInitDialog()
+ 2: {
+ 3:     CDialog::OnInitDialog();
+ 4:
+ 5:     // Add &quot;About...&quot; menu item to system menu.
+ 6:
+.
+.
+.
+26:     SetIcon(m_hIcon, FALSE);        // Set small icon
+27:
+28:     // TODO: Add extra initialization here
+29:     // Initialize the control variables
+30:     m_iType = 0;
+31:     m_strName = &quot;loopback&quot;;
+32:     m_iPort = 4000;
+33:     // Update the controls
+34:     UpdateData(FALSE);
+35:     // Set the socket dialog pointers
+36:     m_sConnectSocket.SetParent(this);
+37:     m_sListenSocket.SetParent(this);
+38:
+39:     return TRUE;  // return TRUE  unless you set the focus to a 	         &Acirc;control
+40: }
+</PRE>
+<H3><A NAME="Heading12"></A>Connecting the Application</H3>
+<P>When the user clicks the Connect button, you'll disable all the top controls on
+the dialog. At this point, you don't want the user to think that she is able to change
+the settings of the computer that she's connecting to or change how the application
+is listening. You'll call the Create function on the appropriate socket variable,
+depending on whether the application is running as the client or server. Finally,
+you'll call either the Connect or Listen function to initiate the application's side
+of the connection. To add this functionality to your application, open the Class
+Wizard and add a function to the BN_CLICKED event message for the Connect button
+(ID IDC_BCONNECT). Edit this function, adding the code in Listing 20.6.</P>
+<P>
+<H4>LISTING 20.6. The CSockDlg OnBconnect FUNCTION.</H4>
+<PRE> 1: void CSockDlg::OnBconnect()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4:     // Sync the variables with the controls
+ 5:     UpdateData(TRUE);
+ 6:     // Disable the connection and type controls
+ 7:     GetDlgItem(IDC_BCONNECT)-&gt;EnableWindow(FALSE);
+ 8:     GetDlgItem(IDC_ESERVNAME)-&gt;EnableWindow(FALSE);
+ 9:     GetDlgItem(IDC_ESERVPORT)-&gt;EnableWindow(FALSE);
+10:     GetDlgItem(IDC_STATICNAME)-&gt;EnableWindow(FALSE);
+11:     GetDlgItem(IDC_STATICPORT)-&gt;EnableWindow(FALSE);
+12:     GetDlgItem(IDC_RCLIENT)-&gt;EnableWindow(FALSE);
+13:     GetDlgItem(IDC_RSERVER)-&gt;EnableWindow(FALSE);
+14:     GetDlgItem(IDC_STATICTYPE)-&gt;EnableWindow(FALSE);
+15:     // Are we running as client or server?
+16:     if (m_iType == 0)
+17:     {
+18:         // Client, create a default socket
+19:         m_sConnectSocket.Create();
+20:         // Open the connection to the server
+21:         m_sConnectSocket.Connect(m_strName, m_iPort);
+22:     }
+23:     else
+24:     {
+25:         // Server, create a socket bound to the port specified
+26:         m_sListenSocket.Create(m_iPort);
+27:         // Listen for connection requests
+28:         m_sListenSocket.Listen();
+29:     }
+30: }
+</PRE>
+<P>Next, to complete the connection, you'll add the socket event function to the
+dialog class for the OnAccept and OnConnect event functions. These are the functions
+that your socket class is calling. They don't require any parameters, and they don't
+need to return any result code. For the OnAccept function, which is called for the
+listening socket when another application is trying to connect to it, you'll call
+the socket object's Accept function, passing in the connection socket variable. Once
+you've accepted the connection, you can enable the prompt and edit box for entering
+and sending messages to the other application.</P>
+<P>To add this function to your application, add a member function to the dialog
+class (CSockDlg). Specify the function type as void, the declaration as OnAccept,
+and the access as public. Edit the function, adding the code in Listing 20.7.</P>
+<P>
+<H4>LISTING 20.7. THE CSockDlg OnAccept FUNCTION.</H4>
+<PRE> 1: void CSockDlg::OnAccept()
+ 2: {
+ 3:     // Accept the connection request
+ 4:     m_sListenSocket.Accept(m_sConnectSocket);
+ 5:     // Enable the text and message controls
+ 6:     GetDlgItem(IDC_EMSG)-&gt;EnableWindow(TRUE);
+ 7:     GetDlgItem(IDC_BSEND)-&gt;EnableWindow(TRUE);
+ 8:     GetDlgItem(IDC_STATICMSG)-&gt;EnableWindow(TRUE);
+ 9: }
+</PRE>
+<P>For the client side, there's nothing to do once the connection has been completed
+except enable the controls for entering and sending messages. You'll also enable
+the Close button so that the connection can be closed from the client side (but not
+the server side). To add this functionality to your application, add another member
+function to the dialog class (CSockDlg). Specify the function type as void, the function
+declaration as OnConnect, and the access as public. Edit the function, adding the
+code in Listing 20.8.</P>
+<P>
+<H4>LISTING 20.8. THE CSockDlg OnConnect FUNCTION.</H4>
+<PRE> 1: void CSockDlg::OnConnect()
+ 2: {
+ 3:     // Enable the text and message controls
+ 4:     GetDlgItem(IDC_EMSG)-&gt;EnableWindow(TRUE);
+ 5:     GetDlgItem(IDC_BSEND)-&gt;EnableWindow(TRUE);
+ 6:     GetDlgItem(IDC_STATICMSG)-&gt;EnableWindow(TRUE);
+ 7:     GetDlgItem(IDC_BCLOSE)-&gt;EnableWindow(TRUE);
+ 8: }
+</PRE>
+<P>If you could compile and run your application now, you could start two copies,
+put one into listen mode, and then connect to it with the other. Unfortunately, you
+probably can't even compile your application right now because your socket class
+is looking for several functions in your dialog class that you haven't added yet.
+Add three member functions to the dialog class (CSockDlg). Specify all of them as
+void functions with public access. Specify the first function's declaration as OnSend,
+the second as OnReceive, and the third as OnClose. You should now be able to compile
+your application.</P>
+<P>Once you've compiled your application, start two copies of the application, side-by-side.
+Specify that one of these two should be the server, and click the Listen button to
+put it into listen mode. Leave the other as the client and click the Connect button.
+You should see the connection controls disable and the message sending controls enable
+as the connection is made, as in Figure 20.6.</P>
+<P><A HREF="javascript:popUp('20fig06.gif')"><B>FIGURE 20.6.</B></A><B> </B><I>Connecting
+the two applications.</I></P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> Be sure that you have the server application listening before you
+	try to connect it to the client application. If you try to connect to it with the
+	client application before the server is listening for the connection, the connection
+	will be rejected. Your application will not detect that the connection was rejected
+	because you haven't added any error handling to detect this event.<BR>
+	<STRONG>TIP:</STRONG> To run these applications and get them to connect, you'll need TCP/IP
+	running on your computer. If you have a network card in your computer, you may already
+	have TCP/IP running. If you do not have a network card, and you use a modem to connect
+	to the Internet, then you will probably need to be connected to the Internet when
+	you run and test these applications. When you connect to the Internet through a modem,
+	your computer usually starts running TCP/IP once the connection to the Internet is
+	made. If you do not have a network card in your computer, and you do not have any
+	means of connecting to the Internet, or any other outside network that would allow
+	you to run networked applications, you may not be able to run and test today's applications
+	on your computer.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading13"></A>Sending and Receiving</H3>
+<P>Now that you are able to connect the two running applications, you'll need to
+add functionality to send and receive messages. Once the connection is established
+between the two applications, the user can enter text messages in the edit box in
+the middle of the dialog window and then click the Send button to send the message
+to the other application. Once the message is sent, it will be added to the list
+box of sent messages. To provide this functionality, when the Send button is clicked,
+your application needs to check whether there is a message to be sent, get the length
+of the message, send the message, and then add the message to the list box. To add
+this functionality to your application, use the Class Wizard to add a function to
+the clicked event of the Send (IDC_BSEND) button. Edit this function, adding the
+code in Listing 20.9.</P>
+<P>
+<H4>LISTING 20.9. The CSockDlg OnBsend FUNCTION.</H4>
+<PRE> 1: void CSockDlg::OnBsend()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4:     int iLen;
+ 5:     int iSent;
+ 6:
+ 7:     // Sync the controls with the variables
+ 8:     UpdateData(TRUE);
+ 9:     // Is there a message to be sent?
+10:     if (m_strMessage != &quot;&quot;)
+11:     {
+12:         // Get the length of the message
+13:         iLen = m_strMessage.GetLength();
+14:         // Send the message
+15:         iSent = m_sConnectSocket.Send(LPCTSTR(m_strMessage), iLen);
+16:         // Were we able to send it?
+17:         if (iSent == SOCKET_ERROR)
+18:         {
+19:         }
+20:         else
+21:         {
+22:             // Add the message to the list box.
+23:             m_ctlSent.AddString(m_strMessage);
+24:             // Sync the variables with the controls
+25:             UpdateData(FALSE);
+26:         }
+27:     }
+28: }
+</PRE>
+<P>When the OnReceive event function is triggered, indicating that a message has
+arrived, you'll retrieve the message from the socket using the Receive function.
+Once you've retrieved the message, you'll convert it into a CString and add it to
+the message-received list box. You can add this functionality by editing the OnReceive
+function of the dialog class, adding the code in Listing 20.10.</P>
+<P>
+<H4>LISTING 20.10. THE CSockDlg OnReceive FUNCTION.</H4>
+<PRE> 1: void CSockDlg::OnReceive()
+ 2: {
+ 3:     char *pBuf = new char[1025];
+ 4:     int iBufSize = 1024;
+ 5:     int iRcvd;
+ 6:     CString strRecvd;
+ 7:
+ 8:     // Receive the message
+ 9:     iRcvd = m_sConnectSocket.Receive(pBuf, iBufSize);
+10:     // Did we receive anything?
+11:     if (iRcvd == SOCKET_ERROR)
+12:     {
+13:     }
+14:     else
+15:     {
+16:         // Truncate the end of the message
+17:         pBuf[iRcvd] = NULL;
+18:         // Copy the message to a CString
+19:         strRecvd = pBuf;
+20:         // Add the message to the received list box
+21:         m_ctlRecvd.AddString(strRecvd);
+22:         // Sync the variables with the controls
+23:         UpdateData(FALSE);
+24:     }
+25: }
+</PRE>
+<P>At this point, you should be able to compile and run two copies of your application,
+connecting them as you did earlier. Once you've got the connection established, you
+can enter a message in one application and send it to the other application, as shown
+in Figure 20.7.</P>
+<P><A HREF="javascript:popUp('20fig07.gif')"><B>FIGURE 20.7.</B></A><B> </B><I>Sending
+messages between the applications.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading14"></A>Ending the Connection</H3>
+<P>To close the connection between these two applications, the client application
+user can click the Close button to end the connection. The server application will
+then receive the OnClose socket event. The same thing needs to happen in both cases.
+The connected socket needs to be closed, and the message sending controls need to
+be disabled. On the client, the connection controls can be enabled because the client
+could change some of this information and open a connection to another server application.
+Meanwhile, the server application continues to listen on the port that it was configured
+to listen to. To add all this functionality to your application, edit the OnClose
+function, adding the code in Listing 20.11.</P>
+<P>
+<H4>LISTING 20.11. THE CSockDlg OnClose FUNCTION.</H4>
+<PRE> 1: void CSockDlg::OnClose()
+ 2: {
+ 3:     // Close the connected socket
+ 4:     m_sConnectSocket.Close();
+ 5:     // Disable the message sending controls
+ 6:     GetDlgItem(IDC_EMSG)-&gt;EnableWindow(FALSE);
+ 7:     GetDlgItem(IDC_BSEND)-&gt;EnableWindow(FALSE);
+ 8:     GetDlgItem(IDC_STATICMSG)-&gt;EnableWindow(FALSE);
+ 9:     GetDlgItem(IDC_BCLOSE)-&gt;EnableWindow(FALSE);
+10:     // Are we running in Client mode?
+11:     if (m_iType == 0)
+12:     {
+13:         // Yes, so enable the connection configuration controls
+14:         GetDlgItem(IDC_BCONNECT)-&gt;EnableWindow(TRUE);
+15:         GetDlgItem(IDC_ESERVNAME)-&gt;EnableWindow(TRUE);
+16:         GetDlgItem(IDC_ESERVPORT)-&gt;EnableWindow(TRUE);
+17:         GetDlgItem(IDC_STATICNAME)-&gt;EnableWindow(TRUE);
+18:         GetDlgItem(IDC_STATICPORT)-&gt;EnableWindow(TRUE);
+19:         GetDlgItem(IDC_RCLIENT)-&gt;EnableWindow(TRUE);
+20:         GetDlgItem(IDC_RSERVER)-&gt;EnableWindow(TRUE);
+21:         GetDlgItem(IDC_STATICTYPE)-&gt;EnableWindow(TRUE);
+22:     }
+23: }
+</PRE>
+<P>Finally, for the Close button, call the OnClose function. To add this functionality
+to your application, use the Class Wizard to add a function to the clicked event
+for the Close button (IDC_BCLOSE). Edit the function to call the OnClose function,
+as in Listing 20.12.</P>
+<P>
+<H4>LISTING 20.12. THE CSockDlg OnBclose FUNCTION.</H4>
+<PRE> 1: void CSockDlg::OnBclose()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4:     // Call the OnClose function
+ 5:     OnClose();
+ 6: }
+</PRE>
+<P>If you compile and run your application, you can connect the client application
+to the server, send some messages back and forth, and then disconnect the client
+by clicking the Close button. You'll see the message-sending controls disable themselves
+in both applications, as in Figure 20.8. You can reconnect the client to the server
+by clicking the Connect button again and then pass some more messages between the
+two, as if they had never been connected in the first place. If you start a third
+copy of the application, change its port number, designate it as a server, and put
+it into listening mode, you can take your client back and forth between the two servers,
+connecting to one, closing the connection, changing the port number, and then connecting
+to the other.</P>
+
+<P><A HREF="javascript:popUp('20fig08.gif')"><B>FIGURE 20.8.</B></A> <I>Closing the
+connection between the applications.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading15"></A>Summary</H2>
+<P>Today, you learned how you can enable your applications to communicate with others
+across a network or across the Internet by using the MFC Winsock classes. You took
+a good look at the CAsyncSocket class and learned how you could create your own descendent
+class from it that would provide your applications with event-driven network communications.
+You learned how to create a server application that can listen for and accept connections
+from other applications. You also learned how to build a client application that
+can connect to a server. You learned how to send and receive messages over a socket
+connection between two applications. Finally, you learned how to close the connection
+and how to detect that the connection has been closed.</P>
+<P>
+<H2><A NAME="Heading16"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q How do Internet applications work?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> Most Internet applications use the same functionality that you created
+	today. The primary difference is that the applications have a script of messages
+	that are passed back and forth. The messages consist of a command and the data that
+	needs to accompany that command. The server reads the command and processes the data
+	appropriately, sending back a status code to let the client know the success or failure
+	of the command. If you want to learn more about how Internet applications do this,
+	several books cover this subject area in detail.
+	<P>
+	<DT></DT>
+	<DD><B>Q How does a server application handle a large number of simultaneous connections
+	from clients?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> With a full-strength server, the connection sockets are not declared
+	as class variables. The server instead uses some sort of dynamic allocation of sockets,
+	in an array or link-list, to create sockets for the clients as the connection requests
+	come in. Another approach often taken by servers is to spin off a separate thread
+	for each connection request. This allows the application to have a single socket
+	connection per thread, and keeping track of the sockets is much easier. In any case,
+	server applications don't normally have a single connection socket variable.
+	<P>
+</DL>
+
+<H2><A NAME="Heading17"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading18"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What are the two things that a client application must know to be able
+	to connect to a server application?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>What CAsyncSocket function is used to enable a server application to
+	detect connection efforts by client applications?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What CAsyncSocket member function is called to signal that data has
+	arrived through a socket connection?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>What function is called to signal that a connection has been established?
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>What function do you use to send a message through a socket connection
+	to the application on the other end?
+	<P>
+</DL>
+
+<H3><A NAME="Heading19"></A>Exercise</H3>
+<P>The server application that you wrote can handle only a single connection at a
+time. If a second application tries to open a connection to it while it's got an
+existing connection to an application, the server application will crash. The server
+tries to accept the second connection into the socket that is already connected to
+the first client application. Add a third socket object to the application that will
+be used to reject additional client connections until the first client closes the
+connection.</P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch19/ch19.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch21/ch21.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

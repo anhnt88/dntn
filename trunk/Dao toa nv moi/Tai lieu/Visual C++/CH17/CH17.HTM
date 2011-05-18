@@ -1,0 +1,1140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 17 -- Sharing Your Functionality with Other Applications--Creating DLLs</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch16/ch16.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch18/ch18.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 17 -<BR>
+Sharing Your Functionality with Other Applications--Creating DLLs</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Why Create DLLs?</A>
+	<UL>
+		<LI><A HREF="#Heading2">Creating and Using DLLs</A>
+		<LI><A HREF="#Heading3">Designing DLLs</A>
+	</UL>
+	<LI><A HREF="#Heading4">Creating and Using an MFC Extension DLL</A>
+	<UL>
+		<LI><A HREF="#Heading5">Creating the MFC Extension DLL</A>
+		<LI><A HREF="#Heading6">Adapting the Test Application</A>
+		<LI><A HREF="#Heading7">Changing the DLL</A>
+	</UL>
+	<LI><A HREF="#Heading8">Creating and Using a Regular DLL</A>
+	<UL>
+		<LI><A HREF="#Heading9">Creating the Regular DLL</A>
+		<LI><A HREF="#Heading10">Adapting the Test Application</A>
+	</UL>
+	<LI><A HREF="#Heading11">Summary</A>
+	<LI><A HREF="#Heading12">Q&amp;A</A>
+	<LI><A HREF="#Heading13">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading14">Quiz</A>
+		<LI><A HREF="#Heading15">Exercises</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+Yesterday you learned how you could create a set of functionality that might be useful
+for multiple applications and how you could package it in a library file that could
+be linked into those applications. Today you will learn how to do this same thing,
+only with a much more dynamic package.</P>
+
+<P>Often, a family of applications will have some functionality in common. When you
+place this shared functionality into DLLs instead of library modules, all the applications
+can use the same functionality with only a single copy of the functionality distributed
+in the form of DLLs, instead of duplicating the same functionality in each of the
+applications. This method saves disk space on any systems where the applications
+are installed.</P>
+<P>Today, you will learn</P>
+<P>
+
+<UL>
+	<LI>About the different types of DLLs that you can create with Visual C++ and how
+	to determine which type best suits your needs.
+	<P>
+	<LI>How to build two of these types of DLLs and the different approaches for the
+	various DLL types.
+	<P>
+	<LI>How to use the functionality for both of these types of DLLs in a Visual C++
+	application.
+	<P>
+	<LI>How to determine when an application needs to be relinked when you make modifications
+	to a DLL that is used by the application.
+</UL>
+
+<H2><A NAME="Heading1"></A>Why Create DLLs?</H2>
+<P>Dynamic link libraries (DLL) were introduced by Microsoft back in the early days
+of Windows. DLLs are similar to library modules in that they both contain sets of
+functionality that have been packaged for use by applications. The difference is
+when the applications link to the library. With a library module (LIB), the application
+is linked to the functionality in the library during the compile and build process.
+The functionality contained in the library file becomes part of the application executable
+file. With a DLL, the application links to the functionality in the library file
+when the application is run. The library file remains a separate file that is referenced
+and called by the application.</P>
+<P>There are several reasons for creating DLLs instead of library module files. First,
+you can reduce the size of the application executable files by placing functionality
+that is used by multiple applications into DLLs that are shared by all of the applications.
+You can update and modify functionality in the DLLs without having to update the
+application executable (assuming that the exported interface for the DLL doesn't
+change). Finally, you can use DLLs with just about any other Windows programming
+language, which makes your functionality available to a wider number of programmers,
+not just fellow Visual C++ programmers.</P>
+<P>
+<H3><A NAME="Heading2"></A>Creating and Using DLLs</H3>
+<P>DLLs are library files with compiled code that can be used by other applications.
+The DLLs expose certain functions and classes to these applications by exporting
+the function. When a function is exported, it is added to a table that is included
+in the DLL. This table lists the location of all exported functions contained in
+the DLL, and it is used to locate and call each of these functions. Any functions
+that are not exported are not added to this table, and they cannot be seen or called
+by any outside application or DLL.</P>
+<P>An application can call the functions in the DLL in two ways. The more involved
+method of calling these functions is to look up the location of the desired function
+in the DLL and get a pointer to this function. The pointer can then be used to call
+the function.</P>
+<P>The other, much easier way (and the only way that you'll use in any of the examples
+in this book) is to link the application with the LIB file that is created with the
+DLL. This LIB file is treated by the linker as a standard library file, just like
+the one that you cre-ated yesterday. However, this LIB file contains stubs for each
+of the exported functions in the DLL. A stub is a pseudo-function that has the same
+name and argument list as the real function. In the interior of the function stub
+is a small amount of code that calls the real function in the DLL, passing all of
+the arguments that were passed to the stub. This allows you to treat the functions
+in the DLL as if they were part of the application code and not as a separate file.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> The LIB file for a DLL is automatically created for the DLL during
+	the compiling of the DLL. There is nothing extra that you need to do to create it.
+<HR>
+
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> Not only is it easier to create your applications using the LIB files
+	for any DLLs that you will be using, but also it can be safer when running the application.
+	When you use the LIB files, any DLLs that are used by your application are loaded
+	into memory the moment the application is started. If any of the DLLs are missing,
+	the user is automatically informed of the problem by Windows, and your application
+	does not run. If you don't use the LIB files, then you are responsible for loading
+	the DLL into memory and handling any errors that occur if the DLL cannot be found.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>There are two types of DLLs that you can easily create using Visual C++. These
+two types are MFC extension DLLs and regular DLLs.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> You can create other types of DLLs using Visual C++. All these other
+	types of DLLs involve a significant amount of ActiveX functionality, so they are
+	beyond the scope of this book. If you need to build ActiveX in-process server DLLs,
+	or other types of ActiveX DLLs, I recommend that you find an advanced book on Visual
+	C++ that provides significant coverage for these topics.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>MFC Extension DLLs</H4>
+<P>MFC DLLs are the easiest to code and create because you can treat them just like
+any other collection of classes. For any classes that you want to export from the
+DLL, the only thing that you need to add is the AFX_EXT_CLASS macro in the class
+declaration, as follows:</P>
+<P>
+<PRE>class AFX_EXT_CLASS CMyClass
+{
+.
+.
+.
+};
+</PRE>
+<P>This macro exports the class, making it accessible to Visual C++ applications.
+You need to include this macro in the header file that is used by the applications
+that will use the DLL, where it will import the class from the DLL so that it can
+be used.</P>
+<P>The one drawback to creating MFC extension DLLs is that they cannot be used by
+any other programming languages. They can be used with other C++ compilers as long
+as the compiler supports MFC (such as with Borland's and Symantec's C++ compilers).</P>
+<P>
+<H4>Regular DLLs</H4>
+<P>The other type of DLL is a regular DLL. This type of DLL exports standard functions
+from the DLL, not C++ classes. As a result, this type of DLL can require a little
+more thought and planning than an MFC extension DLL. Once inside the DLL, you can
+use classes all you want, but you must provide straight function calls to the external
+applications.</P>
+<P>To export a function, declare it as an export function by preceding the function
+name with</P>
+<P>
+<PRE>extern &quot;C&quot; &lt;function type&gt; PASCAL EXPORT &lt;function declaration&gt;
+</PRE>
+<P>Include all this additional stuff in both the header file function prototype and
+the actual source code. The extern &quot;C&quot; portion declares that this is a
+standard C function call so that the C++ name mangler does not mangle the function
+name. PASCAL tells the compiler that all function arguments are to be passed in PASCAL
+order, which places the arguments on the stack in the reverse order from how they
+are normally placed. Finally, EXPORT tells the compiler that this function is to
+be exported from the DLL and can be called outside the DLL.</P>
+<P>The other thing that you need to do to export the functions from your DLL is to
+add all the exported function names to the DEF file for the DLL project. This file
+is used to build the stub LIB file and the export table in the DLL. It contains the
+name of the DLL, or library, a brief description of the DLL, and the names of all
+functions that are to be exported. This file has to follow a specific format, so
+you should not modify the default DEF file that is automatically created by the DLL
+Wizard other than to add exported function names. A typical DEF file follows:</P>
+<P>
+<PRE>LIBRARY     &quot;mydll&quot;
+DESCRIPTION `mydll Windows Dynamic Link Library'
+EXPORTS
+    ; Explicit exports can go here
+    MyFunc1
+    MyFunc2
+</PRE>
+<P>If you are using MFC classes in your regular DLLs, you need to call the AFX_MANAGE_STATE
+macro as the first line of code in all exported functions. This is necessary to make
+the exported functions threadsafe, which allows your class functions to be called
+simultaneously by two or more programs (or threads). The AFX_MANAGE_STATE macro takes
+a single argument, a pointer to a AFX_MODULE_STATE structure, which can be retrieved
+by calling the AfxGetStaticModuleState function. A typical exported function that
+uses MFC looks like the following:</P>
+<P>
+<PRE>extern &quot;C&quot; void PASCAL EXPORT MyFunc(...)
+{
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    // normal function body here
+.
+.
+.
+}
+</PRE>
+<H3><A NAME="Heading3"></A>Designing DLLs</H3>
+<P>When you are designing your DLLs, you should be aware that any of the functions
+in your DLLs can be called simultaneously by multiple applications all running at
+the same time. As a result, all the functionality in any DLLs that you create must
+be threadsafe.</P>
+<P>All variables that hold any values beyond each individual function call must be
+held and maintained by the application and not the DLL. Any application variables
+that must be manipulated by the DLL must be passed in to the DLL as one of the function
+arguments. Any global variables that are manipulated within the DLL may be swapped
+with variables from other application processes while the function is running, leading
+to unpredictable results.</P>
+<P>
+<H2><A NAME="Heading4"></A>Creating and Using an MFC Extension DLL</H2>
+<P>To see how easy it is to create and use an MFC extension DLL, you'll convert the
+library module that you created yesterday into an MFC extension DLL today. After
+you see how easy it is, and what types of changes you have to make to use the DLL,
+you'll then reimplement the same functionality as a regular DLL so that you can get
+an understanding of the different approaches that are necessary with the two DLL
+styles.</P>
+<P>
+<H3><A NAME="Heading5"></A>Creating the MFC Extension DLL</H3>
+<P>To convert the library module you created yesterday into an MFC extension DLL,
+you need to create a new MFC DLL Wizard project, specifying that the project is an
+MFC extension DLL. Copy the source code and header files for the line and drawing
+classes into the project directory. Load the files for the line and drawing classes
+into the current project. Add the AFX_EXT_CLASS macro to the drawing class. Finally,
+move the color table from a global static table to a local variable inside the function
+that creates the squiggles.</P>
+<P>To create this DLL, start a new project. Give the project a suitable name, such
+as ModArtDll, and specify that the project is an MFC AppWizard (DLL) project, as
+in Figure 17.1. Once in the DLL Wizard, specify that the DLL is an MFC Extension
+DLL, as in Figure 17.2.</P>
+<P><A HREF="javascript:popUp('17fig01.gif')"><B>FIGURE 17.1.</B></A><B> </B><I>Selecting
+the MFC DLL Wizard.</I></P>
+
+<P>Once you create the DLL shell, open the file explorer and copy the source code
+and header files for the line and drawing classes (line.cpp, line.h, ModArt.cpp,
+and ModArt.h) from the library module project you created yesterday into the project
+directory that you just created. Add all four of these files to the project. Both
+classes should appear in the Class View of the workspace pane.</P>
+<P><A HREF="javascript:popUp('17fig02.gif')"><B>FIGURE 17.2.</B></A><B> </B><I>Specifying
+the DLL type.</I></P>
+
+<P>Open the header file containing the definition of the drawing class. Add the AFX_EXT_CLASS
+macro to the class declaration as shown in Listing 17.1. Remove the color table variable
+from the class declaration also.</P>
+<P>
+<H4>LISTING 17.1. THE MODIFIED CModArt CLASS DECLARATION.</H4>
+<PRE>1:  class AFX_EXT_CLASS CModArt : public CObject
+2:  {
+3:  public:
+4:      void NewDrawing();
+5:      virtual void Serialize(CArchive &amp;ar);
+6:      void Draw(CDC *pDC);
+7:      void ClearDrawing();
+8:      void SetRect(CRect rDrawArea);
+9:      CModArt();
+10:     virtual ~CModArt();
+11:
+12: private:
+13:     void NewLine();
+14:     CRect m_rDrawArea;
+15:     CObArray m_oaLines;
+16: };
+</PRE>
+<P>You cannot have public static tables in DLLs, so you cannot declare the color
+table as a public, static member of the drawing class, as it was yesterday. As a
+result, you'll move it to a local variable in the NewLine member function. Edit the
+NewLine function to add this local variable and to reset the function to behave as
+it did in its initial incarnation, as in Listing 17.2.</P>
+<P>
+<H4>LISTING 17.2. THE CModArt NewLine FUNCTION.</H4>
+<PRE>1:  void CModArt::NewLine()
+2:  {
+3:      int lNumLines;
+4:      int lCurLine;
+5:      int nCurColor;
+6:      UINT nCurWidth;
+7:      CPoint pTo;
+8:      CPoint pFrom;
+9:
+10:     // Normalize the rectangle before determining the width and height
+11:     m_rDrawArea.NormalizeRect();
+12:     // get the area width and height
+13:     int lWidth = m_rDrawArea.Width();
+14:     int lHeight = m_rDrawArea.Height();
+15:
+16:     COLORREF crColors[8] = {
+17:     RGB(   0,   0,   0),    // Black
+18:     RGB(   0,   0, 255),    // Blue
+19:     RGB(   0, 255,   0),    // Green
+20:     RGB(   0, 255, 255),    // Cyan
+21:     RGB( 255,   0,   0),    // Red
+22:     RGB( 255,   0, 255),    // Magenta
+23:     RGB( 255, 255,   0),    // Yellow
+24:     RGB( 255, 255, 255)     // White
+25:     };
+26:
+27:     // Determine the number of parts to this squiggle
+28:     lNumLines = rand() % 100;
+29:     // Are there any parts to this squiggle?
+30:     if (lNumLines &gt; 0)
+31:     {
+32:         // Determine the color
+33:         nCurColor = rand() % 8;
+34:         // Determine the pen width
+35:         nCurWidth = (rand() % 8) + 1;
+36:         // Determine the starting point for the squiggle
+37:         pFrom.x = (rand() % lWidth) + m_rDrawArea.left;
+38:         pFrom.y = (rand() % lHeight) + m_rDrawArea.top;
+39:         // Loop through the number of segments
+40:         for (lCurLine = 0; lCurLine &lt; lNumLines; lCurLine++)
+41:         {
+42:             // Determine the end point of the segment
+43:             pTo.x = ((rand() % 20) - 10) + pFrom.x;
+44:             pTo.y = ((rand() % 20) - 10) + pFrom.y;
+45:             // Create a new CLine object
+46:             CLine *pLine = new CLine(pFrom, pTo, nCurWidth, 
+                        &Acirc;crColors[nCurColor]);
+47:             try
+48:             {
+49: // Add the new line to the object array
+50:                 m_oaLines.Add(pLine);
+51:             }
+52:             // Did we run into a memory exception?
+53:             catch (CMemoryException* perr)
+54:             {
+55:                 // Display a message for the user, giving him the
+56:                 // bad news
+57:                 AfxMessageBox(&quot;Out of memory&quot;, MB_ICONSTOP | MB_OK);
+58:                 // Did we create a line object?
+59:                 if (pLine)
+60:                 {
+61:                     // Delete it
+62:                     delete pLine;
+63:                     pLine = NULL;
+64:                 }
+65:                 // Delete the exception object
+66:                 perr-&gt;Delete();
+67:             }
+68:             // Set the starting point to the end point
+69:             pFrom = pTo;
+70:         }
+71:     }
+72: }
+</PRE>
+<P>After making these changes to the drawing class, you are ready to compile your
+DLL. Once you compile the DLL, switch over to the file explorer, find the DLL in
+the debug subdirectory under the project directory, and copy the DLL to the debug
+directory in the test application project directory.</P>
+<P>
+<H3><A NAME="Heading6"></A>Adapting the Test Application</H3>
+<P>To adapt the test application to use the DLL, open the test application project
+that you created yesterday. You are going to delete the library module that you created
+yesterday and add the LIB file that was created with the DLL. You are also going
+to change the header file that is included for the drawing class. After making these
+two changes, your test application will be ready to use with the DLL.</P>
+<P>To delete the library module from the project, open the File View in the workspace
+pane. Select the LIB file from the list of project files and press the Delete key.
+Once you delete the library file from the project, select Project | Add To Project
+| Files from the main menu. Specify the Library Files (.lib) file type, and then
+navigate to the debug directory of the DLL project. Select the LIB file that was
+created with your DLL, in this case, ModArtDll.lib. Click OK to add the file to the
+project.</P>
+<P>Once you add the DLL's LIB file, edit the source-code files for the document,
+view, and application classes, changing the include of the drawing class to point
+to the project directory of the DLL, as in line 7 in Listing 17.3.</P>
+<P>
+<H4>LISTING 17.3. THE CTestAppDoc INCLUDES.</H4>
+<PRE>1: // TestAppDoc.cpp : implementation of the CTestAppDoc class
+2: //
+3:
+4: #include &quot;stdafx.h&quot;
+5: #include &quot;TestApp.h&quot;
+6:
+7: #include &quot;..\ModArtDll\ModArt.h&quot;
+8: #include &quot;TestAppDoc.h&quot;
+</PRE>
+<P>After making this change to all three source-code files, you are ready to compile
+and run your test application. You should find your test application running just
+like it did yesterday, only generating shorter squiggles and using only the eight
+colors in the color table.</P>
+<P>
+<H3><A NAME="Heading7"></A>Changing the DLL</H3>
+<P>Now that you have the test application running with the DLL, you'll make the same
+changes to the DLL that you made to the library module yesterday. You'll increase
+the number of squiggles that can be included in a drawing, increase the possible
+length of each squiggle, and generate any number of colors for use in the squiggles.</P>
+<P>To make these changes, switch back to the DLL project. Increase the number of
+lines that may be generated in the NewDrawing member function of the drawing class.
+Increase the possible length of the squiggles in the NewLine member function, and
+add the random colors back in, as in Listing 17.4.</P>
+<P>
+<H4>LISTING 17.4. THE MODIFIED CModArt NewLine FUNCTION.</H4>
+<PRE>1:  void CModArt::NewLine()
+2:  {
+3:      int lNumLines;
+4:      int lCurLine;
+5:  //  int nCurColor;
+6:      UINT nCurWidth;
+7:      CPoint pTo;
+8:      CPoint pFrom;
+9:      int cRed;
+10:     int cBlue;
+11:     int cGreen;
+12:
+13:     // Normalize the rectangle before determining the width and height
+14:     m_rDrawArea.NormalizeRect();
+15:     // get the area width and height
+16:     int lWidth = m_rDrawArea.Width();
+17:     int lHeight = m_rDrawArea.Height();
+18:
+19: //    COLORREF crColors[8] = {
+20: //    RGB(   0,   0,   0),    // Black
+21: //    RGB(   0,   0, 255),    // Blue
+22: //    RGB(   0, 255,   0),    // Green
+23: //    RGB(   0, 255, 255),    // Cyan
+24: //    RGB( 255,   0,   0),    // Red
+25: //    RGB( 255,   0, 255),    // Magenta
+26: //    RGB( 255, 255,   0),    // Yellow
+27: //    RGB( 255, 255, 255)     // White
+28: //    };
+29:
+30:     // Determine the number of parts to this squiggle
+31:     lNumLines = rand() % 200;
+32:     // Are there any parts to this squiggle?
+33:     if (lNumLines &gt; 0)
+34:     {
+35:         // Determine the color
+36: //      nCurColor = rand() % 8;
+37:         cRed = rand() % 256;
+38:         cBlue = rand() % 256;
+39:         cGreen = rand() % 256;
+40:         // Determine the pen width
+41:         nCurWidth = (rand() % 8) + 1;
+42:         // Determine the starting point for the squiggle
+43:         pFrom.x = (rand() % lWidth) + m_rDrawArea.left;
+44:         pFrom.y = (rand() % lHeight) + m_rDrawArea.top;
+45:         // Loop through the number of segments
+46:         for (lCurLine = 0; lCurLine &lt; lNumLines; lCurLine++)
+47:         {
+48:             // Determine the end point of the segment
+49:             pTo.x = ((rand() % 20) - 10) + pFrom.x;
+50:             pTo.y = ((rand() % 20) - 10) + pFrom.y;
+51:             // Create a new CLine object
+52:             CLine *pLine = new CLine(pFrom, pTo, nCurWidth, 
+                        &Acirc;RGB(cRed, cGreen, cBlue));
+53:             try
+54:             {
+55:                 // Add the new line to the object array
+56:                 m_oaLines.Add(pLine);
+57:             }
+58:             // Did we run into a memory exception?
+59:             catch (CMemoryException* perr)
+60:             {
+61:                 // Display a message for the user, giving him the
+62:                 // bad news
+63:                 AfxMessageBox(&quot;Out of memory&quot;, MB_ICONSTOP | MB_OK);
+64:                 // Did we create a line object?
+65:                 if (pLine)
+66:                 {
+67:                     // Delete it
+68:                     delete pLine;
+69:                     pLine = NULL;
+70:                 }
+71:                 // Delete the exception object
+72:                 perr-&gt;Delete();
+73:             }
+74:             // Set the starting point to the end point
+75:             pFrom = pTo;
+76:         }
+77:     }
+78: }
+</PRE>
+<P>After making these changes, compile the DLL again. Once you compile the DLL, switch
+to the file explorer and copy the DLL into the debug directory of the test application
+again. Once you copy the DLL, run the test application from the Start | Run Taskbar,
+as in Figure 17.3. You should find that the application has been updated, and it
+is now including more squiggles and using many different colors.</P>
+<P><A HREF="javascript:popUp('17fig03.gif')"><B>FIGURE 17.3.</B></A><B> </B><I>Starting
+the sample application.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading8"></A>Creating and Using a Regular DLL</H2>
+<P>You might think that you broke the rules about using variables that are not owned
+by the application in a DLL when you created and used the MFC extension DLL. Well,
+you didn't. The instance of the drawing class was a member of the document class
+in the test application. It was created and maintained by the application, not the
+DLL. Now that you are turning your attention to implementing the same functionality
+as a regular DLL, this will become clearer.</P>
+<P>To convert the MFC extension DLL into a regular DLL, you'll have to convert the
+drawing class into a series of regular function calls. In the course of making this
+conversion, the object array must become a member variable of the application document
+class and must be passed as an argument to every exported function in the DLL.</P>
+<P>
+<H3><A NAME="Heading9"></A>Creating the Regular DLL</H3>
+<P>To convert the MFC extension DLL into a regular DLL, you have to start a new project.
+Visual C++ has to build a project that tells the compiler what type of file it's
+creating. You can create this new project using the same steps you used to create
+the MFC extension DLL project, but specify on the DLL Wizard that you are creating
+a regular DLL. (You can leave the wizard at the default settings.) Once you create
+the project, you can copy the line and drawing class source code and header files
+into the project directory and add these files to the project. Once you add these
+files to the project, you need to begin the process of converting the drawing class
+into a series of straight function calls.</P>
+<P>
+
+<DL>
+	<DT><B>Altering the Header File</B></DT>
+</DL>
+
+<P>To start with, you need to radically alter the header file for the drawing class
+so that it will work for a regular DLL. You have to eliminate every trace of the
+actual class from the header file, leaving only the function calls. All of these
+functions must be passed in any objects that they need to work with. (Every function
+will need to be passed the object array as one of its arguments.) Next, you need
+to slightly modify all the function names so that the compiler does not get mixed
+up and call a member function of any class by mistake (such as the Serialize function).
+Finally, each of the public functions must be declared as an exportable function.
+Making these changes to the header file, you end up replacing the entire class declaration
+with the function prototypes in Listing 17.5.</P>
+
+<P>
+<H4>LISTING 17.5. THE MODIFIED ModArt HEADER FILE.</H4>
+<PRE>1: extern &quot;C&quot; void PASCAL EXPORT ModArtNewDrawing(CRect pRect, 
+        &Acirc;CObArray *poaLines);
+2: extern &quot;C&quot; void PASCAL EXPORT ModArtSerialize(CArchive &amp;ar, 
+        &Acirc;CObArray *poaLines);
+3: extern &quot;C&quot; void PASCAL EXPORT ModArtDraw(CDC *pDC, CObArray *poaLines);
+4: extern &quot;C&quot; void PASCAL EXPORT ModArtClearDrawing(CObArray *poaLines);
+5: void NewLine(CRect pRect, CObArray *poaLines); 
+</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Notice that the object array is always passed as a pointer to each
+	of these functions. Because these functions are adding and removing objects from
+	the array, they need to work with the actual array and not a copy of it.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>Adapting the Drawing Generation Functions</H4>
+<P>Moving to the source-code file, you need to make numerous small yet significant
+changes to these functions. Starting with the NewDrawing function, you need to pass
+in the CRect object to get the drawing area. You dropped the function for setting
+the drawing area because you have no local variables in which you can hold this object.
+As a result, you are better off passing it to the drawing generation functions. The
+other change is where you pass in the object array as another argument to the function.
+You aren't doing anything with either of these arguments in this function, just passing
+them along to the squiggle generating function. The other alteration in this function
+is the addition of the AFX_MANAGE_STATE macro as the first line in the body of the
+function. After making these changes, the NewDrawing function will look like the
+one in Listing 17.6.</P>
+<P>
+<H4>LISTING 17.6. THE ModArtNewDrawing FUNCTION.</H4>
+<PRE>1:  extern &quot;C&quot; void PASCAL EXPORT ModArtNewDrawing(CRect pRect, 
+        &Acirc;CObArray *poaLines)
+2:  {
+3:      AFX_MANAGE_STATE(AfxGetStaticModuleState());
+4:      // normal function body here
+5:      int lNumLines;
+6:      int lCurLine;
+7:
+8:      // Initialize the random number generator
+9:      srand((unsigned)time(NULL));
+10:     // Determine how many lines to create
+11:     lNumLines = rand() % 50;
+12:     // Are there any lines to create?
+13:     if (lNumLines &gt; 0)
+14:     {
+15:         // Loop through the number of lines
+16:         for (lCurLine = 0; lCurLine &lt; lNumLines; lCurLine++)
+17:         {
+18:             // Create the new line
+19:             NewLine(pRect, poaLines);
+20:         }
+21:     }
+22: }
+</PRE>
+<P>Another change that is required in the NewDrawing function is the addition of
+the random number generator seeding on line 9. Because there is no class constructor
+any more, you cannot seed the random number generator in it. Therefore, the next
+logical place to add this is in the NewDrawing function before any random numbers
+are generated.</P>
+<P>On the NewLine function, the changes are more extensive. First, the CRect object
+and the object array are passed in as arguments. Second, because this is not an exported
+function, you do not need to add the AFX_MANAGE_STATE macro. Third, all the places
+where the CRect member variable is used must be changed to use the CRect that is
+passed as an argument to the function. Finally, when adding objects to the object
+array, you need to change this to use the object array pointer that was passed as
+an argument. Making these changes leaves you with the code in Listing 17.7.</P>
+<P>
+<H4>LISTING 17.7. THE NewLine FUNCTION.</H4>
+<PRE> 1:   void NewLine(CRect pRect, CObArray *poaLines)
+ 2:   {
+ 3:       int lNumLines;
+ 4:       int lCurLine;
+ 5:   //  int nCurColor;
+ 6:       UINT nCurWidth;
+ 7:       CPoint pTo;
+ 8:       CPoint pFrom;
+ 9:       int cRed;
+10:      int cBlue;
+11:      int cGreen;
+12: 
+13:      // Normalize the rectangle before determining the width and          &Acirc;height
+14:      pRect.NormalizeRect();
+15:      // get the area width and height
+16:      int lWidth = pRect.Width();
+17:      int lHeight = pRect.Height();
+18: 
+19:  //    COLORREF crColors[8] = {
+20:  //    RGB(   0,   0,   0),    // Black
+21:  //    RGB(   0,   0, 255),    // Blue
+22:  //    RGB(   0, 255,   0),    // Green
+23:  //    RGB(   0, 255, 255),    // Cyan
+24:  //    RGB( 255,   0,   0),    // Red
+25:  //    RGB( 255,   0, 255),    // Magenta
+26:  //    RGB( 255, 255,   0),    // Yellow
+27:  //    RGB( 255, 255, 255)     // White
+28:  //    };
+29: 
+30:      // Determine the number of parts to this squiggle
+31:      lNumLines = rand() % 200;
+32:      // Are there any parts to this squiggle?
+33:      if (lNumLines &gt; 0)
+34:      {
+35:          // Determine the color
+36:  //      nCurColor = rand() % 8;
+37:          cRed = rand() % 256;
+38:          cBlue = rand() % 256;
+39:          cGreen = rand() % 256;
+40:          // Determine the pen width
+41:          nCurWidth = (rand() % 8) + 1;
+42:          // Determine the starting point for the squiggle
+43:          pFrom.x = (rand() % lWidth) + pRect.left;
+44:          pFrom.y = (rand() % lHeight) + pRect.top;
+45:          // Loop through the number of segments
+46:          for (lCurLine = 0; lCurLine &lt; lNumLines; lCurLine++)
+47:          {
+48:              // Determine the end point of the segment
+49:              pTo.x = ((rand() % 20) - 10) + pFrom.x;
+50:              pTo.y = ((rand() % 20) - 10) + pFrom.y;
+51:              // Create a new CLine object
+52:              CLine *pLine = new CLine(pFrom, pTo, nCurWidth, 
+                         &Acirc;RGB(cRed, cGreen, cBlue));
+53:              try
+54:              {
+55:                  // Add the new line to the object array
+56:                  poaLines-&gt;Add(pLine);
+57:              }
+58:              // Did we run into a memory exception?
+59:              catch (CMemoryException* perr)
+60:              {
+61:                  // Display a message for the user, giving him the
+62:                  // bad news
+63:                  AfxMessageBox(&quot;Out of memory&quot;, MB_ICONSTOP | MB_OK);
+64:                  // Did we create a line object?
+65:                  if (pLine)
+66:                  {
+67:                      // Delete it
+68:                      delete pLine;
+69:                      pLine = NULL;
+70:                  }
+71:                  // Delete the exception object
+72:                  perr-&gt;Delete();
+73:              }
+74:              // Set the starting point to the end point
+75:              pFrom = pTo;
+76:          }
+77:      }
+78:  }
+</PRE>
+<H4>Adapting the Other Functions</H4>
+<P>Making the necessary changes to the other functions is less involved than the
+changes to the drawing generation functions. With the rest of the functions, you
+must add a pointer to the object array as a function argument and then alter the
+uses of the array to use the pointer instead of the no longer existing member variable.
+You also need to add the AFX_MANAGE_STATE macro as the first line in each of the
+remaining functions. This leaves you with the functions shown in Listings 17.8, 17.9,
+and 17.10.</P>
+<P>
+<H4>LISTING 17.8. THE ModArtDraw FUNCTION.</H4>
+<PRE>1:  extern &quot;C&quot; void PASCAL EXPORT ModArtDraw(CDC *pDC, CObArray *poaLines)
+2:  {
+3:      AFX_MANAGE_STATE(AfxGetStaticModuleState());
+4:      // normal function body here
+5:      // Get the number of lines in the object array
+6:      int liCount = poaLines.GetSize();
+7:      int liPos;
+8:
+9:      // Are there any objects in the array?
+10:     if (liCount)
+11:     {
+12:         // Loop through the array, drawing each object
+13:         for (liPos = 0; liPos &lt; liCount; liPos++)
+14:             ((CLine*)poaLines[liPos])-&gt;Draw(pDC);
+15:     }
+16: }
+</PRE>
+<H4>LISTING 17.9. THE ModArtSerialize FUNCTION.</H4>
+<PRE>1: extern &quot;C&quot; void PASCAL EXPORT ModArtSerialize(CArchive &amp;ar, 
+        &Acirc;CObArray *poaLines)
+2: {
+3:     AFX_MANAGE_STATE(AfxGetStaticModuleState());
+4:     // normal function body here
+5:     // Pass the archive object on to the array
+6:     poaLines.Serialize(ar);
+7: }
+</PRE>
+<H4>Listing 17.10. The MODARTCLEARDRAWING function.</H4>
+<PRE>1:  extern &quot;C&quot; void PASCAL EXPORT ModArtClearDrawing(CObArray *poaLines)
+2:  {
+3:      AFX_MANAGE_STATE(AfxGetStaticModuleState());
+4:      // Normal function body here
+5:      // Get the number of lines in the object array
+6:      int liCount = poaLines.GetSize();
+7:      int liPos;
+8:
+9:      // Are there any objects in the array?
+10:     if (liCount)
+11:     {
+12:         // Loop through the array, deleting each object
+13:         for (liPos = 0; liPos &lt; liCount; liPos++)
+14:             delete poaLines[liPos];
+15:         // Reset the array
+16:         poaLines.RemoveAll();
+17:     }
+18: }
+</PRE>
+<P>Once you make the changes to these functions, the only thing remaining is to remove
+all code for the class constructor and destructor, along with the code for the SetRect
+function.</P>
+<P>
+<H4>Building the Module Definition File</H4>
+<P>Before you compile the DLL, you need to add all the function names to the module
+definition file. You can find this file in the list of source-code files in the File
+View of the workspace pane. When you open this file, you'll find that it briefly
+describes the module that you are building in generic terms. You'll see a place at
+the bottom of the file where you can add the exports for the DLL. Edit this file,
+adding the exportable function names, as in Listing 17.11.</P>
+<P>
+<H4>LISTING 17.11. THE DLL MODULE DEFINITION FILE.</H4>
+<PRE>1:  ; ModArtRDll.def : Declares the module parameters for the DLL
+2:
+3:  LIBRARY        &quot;ModArtRDll&quot;
+4:  DESCRIPTION    `ModArtRDll Windows Dynamic Link Library'
+5:
+6:  EXPORTS
+7:       ; Explicit exports can go here
+8:       ModArtNewDrawing
+9:       ModArtSerialize
+10:      ModArtDraw
+11:      ModArtClearDrawing
+</PRE>
+<P>You are now ready to compile your regular DLL. Once you compile the DLL, copy
+it into the debug directory of the test application.</P>
+<P>
+<H3><A NAME="Heading10"></A>Adapting the Test Application</H3>
+<P>To adapt the test application to use the new DLL that you have just created, you
+need to make a number of changes. First, you need to change the member variable of
+the document class from an instance of the drawing class to the object array. Next,
+you need to change the include in the document and view source code to include the
+header from the new DLL instead of the header from the old DLL. (You can completely
+remove the include in the application source-code file.) Drop the DLL LIB file and
+add the LIB file for the new DLL to the project. Change all of the drawing class
+function calls to call functions in the new DLL instead. Finally, change the GetDrawing
+function in the document class so that it returns a pointer to the object array,
+instead of the drawing object.</P>
+<P>You can start making these changes by deleting the LIB file from the test application
+project. Once you delete the file, add the LIB file for the new DLL to the project
+by selecting Project | Add To Project | Files from the main menu.</P>
+<P>Once you switch the LIB files in the project, edit the source code for the document
+and view classes to change the include statement, changing the project directory
+to the new DLL project directory. You can edit the application class source-code
+file and remove the include from this file. Because you are not creating any instances
+of the drawing class, the application file doesn't need to know about anything in
+the DLL.</P>
+<P>Once you make all those changes, open the header file for the document class.
+Edit the document class declaration: Change the function type of the GetDrawing function
+to return a pointer to an object array, remove the drawing class variable, and add
+an object array variable, as in Listing 17.12. Make only these three changes; do
+not change anything else in the class declaration.</P>
+<P>
+<H4>LISTING 17.12. THE CTestAppDoc CLASS DECLARATION.</H4>
+<PRE>1:  class CTestAppDoc : public CDocument
+2:  {
+3:  protected: // create from serialization only
+4:      CTestAppDoc();
+5:      DECLARE_DYNCREATE(CTestAppDoc)
+6:  .
+7:  .
+8:  .
+9:  // Implementation
+10: public:
+11:     CObArray* GetDrawing();
+12:     virtual ~CTestAppDoc();
+13: .
+14: .
+15: .
+16: private:
+17:     CObArray m_oaLines;
+18: };
+</PRE>
+
+<DL>
+	<DT><B>Modifying the Document Functions</B></DT>
+</DL>
+
+<P>Now that you've made the general changes to the test application, it's time to
+start making the functionality changes. All the calls to a class method of the drawing
+object must be changed to the appropriate function call in the new DLL.</P>
+
+<P>The changes necessary in the OnNewDocument function consist of dropping the function
+call to pass the CRect to the drawing object and replacing the NewDocument function
+call with the new DLL function--in this instance, ModArtNewDrawing, as shown in line
+19 in Listing 17.13.</P>
+<P>
+<H4>LISTING 17.13. THE CTestAppDoc OnNewDocument FUNCTION.</H4>
+<PRE>1:  BOOL CTestAppDoc::OnNewDocument()
+2:  {
+3:      if (!CDocument::OnNewDocument())
+4:          return FALSE;
+5:
+6:      // TODO: add reinitialization code here
+7:      // (SDI documents will reuse this document)
+8:
+9:      // Get the position of the view
+10:     POSITION pos = GetFirstViewPosition();
+11:     // Did we get a valid position?
+12:     if (pos != NULL)
+13:     {
+14:         // Get a pointer to the view
+15:         CView* pView = GetNextView(pos);
+16:         RECT lWndRect;
+17:         // Get the display area rectangle
+18:         pView-&gt;GetClientRect(&amp;lWndRect);
+19:         // Create a new drawing
+20:         ModArtNewDrawing(lWndRect, &amp;m_oaLines);
+21:     }
+22:
+23:     return TRUE;
+24: }
+</PRE>
+<P>In the Serialize function, change the drawing object Serialize function call to
+the new DLL serialization function--in this case, ModArtSerialize, as in Listing
+17.14.</P>
+<P>
+<H4>LISTING 17.14. THE CTestAppDoc Serialize FUNCTION.</H4>
+<PRE>1: void CTestAppDoc::Serialize(CArchive&amp; ar)
+2: {
+3:     // Serialize the drawing
+4:     ModArtSerialize(ar, &amp;m_oaLines);
+5: }
+</PRE>
+<P>For the DeleteContents function, you need to change the call to the ClearDrawing
+function to the new DLL function, ModArtClearDrawing, as in line 5 of Listing 17.15.</P>
+<P>
+<H4>LISTING 17.15. THE CTestAppDoc DeleteContents FUNCTION.</H4>
+<PRE>1: void CTestAppDoc::DeleteContents()
+2: {
+3:     // TODO: Add your specialized code here and/or call the base class
+4:     // Delete the drawing
+5:     ModArtClearDrawing(&amp;m_oaLines);
+6:
+7:     CDocument::DeleteContents();
+8: }
+</PRE>
+<P>Finally, for the GetDrawing function, you need to change the function declaration
+to designate that it's returning a pointer to an object array, just as you did in
+the header file. Next, you need to change the variable that is being returned to
+the object array variable that you added to the header file, as in Listing 17.16.</P>
+<P>
+<H4>LISTING 17.16. THE CTestAppDoc GetDrawing FUNCTION.</H4>
+<PRE>1: CObArray* CTestAppDoc::GetDrawing()
+2: {
+3:     // Return the drawing object
+4:     return &amp;m_oaLines;
+5: }
+</PRE>
+<H4>Modifying the View Functions</H4>
+<P>Switching to the view class, there's only one simple change to make to the OnDraw
+function. In this function, you need to change the type of pointer retrieved from
+the GetDrawing function from a drawing object to an object array object, as in line
+9 of Listing 17.17. Next, call the DLL function, ModArtDraw, to perform the drawing
+on the window, as shown in line 11.</P>
+<P>
+<H4>LISTING 17.17. THE CTestAppView OnDraw FUNCTION.</H4>
+<PRE>1:  void CTestAppView::OnDraw(CDC* pDC)
+2:  {
+3:      CModTestAppDoc* pDoc = GetDocument();
+4:      ASSERT_VALID(pDoc);
+5:
+6:      // TODO: add draw code for native data here
+7:
+8:      // Get the drawing object
+9:      CObArray* m_oaLines = pDoc-&gt;GetDrawing();
+10:     // Draw the drawing
+11:     ModArtDraw(pDC, m_oaLines);
+12: }
+</PRE>
+<P>After making all these changes to the test application, you are ready to compile
+and test it. You should find that the application is working just as it did with
+the previous DLL. You can also play around with it, going back and changing the DLL,
+copying the new DLL into the debug directory for the test application, and seeing
+how the changes are reflected in the behavior of the test application.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>CAUTION:</STRONG> The particular example of a regular DLL that you developed in
+	this exercise is still not usable by other programming languages. The reason is that
+	you are passing MFC classes as the arguments for each of the DLL's functions. This
+	still limits the usage to other applications that are built using MFC. To make this
+	DLL truly portable, you need to pass the bare-bones structures instead of the classes
+	(such as the RECT structure instead of the CRect class) and then convert the structures
+	to the classes inside the DLL.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H2><A NAME="Heading11"></A>Summary</H2>
+<P>Today you learned about two more ways that you can package your functionality
+for other programmers. You learned how you can easily package your classes as an
+MFC extension DLL and how easily it can be used by a Visual C++ application. You
+saw how you can make changes to the DLL without having to recompile the applications
+that use it. You also learned what's involved in creating a regular DLL that can
+be used with other, non-Visual C++ applications. You saw how you needed to convert
+the exported classes from the DLL into standard C-style functions and what's involved
+in adapting an application to use this style of DLL.</P>
+<P>
+<H2><A NAME="Heading12"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q How can I convert the regular DLL so that it can be used by non-Visual C++
+	applications?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> First, you have to make all the arguments to the functions use the bare-bones
+	structures, instead of the MFC classes. For instance, to convert the ModArtNewDrawing
+	function, change it to receive the RECT structure instead of the CRect class and
+	also to receive a generic pointer instead of a pointer to an object array. You have
+	to make the conversions to the appropriate classes in the DLL, as in lines 4 through
+	9 in Listing 17.18.
+	<P>
+</DL>
+
+<H4>LISTING 17.18. THE ModArtNewDrawing FUNCTION.</H4>
+<PRE>1:  extern &quot;C&quot; void PASCAL EXPORT ModArtNewDrawing(RECT spRect, 
+        &Acirc;LPVOID lpoaLines)
+2:  {
+3:      AFX_MANAGE_STATE(AfxGetStaticModuleState());
+4:      CRect pRect;
+5:      pRect.top = spRect.top;
+6:      pRect.left = spRect.left;
+7:      pRect.right = spRect.right;
+8:      pRect.bottom = spRect.bottom;
+9:      CObArray* poaLines = (CObArray*)lpoaLines;
+10:     // Normal function body here
+11:     int m_lNumLines;
+12:     int m_lCurLine;
+13:
+14:     // Initialize the random number generator
+15:     srand((unsigned)time(NULL));
+16:     // Determine how many lines to create
+17:     m_lNumLines = rand() % 50;
+18:     // Are there any lines to create?
+19:     if (m_lNumLines &gt; 0)
+20:     {
+21:         // Loop through the number of lines
+22:         for (m_lCurLine = 0; m_lCurLine &lt; m_lNumLines; m_lCurLine++)
+23:         {
+24:             // Create the new line
+25:             NewLine(pRect, poaLines);
+26:         }
+27:     }
+28: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD>You also have to add functions to create and destroy the object array, with the
+	application storing the object array as a generic pointer as in Listing 17.19.
+	<P>
+</DL>
+
+<H4>LISTING 17.19. THE ModArtInit FUNCTION.</H4>
+<PRE>1: extern &quot;C&quot; LPVOID PASCAL EXPORT ModArtInit()
+2: {
+3:     AFX_MANAGE_STATE(AfxGetStaticModuleState());
+4:     // Create the object array
+5:     return (LPVOID)new CObArray;
+6: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q When do I need to recompile the applications that use my DLLs?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> Whenever you change any of the exported function calls. Changing, adding,
+	or removing arguments to any of these functions would mean recompiling the applications
+	that use the DLL. If you are working with an MFC extension DLL, the applications
+	that use the DLL need to be recompiled if the public interface for the exported classes
+	change or a new function or variable is added or removed. It doesn't matter if the
+	application isn't using any of the functions that were changed; it's still good practice
+	to recompile the applications, just to be sure.
+	<P>
+</DL>
+
+<H2><A NAME="Heading13"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading14"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What kind of DLL do you have to create to make classes in the DLL available
+	to applications?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>What do you have to add to the class to export it from a DLL?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What kind of DLL can be used with other programming languages?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>If you make changes in a DLL, do you have to recompile the applications
+	that use the DLL?
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>What function does the LIB file provide for a DLL?
+	<P>
+</DL>
+
+<H3><A NAME="Heading15"></A>Exercises</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Separate the line class into its own MFC extension DLL and use it with
+	the second (regular) DLL.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Alter the line class DLL so that it uses a consistent line width for
+	all lines.
+</DL>
+
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch16/ch16.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch18/ch18.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

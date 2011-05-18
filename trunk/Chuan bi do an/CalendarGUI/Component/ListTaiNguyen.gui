@@ -1,0 +1,188 @@
+<Screen
+	CID = "290858260"
+	AppID = "2"
+	AppVer = "4.2.116.0"
+	DocID = ""
+	HasCanvas = "1"
+	Width = "640"
+	Height = "480"
+	NextCID = "6"
+	RepresentativeRefID = "0"
+	UseDefRepresentative = "1">
+	<Elements
+		CID = "1">
+		<Element
+			CID = "701831525"
+			Type = "CheckTree"
+			X = "242"
+			Y = "99"
+			Width = "157"
+			Height = "224"
+			Flags = "0"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "30"
+			IsDisabled = "0"
+			HasBorder = "1"
+			HasButtons = "1"
+			HasLines = "1"
+			HasLinesAtRoot = "0"
+			HasHorzScrollBar = "1"
+			HasVertScrollBar = "1"
+			Mirror = "0"
+			WordWrap = "0"
+			IconMargin = "0"
+			ItemHeight = "16"
+			Icons = "">
+			<TreeItem
+				ItemID = "1"
+				Text = "Tài nguyên"
+				IsBold = "1"
+				IsChecked = "0"
+				IsExpanded = "1"
+				IsSelected = "0">
+				<Icon
+					FileID = "4BBAB613-6F71-4ACD-996A0EAFCD5D9217"
+					RootPath = "$Container"
+					Filename = "_Icons\root.ico"
+					IconIndex = "0"/>
+				<TreeItem
+					ItemID = "2"
+					Text = "Phòng họp"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "1"
+					IsSelected = "0">
+					<Icon
+						FileID = "FCACC9ED-A782-456B-8AD947383BC7996C"
+						RootPath = "$Container"
+						Filename = "_Icons\depart.ico"
+						IconIndex = "0"/>
+					<TreeItem
+						ItemID = "5"
+						Text = "Phòng họp 1"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "FCACC9ED-A782-456B-8AD947383BC7996C"
+							RootPath = "$Container"
+							Filename = "_Icons\depart.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+					<TreeItem
+						ItemID = "27"
+						Text = "Phòng họp 2"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "FCACC9ED-A782-456B-8AD947383BC7996C"
+							RootPath = "$Container"
+							Filename = "_Icons\depart.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+					<TreeItem
+						ItemID = "28"
+						Text = "Phòng họp 3"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "FCACC9ED-A782-456B-8AD947383BC7996C"
+							RootPath = "$Container"
+							Filename = "_Icons\depart.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+					<TreeItem
+						ItemID = "29"
+						Text = "Phòng họp 4"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "FCACC9ED-A782-456B-8AD947383BC7996C"
+							RootPath = "$Container"
+							Filename = "_Icons\depart.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+				</TreeItem>
+				<TreeItem
+					ItemID = "3"
+					Text = "Thời gian"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "1"
+					IsSelected = "0">
+					<Icon
+						FileID = "FCACC9ED-A782-456B-8AD947383BC7996C"
+						RootPath = "$Container"
+						Filename = "_Icons\depart.ico"
+						IconIndex = "0"/>
+					<TreeItem
+						ItemID = "7"
+						Text = "Nghỉ phép"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "FCACC9ED-A782-456B-8AD947383BC7996C"
+							RootPath = "$Container"
+							Filename = "_Icons\depart.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+				</TreeItem>
+				<TreeItem
+					ItemID = "4"
+					Text = "Dụ cụ"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "1"
+					IsSelected = "0">
+					<Icon
+						FileID = "FCACC9ED-A782-456B-8AD947383BC7996C"
+						RootPath = "$Container"
+						Filename = "_Icons\depart.ico"
+						IconIndex = "0"/>
+					<TreeItem
+						ItemID = "8"
+						Text = "Xe oto"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "FCACC9ED-A782-456B-8AD947383BC7996C"
+							RootPath = "$Container"
+							Filename = "_Icons\depart.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+				</TreeItem>
+			</TreeItem>
+		</Element>
+	</Elements>
+	<Connections
+		CID = "2"/>
+	<Groups
+		CID = "3"/>
+	<SelectionGroups
+		CID = "4"/>
+	<Notes
+		CID = "5">
+		<Note
+			CID = "290874482"
+			Name = "Description"
+			NextCID = "2">
+			<Text
+				CID = "1">
+				
+			</Text>
+		</Note>
+	</Notes>
+</Screen>

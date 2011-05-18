@@ -1,0 +1,1921 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Appendix F -- Using MFC's Helper Classes</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ape/ape.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../index.htm"><IMG
+SRC="../button/contents.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Contents"
+BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- F -<BR>
+Using MFC's Helper Classes</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Using the Collection Classes</A>
+	<UL>
+		<LI><A HREF="#Heading2">Using the Array Classes</A>
+		<LI><A HREF="#Heading3">Using the List Classes</A>
+		<LI><A HREF="#Heading4">Using the Map Classes</A>
+		<LI><A HREF="#Heading5">&Acirc;GetNext(pos)-&gt;m_dDiameter);</A>
+	</UL>
+	<LI><A HREF="#Heading6">Using the Coordinate-Handling Classes</A>
+	<UL>
+		<LI><A HREF="#Heading7">Using the CPoint Class</A>
+		<LI><A HREF="#Heading8">Using the CRect Class</A>
+		<LI><A HREF="#Heading9">&Acirc;AfxMessageBox(&quot;Hit! - ptTest2&quot;);</A>
+		<LI><A HREF="#Heading10">Using the CSize Class</A>
+	</UL>
+	<LI><A HREF="#Heading11">Using the Time-Handling Classes</A>
+	<UL>
+		<LI><A HREF="#Heading12">Using the COleDateTime Class</A>
+		<LI><A HREF="#Heading13">Using the COleDateTimeSpan Class</A>
+	</UL>
+	<LI><A HREF="#Heading14">Using the String Manipulation Class</A>
+	<UL>
+		<LI><A HREF="#Heading15">Using the CString Class</A>
+		<LI><A HREF="#Heading16">String Manipulation</A>
+		<LI><A HREF="#Heading17">Searching Strings</A>
+		<LI><A HREF="#Heading18">Formatting Text for Display</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+<I>by Jon Bates</I></P>
+<P>
+<H2><A NAME="Heading1"></A>Using the Collection Classes</H2>
+<P>You'll quickly find that in any object-oriented program you write, objects must
+be grouped and stored into collections of different types and sizes. Once again,
+the MFC comes to the rescue with sets of easy-to-use classes and templates to help
+with this common requirement.</P>
+<P>The collection classes fall into three broad categories--arrays, maps, and lists--that
+have their particular niches.</P>
+<P>Arrays are the mainstay of collection classes and are useful for implementing
+object containers. Each object in an array has a zero-based position or index, which
+is used to locate and reference the object.</P>
+<P>Lists are useful when you want to think of your data as being linked sequentially,
+each item to the next. They are useful when you must quickly add or remove items
+to the head or tail of the list. You can also traverse the list forward or backward
+from one item to the next.</P>
+<P>Maps are used to associate data against a key item such as a string or number
+where the associations are sparse and random. For example, you might use a map to
+associate objects with zip or postal codes. They are good at fast retrieval of objects
+given the association key and can be used as short-term data caches for large databases.</P>
+<P>
+<H3><A NAME="Heading2"></A>Using the Array Classes</H3>
+<P>MFC provides several predefined array classes and a generic array template so
+that you can create arrays to hold your own customized objects. (The latter is covered
+later in this chapter, in the &quot;Creating Custom Collection Classes&quot; section.)</P>
+<P>Several predefined array classes offer quick and easy array access for common
+types of variables and objects, as shown in Table F.1.</P>
+<P>
+<H4>TABLE F.1.&nbsp;PREDEFINED ARRAY-BASED CLASSES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Array Class</I></TD>
+		<TD ALIGN="LEFT"><I>Types of Variable Held</I></TD>
+		<TD ALIGN="LEFT"><I>Numeric Range of Type</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CByteArray</TD>
+		<TD ALIGN="LEFT">BYTE--8-bit</TD>
+		<TD ALIGN="LEFT">0 to 255</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">unsigned values</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CWordArray</TD>
+		<TD ALIGN="LEFT">WORD--16-bit</TD>
+		<TD ALIGN="LEFT">0 to 65535</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">unsigned values</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CUIntArray</TD>
+		<TD ALIGN="LEFT">UINT--32-bit</TD>
+		<TD ALIGN="LEFT">0 to 4294967295</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">unsigned integer</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">values</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CDWordArray</TD>
+		<TD ALIGN="LEFT">DWORD--32-bit</TD>
+		<TD ALIGN="LEFT">0 to 4294967295</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">unsigned integer</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">values</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CStringArray</TD>
+		<TD ALIGN="LEFT">CString--text</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">string objects</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CObArray</TD>
+		<TD ALIGN="LEFT">CObject--any</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">CObject-derived</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">objects</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CPtrArray</TD>
+		<TD ALIGN="LEFT">void*--any object</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">pointers or memory</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">addresses</TD>
+		<TD ALIGN="LEFT"></TD>
+	</TR>
+</TABLE>
+</P>
+<P>There are several member functions for each array class that differ only by the
+type of variables they hold. Each function discussed can be used with any array classes
+to deal with variables of their corresponding type.</P>
+<P>One of the most useful aspects of these array classes is their capability to grow
+dynamically. Normal C/C++ arrays are predefined in size and can be extended only
+by lots of messy reallocations of memory. The collection classes hide these reallocations
+so that you can simply call the Add() member of an array object to add a new value.
+For example, to add strings to a CStringArray, you can use code similar to this:</P>
+<P>
+<PRE>CStringArray myStringArray;
+myStringArray.Add(&quot;Red&quot;);
+myStringArray.Add(&quot;Green&quot;);
+myStringArray.Add(&quot;Blue&quot;);
+</PRE>
+<P>You can then find the size of an array by calling the GetSize() function; for
+example, the following line used after the previous lines would return three items
+into nNumberOfItems:</P>
+<P>
+<PRE>int nNumberOfItems = myStringArray.GetSize();
+</PRE>
+<P>You can also set the array to a specific size using the corresponding SetSize()
+function, which will extend or truncate the array to the specified size you pass.</P>
+<P>Values can be set to the array by using the SetAt() function that passes a zero-based
+index and the value to be stored. SetAt() will assert whether the index is larger
+than the current array size. You can then retrieve values from the array using the
+GetAt() function, which will return the value at the index position that you specify.
+You might use these functions with a CWordArray like this:</P>
+<P>
+<PRE>CWordArray myWordArray;
+myWordArray.SetSize(20);
+myWordArray.SetAt(0,200);
+myWordArray.SetAt(19,500);
+TRACE(&quot;Value at index position 19 is %d\n&quot;, 
+        myWordArray.GetAt(19));
+</PRE>
+<P>These lines will set the first element of a 20-element array to 200 and the last
+to 500 and display the value 500 when executed. You can still grow the array by calling
+the Add() function and find the uppermost valid index by calling GetUpperBound(),
+which will return the zero-based index, or -1 if there are no elements present.</P>
+<P>You can use the [ ] operators to set and get values at a specific index just like
+a normal C++ array. For example, the GetAt() and SetAt() functions in the previous
+lines could be replaced with the [ ] operators like this:</P>
+<P>
+<PRE>myWordArray[0] = 200;
+myWordArray[19] = 500;
+TRACE(&quot;Value at index position 19 is %d\n&quot;,
+        myWordArray.GetAt[19]);
+</PRE>
+<P>Using the InsertAt() and RemoveAt() functions, you can insert or remove items
+at a specific position, which results in all the items shifting up or down by one
+or more elements.</P>
+<P>The InsertAt() function has two forms; the first needs an index position and an
+element to insert there. You can also optionally pass it a count to insert multiple
+copies of the specified element. The second form lets you insert another whole array
+at a specified index position.</P>
+<P>The RemoveAt() function needs only one parameter to specify the index value of
+the item to be removed, but you can also optionally pass a count as the second parameter
+to remove a number of elements. The remaining array elements will then be shifted
+down to fill the gap.</P>
+<P>You can remove all the elements of an array by calling the RemoveAll() function.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+MANAGING MEMORY WITH COBARRAY<I> </I>AND CPTRARRAY</P>
+	<P>You must be careful to delete objects that you have allocated with new and stored
+	in a CObArray or CPtrArray because these arrays only hold pointers to the elements
+	(not elements themselves). Therefore, a RemoveAll() call will only remove the pointers
+	to the objects and not free the memory used by the objects themselves. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading3"></A>Using the List Classes</H3>
+<P>There are only three categories of lists as shown in Table F.2 and a template
+for your own types (discussed later). There is seldom any need to have a list of
+simple integer values. Instead, you would probably need a linked list of your own
+CObject-derived classes or pointers to a number of C++ classes or structures.</P>
+<P>
+<H4>TABLE F.2.&nbsp;THE LIST-BASED COLLECTION CLASSES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Class Name</I></TD>
+		<TD ALIGN="LEFT"><I>Type of Variable Held</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CObList</TD>
+		<TD ALIGN="LEFT">CObject--Pointers to any CObject-derived objects.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CPtrList</TD>
+		<TD ALIGN="LEFT">void*--Pointers to memory addresses holding any type of data.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CStringList</TD>
+		<TD ALIGN="LEFT">CString--Text strings.</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Linked lists are several objects linked to each other in a sequential fashion
+like carriages on a train. There is a definite head and tail position, but every
+other element knows only its immediate neighbor. A POSITION variable keeps track
+of a current position in a list. You can declare multiple POSITION variables to track
+different places in the same list. Each list's member functions then use a POSITION
+variable to find the head, tail, or next and previous elements in the list.</P>
+<P>You can add elements to a list by calling the AddHead() or AddTail() functions
+or by inserting items into a specific position using the InsertBefore() or InsertAfter()
+functions. Each function then returns a POSITION value to indicate the position of
+the new added item.</P>
+<P>For example, you can construct a four-element list of CString items like this:</P>
+<P>
+<PRE>CStringList listMyStrings;
+POSITION pos;
+pos = listMyStrings.AddHead(&quot;Hand&quot;);
+listMyStrings.AddTail(&quot;Forearm&quot;);
+listMyStrings.InsertBefore(pos,&quot;Fingers&quot;);
+listMyStrings.AddTail(&quot;Elbow&quot;);
+</PRE>
+<P>These lines will produce a linked list of CString strings from head to tail like
+this:</P>
+<P>
+<PRE>Fingers-Hand-Forearm-Elbow
+</PRE>
+<P>You can also pass other similar list objects to the AddHead() and AddTail() functions
+to add another list to the head or tail of the current list.</P>
+<P>When you've constructed a list, you can iterate through its members using a POSITION
+variable. The head or tail positions can be found by calling GetHeadPosition() or
+GetTailPosition(), respectively. These functions both return a POSITION value indicating
+the current position in the list. You can then pass the POSITION variable as a reference
+to GetNext() or GetPrev() to find the next or previous element in the list. These
+functions then return the specific object and adjust the current position. When the
+end of the list is reached, the POSITION variable will be set to NULL.</P>
+<P>For example, the following lines will iterate through the previous listMyStrings,
+displaying each element in turn:</P>
+<P>
+<PRE>POSITION posCurrent = listMyStrings.GetHeadPosition();
+while(posCurrent) TRACE(&quot;%s\n&quot;, listMyStrings.GetNext(posCurrent);
+</PRE>
+<P>You can find specific list elements by using the Find() function, which returns
+a POSITION value if the search parameter you pass is found. You can also optionally
+pass a position value, from which you can start the search.</P>
+<P>For example, you can search for the string Fingers in the previous list by calling
+the Find() function like this:</P>
+<P>
+<PRE>POSITION posFingers = Find(&quot;Fingers&quot;);
+</PRE>
+<P>If the searched-for element isn't found, a NULL value will be returned.</P>
+<P>There is also a FindIndex() function that will find the nth element from the head
+of the list (where n is the passed parameter).</P>
+<P>You can find out how many elements are in the list by calling the GetCount() member
+function, which returns the number of elements and doesn't need any parameters.</P>
+<P>The value of elements at a specific position can be retrieved or reset by using
+the GetAt() and SetAt() functions, which are used in a similar way to their array
+equivalents, but by passing a POSITION value rather than an array index.</P>
+<P>You can remove elements from the list by using the RemoveAt() function and passing
+the POSITION value to identify the element to be removed. For example, to remove
+the Fingers item from the previous example, you might code the following:</P>
+<P>
+<PRE>RemoveAt(posFingers);
+</PRE>
+<H3><A NAME="Heading4"></A>Using the Map Classes</H3>
+<P>The map classes work by associating a type value (or element) with a key value
+that can be used to look up the element. The various map classes, and their key values
+and associated element types, are shown in Table F.3.</P>
+<P>
+<H4>TABLE F.3.&nbsp;THE MAP-BASED COLLECTION CLASSES.</H4>
+<P>
+<TABLE BORDER="1" WIDTH="100%">
+	<TR>
+		<TD WIDTH="33%"><I>Class Name</I></TD>
+		<TD WIDTH="33%"><I>Key Type</I></TD>
+		<TD WIDTH="34%"><I>Element Type</I></TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">CMapWordToOb</TD>
+		<TD WIDTH="33%">WORD--16-bit</TD>
+		<TD WIDTH="34%">CObject--</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">&nbsp;</TD>
+		<TD WIDTH="33%">unsigned value</TD>
+		<TD WIDTH="34%">CObject-derived objects</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">CMapWordToPtr</TD>
+		<TD WIDTH="33%">WORD--16-bit</TD>
+		<TD WIDTH="34%">void*--</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">&nbsp;</TD>
+		<TD WIDTH="33%">unsigned value</TD>
+		<TD WIDTH="34%">Pointers to memory</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">CMapPtrToPtr</TD>
+		<TD WIDTH="33%">void*--</TD>
+		<TD WIDTH="34%">void*--</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">&nbsp;</TD>
+		<TD WIDTH="33%">Pointers to memory</TD>
+		<TD WIDTH="34%">Pointers to memory</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">CMapPtrToWord</TD>
+		<TD WIDTH="33%">void*--</TD>
+		<TD WIDTH="34%">WORD--16-bit</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">&nbsp;</TD>
+		<TD WIDTH="33%">Pointers to memory</TD>
+		<TD WIDTH="34%">unsigned value</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">CMapStringToOb</TD>
+		<TD WIDTH="33%">CString--</TD>
+		<TD WIDTH="34%">CObject--</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">&nbsp;</TD>
+		<TD WIDTH="33%">Text strings</TD>
+		<TD WIDTH="34%">CObject-derived objects</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">CMapStringToPtr</TD>
+		<TD WIDTH="33%">CString--</TD>
+		<TD WIDTH="34%">void*--</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">&nbsp;</TD>
+		<TD WIDTH="33%">Text strings</TD>
+		<TD WIDTH="34%">Pointers to memory</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">CMapStringToString</TD>
+		<TD WIDTH="33%">CString--</TD>
+		<TD WIDTH="34%">CString--</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="33%">&nbsp;</TD>
+		<TD WIDTH="33%">Text strings</TD>
+		<TD WIDTH="34%">Text strings</TD>
+	</TR>
+</TABLE>
+</P>
+<P>You can insert elements into a map by using the SetAt() function and passing a
+key value as the first parameter and your element value as the second. For example,
+if you must store your own CObject-derived objects indexed by a string value, you
+can use the CMapStringToOb class and add elements like this:</P>
+<P>
+<PRE>CMapStringToOb mapPlanetDetails;
+mapPlanetDetails.SetAt(&quot;Mercury&quot;,new CPlanetDets
+  &Acirc;(4878, 0.054, 57.91, 87.969));
+mapPlanetDetails.SetAt(&quot;Venus&quot;,new CPlanetDets
+  &Acirc;(12100, 0.815, 108.21, 224.701));
+mapPlanetDetails.SetAt(&quot;Earth&quot;,new CPlanetDets
+  &Acirc;(12756, 1.000, 149.60, 365.256));
+</PRE>
+<P>In the previous example, CPlanetDets is a CObject-derived class with a constructor
+that takes four planetary detail parameters. The new objects are then associated
+with the planet names as keys.</P>
+<P>You can also use the [ ] operator overload instead of SetAt() by enclosing the
+key value inside the square brackets like this:</P>
+<P>
+<PRE>mapPlanetDetails[&quot;Mars&quot;] = new CPlanetDets
+  &Acirc;(6762, 0.107, 227.94, 686.98);
+</PRE>
+<P>After you have set data to a map, you can retrieve it by calling the Lookup()
+member function by passing the key value and a reference to a variable to hold the
+associated element value if found. If the element isn't found, a FALSE value is returned
+from Lookup(). For example, to retrieve details about a planet from the previous
+example, you can use these lines:</P>
+<P>
+<PRE>CPlanetDets* pMyPlanet = NULL;
+if (mapPlanetDetails.Lookup(&quot;Earth&quot;,(CObject*&amp;)pMyPlanet))
+    TRACE(&quot;Sidereal Period = %d days\n&quot;, pMyPlanet-&gt;m_dSidereal);
+</PRE>
+<P>The (CObject*&amp;) cast is used to cast the pMyPlanet object pointer to a generic
+CObject pointer reference.</P>
+<P>The GetCount() function will return the number of elements current in the map.
+These elements can be removed by calling the RemoveKey() function and passing the
+key of the element to be removed like this:</P>
+<P>
+<PRE>mapPlanetDetails.RemoveKey(&quot;Jupiter&quot;);
+</PRE>
+<P>Remember to delete the allocated objects. RemoveKey() just removes the pointer
+to the object--not the object itself--so it won't free up the used memory. You can
+also remove all the elements by calling RemoveAll().</P>
+<P>You can iterate through the list of associations using the GetNextAssoc() function,
+which needs parameters that reference a current POSITION holding variable, a key
+variable, and an element variable. You can find the position of the first element
+by calling GetFirstPosition(), which returns the POSITION value for the first element.
+To iterate through the associations, you might code the following:</P>
+<P>
+<PRE>POSITION pos = mapPlanetDetails.GetStartPosition();
+while(pos!=NULL)
+{
+CString strPlanet;
+CPlanet* pMyPlanet;
+mapPlanetDetails.GetNextAssoc(pos,strPlanet, (CObject*&amp;)pMyPlanet);
+TRACE(&quot;%s has a diameter of %d km\n&quot;,strPlanet, pMyPlanet-&gt;m_dDiameter);
+}
+</PRE>
+<P>When GetNextAssoc() returns, pos will hold the position for the next association
+or NULL if there are no more. The key and element values (strPlanet and pMyPlanet
+in the previous example) will be set to each key-element pair in turn.</P>
+<P>Because of a map's capability to retrieve sparse data quickly and efficiently,
+it is often advantageous to use a map as a memory cache for a slow database lookup.</P>
+<P>For example, in the following lines, the planet details associated with strPlanetName
+are required. When first called, this code won't have a mapped version of the required
+planet, so it will have to call GetPlanetFromSlowDB() to find it. Because it then
+stores the retrieved planet in the mapPlanetDetails map, when it is next called with
+the same strPlanetName, the details can be quickly returned from the cached version
+in memory:</P>
+<P>
+<PRE>CPlanetDets* pMyPlanet = NULL;
+if (mapPlanetDetails.Lookup(strPlanetName,
+   &Acirc;(CObject*&amp;)pMyPlanet) == FALSE)
+{
+pMyPlanet = GetPlanetFromSlowDB(strPlanetName);
+mapPlanetDetails.SetAt(strPlanetName,pMyPlanet);
+}
+return pMyPlanet;
+</PRE>
+<P>This technique is easy to implement and can transform your application's speed
+when you are using slow retrieval devices such as databases or files.</P>
+<P>
+<H3><B>Creating Custom Collection Classes</B></H3>
+<P>You might want to customize the collection classes to use your own objects rather
+than the generic CObject-derived classes. Customization offers several benefits because
+you can make an array, list, or map that will accept and return only your specific
+type of object. If you accidentally try to add the wrong sort of object to a customized
+array, list, or map, the compiler will issue an error message to notify you. The
+other advantage is that you don't have to cast generic CObject* pointers (that is,
+from a CObArray) back to your specific object to use it.</P>
+<P>This sort of customization is known as <I>type-safety</I>; in large programs it
+can be invaluable for stopping accidental assignments of the wrong class. A set of
+templates, CArray, Clist, and CMap, lets you easily create an array, list, or map
+to store, use, and return objects of your specified type only. Templates are a complex
+subject, but you don't have to worry about writing templates; the MFC-provided templates
+defined in the afxtempl.h header file will do for these type-safe collection classes.
+For the scope of this section, it is best to think of templates as large macros that
+generate lots of code based on your parameters when compiled.</P>
+<P>The templates will give you access to all the normal functions in the array, list,
+or map classes discussed in the previous sections. However, instead of using generic
+CObject-based parameters and returned values, you can define your own types as parameters
+and return values.</P>
+<P>To use the templates in your program, you'll need to include the following header
+line in each module (.cpp/.h file) that uses the template definitions:</P>
+<P>
+<PRE>#include &quot;afxtempl.h&quot;
+</PRE>
+<P>You can then define your own custom type-safe class using the template syntax
+like this for an array of custom objects:</P>
+<P>
+<PRE>CArray&lt;CMyCustomClass*, CMyCustomClass *&gt; myCustomClassArray;
+</PRE>
+<P>The &lt; and &gt; symbols used in the definition should be thought of as angle
+brackets (not greater-than or less-than conditional operators). The previous line
+uses the CArray template to create an instance of myCustomClassArray. The first CMyCustomClass*
+parameter specifies types of object pointers you want the array to return when you
+use GetAt() and other access functions. The second CMyCustomClass* specifies the
+type that should be used for the input parameter definitions. Then all the functions
+that store objects, such as SetAt() and Add(), will accept only pointers to objects
+of your specific CMyCustomClass.</P>
+<P>For example, you can create an array that takes and returns only pointers to the
+specific CPlanetDets class, defined (and implemented) like this:</P>
+<P>
+<PRE>class CPlanetDets : public CObject
+{
+public:
+CPlanetDets(double dDiameter,double dGravity,
+&Acirc;double dDistFromSun,double dSidereal):
+    m_dDiameter(dDiameter), m_dGravity(dGravity),
+    m_dDistFromSun(dDistFromSun), m_dSidereal(dSidereal) {}
+  double m_dDiameter,m_dGravity,m_dDistFromSun,m_dSidereal;
+};
+</PRE>
+<P>To declare a type-safe CArray-based array called myPlanetArray, you can then code
+the following line:</P>
+<P>
+<PRE>CArray&lt;CPlanetDets*,CPlanetDets*&gt; myPlanetArray;
+</PRE>
+<P>This declares that myPlanetArray can only accept pointers to a CPlanetDets object
+and return pointers to a CPlanetDets object. You might then use the new array like
+this:</P>
+<P>
+<PRE>myPlanetArray.Add(new CPlanetDets
+  &Acirc;(4878, 0.054, 57.91, 87.969));
+myPlanetArray.Add(new CPlanetDets
+  &Acirc;(12100, 0.815, 108.21, 224.701));
+myPlanetArray.Add(new CPlanetDets
+  &Acirc;(12756, 1.000, 149.60, 365.256));
+for(int i=0;i&lt;myPlanetArray.GetSize();i++)
+   TRACE(&quot;Diameter = %f\n&quot;, myPlanetArray[i]-&gt;m_dDiameter);
+</PRE>
+<P>These lines create three new CPlanetDets type objects and add them to the array.
+The last line displays the diameter in the TRACE macro without needing to cast the
+returned value from myPlanetArray[i] because it's already a pointer of the CPlanetDets*
+type.</P>
+<P>However, later you might forget the exact nature of myPlanetArray and try to add
+a CStatic object instead:</P>
+<P>
+<PRE>myPlanetArray.Add(new CStatic());
+</PRE>
+<P>Fortunately, the compiler will spot the transgression and issue a compiler error
+such as</P>
+<P>
+<PRE>`Add' : cannot convert parameter 1 from `class 
+&Acirc;CStatic *' to `class CPlanetDets *
+</PRE>
+<P>However, the error wouldn't have been spotted if you had been using a CObArray
+to hold the planet details:</P>
+<P>
+<PRE>CObArray myPlanetArray;
+</PRE>
+<P>The CStatic object would be happily stored along with the CPlanetDets objects,
+causing untold havoc when you try to retrieve the CStatic object, thinking it's a
+CPlanetDets object.</P>
+<P>The template used to generate type-safe lists is CList; it takes the same general
+form as CArray:</P>
+<P>
+<PRE>CList&lt;CMyCustomClass*, CMyCustomClass *&gt; myCustomClassList;
+</PRE>
+<P>Again, the first parameter is the required returned object type, and the second
+parameter specifies the accepted object types for functions that accept elements
+for storage.</P>
+<P>All the functions available for lists are available for your own specific type-safe
+customized lists, again checking and returning your specified types. Therefore, the
+equivalent list-based code for the planet storing array would be coded like this:</P>
+<P>
+<PRE>CList&lt;CPlanetDets*,CPlanetDets*&gt; myPlanetList;
+myPlanetList.AddTail(new CPlanetDets
+  &Acirc;(4878, 0.054, 57.91, 87.969));
+myPlanetList.AddTail(new CPlanetDets
+  &Acirc;(12100, 0.815, 108.21, 224.701));
+myPlanetList.AddTail(new CPlanetDets
+  &Acirc;(12756, 1.000, 149.60, 365.256));
+POSITION pos = myPlanetList.GetHeadPosition();
+while(pos) TRACE(&quot;Diameter = %f\n&quot;,myPlanetList.
+</PRE>
+<H3><A NAME="Heading5"></A>&Acirc;GetNext(pos)-&gt;m_dDiameter);</H3>
+<P>The template for customized maps differs from the list and arrays in that it needs
+four parameters: an input and a return value for both the key and element value.
+So the general form is like this:</P>
+<P>
+<PRE>CMap&lt;MyType, MyArgType, CMyCustomClass *, CMyCustomClassArg *&gt;
+myCustomClassMap;
+</PRE>
+<P>The first parameter, MyType, specifies the internally stored key value for each
+map association. This can be any of the basic types such as int, WORD, DWORD, double,
+float, or CString, or it can be a pointer to your own specific type.</P>
+<P>The second parameter, MyArgType, specifies the argument type used to pass key
+values in and out of the map functions.</P>
+<P>The third parameter, CMyCustomClass *, is how you want the internal element values
+to be stored (as specific type-safe pointers to your objects).</P>
+<P>The fourth parameter, CMyCustomClassArg *, specifies the argument type used to
+pass your element values in and out of the map functions. For example, to associate
+the planet details with their names, you might code the following:</P>
+<P>
+<PRE>CMap&lt;CString,LPCSTR,CPlanetDets*,CPlanetDets*&gt; myPlanetMap;
+myPlanetMap.SetAt(&quot;Mercury&quot;,
+          new CPlanetDets(4878, 0.054, 57.91, 87.969));
+myPlanetMap.SetAt(&quot;Venus&quot;,
+          new CPlanetDets(12100, 0.815, 108.21, 224.701));
+myPlanetMap.SetAt(&quot;Earth&quot;,
+          new CPlanetDets(12756, 1.000, 149.60, 365.256));
+CPlanetDets* pPlanet = NULL;
+if (myPlanetMap.Lookup(&quot;Venus&quot;,pPlanet))
+TRACE(&quot;Diameter = %f\n&quot;,pPlanet-&gt;m_dDiameter);
+</PRE>
+<P>The map declaration indicates that the objects should be stored internally as
+CStrings but use LPCSTR (pointers to constant character arrays) to pass values into
+and out of the map. The planet's details themselves will be both stored internally
+and accessed as pointers to CPlanetDets objects (such as CPlanetDets*).</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>POTENTIAL PROBLEMS WHEN USING THE MAP'S INTERNAL HASH KEY TYPES</B></P>
+	<P>You must be wary of the conversion between the passed parameters and the internal
+	hash key storage system. For example, if you were to replace the CString in the previous
+	example with another LPCSTR for the internal storage object, the Lookup() would fail
+	to find &quot;Venus&quot; because it would be comparing the pointer values (to different
+	instances of &quot;Venus&quot;) rather than the contents of the strings. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H2><A NAME="Heading6"></A>Using the Coordinate-Handling Classes</H2>
+<P>Because Windows is a graphically oriented environment, you'll often need to hold
+point positions, rectangles, and sizes. Three MFC classes help store and manipulate
+these coordinates: CPoint, CRect, and CSize. Each has several member functions and
+operator overloads that take much of the work out of adding, constructing, and finding
+derivatives of these coordinates.</P>
+<P>Also several of the MFC and GDI functions understand their types or underlying
+types as parameter values, so you don't have to perform any messy mangling operations
+to pass them into functions.</P>
+<P>
+<H3><A NAME="Heading7"></A>Using the CPoint Class</H3>
+<P>CPoint encapsulates a POINT structure that just holds an x and y position to represent
+a point on a two-dimensional surface. You can always access x and y members directly
+to get or set their current values like this:</P>
+<P>
+<PRE>CPoint ptOne;
+ptOne.x = 5;
+ptOne.y = 20;
+TRACE(&quot;Co-ordinate = (%d,%d)\n&quot;,ptOne.x,ptOne.y);
+</PRE>
+<P>You set these values when you construct a CPoint object by passing values to one
+of CPoint's several constructors, as shown in Table F.4.</P>
+<P>
+<H4>TABLE F.4.&nbsp;CONSTRUCTOR TYPES FOR THE CPoint CLASS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Constructor Definition</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CPoint()</TD>
+		<TD ALIGN="LEFT">Constructs an uninitialized object</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CPoint(POINT ptInit)</TD>
+		<TD ALIGN="LEFT">Copies the settings from a POINT structure or another CPoint object</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CPoint(int x, int y)</TD>
+		<TD ALIGN="LEFT">Initializes the object from the x and y parameter values</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CPoint(DWORD dwInit)</TD>
+		<TD ALIGN="LEFT">Uses the low 16 bits for the x value and the high 16 bits for the y value</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CPoint(SIZE sizeInit)</TD>
+		<TD ALIGN="LEFT">Copies the settings from a SIZE structure or CSize object</TD>
+	</TR>
+</TABLE>
+</P>
+<P>For example, you could replace the last sample lines with these for the same result:</P>
+<P>
+<PRE>CPoint ptOne(5,20);
+TRACE(&quot;Co-ordinate = (%d,%d)\n&quot;,ptOne.x,ptOne.y);
+</PRE>
+<P>One of the most useful aspects of the CPoint class is its many operator overloads.
+By using the +, -, +=, and -= operators with other CPoint, CRect, or CSize objects,
+you can add or subtract coordinate pairs from other coordinate pairs or from rectangles
+or sizes. For example, the long way to subtract two points from each other to give
+a third would be like this:</P>
+<P>
+<PRE>CPoint ptOne(5,20);
+CPoint ptTwo(25,40);
+CPoint ptThree;
+ptThree.x = ptTwo.x - ptOne.x;
+ptThree.y = ptTwo.y - ptOne.y;
+</PRE>
+<P>This can be simplified by using the operator overload:</P>
+<P>
+<PRE>CPoint ptOne(5,20);
+CPoint ptTwo(25,40);
+CPoint ptThree = ptTwo - ptOne;
+</PRE>
+<P>Or you can add the coordinates of one point to another like this:</P>
+<P>
+<PRE>ptTwo += ptOne;
+</PRE>
+<P>You can also use the == and != logical operator overloads to perform comparisons.
+For example, to check whether ptTwo is equal to ptOne in both x and y values, you
+can code the following:</P>
+<P>
+<PRE>if (ptOne == ptTwo) TRACE(&quot;Points are the same&quot;);
+</PRE>
+<P>There is also an Offset() function that adds an offset value specified by passing
+x and y values, or a CPoint class or POINT structure, or a CSize or SIZE structure.
+Therefore, the following two lines are functionally identical:</P>
+<P>
+<PRE>ptOne.Offset(75,-15);
+ptOne-=CPoint(-75,15);
+</PRE>
+<H3><A NAME="Heading8"></A>Using the CRect Class</H3>
+<P>The CRect class encapsulates a RECT structure to hold two pairs of coordinates
+that describe a rectangle by its top-left point and its bottom-right point. You can
+construct a CRect object using one of its several constructors, as shown in Table
+F.5.</P>
+<P>
+<H4>TABLE F.5.&nbsp;CONSTRUCTOR TYPES FOR THE CRect CLASS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Constructor Definition</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRect()</TD>
+		<TD ALIGN="LEFT">Constructs an uninitialized object</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRect(const RECT&amp; rcInit)</TD>
+		<TD ALIGN="LEFT">Copies the settings from another RECT structure or CRect object</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRect(LPCRECT lprcInit)</TD>
+		<TD ALIGN="LEFT">Copies the settings via a RECT or CRect pointer</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRect(int l,int t,int r,int b)</TD>
+		<TD ALIGN="LEFT">Initializes the coordinates from left, top, right, and bottom parameters</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRect(POINT point, SIZE size)</TD>
+		<TD ALIGN="LEFT">Initializes from a POINT or CPoint and a SIZE or CSize</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRect(POINT ptTL, POINT ptBR)</TD>
+		<TD ALIGN="LEFT">Initializes from a top-left POINT and a bottom-right POINT</TD>
+	</TR>
+</TABLE>
+</P>
+<P>After you've constructed a CRect object, you can access each of the top, left,
+bottom, and right members individually using the (LPRECT) cast to cast it into a
+RECT structure as shown in these lines:</P>
+<P>
+<PRE>CRect rcOne(15,15,25,20);
+ ((LPRECT)rcOne)-&gt;bottom += 20;
+TRACE(&quot;Rect is (%d,%d)-(%d,%d)&quot;,
+((LPRECT)rcOne)-&gt;left,((LPRECT)rcOne)-&gt;top,
+        ((LPRECT)rcOne)-&gt;right,((LPRECT)rcOne)-&gt;bottom);
+</PRE>
+<P>Alternatively, you can access the members via either the top-left CPoint or the
+bottom-right CPoint. References to these member objects are returned by the TopLeft()
+and BottomRight() functions. When you've accessed either the top-left or bottom-right
+points, you can then manipulate them using any of the CPoint functions shown in the
+previous section. For example, the following lines are functionally identical to
+the previous lines, but differ in that they construct and access the rectangle using
+CPoint objects:</P>
+<P>
+<PRE>CRect rcOne(CPoint(15,15),CPoint(25,20));
+rcOne.BottomRight().y += 20;
+TRACE(&quot;Rect is (%d,%d)-(%d,%d)&quot;,
+    rcOne.TopLeft().x,rcOne.TopLeft().y,
+    rcOne.BottomRight().x,rcOne.BottomRight().y);
+</PRE>
+<P>You can also use the SetRect() function to set the coordinates by passing four
+integers to represent the top-left x- and y-coordinates and the bottom-right x- and
+y-coordinates. SetRectEmpty() sets all these coordinates to zero to make a NULL rectangle.
+The IsRectNull() function will return TRUE if called on such a NULL rectangle, and
+IsRectEmpty() will return TRUE if the width and height are both zero (even if the
+individual values are not zero).</P>
+<P>Several helper functions help you calculate various aspects of the rectangle's
+geometry. The width and height can be found by calling the Width()and Height() functions,
+each of which returns the relevant integer value. Alternatively, you can find a CSize
+that represents both width and height by calling the Size() function. For example,
+the following line displays the width and height of the rectangle rcOne:</P>
+<P>
+<PRE>TRACE(&quot;Rect Width = %d, Height = %d\n&quot;, 
+                    rcOne.Width(), rcOne.Height());
+</PRE>
+<P>The point in the center of the rectangle is often a useful coordinate to know;
+you can find this by calling the CenterPoint() function, which returns a CPoint object
+to represent the center of the rectangle.</P>
+<P>You might use this to find the center of your window's client area and draw a
+dot there like this:</P>
+<P>
+<PRE>CRect rcClient;
+GetClientRect(&amp;rcClient);
+dc.SetPixel(rcClient.CenterPoint(),0);
+</PRE>
+<P>You can also find the union or intersection of two rectangles by calling UnionRect()
+and InterSectRect(), which both take two source rectangles as parameters and set
+the coordinates of the calling CRect object to the union or intersection. The union
+is the smallest rectangle that will enclose the two source rectangles. The intersection
+is the largest rectangle that is enclosed by both source rectangles. The diagram
+in Figure F.1 shows the union and intersection of two source rectangles labeled A
+and B.</P>
+<P><A HREF="javascript:popUp('33fig01.gif')"><B>FIGURE F.1.</B></A><B> </B><I>The
+union and intersection between two rectangles.</I></P>
+<P>The following lines calculate the intersection and union of the source rectangles
+rcOne and rcTwo:</P>
+<P>
+<PRE>CRect rcOne(10,10,100,100);
+CRect rcTwo(50,50,150,200);
+CRect rcUnion, rcIntersect;
+rcUnion.UnionRect(rcOne,rcTwo);
+rcIntersect.IntersectRect(rcOne,rcTwo);
+</PRE>
+<P>When this code is run, rcUnion will be set to coordinates (10,10)-(150,200) and
+rcIntersect will be set to coordinates (50,50)-(100,100).</P>
+<P>You can use SubtractRect() to find the subtraction of one rectangle from another.
+This is the smallest rectangle that contains all the points not intersected by the
+two source rectangles (or the smallest non-overlapping section). For example, by
+adding the following lines to an OnPaint() handler, you can see the effects of SubtractRect()
+to subtract rcTwo from rcOne to produce rcDst. The resulting subtraction is the section
+that will be drawn in blue at the bottom of the diagram, as shown in Figure F.2.</P>
+<P>
+<PRE>CRect rcOne(10,10,220,220), rcTwo(50,50,150,260), rcDst;
+rcDst.SubtractRect(rcTwo,rcOne);
+dc.FillSolidRect(rcOne,RGB(255,0,0));//red
+dc.FillSolidRect(rcTwo,RGB(0,255,0));//green
+dc.FillSolidRect(rcDst,RGB(0,0,255));//blue
+</PRE>
+<P>When this code is run, the resulting rectangle rcDst will hold the coordinates
+(50,220)-(150,26).</P>
+<P><A HREF="javascript:popUp('33fig02.gif')"><B>FIGURE F.2.</B></A><B> </B><I>The
+effects of a subtraction operation on two partially overlapping rectangles.</I></P>
+<P>You can increase or decrease the size of a rectangle using InflateRect() and DeflateRect().
+These both have several forms that accept various types of parameters, as shown in
+Table F.6.</P>
+<P>
+<H4>TABLE F.6.&nbsp;&nbsp;PARAMETER FORMS FOR InflateRect AND DeflateRect.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Parameters</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">(int x, int y)</TD>
+		<TD ALIGN="LEFT">Inflate or deflate the left and right sides by the x value and the top and bottom
+			sides by the y value.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">(SIZE size)</TD>
+		<TD ALIGN="LEFT">Inflate or deflate the left and right sides by size.cx and the top and bottom sides
+			by size.cy.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">(LPCRECT lpRect)</TD>
+		<TD ALIGN="LEFT">Inflate each side by the corresponding left, top, right, and bottom values from lpRect.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">(int l, int t, int r, int b)</TD>
+		<TD ALIGN="LEFT">Inflate each side by the corresponding left, top, right, and bottom values.</TD>
+	</TR>
+</TABLE>
+</P>
+<P>For example, the following code inflates rcOne and deflates rcTwo:</P>
+<P>
+<PRE>CRect rcOne(10,10,100,100);
+CRect rcTwo(50,50,150,200);
+rcOne.InflateRect(5,5);
+rcTwo.DeflateRect(10,20,30,40);
+</PRE>
+<P>After these lines have run, rcOne will be set to the coordinates (5,5)-(105,105)
+and rcTwo will be set to the coordinates (60,70)-(120,160).</P>
+<P>You can perform hit-testing by determining whether a specified point (perhaps
+from a mouse click) lies within the bounds of a rectangle by calling PtInRect() and
+passing the point to be tested. If the point does lie within the rectangle, a TRUE
+value is returned; otherwise a FALSE value is returned.</P>
+<P>In the following lines, the Hit! - ptTest1 message is displayed because ptTest1
+does lie within the rcTestArea test area, whereas ptTest2 doesn't, so PtInRect()
+returns TRUE for ptTest1 and FALSE for ptTest2:</P>
+<P>
+<PRE>CRect rcTestArea(10,20,440,450);
+CPoint ptTest1(200,200), ptTest2(500,500);
+if (rcTestArea .PtInRect(ptTest1)) 
+  &Acirc;AfxMessageBox(&quot;Hit! - ptTest1&quot;);
+if (rcTestArea .PtInRect(ptTest2)) 
+</PRE>
+<H3><A NAME="Heading9"></A>&Acirc;AfxMessageBox(&quot;Hit! - ptTest2&quot;);</H3>
+<P>There are also several operator overloads for use with CRect objects, as shown
+in Table F.7.</P>
+<P>
+<H4>TABLE F.7.&nbsp;OPERATOR OVERLOADS USED WITH CRect.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Operator</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">=</TD>
+		<TD ALIGN="LEFT">Copies all the coordinates from the right rectangle operand to the left rectangle,
+			like an ordinary numeric assignment.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">+</TD>
+		<TD ALIGN="LEFT">Either displaces a rectangle position if a CPoint or CSize object is added to a rectangle
+			or inflates the coordinates with their corresponding counterparts if a CRect object
+			is added.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">-</TD>
+		<TD ALIGN="LEFT">Same as +, except that the coordinates are displaced in a negative direction or deflated
+			if a CRect is used.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">+=</TD>
+		<TD ALIGN="LEFT">Same overall effect as + but affects only the current rectangle.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">-=</TD>
+		<TD ALIGN="LEFT">Same overall effect as - but affects only the current rectangle.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&amp;</TD>
+		<TD ALIGN="LEFT">Creates an intersection rectangle from the two rectangle operands.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">|</TD>
+		<TD ALIGN="LEFT">Creates a union rectangle from the two rectangle operands.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&amp;=</TD>
+		<TD ALIGN="LEFT">Same overall effect as &amp; but affects only the current rectangle.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">|=</TD>
+		<TD ALIGN="LEFT">Same overall effect as | but affects only the current rectangle.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">==</TD>
+		<TD ALIGN="LEFT">Returns TRUE if the rectangles are identical, otherwise FALSE.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">!=</TD>
+		<TD ALIGN="LEFT">Returns FALSE if the rectangles are identical; otherwise returns TRUE.</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The following lines show some of the CRect operator overloads being used to manipulate
+the rcStart rectangle:</P>
+<P>
+<PRE>CRect rcStart(10,10,100,100);
+rcStart = rcStart + CPoint(5,5);
+rcStart -= CSize(5,5);
+rcStart    += CRect(1,2,3,4);
+if (rcStart == CRect(9,8,103,104)) AfxMessageBox(&quot;TRUE&quot;);
+</PRE>
+<P>The final condition returns TRUE, thus displaying the message box because the
+final coordinates are (9,8)-(103,104).</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>USING THE </B>NormalizeRect()<B> FUNCTION</B></P>
+	<P>Sometimes you might perform an operation that makes the top-left point hold values
+	greater than the bottom-right point. If this is so, the width or height might be
+	negative, causing other functions to fail. If you suspect this might happen, you
+	can call the NormalizeRect() function to correct the coordinates so that the top-left
+	coordinates have lower values than the bottom-right coordinates. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading10"></A>Using the CSize Class</H3>
+<P>The CSize class encapsulates the SIZE structure and provides several constructors
+and operator overloads that manipulate the internal cx and cy values that define
+a size. The various constructors you can use to create an instance of a CSize object
+are shown in Table F.8.</P>
+<P>
+<H4>TABLE F.8.&nbsp;&nbsp;CONSTRUCTOR TYPES FOR THE CSize CLASS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Constructor Definition</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CSize()</TD>
+		<TD ALIGN="LEFT">Creates an uninitialized CSize object.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CSize(SIZE sizeInit)</TD>
+		<TD ALIGN="LEFT">Copies the cx and cy values from another CSize object or SIZE structure.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CSize(initCX, initCY)</TD>
+		<TD ALIGN="LEFT">Initializes the object with initCX for the horizontal size and initCY for the vertical
+			size.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CSize(POINT ptInit)</TD>
+		<TD ALIGN="LEFT">Initializes the object with the x and y values from a CPoint object or POINT structure.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CSize(DWORD dwSize)</TD>
+		<TD ALIGN="LEFT">Sets the cx value to the low-word (bottom 16 bits) of dwSize and the cy value to
+			the high-word (to 16 bits) of dwSize.</TD>
+	</TR>
+</TABLE>
+</P>
+<P>You can manipulate the cx and cy members directly like this:</P>
+<P>
+<PRE>CSize tstSize(10,10);
+tstSize.cx = tstSize.cy * 2;
+</PRE>
+<P>The only functions that the CSize class offers are operator overloads, as shown
+in Table F.9.</P>
+<P>
+<H4>TABLE F.9.&nbsp;&nbsp;OPERATOR OVERLOADS USED WITH CSize.</H4>
+<P>
+<TABLE BORDER="1" WIDTH="100%">
+	<TR>
+		<TD WIDTH="21%"><I>Operator</I></TD>
+		<TD WIDTH="79%"><I>Description</I></TD>
+	</TR>
+	<TR>
+		<TD WIDTH="21%">+</TD>
+		<TD WIDTH="79%">Add two size objects</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="21%">-</TD>
+		<TD WIDTH="79%">Subtract one size object from another</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="21%" HEIGHT="13">+=</TD>
+		<TD WIDTH="79%" HEIGHT="13">Add a SIZE object</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="21%">-=</TD>
+		<TD WIDTH="79%">Subtract a SIZE object</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="21%">==</TD>
+		<TD WIDTH="79%">Determine whether the two sizes are the same and return TRUE if identical</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="21%">!=</TD>
+		<TD WIDTH="79%">Determine whether the two sizes are different and return TRUE if different</TD>
+	</TR>
+</TABLE>
+</P>
+<P>These can be used just like normal arithmetic operators and affect both the cx
+and cy members, as shown in the following lines that manipulate the contents of tstSize:</P>
+<P>
+<PRE>CSize tstSize(10,15);
+tstSize += tstSize + tstSize - CSize(1,2);
+if (tstSize == CSize(29,43)) AfxMessageBox(&quot;TRUE&quot;);
+</PRE>
+<P>When run, this code will display the TRUE message box message because tstSize
+ends up as the size 29&yen;43.</P>
+<P>
+<H2><A NAME="Heading11"></A>Using the Time-Handling Classes</H2>
+<P>The capability to store dates and times is a common requirement for many applications.
+You will probably also need to calculate elapsed times and time spans between stored
+date and time values and be able to format those into user-readable text strings.</P>
+<P>MFC provides four classes to handle all the aspects of date and time manipulation
+and storage. Originally, there were just two classes; CTime and CTimeSpan, which
+are based on the UNIX time_t (4 byte long value) system (the number of elapsed seconds
+since 1970). However, granularity of only one second and a limited range of dates
+between 1970 and 2038 proved too restrictive for many applications. Hence, two new
+replacement classes, COleDateTime and COleDateTimeSpan, are now also supplied and
+should be used in preference to CTime and CTimeSpan in newer applications.</P>
+<P>COleDateTime is based on an underlying DATE structure (which is actually just
+a double value). This greater capacity of storage type lets COleDateTime cover a
+range of dates between January 1, 100, and December 31, 9999, and down to an approximate
+resolution of 1 millisecond. The difference between two COleDateTime values can be
+represented and manipulated by the COleDateTimeSpan object.</P>
+<P>Because of the similarity between the CTime class and the newer COleDateTime class,
+the following sections just describe COleDateTime, although many of the functions
+are identical in the CTime versions.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>USING </B>CTime<B> WITH DATABASES</B></P>
+	<P>You might find it convenient to use CTime when using ODBC-based databases because
+	the RFX recordset transfer macros know only how to handle CTime objects directly
+	and don't know how to handle COleDateTime objects without conversion. If you use
+	DAO databases, COleDateTime can be used directly. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading12"></A>Using the COleDateTime Class</H3>
+<P>COleDateTime is connected with OLE in that it can be used in conjunction with
+the VARIANT structure, often used in OLE automation. Because of the wide range of
+date and time storage systems, especially in OLE environments, COleDateTime must
+be capable of converting between all these various types. This support is reflected
+in its many constructor forms, as shown in Table F.10.</P>
+<P>
+<H4>TABLE F.10.&nbsp;&nbsp;CONSTRUCTOR TYPES USED WITH COleDateTime.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Constructor Definition</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">COleDateTime()</TD>
+		<TD ALIGN="LEFT">Creates an uninitialized COleDateTime object</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">COleDateTime(const COleDateTime&amp; datesrc)</TD>
+		<TD ALIGN="LEFT">Copies the values from another COleDateTime object</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">COleDateTime(int nYear, int nMonth, int nDay, int nHour, int nMinute, int nSecond)</TD>
+		<TD ALIGN="LEFT">Initializes the date and time from the values passed</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">COleDateTime(const VARIANT&amp; varSrc)</TD>
+		<TD ALIGN="LEFT">Converts a date time from a VARIANT structure</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">COleDateTime(DATE dtSrc)</TD>
+		<TD ALIGN="LEFT">Copies a date time from a DATE structure</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">COleDateTime(time_t timeSrc)</TD>
+		<TD ALIGN="LEFT">Copies a date time from a UNIX-style time_t structure</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">COleDateTime(WORD wDosDate)</TD>
+		<TD ALIGN="LEFT">Copies a date time from the MS-DOS-style values WORD and wDosTime</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">COleDateTime(const SYSTEMTIME&amp; systimeSrc)</TD>
+		<TD ALIGN="LEFT">Copies a date time from a SYSTEMTIME structure</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">COleDateTime(const FILETIME&amp; filetimeSrc)</TD>
+		<TD ALIGN="LEFT">Copies a date time from a FILETIME structure</TD>
+	</TR>
+</TABLE>
+</P>
+<P>If you've constructed COleDateTime with a valid date time, the object will be
+marked with a valid status flag (COleDateTime::valid). Otherwise, the status flag
+is invalid (COleDateTime::invalid). You can check this status by calling the GetStatus()
+member function to return the relevant flag value, or you can force the flag value
+by passing it into the SetStatus() function.</P>
+<P>The status flag is also updated when you set date and time values to the object
+by calling the SetDateTime() function. This function takes six integer parameters
+for the year (100-9999), month (1-12), day of the month (1-31), hour (0-23), minute
+(0-59), and second (0-59). You can also set just the date or time components by calling
+SetDate()--passing just the year, month, and day of the month--or by calling SetTime()--passing
+only the hour, minute, and second values.</P>
+<P>You can use the GetCurrentTime() static function to retrieve the current system
+time and set it to a COleDateTime object using the = operator overload function like
+this:</P>
+<P>
+<PRE>COleDateTime dtCurrent;
+dtCurrent = COleDateTime::GetCurrentTime();
+</PRE>
+<P>After running these lines, dtCurrent will be set to your machine's current system
+date and time.</P>
+<P>The same values (in the same ranges) can be retrieved by the return value of GetYear(),
+GetMonth(), GetDay(), GetHour(), GetMinute(), or GetSecond(). There are also the
+useful derivative functions: GetDayOfWeek() and GetDayOfYear(). GetDayOfWeek() returns
+the day of the week in the range 1 to 7 where 1 is Sunday. The GetDayOfYear() function
+returns a value in the range 1 to 366 starting at January 1.</P>
+<P>You can retrieve a displayable formatted CString by using the Format() function.
+This is probably one of the most useful COleDateTime functions because you can pass
+several formatting codes to specify the exact format returned from Format(), as shown
+in Table F.11. These codes are passed as either a string or a string resource identifier,
+and several individual codes are strung together to add various aspects of the formatting.</P>
+<P>These values are also modified by the current locale settings. The locale preferences
+can affect things such as the names of days and months, the ordering of MM/DD/YY
+representations, and the AM/PM indicators.</P>
+<P>
+<H4>TABLE F.11.&nbsp;FORMATTING CODES TO FORMAT THE COleDateTime TEXT OUTPUT.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Code</I></TD>
+		<TD ALIGN="LEFT"><I>Example</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%a</TD>
+		<TD ALIGN="LEFT">Sat</TD>
+		<TD ALIGN="LEFT">Abbreviated day of the week</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%A</TD>
+		<TD ALIGN="LEFT">Saturday</TD>
+		<TD ALIGN="LEFT">Day of the week</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%b</TD>
+		<TD ALIGN="LEFT">Apr</TD>
+		<TD ALIGN="LEFT">Abbreviated month</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%B</TD>
+		<TD ALIGN="LEFT">April</TD>
+		<TD ALIGN="LEFT">Month</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%c</TD>
+		<TD ALIGN="LEFT">04/04/98 18:05:01</TD>
+		<TD ALIGN="LEFT">Date and time in the current locale format</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%d</TD>
+		<TD ALIGN="LEFT">04</TD>
+		<TD ALIGN="LEFT">Day of the month (01-31)</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%H</TD>
+		<TD ALIGN="LEFT">18</TD>
+		<TD ALIGN="LEFT">Hour (00-23) 24 hour</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%I</TD>
+		<TD ALIGN="LEFT">06</TD>
+		<TD ALIGN="LEFT">Hour (01-12) 12 hour</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%j</TD>
+		<TD ALIGN="LEFT">094</TD>
+		<TD ALIGN="LEFT">Day of the year</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%m</TD>
+		<TD ALIGN="LEFT">04</TD>
+		<TD ALIGN="LEFT">Month (01-12)</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%M</TD>
+		<TD ALIGN="LEFT">05</TD>
+		<TD ALIGN="LEFT">Minute (01-59)</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%p</TD>
+		<TD ALIGN="LEFT">PM</TD>
+		<TD ALIGN="LEFT">AM/PM indicator for locale</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%S</TD>
+		<TD ALIGN="LEFT">01</TD>
+		<TD ALIGN="LEFT">Second (01-59)</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%U</TD>
+		<TD ALIGN="LEFT">13</TD>
+		<TD ALIGN="LEFT">Week of year (00-51) with Sunday as first day of week</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%w</TD>
+		<TD ALIGN="LEFT">6</TD>
+		<TD ALIGN="LEFT">Weekday (0-6) 0=Sunday</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%W</TD>
+		<TD ALIGN="LEFT">13</TD>
+		<TD ALIGN="LEFT">Week of year (00-51) with Monday as first day of week</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%x</TD>
+		<TD ALIGN="LEFT">04/04/98</TD>
+		<TD ALIGN="LEFT">Date in the current locale format</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%X</TD>
+		<TD ALIGN="LEFT">18:05:01</TD>
+		<TD ALIGN="LEFT">Time in the current locale format</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%y</TD>
+		<TD ALIGN="LEFT">98</TD>
+		<TD ALIGN="LEFT">Two-digit year (00-99)</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%Y</TD>
+		<TD ALIGN="LEFT">1998</TD>
+		<TD ALIGN="LEFT">Four-digit year (0100-9999)</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%z or %Z</TD>
+		<TD ALIGN="LEFT">GMT Daylight Time</TD>
+		<TD ALIGN="LEFT">Time zone name/abbreviation</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">% %</TD>
+		<TD ALIGN="LEFT">%</TD>
+		<TD ALIGN="LEFT">A percent sign</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%#c</TD>
+		<TD ALIGN="LEFT">Saturday, April 04, 1998 18:05:01</TD>
+		<TD ALIGN="LEFT">Current locale long date and time</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%#x</TD>
+		<TD ALIGN="LEFT">Saturday, April 04, 1998</TD>
+		<TD ALIGN="LEFT">Current locale long date</TD>
+	</TR>
+</TABLE>
+</P>
+<P>You can use the following lines to generate a message box displaying your machine's
+date and time like this:</P>
+<P>
+<PRE>COleDateTime dtCurrent;
+dtCurrent = COleDateTime::GetCurrentTime();
+AfxMessageBox(dtCurrent.Format(&quot;Today is %a %b %d, %Y&quot;));
+</PRE>
+<P>When run, the time will then be displayed in a message box in the following format:</P>
+<P>
+<PRE>Today is Sat Apr 04, 1998
+</PRE>
+<P>You can get COleDateTime to attempt to determine a date and time by calling ParseDateTime()
+and passing a string for it to parse and a flag value to specify that only the date
+or the time component is required. ParseDateTime() will then scan the string for
+time in the format HH:MM:SS, and a date in the format DD/MM/YYYY, or in a long format
+such as January 18th, 1998. If you only want to scan for the time, you can pass VAR_TIMEVALUEONLY
+for the second parameter flag value, alternatively VAR_DATEVALUEONLY for just the
+date. If you don't want the users' locale preferences to be used to indicate the
+string format to check for, you can pass LOCALE_NOUSEROVERRIDE as this flag value.</P>
+<P>There are also several operator overloads you can use to add and subtract COleDateTimeSpans
+and to compare date and time values with other date and time values as shown in Table
+F.12.</P>
+<P>
+<H4>TABLE F.12.&nbsp;OPERATOR OVERLOADS USED IN COleDateTime.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Operator</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">=</TD>
+		<TD ALIGN="LEFT">Copy a date/time value from another COleDateTime object, VARIANT structure, DATE
+			structure, time_t structure, SYSTEMTIME structure, or FILETIME structure.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">+</TD>
+		<TD ALIGN="LEFT">Add a COleDateTimeSpan value to a COleDateTime value.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">-</TD>
+		<TD ALIGN="LEFT">Subtract a COleDateTimeSpan from a COleDateTime value or two COleDateTime objects
+			from each other to yield a COleDateTimeSpan result.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">+=</TD>
+		<TD ALIGN="LEFT">Add a COleDateTimeSpan value to the current COleDateTime object.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">-=</TD>
+		<TD ALIGN="LEFT">Subtract a COleDateTimeSpan value from the current COleDateTime object.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">==</TD>
+		<TD ALIGN="LEFT">Check whether two COleDateTime objects hold an identical date and time.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">!=</TD>
+		<TD ALIGN="LEFT">Check whether two COleDateTime objects hold different dates and times.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&lt;</TD>
+		<TD ALIGN="LEFT">Check whether one COleDateTime object is less than another.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&gt;</TD>
+		<TD ALIGN="LEFT">Check whether one COleDateTime object is greater than another.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&lt;=</TD>
+		<TD ALIGN="LEFT">Check whether one COleDateTime object is less than or equal to another.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&gt;=</TD>
+		<TD ALIGN="LEFT">Check whether one COleDateTime object is greater than or equal to another.</TD>
+	</TR>
+</TABLE>
+
+<H3><A NAME="Heading13"></A>Using the COleDateTimeSpan Class</H3>
+<P>A COleDateTimeSpan object can hold the difference between two COleDateTime objects.
+You can create one by subtracting one COleDateTime object from another or by using
+one of the COleDateTimeSpan constructor forms shown in Table F.13.</P>
+<P>
+<H4>TABLE F.13.&nbsp;CONSTRUCTOR TYPES USED WITH COleDateTimeSpan.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">
+			<H4>Constructor Definition
+		</TD>
+		<TD ALIGN="LEFT">
+			<H4>Description
+		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">COleDateTimeSpan()</TD>
+		<TD ALIGN="LEFT">Create a time span set to zero.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">COleDateTimeSpan(const COleDateTimeSpan&amp; srcSpan)</TD>
+		<TD ALIGN="LEFT">Copy the time span from another COleDateTimeSpan object.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">COleDateTimeSpan(long lDays, int nHours, int nMins, int nSecs)</TD>
+		<TD ALIGN="LEFT">Initialize the time span with the passed parameter values.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">COleDateTimeSpan(double dSpanSrc)</TD>
+		<TD ALIGN="LEFT">Initialize the time span with the number of days passed value.</TD>
+	</TR>
+</TABLE>
+</P>
+<P>After you have a COleDateTimeSpan object, you can check or set its status using
+the GetStatus() and SetStatus() functions just like the COleDateTime object. The
+only differences are that the flag values are COleDateTimeSpan::valid and COleDateTimeSpan::invalid.</P>
+<P>You can also set a time span by passing the number of days, hours, minutes, and
+seconds as integer parameters to SetDateTimeSpan(). You can then retrieve these values
+from a valid COleDateTimeSpan object by calling the GetDays(), GetHours(), GetMinutes(),
+and GetSeconds() functions that all return long values representing each portion
+of the time span value. If you want to retrieve the overall time span expressed in
+days, hours, minutes, or seconds in one double value, you can call GetTotalDays(),
+GetTotalHours(), GetTotalMinutes(), or GetTotalSeconds(), respectively.</P>
+<P>You can format COleDateTimeSpan values as strings in the same way as COleDateTime
+values by passing a format string using the codes appropriate to time spans from
+Table F.11.</P>
+<P>Several operator overloads help you use COleDateTimeSpan objects arithmetically
+to add and subtract time spans to and from each other and also use them in conditions,
+as shown in Table F.14.</P>
+<P>
+<H4>TABLE F.14.&nbsp;OPERATOR OVERLOADS USED IN COleDateTimeSpan.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Operator</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">=</TD>
+		<TD ALIGN="LEFT">Copies time spans from other time span values</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">+</TD>
+		<TD ALIGN="LEFT">Adds two time spans</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">-</TD>
+		<TD ALIGN="LEFT">Subtracts one time span from another</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">+=</TD>
+		<TD ALIGN="LEFT">Adds a time span to the current object</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">-=</TD>
+		<TD ALIGN="LEFT">Subtracts a time span from the current object</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">==</TD>
+		<TD ALIGN="LEFT">Checks to see whether two time spans are identical</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">!=</TD>
+		<TD ALIGN="LEFT">Checks to see whether two time spans are different</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&lt;</TD>
+		<TD ALIGN="LEFT">Checks to see whether one time span is less than another</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&gt;</TD>
+		<TD ALIGN="LEFT">Checks to see whether one time span is greater than another</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&lt;=</TD>
+		<TD ALIGN="LEFT">Checks to see whether one time span is less than or equal to another</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&gt;=</TD>
+		<TD ALIGN="LEFT">Checks to see whether one time span is greater than or equal to another</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The following sample code shows how two COleDateTime objects can be subtracted
+to yield a COleDateTimeSpan using the minus (-) operator overload:</P>
+<P>
+<PRE>COleDateTime dtMoonwalk;
+dtMoonwalk = COleDateTime(1969,7,20,0,0,0);
+COleDateTimeSpan dtDiff = 
+               COleDateTime::GetCurrentTime()- dtMoonwalk;
+CString strMessage;
+strMessage.Format(&quot;Days since first moonwalk: %d &quot;,
+                             (int)dtDiff.GetTotalDays());
+AfxMessageBox(strMessage);
+</PRE>
+<H2><A NAME="Heading14"></A>Using the String Manipulation Class</H2>
+<P>For several years C programmers secretly envied one (and only one) tool that BASIC
+programmers had at their disposal: sophisticated and easy string handling. With C++,
+that functionality can be naturally replicated, and has been with MFC's CString class.</P>
+<P>String handling is a very common application requirement, and Visual C++ applications
+tend to be littered with instances of CString-based objects to accomplish the task.</P>
+<P>
+<H3><A NAME="Heading15"></A>Using the CString Class</H3>
+<P>You can easily construct CString objects as an empty string or initialized by
+passing one of many differing types of text representation systems to the constructor.
+The various forms of CString construction are shown in Table F.15.</P>
+<P>
+<H4>TABLE F.15.&nbsp;CONSTRUCTOR TYPES USED WITH CString.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Constructor Definition</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CString()</TD>
+		<TD ALIGN="LEFT">Creates an empty zero-length string</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CString(const CString&amp; strSrc)</TD>
+		<TD ALIGN="LEFT">Copies the contents from another CString</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CString(LPCSTR lpsz)</TD>
+		<TD ALIGN="LEFT">Copies the contents from a null-terminated string</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CString(const unsigned char* psz)</TD>
+		<TD ALIGN="LEFT">Copies the contents from a null-terminated string</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CString(LPCTSTR lpch, int nLength)</TD>
+		<TD ALIGN="LEFT">Copies nLength characters from a character array</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CString(TCHAR ch, int nRepeat = 1)</TD>
+		<TD ALIGN="LEFT">Fills the string with nRepeat copies of character ch</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">
+			<PRE>CString(LPCWSTR lpsz)</PRE>
+		</TD>
+		<TD ALIGN="LEFT">
+			<PRE>Copies a Unicode null-terminated string</PRE>
+		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>When you've constructed a CString object, there are many ways in which you can
+add or assign text to it. The operator overloads provide simple assignments via the
+= operator, or concatenation of two strings by the + or += operators, as shown in
+the following lines:</P>
+<P>
+<PRE>CString strTest;
+strTest = &quot;Mr Gorsky&quot;;
+strTest = &quot;Good luck &quot; + strTest;
+AfxMessageBox(strTest);
+</PRE>
+<P>When this code is run, the string is initially set to &quot;Mr Gorsky&quot;; then
+&quot;Good luck &quot; is prefixed by the + operator.</P>
+<P>You can find the length of a string by calling the GetLength() member function,
+which returns an integer representing the number of characters the string currently
+holds. You can also test whether a string is empty by calling IsEmpty(), which returns
+TRUE if it holds no characters.</P>
+<P>You can also drop the contents of a CString object by calling Empty(), which will
+then force the string to be zero length.</P>
+<P>Many functions require old C-style strings rather than a CString object; you can
+use the (const char *) or LPCTSTR casts to give functions access to the CString object's
+internal buffer as if it were a C-style null-terminated string (but only for read
+access). Visual C++ will implicitly cast the CString to a null-terminated string
+if a specific function has a prototype that requires it. However, because some functions
+might have a void* prototype, the compiler will pass a pointer to the CString object
+rather than the null- terminated string it expects, thus requiring you to perform
+the (LPCTSTR) cast on the CString object.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>USING NULL-TERMINATED STRINGS</B></P>
+	<P><I>ULL-terminated strings</I> are character arrays that use a NULL or zero value
+	character to mark the end of the string. Therefore the length of the string is the
+	number of characters before the NULL character. There are several C-style functions
+	such as strlen(), strcpy() (find the length and copy a string), and many others that
+	are used to manipulate NULL-terminated strings. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>You can access the string as an array of characters by using the GetAt() and SetAt()
+functions. GetAt() will return the character at a specified (zero-based) position
+parameter. SetAt() will set a character (second parameter) to a position (first parameter)
+within the length of the string. You can also use the [ ] operator to get a character
+value from a specific position instead of GetAt(). For example, the following lines
+transpose the e and i characters to fix the spelling mistake:</P>
+<P>
+<PRE>CString strText(&quot;Fix this spilleng&quot;);
+TCHAR ch1 = strText.GetAt(11);
+strText.SetAt(11,strText[14]);
+strText.SetAt(14,ch1);
+</PRE>
+<P>You can also use the conditional operator overloads &lt;, &lt;=, ==, !=, &gt;=,
+and &gt; to test one string lexicographically against another. The ASCII codes are
+compared when the strings are compared, so numbers are less than letters and uppercase
+letters are less than lowercase letters. Therefore, the following lines of code will
+cause the TRUE message box to appear:</P>
+<P>
+<PRE>CString str1(&quot;123&quot;);
+CString str2(&quot;ABC&quot;);
+CString str3(&quot;abc&quot;);
+CString str4(&quot;bcd&quot;);
+if (str1 &lt; str2 &amp;&amp; str2 &lt; str3 &amp;&amp; str3 &lt; str4) 
+                                     AfxMessageBox(&quot;TRUE&quot;);
+</PRE>
+<P>You can also use the Compare() function to compare the current string with another.
+This will return zero if the two strings are equal, a negative value if the current
+string is less than the tested string, or a positive value if the current string
+is greater than the tested string. For example, the following lines will cause the
+TRUE message box to appear:</P>
+<P>
+<PRE>CString strName(&quot;Peter&quot;);
+if (strName.Compare(&quot;Piper&quot;)&lt;0) AfxMessageBox(&quot;TRUE&quot;);
+</PRE>
+<P>This comparison also takes notice of the case of the compared strings. You can
+use the CompareNoCase() equivalent to ignore differences in case.</P>
+<P>
+<H3><A NAME="Heading16"></A>String Manipulation</H3>
+<P>The BASIC language had three very useful manipulation functions--Mid$, Left$,
+and Right$--which are now available as the CString Mid(), Left(), and Right() functions.
+Their job is to copy out sections of a specified string. You can pass the Mid() function
+a start position and optionally a number of characters to copy (it defaults to all
+characters if not specified), and Mid() will return another CString containing the
+specified section. You can extract a number of characters from the left of a string
+by passing the required count to the Left() function. Right() returns the corresponding
+specified number of characters from the right of the string as shown in these lines:</P>
+<P>
+<PRE>CString strText(&quot;I saw three ships a sailing&quot;);
+TRACE(&quot;%s\n&quot;,strText.Left(5));
+TRACE(&quot;%s\n&quot;,strText.Mid(6,11));
+TRACE(&quot;%s\n&quot;,strText.Right(7));
+</PRE>
+<P>When run, these lines will display the following trace output:</P>
+<P>
+<PRE>I saw
+three ships
+sailing
+</PRE>
+<P>Notice that the word <I>a</I> used between ships and sailing isn't displayed in
+the trace output because that portion of the string is never extracted.</P>
+<P>You can use the MakeUpper() and MakeLower() functions to change all the characters
+in a string to upper- or lowercase and MakeReverse() to reverse the string.</P>
+<P>Spaces, newline characters, and tabs can be trimmed from the left of a string
+with the TrimLeft() function and from the right with the TrimRight() function.</P>
+<P>
+<H3><A NAME="Heading17"></A>Searching Strings</H3>
+<P>You can look for specific substrings or characters from a string by using the
+Find(), ReverseFind(), or FindOneOf() functions.</P>
+<P>You can pass a single character or string to the Find() member function to look
+for an instance of that character or string in the context string. If the character
+or substring is found, its zero-based position will be returned; otherwise -1 is
+returned to indicate that the substring or character isn't present. The following
+lines search for the word &quot;you&quot; and display the substring starting at that
+position:</P>
+<P>
+<PRE>CString strTest(&quot;Start as you mean to go on&quot;);
+int nPosn = strTest.Find(&quot;you&quot;);
+if (nPosn!=-1) TRACE(strTest.Mid(nPosn) + &quot;?&quot;);
+</PRE>
+<P>ReverseFind() searches for a specified character (no substring form) from the
+end of a string and if found, returns its position from the beginning of the string;
+otherwise it returns -1.</P>
+<P>FindOneOf() lets you pass a number of characters to look for in a string. The
+position of the first character from the set to be found is returned, or -1 is returned
+to indicate that none were found. The following sample lines search for the characters
+g, m, i, and p; the m is found first, so the string &quot;mean to go on&quot; is
+displayed in the trace output:</P>
+<P>
+<PRE>CString strTest(&quot;Start as you mean to go on&quot;);
+int nPosn = strTest.FindOneOf(&quot;gmip&quot;);
+if (nPosn!=-1) TRACE(strTest.Mid(nPosn));
+</PRE>
+<H3><A NAME="Heading18"></A>Formatting Text for Display</H3>
+<P>A common use for CString objects is for formatting text before it is displayed.
+You can use the Format() function for this formatting by passing a set of formatting
+instructions as % coded instruction strings as the first parameter. Then you must
+pass a number of value parameters that correspond to each of those instructions.
+Some of the possible formatting instruction flags and corresponding parameter types
+are shown in Table F.16. Several of these codes can be combined to form a formatted
+string, which is then stored in the calling CString object. This format string can
+also be passed as a string resource ID from your application's resources.</P>
+<P>
+<H4>TABLE F.16.&nbsp;&nbsp;FORMATTING % INSTRUCTION CODES FOR USE WITH THE Format()
+FUNCTION.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Flag</I></TD>
+		<TD ALIGN="LEFT"><I>Parameter Type</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%c</TD>
+		<TD ALIGN="LEFT">int</TD>
+		<TD ALIGN="LEFT">Displays a single text character</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%d</TD>
+		<TD ALIGN="LEFT">int</TD>
+		<TD ALIGN="LEFT">Displays a signed decimal integer</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%u</TD>
+		<TD ALIGN="LEFT">int</TD>
+		<TD ALIGN="LEFT">Displays an unsigned decimal integer</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%o</TD>
+		<TD ALIGN="LEFT">int</TD>
+		<TD ALIGN="LEFT">Displays an unsigned octal integer</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%x</TD>
+		<TD ALIGN="LEFT">int</TD>
+		<TD ALIGN="LEFT">Displays an unsigned hexadecimal integer in lowercase</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%X</TD>
+		<TD ALIGN="LEFT">int</TD>
+		<TD ALIGN="LEFT">Displays an unsigned hexadecimal integer in uppercase</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%f</TD>
+		<TD ALIGN="LEFT">double</TD>
+		<TD ALIGN="LEFT">Displays a signed floating-point number</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%s</TD>
+		<TD ALIGN="LEFT">string</TD>
+		<TD ALIGN="LEFT">Displays a string of text when passed a string pointer such as char*</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">%%</TD>
+		<TD ALIGN="LEFT">none</TD>
+		<TD ALIGN="LEFT">Display a percent sign %.</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The following example combines some of these common types to display a message
+box containing the text &quot;There are 1.609340 Kilometers to 1 Mile&quot;:</P>
+<P>
+<PRE>CString strFormatMe;
+char *szKm = &quot;Kilometer&quot;;
+double dKmsPerMile = 1.60934;
+strFormatMe.Format(&quot;There are %f %ss to %d %s&quot;,
+                    dKmsPerMile,szKm,1,&quot;Mile&quot;);
+AfxMessageBox(strFormatMe);
+</PRE>
+<P>You can pass extra formatting specification flags to the width and precision of
+each output field and its alignment. These flags are passed after the % sign, but
+before the type (refer to Table F.16) in the following format:</P>
+<P>
+<PRE>%[flags] [width] [.precision]type
+</PRE>
+<P>The flag value can be any of the following characters:</P>
+
+<UL>
+	<LI><B>-</B>&nbsp;&nbsp;Left-aligns the field (otherwise it is right-aligned).
+	<P>
+	<LI><B>+</B>&nbsp;&nbsp;Displays a + or - to indicate the numeric sign (defaults
+	to just show - for negative numbers).
+	<P>
+	<LI><B>0</B>&nbsp;&nbsp;Pads the width with zeroes
+</UL>
+
+<P>The width then specifies the minimum number of characters that should be displayed,
+and the .precision specifies how many characters should be displayed after a floating
+point.</P>
+<P>For example, you could change the text from the previous example to read &quot;There
+are +1.6 Kilometers to 1 Mile&quot; by changing the format for %f to %+1.f like this:</P>
+<P>
+<PRE>strFormatMe.Format(&quot;There are %+.1f %ss to %d %s&quot;,
+                    dKmsPerMile,szKm,1,&quot;Mile&quot;);
+</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>STRING FORMATTING</B></P>
+	<PRE>The CString Format() function uses the same format specifier 
+codes as the C-style printf() and sprintf() (print and string 
+print) functions. C programmers might be more familiar with the 
+formatting codes of these printf() functions, which can also be 
+used and applied to the CString Format() function.
+
+</PRE>
+
+</BLOCKQUOTE>
+
+<CENTER>
+<P>
+<HR>
+<A HREF="../ape/ape.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../index.htm"><IMG
+SRC="../button/contents.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Contents"
+BORDER="0"></A> <BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

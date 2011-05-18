@@ -1,0 +1,174 @@
+<Catalogue
+	CID = "1"
+	NextCID = "2">
+	<Files
+		CID = "1">
+		<FileInfo
+			ID = "0134445D-F020-48C6-B9DC02BDAB383970"
+			RelativePath = "Bitmap\outlookBar.PNG"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\outlookBar.PNG"/>
+		<FileInfo
+			ID = "0531809E-DE6F-4714-8C651E5E44FBAE1E"
+			RelativePath = "Bitmap\Collaps.gif"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\Collaps.gif"/>
+		<FileInfo
+			ID = "0D2F0714-A7E2-4421-9A6A5AA86DDE7B9D"
+			RelativePath = "MainUI\monthView.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "monthView.gui"/>
+		<FileInfo
+			ID = "12F1ABBE-9CD2-4D88-ABA9924316DE1850"
+			RelativePath = "MainUI\WeekView.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "MonthView.gui"/>
+		<FileInfo
+			ID = "1390AB1B-0B33-4483-B2B35D2A271F045A"
+			RelativePath = "bitmap\ToolbarNormal.bmp"
+			OriginalRoot = "$Project"
+			OriginalPath = "bitmap\ToolbarNormal.bmp"/>
+		<FileInfo
+			ID = "25D9C99C-7941-47F7-BD7D7D7FF432A3B3"
+			RelativePath = "_Icons\user1_preferences.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "_Icons\user1_preferences.ico"/>
+		<FileInfo
+			ID = "35F1FC14-D108-441C-9A0D1FA82D6230BF"
+			RelativePath = "Component.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Component.gui"
+			IsDeleted = "1"/>
+		<FileInfo
+			ID = "38069F9A-B92E-4293-A64F870F5385683E"
+			RelativePath = "_Icons\user1_information.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "_Icons\user1_information.ico"/>
+		<FileInfo
+			ID = "3EE2D1C3-B72E-4642-B15FD4F1BA7F52A6"
+			RelativePath = "Component\ListTaiNguyen.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "ListTaiNguyen.gui"/>
+		<FileInfo
+			ID = "4213AD01-0BE9-4A9B-A2A42375648C8351"
+			RelativePath = "_Icons\user.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "_Icons\user.ico"/>
+		<FileInfo
+			ID = "4258706F-17AB-4982-AAB890F0E8FED2F9"
+			RelativePath = "CalendarView\Tip.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Tip.gui"/>
+		<FileInfo
+			ID = "440065F5-8FFD-4F43-804D00B754DACF7E"
+			RelativePath = "_Icons\typereport.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "_Icons\typereport.ico"/>
+		<FileInfo
+			ID = "4BBAB613-6F71-4ACD-996A0EAFCD5D9217"
+			RelativePath = "_Icons\root.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "_Icons\root.ico"/>
+		<FileInfo
+			ID = "5C5DB501-1A96-45F2-89A397D55A11EEFC"
+			RelativePath = "NewCalendar\Detail_tab.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\Detail_tab.gui"/>
+		<FileInfo
+			ID = "6BC18CD2-E2F0-4985-867C06418A8235BC"
+			RelativePath = "MainUI.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "MainUI.gui"
+			IsDeleted = "1"/>
+		<FileInfo
+			ID = "745A32B2-D9BF-45B8-B9CF972C27320D9F"
+			RelativePath = "Bitmap\Cancel.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\Cancel.ico"/>
+		<FileInfo
+			ID = "84807C67-577F-4729-85D2F7BEE2B4FD32"
+			RelativePath = "CalendarView\Calendar.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\Calendar.gui"/>
+		<FileInfo
+			ID = "8C669470-E460-4685-8B0EAC520099334A"
+			RelativePath = "_Icons\Calendar Month.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "_Icons\Calendar Month.ico"/>
+		<FileInfo
+			ID = "914CFA5B-4BB5-4F3B-889046F1BD0A1E37"
+			RelativePath = "CalendarGUI.autosave"
+			OriginalRoot = "$Project"
+			OriginalPath = "CalendarGUI.autosave"/>
+		<FileInfo
+			ID = "9ACF7B7C-48B6-47BD-A3365C1A6706BEF5"
+			RelativePath = "MainUI\ResourceView.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "ResourceView.gui"/>
+		<FileInfo
+			ID = "A2143DC3-51A4-4AB9-83C82B6C87BC2BB3"
+			RelativePath = "_Icons\search.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "_Icons\search.ico"/>
+		<FileInfo
+			ID = "A24FF4A0-3F03-465F-868B4AE1253EFC5B"
+			RelativePath = "Bitmap\Expand.gif"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\Expand.gif"/>
+		<FileInfo
+			ID = "A2BE12C9-60AC-4238-9E4BEB6DDE3DBB01"
+			RelativePath = "Component\cayPhongban.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "cayPhongban.gui"/>
+		<FileInfo
+			ID = "A90C9CC4-5B59-4098-B11114BA65F189C8"
+			RelativePath = "MainUI\DayView.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "DayView.gui"/>
+		<FileInfo
+			ID = "B2646261-5D47-487E-AB62AC5D4F497705"
+			RelativePath = "MainUI\MainGUI.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "MainGUI.gui"/>
+		<FileInfo
+			ID = "B596A4D4-8E7E-4F50-BD51EED6A05BF250"
+			RelativePath = "Bitmap\OK.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\OK.ico"/>
+		<FileInfo
+			ID = "C0FE0BB2-52A0-4FDE-80350AB6D25941DC"
+			RelativePath = "Bitmap\NewCaldToolbar.PNG"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\NewCaldToolbar.PNG"/>
+		<FileInfo
+			ID = "C4B2D24B-DEBE-4DE9-BB28E886739AA876"
+			RelativePath = "_Icons\user1_delete.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "_Icons\user1_delete.ico"/>
+		<FileInfo
+			ID = "D24C9EDB-D8AE-4E5F-B664EE1E7F85B67E"
+			RelativePath = "CalendarView\calendar_month.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "calendar_month.gui"/>
+		<FileInfo
+			ID = "E9085FD5-F666-4363-B3D43E7481FEDB86"
+			RelativePath = "NewCalendar\NewCalendarDlg.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "NewCalendarDlg.gui"/>
+		<FileInfo
+			ID = "FCACC9ED-A782-456B-8AD947383BC7996C"
+			RelativePath = "_Icons\depart.ico"
+			OriginalRoot = "$Project"
+			OriginalPath = "_Icons\depart.ico"/>
+		<FileInfo
+			ID = "FCF36C73-419B-423C-A73717A33FFF78E0"
+			RelativePath = "NewCalendar\General_tab.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "Bitmap\General_tab.gui"/>
+		<FileInfo
+			ID = "FDC98D82-F8B8-4D21-848A6C2899CC4EA1"
+			RelativePath = "bitmap\toolbar.PNG"
+			OriginalRoot = "$Project"
+			OriginalPath = "bitmap\toolbar.PNG"/>
+	</Files>
+</Catalogue>
