@@ -1,0 +1,820 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 6 -- Creating Menus for Your Application</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch05/ch05.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch07/ch07.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 6 -<BR>
+Creating Menus for Your Application</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Menus</A>
+	<UL>
+		<LI><A HREF="#Heading2">Menu Styles</A>
+		<LI><A HREF="#Heading3">Keyboard Shortcut-Enabling Menus</A>
+		<LI><A HREF="#Heading4">Menu Standards and Conventions</A>
+	</UL>
+	<LI><A HREF="#Heading5">Designing Menus</A>
+	<LI><A HREF="#Heading6">Creating a Menu</A>
+	<UL>
+		<LI><A HREF="#Heading7">Creating the Application</A>
+		<LI><A HREF="#Heading8">Adding and Customizing a Menu</A>
+		<LI><A HREF="#Heading9">Attaching the Menu to Your Dialog Window</A>
+		<LI><A HREF="#Heading10">Attaching Functionality to Menu Entries</A>
+	</UL>
+	<LI><A HREF="#Heading11">Creating Pop-Up Menus</A>
+	<LI><A HREF="#Heading12">Creating a Menu with Accelerators</A>
+	<LI><A HREF="#Heading13">Summary</A>
+	<LI><A HREF="#Heading14">Q&amp;A</A>
+	<LI><A HREF="#Heading15">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading16">Quiz</A>
+		<LI><A HREF="#Heading17">Exercises</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+Most Windows applications use pull-down menus to provide the user a number of functions
+without having to provide buttons on the window. This enables you to provide your
+users a large amount of functionality while preserving most of your valuable screen
+real estate for other stuff.</P>
+
+<P>Today you will learn</P>
+<P>
+
+<UL>
+	<LI>How to create menus for your Visual C++ application
+	<P>
+	<LI>How to attach a menu to your application's main dialog window
+	<P>
+	<LI>How to call application functions from a menu
+	<P>
+	<LI>How to create a pop-up menu that can be triggered with the right mouse button
+	<P>
+	<LI>How to set up accelerator keys for keyboard shortcuts to menus
+</UL>
+
+<H2><A NAME="Heading1"></A>Menus</H2>
+<P>Back when the first computer terminals were introduced and users began using computer
+software, even on large mainframe systems software developers found the need to provide
+the users with some sort of menu of the functions that the computer could perform.
+These early menus were crude by today's standards and were difficult to use and navigate.
+Menus have progressed since then; they've become standardized in how they are used
+and easy to learn.</P>
+<P>The software designers that first came up with the idea of a graphical user interface
+(GUI) planned to make computer systems and applications easier to learn by making
+everything behave in a consistent manner. Menus used for selecting application functionality
+were one part of the GUI design that could be more easily learned if they all worked
+the same. As a result, a number of standard menu styles were developed.</P>
+<P>
+<H3><A NAME="Heading2"></A>Menu Styles</H3>
+<P>The first menu styles that were standardized are the pull-down and cascading menus.
+These are the menus with the categories all listed in a row across the top of the
+application window. If you select one of the categories, a menu drops down below
+the category, with a number of menu entries that can be selected to trigger various
+functions in the application.</P>
+<P>A variation on this menu style is the <I>cascading menu</I>, which has another
+submenu that opens to the right of a menu entry. This submenu is similar to the pull-down
+menu, with a number of entries that trigger application functions. The menu designers
+placed no limit on how many cascading menus can be strung together, but it quickly
+became clear to most developers that more than two cascading levels is a little unwieldy.</P>
+<P>Eventually, a third style of menu was developed, called a <I>pop-up</I> or <I>context
+menu</I>--a menu that pops up in the middle of the application area, floating freely
+above the application work area. This is also called a context menu because the specific
+menu that pops up is dependent on the selected object or workspace area where the
+cursor or mouse pointer is.</P>
+<P>
+<H3><A NAME="Heading3"></A>Keyboard Shortcut-Enabling Menus</H3>
+<P>When users began working with keyboard-intensive applications, such as word processors,
+it was discovered that taking your hands off the keyboard to use the mouse to make
+menu selections dramatically reduced productivity. Software designers decided that
+they needed to add keyboard shortcuts for the various menu entries (especially the
+most frequently used menu options). For this reason, keyboard shortcuts (accelerators)
+and hotkeys were added.</P>
+<P><I>Hotkeys</I> are letters that are underlined in each menu entry. If you press
+the Alt key with the underlined letter, you can select the menu entry that contains
+the underlined letter. This is a means of navigating application menus without taking
+your hands off the keyboard.</P>
+<P>For more advanced users, application designers added <I>keyboard shortcuts</I>,
+or <I>accelerators</I>. An accelerator is a single key combination that you can press
+to trigger an application function instead of having to navigate through the application
+menus. This allows advanced users to avoid the overhead of using menus for the most
+common application functions. To enable users to learn what accelerators are available
+in an application, the key combination is placed on the menu entry that it can be
+used to replace, positioned at the right edge of the menu window.</P>
+<P>
+<H3><A NAME="Heading4"></A>Menu Standards and Conventions</H3>
+<P>Although there are no standards in how menus are designed, there are a number
+of conventions for how they are designed and organized. All these conventions are
+available in <I>Windows Interface Guidelines for Software Design</I>, published by
+Microsoft for use by Windows software developers. The purpose of this publication
+is to facilitate the development of consistent application behaviors, which will
+help accomplish one of the primary goals behind the development of GUI systems. The
+conventions are as follows:</P>
+<P>
+
+<UL>
+	<LI>Use single-word menu categories across the top menu bar. A two-word category
+	can easily be mistaken for two one-word categories.
+	<P>
+	<LI>The File menu is located as the first menu on the left. It contains all file-oriented
+	functions (such as New, Open, Save, Print, and so on), as well as the Exit function.
+	The Exit option is located at the bottom of the menu, separated from the rest of
+	the menu entries by a border.
+	<P>
+	<LI>The Edit menu is next to the File menu. The Edit menu contains all editing functions
+	such as Copy, Cut, Paste, Undo, Redo, and so on.
+	<P>
+	<LI>The View menu contains menu entries that control and affect the appearance of
+	the application work area.
+	<P>
+	<LI>The Window menu is used in Multiple Document Interface (MDI) style applications.
+	This has functions for controlling the child windows, selecting the current window,
+	and altering the layout. This menu is the next-to-last menu from the right end of
+	the menu bar.
+	<P>
+	<LI>The Help menu is the final menu on the right end of the menu bar. It contains
+	menu entries that provide instruction or documentation on the application. If the
+	application has any copyrighted or corporate information that needs to be available
+	for viewing, this should be located as the final entry on this menu, labeled About<I>
+	&lt;application name&gt;</I>.
+</UL>
+
+<H2><A NAME="Heading5"></A>Designing Menus</H2>
+<P>Menus are defined as a resource in Visual C++ applications. Because they are a
+resource, you can design menus in the Visual C++ editor through the Resource View
+tab on the workspace pane. When you first create a dialog-style application, there
+won't be a menu folder in the resource tree, but you can change that.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Various aspects of Windows applications are considered to be resources,
+	including window layouts, menus, toolbars, images, text strings, accelerators, and
+	so on. All these features are organized in what is known as a <I>resource file</I>,
+	which is used by the Visual C++ compiler to create these objects from their definitions.
+	The resource file is a text file with an .rc filename extension and contains a textual
+	description of all the various objects, including IDs, captions, dimensions, and
+	so on.<BR>
+	Some resources, such as images and sounds, cannot be described in text, but have
+	to be stored in a binary format. These resources are stored in individual files,
+	with the filenames and locations included in the resource file.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H2><A NAME="Heading6"></A>Creating a Menu</H2>
+<P>Creating a menu is not difficult. You will follow several steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Create the application that will house the menu.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Add a menu resource to your project.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Customize the menu resource to include the menu items for your application.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Add functionality to your menu by connecting routines to your menu
+	items.
+	<P>
+</DL>
+
+<H3><A NAME="Heading7"></A>Creating the Application</H3>
+<P>For the example in this chapter, you will create a simple dialog-style application
+that contains a single button and a menu. To create your application, do the following:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Create a new MFC AppWizard application, naming the project <B>Menus</B>.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Select the default AppWizard settings on all screens. For the dialog
+	title, enter <B>Menus</B>.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>When the AppWizard has generated your application shell, delete all
+	the controls from the dialog.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Add a single button to the dialog. Name the button IDC_EXIT, and specify
+	the caption as E&amp;xit.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>Add a function to the button using the Class Wizard. Change the code
+	in this function to call OnOK. Remember, the OnOK function causes the application
+	to close.
+	<P>
+</DL>
+
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> If you don't remember how to add the OnOK function, review the section
+	&quot;Closing the Application&quot; on Day 2, &quot;Using Controls in Your Application,&quot;
+	for an example.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading8"></A>Adding and Customizing a Menu</H3>
+<P>Now that you have the basic application built, it's time to start creating a menu
+for the application. To create a menu, you will first add a menu resource to your
+project. When you add the resource, Visual C++ automatically invokes the Menu Designer,
+which allows you to customize the menu. The following steps show you how to add and
+customize a menu:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select the Resource View tab in the workspace pane.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Select the project resources folder at the top of the tree; in your
+	example, this is Menus.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Right-click the mouse to bring up a pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Select Insert from the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>In the Insert Resource dialog that opens, select Menu from the list
+	of available resources, as in Figure 6.1. Click the New button.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('06fig01.gif')"><B>FIGURE 6.1.</B></A><B> </B><I>The
+Insert Resource dialog.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>6. </B>The Menu Designer opens in the editing area of Developer Studio. The
+	first menu spot is highlighted, as shown in Figure 6.2.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('06fig02a.gif')"><B>FIGURE 6.2.</B></A><B> </B><I>An
+empty menu.</I></P>
+
+<P>At this point, you have created the menu resource and you are ready to customize
+it by adding menu items. To add a menu item, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Right-click the mouse on the highlighted area and select Properties
+	from the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Enter the menu item's Caption. For this example, enter <B>&amp;File</B>
+	and close the Properties dialog.
+	<P>
+</DL>
+
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> You are in the menu Properties dialog to specify the text that the
+	user will see on the menu bar while the application is running. Because the Pop-up
+	check box is checked (by default on any menu items on the top-level menu bar), this
+	menu element doesn't trigger any application functionality and thus doesn't need
+	to have an object ID assigned to it.
+<HR>
+
+
+</BLOCKQUOTE>
+
+
+<DL>
+	<DT><B></B></DT>
+	<DD><B>3. </B>The first drop-down menu location is highlighted. To add this menu
+	item, right-click the mouse again on the highlighted area and select Properties from
+	the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Enter an ID and caption for the menu item. For this example, enter
+	<B>IDM_FILE_HELLO</B> for the ID and <B>&amp;Hello</B> for the Caption. Close the
+	dialog.
+	<P>
+</DL>
+
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> This time in the menu Properties dialog, you not only specify the
+	text that the user will see when the menu is opened from the menu bar, but you also
+	specify the object ID that will be used in the event message handler to determine
+	what function receives each of the menu events.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>At this point you have created a menu with a single menu item. You can continue
+to add menu items by repeating steps 3 and 4 of the preceding list for each of the
+highlighted areas. You can also add separators onto the menu. A <I>separator</I>
+is a dividing line that runs across the menu to separate two functional areas of
+menu selections. To add a separator, perform the following steps:</P>
+<P><A HREF="javascript:popUp('06fig02.gif')"><B>FIGURE 6.3.</B></A><B> </B><I>Specifying
+a menu separator.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>1. </B>Select the highlighted area where you want the separator to be placed.
+	In the example you created, the second drop-down menu location should be highlighted.
+	Open the properties dialog as you did in step 3 in the preceding list. To add a separator,
+	simply select the Separator option, as shown in Figure 6.3, and close the dialog.
+	<P>
+</DL>
+
+<P>To complete your sample program, follow the same steps I just described to add
+an Exit item to your File menu and a second menu called Help with one menu item called
+About. The following steps, which resemble the preceding list of steps, walk you
+through adding these additional items:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Open the properties dialog for the third drop-down location and specify
+	the ID as IDM_FILE_EXIT and the caption as E&amp;xit. Close the dialog.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Select the second top-level menu location and open the properties dialog.
+	Specify the caption as &amp;Help and close the dialog.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Open the properties dialog for the first drop-down location on the
+	second top-level menu. Specify the ID as ID_HELP_ABOUT and the caption as &amp;About.
+	Close the dialog.
+	<P>
+</DL>
+
+<P>At this point, your menu is created; however, it is not attached to your application.</P>
+<P>
+<H3><A NAME="Heading9"></A>Attaching the Menu to Your Dialog Window</H3>
+<P>You now have a menu that you can use in your application. If you compile and run
+your application at this point, however, the menu doesn't appear. You still need
+to attach the menu to your dialog window. You can attach a menu by following these
+steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Open the dialog painter by double-clicking the primary application
+	dialog in the Dialog folder in the Workspace pane. For this example, double-click
+	on IDD_MENUS_DIALOG.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Select the entire dialog window, making sure that no controls are selected,
+	and open the dialog's properties dialog. (What you are doing is opening the properties
+	for the dialog window itself, not for any of the controls that might be on the window.)
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Select the menu you have designed from the Menu drop-down list box,
+	as shown in Figure 6.4.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('06fig03.gif')"><B>FIGURE 6.4.</B></A><B> </B><I>Attaching
+the menu to the dialog window.</I></P>
+
+<P>If you compile and run your application, you find that the menu is attached to
+the application dialog, as shown in Figure 6.5. You can select menu entries as you
+do with any other Windows application--with one small difference. At this point,
+when you select one of the menu entries, nothing happens. You still need to attach
+functionality to your menu.</P>
+<P><A HREF="javascript:popUp('06fig04.gif')"><B>FIGURE 6.5.</B></A><B> </B><I>The
+menu is now part of the application dialog.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading10"></A>Attaching Functionality to Menu Entries</H3>
+<P>Now that you have a menu as part of your application, it sure would be nice if
+it actually did something. Well, before your menu can do anything, you have to tell
+it what to do, just like everything else in your Visual C++ applications. To attach
+some functionality to your menu, follow these steps:</P>
+<P><A HREF="javascript:popUp('06fig05.gif')"><B>FIGURE 6.6.</B></A><B> </B><I>The
+menu is now part of the application.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>1. </B>Open the Menu Designer to your menu.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Open the Class Wizard from the View menu.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>The Adding a Class dialog is displayed for you, just as it was yesterday
+	when you added a second dialog. Leave the dialog selection on Select an Existing
+	Class and click OK (see Figure 6.6).
+	<P>
+	<DT></DT>
+	<DD>Yesterday, when you were adding a second dialog window to your application, you
+	needed to create a new C++ class for that window. For today's menu, you want to attach
+	it to the existing C++ class for the dialog window to which the menu is attached.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Choose the C++ class of the primary dialog window from the list of
+	available classes in the Select Class dialog. For this example, select CMenusDlg,
+	as shown in Figure 6.7. This tells Visual C++ that all the functionality that you
+	will call from the various menu entries is part of the same dialog class of the window
+	that it's attached to.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('06fig06.gif')"><B>FIGURE 6.7.</B></A><B> </B><I>The
+Select Class dialog.</I></P>
+
+<P>For the menu elements that you want to use to trigger new functions in your application,
+you can add event-handler functions through the Class Wizard, just as you can with
+controls that you place on the dialog window.</P>
+<P>For this example, add a function for the IDM_FILE_HELLO object (the Hello menu)
+on the COMMAND event message. Name the function OnHello and add the code in Listing
+6.1 to the function.</P>
+<P>
+<H4>LISTING 6.1. THE ONHELLO FUNCTION.</H4>
+<PRE> 1: void CMenusDlg::OnHello() 
+ 2: {
+ 3:     // TODO: Add your command handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Display a message for the user
+10:     MessageBox(&quot;Hello there&quot;, &quot;Hello&quot;);
+11: 
+12:     ///////////////////////
+13:     // MY CODE ENDS HERE
+14:     ///////////////////////
+</PRE>
+
+<PRE>15: }</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> The COMMAND event message is the message that is passed to the application
+	window when a menu entry is selected. Placing a function on this event message has
+	the same effect as placing a function on the menu entry selection.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>You can call existing event handlers from menu elements by adding the existing
+function to the menu COMMAND event. You can do this by adding a function to the menu
+object ID and then specifying the existing function name instead of accepting the
+suggested function name.</P>
+<P>To reuse the OnExit function for the Exit menu element, reopen the Menu Designer
+and then reopen the Class Wizard. When the Class Wizard is displayed, add a function
+for the IDM_FILE_EXIT object on the COMMAND event message. Do not accept the default
+function name presented to you by the Class Wizard. Enter the function name <B>OnExit</B>.
+This automatically attaches the existing OnExit function that you created with your
+Exit button earlier.</P>
+<P>To round out your example's functionality, add a function to the ID_HELP_ABOUT
+object on the COMMAND event message. Edit the function as in Listing 6.2.</P>
+<P>
+<H4>LISTING 6.2. THE ONHELPABOUT FUNCTION.</H4>
+<PRE> 1: void CMenusDlg::OnHelpAbout() 
+ 2: {
+ 3:     // TODO: Add your command handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Declare an instance of the About window
+10:     CAboutDlg dlgAbout;
+11: 
+12:     // Show the About window
+13:     dlgAbout.DoModal();
+14: 
+15:     ///////////////////////
+16:     // MY CODE ENDS HERE
+17:     ///////////////////////
+</PRE>
+
+<PRE>18: }</PRE>
+<P>You attached the File | Exit menu entry to an existing function that closes the
+application. On the File | Hello, you added a new function that called the MessageBox
+function to display a simple message to the user. With Help | About, you added another
+function that declared an instance of the About dialog window and called its DoModal
+method.</P>
+<P>If you compile and run your application, you find that all the menu entries are
+working. If you select Help | About, as shown in Figure 6.8, you see the application
+About dialog (see Figure 6.9). If you select File | Hello, you see a Hello there
+message box, as shown in Figure 6.10. And if you select File | Exit, your application
+closes.</P>
+<P><A HREF="javascript:popUp('06fig07.gif')"><B>FIGURE 6.8.</B></A><B> </B><I>The
+Help | About menu entry.</I></P>
+
+<P><A HREF="javascript:popUp('06fig08.gif')"><B>FIGURE 6.9.</B></A><B> </B><I>The
+About dialog.</I></P>
+
+<P><A HREF="javascript:popUp('06fig09.gif')"><B>FIGURE 6.10.</B></A><B> </B><I>The
+Hello there message box.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading11"></A>Creating Pop-Up Menus</H2>
+<P>Most Windows applications have what are called either pop-up or context menus,
+which are triggered by the user right-clicking an object. These are called <I>pop-up
+menus</I> because they pop up in the middle of the application area, not attached
+to a menu bar, the window frame, or anything else on the computer screen (not counting
+the mouse pointer). These menus are often referred to as <I>context menus</I> because
+the contents of a menu depend on the context in which it is opened; the elements
+available on the menu depend on what objects are currently selected in the application
+or what the mouse pointer is positioned over.</P>
+<P>To provide a pop-up menu in your application, you have two approaches available.
+You can either design a menu specifically for use as a pop-up menu, or you can use
+one of the pull-down menus from the primary menu that you have already designed.
+If you design a menu specifically for use as a pop-up menu, you will need to skip
+the top-level, menu bar element by placing a space or some other text in the caption,
+knowing that it will not be seen. You will see how this works when you build a custom
+menu specifically for use as a pop-up menu on Day 11, &quot;Creating Multiple Document
+Interface Applications,&quot; in the section &quot;Adding a Context Menu.&quot;</P>
+<P>Every drop-down portion of a menu can also be used as a pop-up menu. To use it
+in this way, you must get a handle to the submenu (the drop-down menu) and then call
+the TrackPopupMenu function on the submenu. The rest of the pop-up menu functionality
+is already covered in the other menu building and coding that you have already done.
+To add a pop-up menu to your application, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Using the Class Wizard, add a function for the WM_CONTEXTMENU event
+	message in your dialog window.
+	<P>
+</DL>
+
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> There are two dialog event messages that you can use to trigger your
+	context menu. The event that you'd expect to use is the WM_RBUTTONDOWN event, which
+	is triggered by the user right-clicking. The other event that can (and should) be
+	used is the WM_CONTEXTMENU event, which is intended for use specifically to trigger
+	a context menu. This event is triggered by a couple user actions: One of these is
+	the release of the right mouse button, and another is the pressing of the context
+	menu button on one of the newer Windows-enabled keyboards.
+<HR>
+
+
+</BLOCKQUOTE>
+
+
+<DL>
+	<DT><B></B></DT>
+	<DD><B>2. </B>Edit the function, adding the code in Listing 6.3.
+	<P>
+</DL>
+
+<H4>LISTING 6.3. THE ONCONTEXTMENU FUNCTION.</H4>
+<PRE> 1: void CMenusDlg:: OnContextMenu(CWnd* pWnd, CPoint point) 
+ 2: {
+ 3:     // TODO: Add your message handler code here
+ 4:     
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Declare local variables
+10:     CMenu *m_lMenu;     // A pointer to the menu
+11:     CPoint m_pPoint;    // A copy of the mouse position
+12: 
+13:     // Copy the mouse position to a local variable
+14:     m_pPoint = point;
+15:     // Convert the position to a screen position
+16:     ClientToScreen(&amp;m_pPoint);
+17:     // Get a pointer to the window menu
+18:     m_lMenu - GetMenu();
+19:     // Get a pointer to the first submenu
+20:     m_lMenu = m_lMenu-&gt;GetSubMenu(0);
+21:     // Show the Popup Menu
+22:     m_lMenu-&gt;TrackPopupMenu(TPM_CENTERALIGN + TPM_LEFTBUTTON,
+23:         m_pPoint.x, m_pPoint.y, this, NULL);
+24: 
+25:     ///////////////////////
+26:     // MY CODE ENDS HERE
+27:     ///////////////////////
+</PRE>
+
+<PRE>28: }</PRE>
+<P>In Listing 6.3, the first thing that you did was make a copy of the mouse position.
+This mouse position is a relative position within the window area. It must be converted
+to an absolute position on the entire screen area for displaying the pop-up menu.
+If you don't convert the position coordinates, you can't predict where your pop-up
+menu will appear.</P>
+<P>After you convert the position to an absolute position, you get a pointer to the
+window menu. This pointer should always be a local pointer within the function where
+you are going to use it because the location of the menu might change as the application
+runs. From the menu pointer, you next get a pointer to the first drop-down menu (submenu
+numbering begins with 0, like just about everything else in C/C++). After you have
+a pointer to the submenu, you can treat it as a regular CMenu class instance.</P>
+<P>The final piece in this puzzle is the call to the CMenu member function TrackPopupMenu.
+This function takes five arguments and uses them to determine where and how to show
+the pop-up menu. The first argument is a combination of two flags. The first flag,
+TPM_CENTERALIGN, centers the pop-up menu on the mouse point. You can also use TPM_LEFTALIGN
+or TPM_RIGHTALIGN instead. These flags line up the left or right edge of the pop-up
+menu with the mouse position. The second part of this flag combination is TPM_LEFTBUTTON,
+which makes the pop-up menu trigger from the left mouse button. You can also use
+TPM_RIGHTBUTTON to make the menu trigger from the right mouse button.</P>
+<P>The second and third arguments to the TrackPopupMenu function specify the screen
+position for the pop-up menu. This is the absolute position on the screen, not a
+relative position within the window area. The fourth argument is a pointer to the
+window that receives the menu command messages. The final argument is a rectangle
+that the user can click without closing the pop-up menu. By passing NULL, you specify
+that if the user clicks outside the pop-up menu, the menu closes. This code enables
+you to include a pop-up menu in your application, as shown in Figure 6.11.</P>
+<P><A HREF="javascript:popUp('06fig10.gif')"><B>FIGURE 6.11.</B></A><B> </B><I>The
+pop-up menu in action.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading12"></A>Creating a Menu with Accelerators</H2>
+<P>One of the original keyboard shortcuts for selecting menu entries were accelerator
+keys. As mentioned earlier in the chapter, accelerator keys are specific key combinations,
+usually the Ctrl key combined with another key, or function keys, that are unique
+within the entire application. Each of these key combinations triggers one menu event
+function.</P>
+<P>The way that accelerator keys work is similar to the way menus work. They are
+also an application resource that is defined in a table in the resource tab of the
+workspace pane. Each table entry has an object ID and a key code combination. After
+you define the accelerators, you can attach functionality to the object IDs. You
+can also assign accelerator entries the same object ID as the corresponding menu
+entry so that you have to define only a single entry in the application message map.</P>
+<P>After you define all your accelerator keys, you can add the key combination to
+the menu entry so that the user will know about the accelerator key combination.
+Add \t to the end of the menu entry caption, followed by the key combination. The
+\t is replaced in the menu display by a tab, which separates the menu caption from
+the accelerator key combination.</P>
+<P>Unfortunately, accelerator keys don't work in dialog-style windows, so you cannot
+add them to today's application. You will learn how to attach accelerator keys to
+menus in a few days when you learn about single and multi-document interface style
+applications.</P>
+<P>
+<H2><A NAME="Heading13"></A>Summary</H2>
+<P>Today you learned about menus in Visual C++ applications. You learned how to use
+the tools in Visual C++ to create a menu for use in your application and then how
+to attach the menu to a window in your application. After you had the menu attached
+to your window, you learned how to attach functionality to the various menu entries.
+Later in the day, you learned how you can use a portion of your menu as a pop-up,
+or context, menu. Finally, you learned how accelerator keys are added to most applications.</P>
+<P>
+<H2><A NAME="Heading14"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q Do I have to name my menu items the same names everyone else uses? For example,
+	a lot of applications use File and Help. Can I name my menus something else?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> You can name your top-level menus anything you want. However, there
+	are ac-cepted menu name conventions that place all file-oriented functionality under
+	a menu labeled File and all help-related functionality under a menu labeled Help.
+	If you have a menu with entries such as Broccoli, Corn, and Carrots, you will probably
+	want to call the menu Vegetables, although an equally valid label would be Food or
+	Plants. In general, if you want to make your application easy for your users to learn,
+	you will want to use menu labels that make sense for the entries o n the pull-down
+	portion of the menu.
+	<P>
+	<DT></DT>
+	<DD><B>Q Why can't I specify a single character as an accelerator key?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> The single character would trigger the WM_KEY messages, not the menu
+	messages. When the designers of Windows were deciding how accelerator keys would
+	work, they decided that single-character keys would most likely be input to the active
+	application. If they had allowed single-character accelerators, Windows wouldn't
+	be able to determine whether the character was input or a shortcut. By requiring
+	a key combination (with the exception of function keys), the designers ensured that
+	Windows won't have to make this determination.
+	<P>
+</DL>
+
+<H2><A NAME="Heading15"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions are provided in Appendix B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading16"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What event message does a menu selection send to the window message
+	queue?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>How do you attach a menu to a dialog window?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Which existing class do you specify for handling event messages for
+	the menu?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>What event message should a pop-up menu be triggered by?
+	<P>
+</DL>
+
+<H3><A NAME="Heading17"></A>Exercises</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Add a button to the main window and have it call the same function
+	as the Hello menu entry.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Add a pop-up menu to your application that uses the Help drop-down
+	menu as the pop-up menu.
+</DL>
+
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch05/ch05.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch07/ch07.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

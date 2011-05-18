@@ -1,0 +1,69 @@
+<Workspace
+	CID = "1"
+	NextCID = "2"
+	IconCategory = "Miscellaneous">
+	<OpenFiles
+		CID = "1"
+		LastActive = "5">
+		<File
+			FileID = "EF9B9F6C-EBD5-461B-A248C60A7FB38D66"
+			RootPath = "$Container"
+			RelativePathname = "Note\Main.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "FC5A5F60-08D5-48E5-B1DAAB073065C7D2"
+			RootPath = "$Container"
+			RelativePathname = "Note\components\AdvanceBar.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "9DB59AC0-8DBE-4D51-8E59228631942C56"
+			RootPath = "$Container"
+			RelativePathname = "Note\components\AddUser.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "C580516C-A32A-4285-9A3041F9FD4CA990"
+			RootPath = "$Container"
+			RelativePathname = "Note\Checklist_DetailForm.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "47A6DC66-6016-459E-BF03F13DA5840805"
+			RootPath = "$Container"
+			RelativePathname = "Note\components\CayPhongBan.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "F909E3EF-321F-4C2E-9963E3F90A666B11"
+			RootPath = "$Container"
+			RelativePathname = "Note\DuyetTaiNguyen.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "3D118C66-E45C-4DE1-9C0EA673973E6648"
+			RootPath = "$Container"
+			RelativePathname = "Note\Ghi chú.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "CDB0B028-00C5-4831-8927ABCAB03F29F9"
+			RootPath = "$Container"
+			RelativePathname = "Note\Checklist.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "6F7F81A2-2276-4A65-B3E88D43B51D0B2C"
+			RootPath = "$Container"
+			RelativePathname = "Note\Checklist_new.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "DF710C13-2269-4E3F-9A0A2D1A7AEBE4F9"
+			RootPath = "$Container"
+			RelativePathname = "Note\components\DateTime.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "9E97FB24-2C5A-48D3-A1572EB3A67C8DA4"
+			RootPath = "$Container"
+			RelativePathname = "Note\Checklist_ManagerForm.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "8CD17457-48E1-4A20-A49BC45B0D4C7D06"
+			RootPath = "$Container"
+			RelativePathname = "Note\DuyetTaiNguyen_old.gui"
+			ViewSettings = ""/>
+	</OpenFiles>
+</Workspace>

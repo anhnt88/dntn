@@ -1,0 +1,1125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Appendix C -- Printing and Print Previewing</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../apb/apb.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../apd/apd.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- C -<BR>
+Printing and Print Previewing</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Using the Framework's Functionality</A>
+	<UL>
+		<LI><A HREF="#Heading2">Using Default Print Functionality</A>
+		<LI><A HREF="#Heading4">Overriding OnPrint()</A>
+		<LI><A HREF="#Heading5">Using the Printer Device Context</A>
+		<LI><A HREF="#Heading6">Maintaining the Aspect Ratio</A>
+	</UL>
+	<LI><A HREF="#Heading7">Pagination and Orientation</A>
+	<UL>
+		<LI><A HREF="#Heading8">Setting the Start and End Pages</A>
+		<LI><A HREF="#Heading9">Using the Print Dialog Box</A>
+		<LI><A HREF="#Heading10">Using Portrait and Landscape Orientations</A>
+		<LI><A HREF="#Heading11">Adding GDI Objects with OnBeginPrinting()</A>
+		<LI><A HREF="#Heading12">Customizing Device Context Preparation</A>
+		<LI><A HREF="#Heading13">Aborting the Print Job</A>
+	</UL>
+	<LI><A HREF="#Heading14">Direct Printing Without the Framework</A>
+	<UL>
+		<LI><A HREF="#Heading15">Invoking the Print Dialog Box Directly</A>
+		<LI><A HREF="#Heading16">Using StartDoc() and EndDoc()</A>
+		<LI><A HREF="#Heading17">Using StartPage() and EndPage()</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+<I>by Jon Bates</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading1"></A>Using the Framework's Functionality</H2>
+<P>The SDI and MDI frameworks created by the AppWizard add the hooks for printing
+and previewing by default. These can be turned off by unchecking the Printing and
+Print Preview option in Step 4 of the MFC AppWizard, but generally they are useful
+to include in any project and add very little overhead. Most of the real work of
+printing is taken care of by the device context and GDI. The framework presents you
+with a device context for a print document page; you can treat it pretty much as
+if it's a normal window device context.</P>
+<P>
+<H3><A NAME="Heading2"></A>Using Default Print Functionality</H3>
+<P>The SDI (Single Document Interface) framework supports printing images from views
+based on information held in the document. Because this information is already displayed
+in your applications views, you can probably print it by modifying the view to add
+printing support.</P>
+<P>The framework calls your OnDraw() function in the view to display an image. There
+is a corresponding OnPrint() function that it calls to let your view handle printing
+the information. Often this task is simply a case of using the same drawing code
+as you've implemented in your OnDraw() function. If this is so, you don't actually
+need to implement the OnPrint() function; the framework does this by default in the
+CView base class and calls OnDraw(). The printer is then treated just like it would
+be for a screen because it offers a device context for the drawing functions to use,
+as a substitute for the usual screen device context. Your OnDraw() function can determine
+whether the device context it is passed is a screen or printer device context, but
+because the drawing functions will work in the same way on both, even this knowledge
+isn't necessary.</P>
+<P>You can explore the printing functionality added by the standard framework by
+creating a standard SDI application with the AppWizard. Leave the Printing and Print
+Preview option in Step 4 checked (this means you can click Finish<B> </B>on Step
+1) and name the project PrintIt.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>STANDARD PRINT FRAMEWORK SUPPORT</B><BR>
+	</P>
+
+	<P>The standard print and print preview support is available only in SDI and MDI
+	applications. Dialog box-based applications must implement their own printing support.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>The first thing you'll need is a graphic to print. You can create a graphical
+test display in the OnDraw() function of my CPrintItView class (just a normal CView)
+as shown in Listing C.1. This test displays a line-art style picture with some centralized
+text in a large font (see Figure C.1). The test image isn't too important, but it
+will make a useful comparison between printed output and screen display.</P>
+<P>
+<H4>LISTING C.1.&nbsp;LST23_1.CPP--DRAWING IN OnDraw TO PRODUCE A PRINT SAMPLE.</H4>
+<PRE>1:  void CPrintItView::OnDraw(CDC* pDC)
+2:  {
+3:      CPrintItDoc* pDoc = GetDocument();
+4:      ASSERT_VALID(pDoc);
+5:
+6:      // TODO: add draw code for native data here
+7:
+8:      // ** Set metric mapping
+9:      pDC-&gt;SetMapMode(MM_LOMETRIC);
+10:
+11:      // ** Declare and create a font 2.2cm high
+12:      CFont fnBig;
+13:      fnBig.CreateFont(220,0,0,0,FW_HEAVY,FALSE,FALSE,0,
+14:          ANSI_CHARSET,OUT_DEFAULT_PRECIS,
+15:          CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
+16:          FF_SWISS+VARIABLE_PITCH,&quot;Arial&quot;);
+17:
+18:      //** Select the new font and store the original
+19:      CFont* pOldFont = pDC-&gt;SelectObject(&amp;fnBig);
+20:
+21:      //** Declare a client rectangle
+22:      CRect rcClient;
+23:      GetClientRect(&amp;rcClient);
+24:
+25:      // ** Convert to logical units
+26:      pDC-&gt;DPtoLP(&amp;rcClient);
+27:
+28:      // ** Set up some drawing variables
+29:      const int nPoints = 50;
+30:      int xm = rcClient.Width();
+31:      int ym = rcClient.Height();
+32:      double dAspW = xm/(double)nPoints;
+33:      double dAspH = ym/(double)nPoints;
+34:
+35:      // ** Select a black pen
+36:      CPen* pOldPen = 
+37:           (CPen*)pDC-&gt;SelectStockObject(BLACK_PEN);
+38:
+39:      // ** Draw the lines
+40:      for(int i=0;i&lt;nPoints;i++)
+41:      {
+42:          int xo = (int)(i * dAspW);
+43:          int yo = (int)(i * dAspH);
+44:
+45:          pDC-&gt;MoveTo(xo,0);
+46:          pDC-&gt;LineTo(xm,yo);
+47:          pDC-&gt;LineTo(xm-xo,ym);
+48:          pDC-&gt;LineTo(0,ym-yo);
+49:          pDC-&gt;LineTo(xo,0);
+50:      }
+51:
+52:      // ** Reselect the old pen
+53:      pDC-&gt;SelectObject(pOldPen);
+54:
+55:      // ** Draw the text on top
+56:      pDC-&gt;SetTextAlign(TA_CENTER+TA_BASELINE);
+57:      pDC-&gt;SetBkMode(TRANSPARENT);
+58:
+</PRE>
+
+<PRE>59: // ** Set gray text</PRE>
+
+<PRE>60:      pDC-&gt;SetTextColor(RGB(64,64,64));
+61:      pDC-&gt;TextOut(xm/2,ym/2,&quot;Sample Print&quot;);
+62:
+63:      // ** Reselect the old font
+64:      pDC-&gt;SelectObject(pOldFont);
+65:  }
+</PRE>
+<P><A HREF="javascript:popUp('23fig01.gif')"><B>FIGURE C.1.</B></A><B> </B><I>Graphical
+test output of PrintIt in a window.a</I></P>
+
+<P>Although there is a fair bit of code in this OnDraw() function, none of it is
+unusual. It just draws lines inside the client rectangle and writes some text in
+the middle. Notice at line 9, the mapping mode is set to MM_LOMETRIC; this sets the
+logical coordinates to tenths of a millimeter.</P>
+<P>A 2.2cm high font is created at line 13 and used to draw the sample text at line
+61. Lines 40 to 50 draw the arty &quot;peg and string&quot; frame using the client
+rectangle coordinates. I'll let you decipher the details; the important thing here
+is to investigate the business of printing.</P>
+<P>If you build and run the program after adding these lines to the OnDraw() function
+of Listing C.1, you should see a graphical display in your application window, as
+shown in Figure C.1.</P>
+<P>So the big question is this: What must you do to print this image output? Surprisingly
+little--because the standard framework tries to print this by calling your OnDraw()
+function and passing the device context for the printer rather than for the window.</P>
+<P>If you click the File<B> </B>menu of the PrintIt application and choose Print
+Preview, you'll see a small representation of the image in the top-left corner, although
+the font is too big for the line drawing. This isn't the framework's fault; it has
+done its best to represent your window, but it was passed the wrong coordinates for
+the device context. The problem lies with the GetClientRect()used in line 23.</P>
+<P>Notice that GetClientRect() is a member of the view, not of the device context.
+This works fine for the window because the device context is the same size as the
+window rectangle. Now you're passing the window rectangle to the printer device context
+(which is small in comparison) but creating a 2.2cm high font that is always the
+same size (because of the mapping mode).</P>
+<P>
+<H3><A NAME="Heading4"></A>Overriding OnPrint()</H3>
+<P>To fix the client rectangle coordinate size problem, you must pass the correct
+rectangle for the printer rather than the window. Fortunately, the framework calls
+a virtual function that you can override in your view and use to find all the information
+you need. As you read earlier, this function is named OnPrint() and is analogous
+to OnDraw(). When drawing in a window, OnDraw() is called; when drawing on a printer,
+OnPrint() is called. You might be wondering how the drawing code in OnDraw() was
+executed to print preview the sample graphical display. The default CView implementation
+of OnPrint() simply calls OnDraw(), passing its printer device context.</P>
+<P>Your OnPrint() doesn't have to call OnDraw(); you can override OnPrint() to make
+it draw something entirely different, but many applications must print out what the
+user sees. These applications reuse their OnDraw() code with the printer device context.</P>
+<P>To override the OnPrint() virtual function, perform the following steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Click the ClassView tab of the Project Workspace view.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Click the top plus sign to open the view of the project classes.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Right-click the view class to which you want to add the OnPrint() override
+	(such as CPrintItView in the PrintIt example) to display the context menu.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Select the Add Virtual Function option to display the New Virtual Override
+	dialog box.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>You should see an OnPrint virtual function in the New Virtual Functions
+	list.
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>Click the Add and Edit button to start editing the OnPrint() virtual
+	function.
+	<P>
+</DL>
+
+<P>The standard override for OnPrint() looks like this:</P>
+<P>
+<PRE>void CPrintItView::OnPrint(CDC* pDC, CPrintInfo* pInfo)
+{
+    // TODO: Add your specialized code here 
+    CView::OnPrint(pDC, pInfo);
+}
+</PRE>
+<P>The first thing you'll notice that's different from OnDraw() is the second parameter,
+the pointer to a CPrintInfo object pInfo. This is where you'll find the details about
+the current print, specifically the rectangle coordinates for the printer device
+context you require. There are lots of useful CPrintInfo member variables. Some of
+these are shown in Table C.1.</P>
+<P>
+<H4>TABLE C.1.&nbsp;&nbsp;CPrintInfo MEMBER VARIABLES SPECIFIC TO PRINT INFORMATION.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Variable Name</I></TD>
+		<TD ALIGN="LEFT"><I>Description of Contents</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_nCurPage		</TD>
+		<TD ALIGN="LEFT">The current page number for multipage prints		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_nNumPreviewPages		</TD>
+		<TD ALIGN="LEFT">Either 1 or 2, depending on the preview pages shown		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_rectDraw		</TD>
+		<TD ALIGN="LEFT">The coordinates of the print page rectangle		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_pPD		</TD>
+		<TD ALIGN="LEFT">Pointer to a CPrintDialog class if the Print dialog box is used		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_bDirect		</TD>
+		<TD ALIGN="LEFT">TRUE if the Print dialog box has been bypassed		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_bPreview		</TD>
+		<TD ALIGN="LEFT">TRUE if currently in print preview		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_strPageDesc		</TD>
+		<TD ALIGN="LEFT">A format string to help generate the page number		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_lpUserData		</TD>
+		<TD ALIGN="LEFT">A pointer that can be used to hold user data		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Some other member variables in CPrintInfo are covered later in this chapter, but
+first you'll need to find the printing rectangle coordinates rather than the window's
+rectangle. The m_rectDraw member holds the coordinate rectangle of the current print
+page. You can use these coordinates with the printer device context in the OnDraw()
+function. There is a problem though, in that this structure isn't passed to the OnDraw(),
+but you can copy the coordinates into a member variable held in your CPrintItView
+class.</P>
+<P>Add the following lines to store the rectangle after the // TODO comment, but
+before the CView::OnPrint() call:</P>
+<P>
+<PRE>// ** copy the print rectangle from the pInfo
+    if (pInfo) m_rcPrintRect = pInfo-&gt;m_rectDraw;
+</PRE>
+<P>This will store the printing rectangle in the m_rcPrintRect member of the CPrintItView
+class. You must therefore declare this member variable, which is easily done by right-clicking
+the CPrintItView class in the ClassView pane of the Project Workspace view and choosing
+the Add Member Variable<B> </B>option. The Variable Type<B> </B>is a CRect, and the
+declaration is obviously m_rcPrintRect. Access should be private because you don't
+need or want any other classes to know about this internal rectangle.</P>
+<P>
+<H3><A NAME="Heading5"></A>Using the Printer Device Context</H3>
+<P>The device context passed to OnPrint() differs slightly from the display context
+in that it may have fewer colors and is probably larger that your display. Other
+than these attributes, you can use it to draw in exactly the same way as the screen
+device context. This is how you can use the same OnDraw() to print as well as view
+in a window. The base class call CView::OnPrint() implements code that does exactly
+this.</P>
+<P>The device context holds a flag that you can interrogate via the IsPrinting()
+function to determine whether you are drawing to a screen-based device context or
+a printer-based device context. You might use this difference to change the printed
+output from the screen output, or more subtly to adjust the coordinates used to produce
+the printed output.</P>
+<P>For the sample program it only remains to use the m_rcPrintRect coordinates when
+printing in the OnDraw() function. The code necessary to use the IsPrinting() function
+to determine whether the window's client rectangle or the printer's rectangle should
+be used is shown in Listing C.2. The output produced is shown by the print preview
+in Figure C.2.</P>
+<P>
+<H4>LISTING C.2.&nbsp;LST23_2.CPP--ADDING PRINTING RECTANGLE SUPPORT TO THE STANDARD
+OnDraw() IMPLEMENTATION.</H4>
+<PRE>1:  // Declare a client rectangle
+2:  CRect rcClient;
+3:
+4:  // ** Check the device context for printing mode
+5:  if (pDC-&gt;IsPrinting())
+6:  {
+7:      // ** Printing, so use the print rectangle
+8:      rcClient = m_rcPrintRect;
+9:  }
+10:  else
+11:  {
+12:      // ** Not printing, so client rect will do
+13:      GetClientRect(&amp;rcClient);
+14:  }
+15:
+16:  // Convert to logical units
+17:  pDC-&gt;DPtoLP(&amp;rcClient);
+</PRE>
+<P>Notice in Listing C.2 that an if statement is used in line 5 to call the device
+context's IsPrinting() function. This function returns TRUE if this is a printer
+device context (or preview) and FALSE for any other device contexts. In the printing
+case, you can assign the stored print page rectangle to rcClient, as shown in line
+8. In the normal screen window case you can just use the standard GetClientRect()
+to find the window's rectangle, as shown in line 13.</P>
+<P>Because you've used a mapping mode, you must convert both printing and display
+rectangle coordinates from device units to logical units. This is done by the DPtoLP()
+function in line 17. If you change and add lines 4-14 to your existing OnDraw() function
+and then build and run the application, you should be able to run the print preview
+as before, with better results (see Figure C.2).</P>
+<P><A HREF="javascript:popUp('23fig02.gif')"><B>FIGURE C.2.</B></A><B> </B><I>Print
+preview using the full print page rectangle coordinates.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading6"></A>Maintaining the Aspect Ratio</H3>
+<P>As you can see from Figure C.2, because the paper is much longer and thinner than
+the window, the printed output becomes stretched. The relationship between the width
+and the height is the aspect ratio<I>.</I> To stop the image from stretching one
+way or another, you must keep the same aspect ratio as the image in the window. The
+code in Listing C.2 doesn't try to maintain aspect ratios, which isn't very satisfactory
+in most cases, so you would need to add some code to maintain the aspect ratio of
+the printed output.</P>
+<P>The best tactic to use in this case is to find out whether setting either the
+width or the height to the full width or height of the paper will give maximum coverage
+and then shorten the other dimension to maintain the aspect ratio.</P>
+<P>To do this, you need some information about the paper dimensions and its own aspect
+ratio. There is a device context function that retrieves these details (and many
+more) named GetDeviceCaps(). By passing the ASPECTX or ASPECTY flags to GetDeviceCaps(),
+you can find the relationship between the width of a pixel and its height. If the
+relationship is 1:1 the pixel is square; otherwise, it is oblong and might differ
+from the screen's own aspect ratio. If it differs, you can decide which axis will
+give you the largest image, while maintaining the same aspect ratio as the screen.
+That way you can avoid a stretched looking image.</P>
+<P>Code that does just that in the OnDraw() function is demonstrated in Listing C.3.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>DEVICE ASPECT RATIOS</B><BR>
+	</P>
+
+	<P>For most printers, you'll probably find that the aspect ratio is 1:1. But if you
+	look closely at thermal printer output like those in fax machines, you can see a
+	very distinctive aspect ratio difference in their pixels.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>LISTING C.3.&nbsp;&nbsp;LST23_3.CPP--MAINTAINING THE ASPECT RATIO WHILE PRODUCING
+THE LARGEST PRINTED REPRESENTATION.</H4>
+<PRE>1:  //** Declare a client rectangle and get the client rect
+2:  CRect rcClient;
+3:  GetClientRect(&amp;rcClient);
+4:
+5:  // ** Check the device context for printing mode
+6:  if (pDC-&gt;IsPrinting())
+7:  {
+8:    // ** Find the Print width : Window width ratio
+9:    double dWidthRatio=(double)m_rcPrintRect.Width()/
+10:                            (double)rcClient.Width();
+11:
+12:    // ** Find the Print height : Window height ratio
+13:    double dHeightRatio=(double)m_rcPrintRect.Height()/
+14:                            (double)rcClient.Height();
+15:
+16:    // ** Calculate the device's aspect ratio
+17:    double dAspect=(double)pDC-&gt;GetDeviceCaps(ASPECTX)/
+18:                   (double)pDC-&gt;GetDeviceCaps(ASPECTY);
+19:
+20:    // ** Find the new relative height
+21:    int nHeight=(int)(rcClient.Height() *
+22:                     dWidthRatio * dAspect );
+23:
+24:    // ** Find the new relative width
+25:    int nWidth=(int)(rcClient.Width() *
+26:                     dHeightRatio * (1.0 / dAspect) );
+27:
+28:    // ** Set the whole rectangle
+29:    rcClient=m_rcPrintRect;
+30:
+31:    // ** Determine the best fit across or down the page
+32:    if (nHeight &gt; nWidth)
+33:    {
+34:        // ** Down is best, so adjust the width
+35:        rcClient.BottomRight().x=
+36:            m_rcPrintRect.TopLeft().x + nWidth;
+37:    }
+38:    else
+39:    {
+40:        // ** Across is best, so adjust the height
+41:        rcClient.BottomRight().y=
+42:            m_rcPrintRect.TopLeft().y + nHeight;
+43:    }
+44:  }
+45:
+46:  // Convert to logical units
+47:  pDC-&gt;DPtoLP(&amp;rcClient);
+</PRE>
+<P>Notice that both the screen window and printed case use the window coordinates
+that are found from the GetClientRect() in line 3. In the onscreen window case, nothing
+else is done and the code continues as normal.</P>
+<P>However, a lot now happens when printing, if the IsPrinting() test in line 6 returns
+TRUE. First, you must find the ratios of the window width to the paper width and
+the window height to the paper height. You can find these ratios as shown in lines
+9 and 13 by dividing the paper dimensions by the window dimensions.</P>
+<P>The next thing you must calculate is the device's own aspect ratio peculiarities.
+You can use the GetDeviceCaps() function in line 17 to find the ratio of width to
+height in the device itself and store the result in dAspect.</P>
+<P>Using these values, you can now calculate the device's comparative width and height
+coordinates in terms of the opposing window dimension, as shown in lines 21 and 25.
+This calculation, which includes the device aspect ratio for each dimension, will
+yield the adjusted height for the full page width or vice versa. Now you must decide
+whether you can best fit the full width or height of a page and adjust the other
+dimension. The condition on line 32 makes this decision based on the bigger width
+or height. This means that if you have a tall, thin window, it is better to use the
+full height of the paper and adjust the width; conversely, if you have a short, wide
+window, it is better to use the full width and adjust the height. Depending on what
+is better, the adjustment is made on line 35 or 42 by setting the bottom-right point's
+x- or y-coordinate to the adjusted width or height.</P>
+<P>Notice that all the other dimensions are set to rcClient from the paper in the
+assignment on line 29, so the adjustment is the only change required. After this
+section, the program continues and will use the adjusted rectangle to do its drawing.</P>
+<P>If you build and run the application after adding the lines in Listing C.3 to
+the OnDraw() function, you should see that printing or previewing the window will
+now maintain the same aspect ratio as the onscreen window. If you stretch the window
+to make it higher than it is wide, the printed output will use the full height of
+the page rather than the full width, but still maintain the correct aspect ratios.</P>
+<P>
+<H2><A NAME="Heading7"></A>Pagination and Orientation</H2>
+<P>Printing a single page to represent the view in a window is a common requirement,
+but largely the printing process is concerned with printing large and complex multipage
+documents from the user's sophisticated data. The framework comes to the rescue again
+and simplifies this process by providing a common Print Setup dialog box and a page
+enumeration system to print and preview the specified range of pages.</P>
+<P>
+<H3><A NAME="Heading8"></A>Setting the Start and End Pages</H3>
+<P>The first considerations for a multipage document are the start and end pages,
+which also indicate how many pages you are going to print. A framework virtual function
+in the view class is called first when printing begins. This function is OnPreparePrinting()
+and it supplies one parameter, the CPrintInfo object pInfo. This is the first time
+you'll see the CPrintInfo, and this is where you can first change it to customize
+the print to your requirements. The OnPreparePrinting() function is supplied automatically
+from the AppWizard when you create the SDI, so you don't have to add it yourself.
+You can see the default implementation by double-clicking the OnPreparePrinting()
+member of the CPrintItView class in the ClassView pane.</P>
+<P>It should look like this:</P>
+<P>
+<PRE>BOOL CPrintItView::OnPreparePrinting(CPrintInfo* pInfo)
+{
+    // default preparation
+    return DoPreparePrinting(pInfo);
+}
+</PRE>
+<P>By default, the DoPreparePrinting() function is called and passed the pInfo pointer
+to the CPrintInfo object for the print. DoPreparePrinting() sets up the required
+device context and calls the standard Print dialog box if you are printing (not previewing).
+This dialog box is covered in more detail in the next section, but first you can
+set up a range of pages to print by modifying the CPrintInfo object before the DoPreparePrinting().</P>
+<P>To do this, add the following lines before the // default preparation comment:</P>
+<P>
+<PRE>pInfo-&gt;SetMinPage(2);
+    pInfo-&gt;SetMaxPage(8);
+</PRE>
+<P>These two member functions of the CPrintInfo class will modify the CPrintInfo
+object pointed at by pInfo to set the starting page at page 2 via SetMinPage() and
+the ending page at page 8 via SetMaxPage().</P>
+<P>Now when the document is printed, the OnPrint() function will be called six times.
+The only difference between each of these calls will be the pInfo-&gt;m_nCurPage
+member variable that will hold the current page as it iterates between 2 and 8.</P>
+<P>Depending on the kind of application you write, the technique you'll use to determine
+the number of pages will vary. If you are selling music compact discs and want to
+print a brochure of your product range, you would probably fit the cover picture
+and review of each CD on one printed page, so if you sell 120 different CDs, you
+need 120 pages. However, if you are printing a complex government tender with different
+bill elements and formatted items, you'll probably need to measure the height of
+all the different parts and calculate a page count after performing your own pagination.
+Either way, when you have the page count, OnPreparePrinting() is where you'll set
+it into the CPrintInfo object.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>BYPASSING THE PRINT DIALOG BOX WHEN PRINTING</B></P>
+
+	<P>You don't always need to bother the user with the Print dialog box; this can be
+	bypassed by setting the pInfo-&gt;m_bDirect variable to TRUE in OnPreparePrinting().
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>To emphasize the difference between a full report and a window print, you can
+implement a completely different drawing in the OnPrint() function than OnDraw(),
+as shown in Listing C.4. In this OnPrint(), the base class CView::OnPrint() function
+isn't called at all, which means that the default call of OnDraw() isn't performed.
+So in this implementation, the printing output and the display output are entirely
+different.</P>
+<P>
+<H4>LISTING C.4.&nbsp;LST23_4.CPP--IMPLEMENTING PAGE-SPECIFIC DRAWING IN OnPrint().</H4>
+<PRE>1: void CPrintItView::OnPrint(CDC* pDC, CPrintInfo* pInfo)
+2: {
+3:    // TODO: Add your specialized code here 
+4:
+5:   // ** Create and select the font
+6:   CFont fnTimes;
+7:   fnTimes.CreatePointFont(720,&quot;Times New Roman&quot;,pDC);
+8:    CFont* pOldFont=(CFont*)pDC-&gt;SelectObject(&amp;fnTimes);
+9:
+10:    // ** Create and select the brush
+11:    CBrush brHatch(HS_CROSS,RGB(64,64,64));
+12:    CBrush* pOldBrush = 
+13:        (CBrush*)pDC-&gt;SelectObject(&amp;brHatch);
+14:
+15:    // ** Create the page text
+16:    CString strDocText;
+17:    strDocText.Format(&quot;Page Number %d&quot;,
+18:                         pInfo-&gt;m_nCurPage);
+19:
+20:    pDC-&gt;SetTextAlign(TA_CENTER+TA_BASELINE);
+21:
+22:    // ** Set up some useful point objects
+23:    CPoint ptCenter=pInfo-&gt;m_rectDraw.CenterPoint();
+24:    CPoint ptTopLeft=pInfo-&gt;m_rectDraw.TopLeft();
+25:  CPoint ptBotRight=pInfo-&gt;m_rectDraw.BottomRight();
+26:
+27:    // ** Create the points for the diamond
+28:    CPoint ptPolyArray[4]=
+29:    {
+30:        CPoint(ptTopLeft.x,ptCenter.y),
+31:        CPoint(ptCenter.x,ptTopLeft.y),
+32:        CPoint(ptBotRight.x,ptCenter.y),
+33:        CPoint(ptCenter.x,ptBotRight.y)
+34:    };
+35:
+36:    // ** Draw the diamond
+37:    pDC-&gt;Polygon(ptPolyArray,4);
+38:
+39:    // ** Draw the text
+40:    pDC-&gt;TextOut(ptCenter.x,ptCenter.y,strDocText);
+41:
+42:    // ** Unselect the fonts
+43:    pDC-&gt;SelectObject(pOldFont);
+44:    pDC-&gt;SelectObject(pOldBrush);
+45:}
+</PRE>
+<P>In lines 6-12 of Listing C.4, the resources for the print (a font and a brush)
+are set up. Note that there is a better place to do this, as explained later in this
+chapter in the section &quot;Adding GDI Objects with OnBeginPrinting().&quot;</P>
+<P>You can use the current page number to draw the different textual content of each
+page by its position in the printed document, as shown in line 17. In a real application
+you would probably use this page number to reference the document and look up a specific
+item of data. In the compact disc scenario mentioned earlier, this page number might
+be used to reference a specific CD, and the drawing functions would then use that
+data. I don't have space to demonstrate anything quite so sophisticated here, so
+I've just used the current page number from pInfo-&gt;m_nCurPage to illustrate the
+point.</P>
+<P>Lines 22-37 set up a diamond-shaped polygon to draw as the background and line
+40 draws the text containing the current page in the middle of the page. Lines 43-44
+reselect the old font and brush.</P>
+<P>If you build and run the program after making these changes to OnPrint() and then
+click the test application File menu and choose Print Preview, you should be able
+to preview multiple pages using the Next Page<B> </B>and Prev Page<B> </B>buttons
+shown in Figure C.3. If you have a printer attached, you'll also be able to print
+the multipage document.</P>
+<P>
+<H3><A NAME="Heading9"></A>Using the Print Dialog Box</H3>
+<P>Notice that when you print a multipage document, you are first presented with
+a dialog box that enables you to customize the print settings, as shown in Figure
+C.4. This is the standard Print dialog box and is called from the CView::DoPreparePrinting()
+function that was called from within the OnPreparePrinting() override. This dialog
+box lets you set the page ranges to print, the number of copies, collation flags,
+the destination printer, and a whole host of things specific to the printer properties.</P>
+<P><A HREF="javascript:popUp('23fig03.gif')"><B>FIGURE C.3.</B></A><B> </B><I>The
+Print Preview output of a multipage document.</I></P>
+
+<P><A HREF="javascript:popUp('23fig04.gif')"><B>FIGURE C.4.</B></A><B> </B><I>The
+standard Print dialog box.</I></P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>THE Collate CHECK BOX</B></P>
+
+	<P>If the user unchecks the Collate check box on the Print dialog box, the printer
+	driver will automatically repeat the same pages together. You don't need to do anything
+	special in your code to handle this--but the feature must be supported by the printer
+	driver; otherwise it will be disabled and inaccessible in the Print dialog box.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>The user can change the print options from this dialog box, which will then update
+the settings in the CPrintInfo object before it is passed to your application. You
+can customize this dialog box to a small or great degree depending on the amount
+of customization you require and the work you're prepared to put into the job.</P>
+<P>From the CPrintInfo class members in Table C.1, recall that there is an m_pPD
+pointer. This points to a CPrintDialog class that is an MFC wrapper class for the
+Print dialog box. This class also holds an m_pd member, which is a PRINTDLG structure
+holding the default settings that are displayed in the Print dialog box. There are
+many members of this structure, as shown in Listing C.5. This allows complete customization
+of the dialog box defaults, even to the level of specifying a completely different
+dialog box template than the default template (if you want a challenge). There isn't
+enough space here to describe all these members in detail; one of the more obvious
+members is the nCopies member variable. You could change the default number of copies
+displayed in this dialog box by setting the nCopies member of this structure directly
+before calling the CView::DoPreparePrinting() function. To do this, add the following
+line to your OnPreparePrinting() function:</P>
+<P>
+<PRE>pInfo-&gt;m_pPD-&gt;m_pd.nCopies = 15;
+</PRE>
+<P>When you open the Print dialog box after adding this line, the number of copies
+will default to 15 (if your printer or printer driver supports multiple copies).
+You can set the other default values in the PRINTDLG accordingly.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B> USING THE </B>DevMode<B> STRUCTURE</B><BR>
+	</P>
+
+	<P>The DevMode structure holds many useful attributes that describe the technical
+	capabilities and configuration of the device. The structure pointer is returned by
+	the GetDevMode() function in the CPrintDialog class.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>LISTING C.5.&nbsp;LST23_5.CPP--THE PRINTDLG STRUCTURE.</H4>
+<PRE>1:  typedef struct tagPD {
+2:  DWORD     lStructSize;
+3:  HWND      hwndOwner;
+4:  HANDLE    hDevMode;
+5:  HANDLE    hDevNames;
+6:  HDC       hDC;
+7:  DWORD     Flags;
+8:  WORD      nFromPage;
+9:  WORD      nToPage;
+10:  WORD      nMinPage;
+11:  WORD      nMaxPage;
+12:  WORD      nCopies;
+13:  HINSTANCE hInstance;
+14:  DWORD     lCustData;
+15:  LPPRINTHOOKPROC lpfnPrintHook;
+16:  LPSETUPHOOKPROC lpfnSetupHook;
+17:  LPCTSTR    lpPrintTemplateName;
+18:  LPCTSTR    lpSetupTemplateName;
+19:  HANDLE    hPrintTemplate;
+20:  HANDLE    hSetupTemplate;
+21:  } PRINTDLG;
+</PRE>
+<P>After the user has confirmed OK in the Print dialog box, you can retrieve the
+changes by using the CPrintDialog class access functions shown in Table C.2. So if
+you wanted to find the number of copies specified by the user before printing, you
+could catch the value after it is returned from the CView::DoPreparePrinting() function,
+as shown in Listing C.6.</P>
+<P>Obviously, any of the values in the PRINTDLG structure pInfo-&gt;m_pPD-&gt;m_pd
+can be tested here also.</P>
+<P>
+<H4>TABLE C.2.&nbsp;CPrintDialog ACCESS FUNCTIONS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Function Name</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">GetCopies()		</TD>
+		<TD ALIGN="LEFT">Returns the number of copies set by the user		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">GetFromPage()		</TD>
+		<TD ALIGN="LEFT">Returns the starting page as specified		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">GetToPage()		</TD>
+		<TD ALIGN="LEFT">Returns the last page as specified		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">GetPortName()		</TD>
+		<TD ALIGN="LEFT">Returns the selected printer port, for example, LPT1:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">GetDriverName()		</TD>
+		<TD ALIGN="LEFT">Returns the selected print driver (destination printer)		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">GetPrinterDC()		</TD>
+		<TD ALIGN="LEFT">Returns a device context for the printer		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">PrintAll()		</TD>
+		<TD ALIGN="LEFT">Returns TRUE if all pages are selected		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">PrintCollate()		</TD>
+		<TD ALIGN="LEFT">Returns TRUE if collation is required		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">PrintRange()		</TD>
+		<TD ALIGN="LEFT">Returns TRUE if a range is specified		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">PrintSelection()		</TD>
+		<TD ALIGN="LEFT">Returns TRUE if a specific selection of pages is chosen		</TD>
+	</TR>
+</TABLE>
+
+<H4>LISTING C.6.&nbsp;&nbsp;LST23_6.CPP--VALIDATING THE STANDARD PRINT DIALOG BOX
+FOR A SPECIFIC NUMBER OF COPIES.</H4>
+<PRE>1:  BOOL CPrintItView::OnPreparePrinting(CPrintInfo* pInfo)
+2:  {
+3:      pInfo-&gt;SetMinPage(1);
+4:      pInfo-&gt;SetMaxPage(10);
+5:
+6:      pInfo-&gt;m_pPD-&gt;m_pd.nCopies = 3;
+7:
+8:      do
+9:      {
+10:          // ** Check if user has cancelled print
+11:          if (DoPreparePrinting(pInfo) == FALSE)
+12:              return FALSE;
+13:
+14:          // ** Warn the user if too many copies
+             &Acirc;are specified
+15:          if (pInfo-&gt;m_pPD-&gt;GetCopies()&gt;5)
+16:              AfxMessageBox(&quot;Please choose less than
+                 &Acirc;5 copies&quot;);
+17:
+18:          // ** Keep looping until they specify a 
+              &Acirc;valid number
+19:      } while(pInfo-&gt;m_pPD-&gt;GetCopies()&gt;5);
+20:      return TRUE;
+21:  }
+</PRE>
+<P>In Listing C.6 the CView::DoPreparePrinting() returns FALSE if the user has pressed
+Cancel in lines 11 and 12. Otherwise, the number of copies set is checked in line
+15, and a warning is issued if more than five copies have been selected (my arbitrary
+criteria). The loop is repeated at line 19 until the user enters a valid number of
+copies or presses Cancel.</P>
+<P>
+<H3><A NAME="Heading10"></A>Using Portrait and Landscape Orientations</H3>
+<P>If you click the File menu from the application and choose the Print Setup option,
+you can change the printer's orientation defaults. You can choose either Portrait
+or Landscape from the dialog. You don't need to make any code changes to handle Landscape
+printing; if you choose this option and then run a print preview, you should notice
+that the device context is now drawn to the shape of the paper turned on its side.
+As long as your application takes note of the rectDraw member of the CPrintInfo object,
+it should be able to cope with landscape printing automatically.</P>
+<P>
+<H3><A NAME="Heading11"></A>Adding GDI Objects with OnBeginPrinting()</H3>
+<P>As I mentioned earlier, the code in Listing C.4 works fine, but there is a better
+way to allocate the resources needed. Currently every time a page is printed, OnPrint()
+is called to draw the page, and all the resources are created from scratch. That
+probably won't slow things down too much for this simple output, but in a large,
+complex report you might want to set up a number of resources and other calculations
+just once at the start of the report. Then you can print a number of pages and clean
+up the resources at the end of the report.</P>
+<P>The OnBeginPrinting()virtual function is an ideal place to do this initialization,
+and its sister function, OnEndPrinting(), is the place to clean up these resources.
+OnBeginPrinting() is called after OnPreparePrinting() and is the first place where
+a printer device context is passed in. This device context is the one that is used
+during the printing process, so you can set up all the GDI objects and printer page
+coordinates at this point. The default code supplied automatically by the ClassWizard
+just gives you an empty function:</P>
+<P>
+<PRE>void CPrintItView::OnBeginPrinting(CDC* /*pDC*/,
+ &Acirc; CPrintInfo* /*pInfo*/)
+{
+    // TODO: add extra initialization before printing
+}
+</PRE>
+<P>Take a close look at that function definition. Notice the parameters are actually
+commented out to the compiler, throwing warning messages about unused parameters
+when you compile. You'll have to remember to uncomment these parameters before you
+start using them.</P>
+<P>You can now add the GDI object creation calls to this function to avoid doing
+it on every page:</P>
+<P>
+<PRE>m_fnTimes.CreatePointFont(720,&quot;Times New Roman&quot;,pDC);
+m_brHatch.CreateHatchBrush(HS_CROSS,RGB(64,64,64));
+</PRE>
+<P>Notice that the fnTimes and brHatch objects have been prefixed by an m_; this
+is a naming convention to indicate that the objects have class scope (are embedded
+in the class) rather than local scope (are embedded in the function). Because you'll
+need to access these GDI objects in OnPrint(), you can add them to the class declaration.
+You can do this by adding the font and brush objects to the class declaration like
+this:</P>
+<P>
+<PRE>protected:
+    CFont     m_fnTimes;
+    CBrush    m_brHatch;
+</PRE>
+<P>You can add these either by double-clicking the CPrintItView class in the ClassView
+and adding them directly or by using the Add Member Variable dialog box.</P>
+<P>Also notice that the hatched brush is created with the CreateHatchBrush() function
+rather than with the constructor. This is because the brush will exist as long as
+the view does, but you must call DeleteObject() in the OnBeginPrinting() function
+so that the underlying GDI resource is freed between prints. You can add the code
+to delete both the font and brush GDI objects in OnEndPrinting(), as shown in these
+lines:</P>
+<P>
+<PRE>m_fnTimes.DeleteObject();
+m_brHatch.DeleteObject();
+</PRE>
+<P>All that remains is to remove the local GDI objects from the OnPrint() function
+itself and replace their references with the member variable versions. You can do
+this by replacing the CFont fnTimes and CBrush brHatch local variables and their
+creation functions and just selecting the precreated font and brush:</P>
+<P>
+<PRE>CFont* pOldFont = (CFont*)pDC-&gt;SelectObject(&amp;m_fnTimes);
+CBrush* pOldBrush = (CBrush*)pDC-&gt;SelectObject(&amp;m_brHatch);
+</PRE>
+<P>If you were to build and run the application after making these changes, you'd
+probably notice no difference. Functionally it's the same, but the print and preview
+should be a little faster. If you had a large, complex 100-page report using lots
+of GDI resources, you'd definitely find this technique useful in speeding up the
+printing.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>USING COORDINATES FROM </B>OnBeginPrinting()</P>
+
+	<P>You might be tempted to also store the coordinates from OnBeginPrinting(). This
+	won't work because CPrintInfo's m_rectDraw member hasn't been initialized by that
+	stage and random coordinates will be used.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading12"></A>Customizing Device Context Preparation</H3>
+<P>Before both OnDraw() and OnPrint() are called, the OnPrepareDC() virtual function
+is called and can be overridden in your view class to perform any device context
+modifications that might be common to both OnDraw() and OnPrint(). You might want
+to set mapping modes or set certain common draw modes to the device context for both
+onscreen and printing modes. The override isn't supplied by the AppWizard, but can
+easily be added from the Add Virtual Function dialog box. One thing common to both
+OnDraw() and OnPrint() in the example is the SetTextAlign() device context function.
+You could add this to an OnPrepareDC() function like this:</P>
+<P>
+<PRE>void CPrintItView::OnPrepareDC(CDC* pDC, CPrintInfo* pInfo)
+{
+    pDC-&gt;SetTextAlign(TA_CENTER+TA_BASELINE);
+}
+</PRE>
+<P>There might be times, especially when preparing WYSIWYG printouts, that it is
+advantageous to set mapping modes and window extents in a common function before
+the draw or print function is called. OnPrepareDC() is the place to put any device
+context-specific initialization code.</P>
+<P>
+<H3><A NAME="Heading13"></A>Aborting the Print Job</H3>
+<P>Another use of OnPrepareDC() is to call printer escapes or other print document-specific
+functions. If you had a particularly long report, you might want to give the user
+the option of terminating the printing process and aborting the print. The AbortDoc()
+device context function aborts the printing document for a printer device context.
+You can try this by adding the following lines to OnPrepareDC() and aborting the
+document after three pages:</P>
+<P>
+<PRE>if (pDC-&gt;IsPrinting())
+    if (pInfo-&gt;m_nCurPage==3) pDC-&gt;AbortDoc();
+</PRE>
+<H2><A NAME="Heading14"></A>Direct Printing Without the Framework</H2>
+<P>So far in this chapter, I've shown you the SDI and MDI framework support for printing.
+This support melds nicely into the Document/View architecture, but there are times
+when you just want quick and easy access to a printer or don't have the framework
+available--in a dialog-based application, for example.</P>
+<P>The framework support hides lower-level printing support that is the bedrock for
+all the printing operations. This section explains how this support works and shows
+it in use in a dialog box-based application example.</P>
+<P>
+<H3><A NAME="Heading15"></A>Invoking the Print Dialog Box Directly</H3>
+<P>You saw in the earlier section &quot;Using the Print Dialog Box&quot; how the
+CPrintDialog class provides a wrapper for the common PRINTDLG dialog and how this
+was called from CView::DoPreparePrinting().</P>
+<P>The same dialog box and class can be used directly to set up the destination printer
+and its default settings just like you'd use a normal modal dialog box. You can use
+the same access functions to set the page numbers and copy defaults as you used from
+inside the framework's DoPreparePrinting() function.</P>
+<P>Listing C.7 shows this dialog box being used directly to configure the printer
+for dialog box-based printing and then prints a small document from the defaults
+set by the dialog box.</P>
+<P>The direct printing mechanism works via the StartDoc() and EndDoc() functions
+shown in this listing and is explained in the next section.</P>
+<P>You can use the AppWizard to create a dialog box-based application named DlgPrint
+and create an OnOK() handler with the ClassWizard to implement the printing code,
+as shown in Listing C.7.</P>
+<P>
+<H4>LISITNG C.7.&nbsp;&nbsp;LST23_7.CPP--IMPLEMENTING A DIRECT DOCUMENT PRINT IN
+OnOK OF A DIALOG BOX-BASED APPLICATION.</H4>
+<PRE>1:  void CDlgPrintDlg::OnOK()
+2:  {
+3:      // TODO: Add extra validation here
+4:
+5:      // ** Construct a CPrintDialog object
+6:      CPrintDialog dlgPrint(FALSE,PD_ALLPAGES,this);
+7:
+8:      if (dlgPrint.DoModal()==IDOK)
+9:      {
+10:          // ** Attach the printer DC from the dialog
+11:          // ** to a CDC object
+12:          CDC dcPrint;
+13:          dcPrint.Attach(dlgPrint.GetPrinterDC());
+14:
+15:          // ** Create and fill a DOCINFO structure
+16:          DOCINFO myPrintJob;
+17:          myPrintJob.cbSize = sizeof(myPrintJob);
+18:          myPrintJob.lpszDocName = &quot;MyPrintJob&quot;;
+19:          myPrintJob.lpszOutput = NULL;
+20:          myPrintJob.lpszDatatype = NULL;
+21:          myPrintJob.fwType = NULL;
+22:
+23:          // ** Start the printing document
+24:          if (dcPrint.StartDoc(&amp;myPrintJob)&gt;=0)
+25:          {
+26:              // ** Start a page
+27:              dcPrint.StartPage();
+28:
+29:              // ** Start drawing
+30:              dcPrint.TextOut(0,0,&quot;My Small Print Job&quot;);
+31:
+32:              // ** Throw the page
+33:              dcPrint.EndPage();
+34:
+35:              // ** Close the document
+36:              dcPrint.EndDoc();
+37:          }
+38:
+39:          // ** Delete the printer device context
+40:          dcPrint.DeleteDC();
+41:      }
+42:
+43:      // ** Carry on with the standard OnOK
+44:      CDialog::OnOK();
+45:  }
+</PRE>
+<P>Listing C.7 declares a CPrintDialog object dlgPrint at line 6 that takes three
+parameters in its constructor. The first parameter is a flag that can be set as TRUE
+to display the Print Setup dialog box, or FALSE to display the Print dialog box.
+The second parameter is a set of combinable flags that customize the settings of
+the dialog box (too numerous to cover here). The third parameter is a pointer to
+the parent window; in this case the C++ this pointer indicates that the dialog box
+is the parent.</P>
+<P>On line 8, dlgPrint.DoModal()is called to display this dialog box. If the user
+clicks OK, the print begins; otherwise, the block is skipped.</P>
+<P>When the user has clicked OK in the Print dialog box, a device context for the
+printer is created and attached to a CDC object in line 13 to make it easier to use.
+You must remember to delete the device context itself, as shown in line 40.</P>
+<P>You can add the listing lines and handler, build and run it, and click OK of the
+dialog box application to run the new code.</P>
+<P>
+<H3><A NAME="Heading16"></A>Using StartDoc() and EndDoc()</H3>
+<P>The CDC device context has many printer-specific functions. To start a new print,
+Windows must create a spool document to store the print job and submit it to the
+printer when it is complete. The StartDoc() function tells Windows to start spooling,
+and the EndDoc() function tells it that the document is complete and can be sent
+to the printer. You saw the AbortDoc() function earlier that will abort the print
+and cancel the print job rather than send to the printer.</P>
+<P>Listing C.7 calls the StartDoc() member of the printer device context object dcPrint
+at line 24, passing a pointer to a DOCINFO structure. This structure holds the details
+of the print job. The only detail you must specify is a name for the spool document,
+which is assigned at line 18. Notice that it has an unusual cbSize member that holds
+the size of the structure. This is assigned the value from sizeof(myPrintJob) at
+line 17. You see this sort of strange action going on a lot at the Win32 API level
+because DOCINFO is an old C-style structure; the cbSize is used because there are
+a few different forms of DOCINFO and the only way to tell them apart is the size.</P>
+<P>When StartDoc() is called, it will try to start the print job and return a positive
+value if it succeeds. There are many reasons why it might fail, such as low disk
+space or memory, or a corrupt printer driver, so it's a good idea to carry on with
+the print only after checking the return code.</P>
+<P>After the document is printed, you should call EndDoc() as shown on line 36 to
+start printing the document.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>WATCHING THE WINDOWS SPOOLER</B></P>
+
+	<P>You can watch the print document as it builds up by placing a breakpoint in the
+	OnPrint() function or after a StartDoc() function and opening your printer status
+	icon from the Printers group available from the main Windows Start menu under the
+	Settings option.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading17"></A>Using StartPage() and EndPage()</H3>
+<P>Another pair of printer device context functions are StartPage() and EndPage().
+The StartPage() function is used to initialize the device context ready for printing
+a new page. This will reset some of the device context settings such as the current
+graphics cursor position and set the document spooling information for starting a
+new page.</P>
+<P>Typically, you'd call StartPage(), do some drawing in the device context for the
+details to be printed on that page, and call EndPage() to write the page away to
+the spool file to add it to the print document.</P>
+<P>In Listing C.7, StartPage() is called on line 27, followed by a solitary TextOut()
+function to draw something on the printer page, followed by a call to EndPage() on
+line 33.</P>
+
+<P>When EndPage() is called, the special printer codes for throwing a Form Feed are
+sent to the spooler and the spool document registers another print page. You can
+repeat this StartPage() and EndPage() sequence for all the document pages before
+calling EndDoc() to complete the printing process. You can use the printer device
+context for drawing in just the same way as the OnPrint() was used in the SDI application
+in between the StartPage() and EndPage() calls. The same functions were called in
+the SDI framework, but the framework hides it from you, only calling your OnPrint()
+between start and end page calls.</P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../apb/apb.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../apd/apd.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

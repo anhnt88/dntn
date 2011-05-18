@@ -1,0 +1,474 @@
+bool FindConflict(bool *bConflict,
+      CALENDAR_INFO* pCalendar,
+      LIST_MEN_IN_CALENDAR *pListMen,
+      LIST_DEP_IN_CALENDAR *pListDep,
+      LIST_GROUP_IN_CALENDAR *pListGroup,
+      LIST_RESOURCE_IN_CALENDAR *pListResource,
+      LIST_CALENDAR_CONFLICT *pListConflictOut,
+      bool bUpdate)
+{
+	*bConflict = false;
+	CADODatabase pAdodb;// = NULL;
+	//pAdodb = new CADODatabase();
+	//  if (pAdodb == NULL) 
+	//  {
+	//   return false;
+	//  }
+ 
+	pAdodb.SetConnectionString(g_strDBConnectionString);
+	if(!pAdodb.Open())
+	{
+		//delete pAdodb;//pAdodb=NULL;
+		return false;
+	}
+
+	CString strQuery;
+	CADORecordset rs(&pAdodb);
+	UserConflictMap  ListUser;
+	int i;
+	ListUser.InitHashTable(MAX_CONNECTIONS);
+	for (i=0; i <pListMen->size(); i++) 
+	{
+		MAN_CONFLICT man;
+		man.Email = pListMen->at(i).Email;
+		man.Status = pListMen->at(i).Status;
+		ListUser.SetAt(man.Email,man);
+	}
+	CString strTemp;
+	CString strList = "";
+	for (i=0; i <pListGroup->size(); i++) 
+	{
+		if (strList.IsEmpty()) 
+		{
+			strTemp.Format("%d",pListGroup->at(i).GroupID);
+		} else
+		{
+			strTemp.Format(",%d",pListGroup->at(i).GroupID);
+		}
+		strList = strList + strTemp;
+	}
+	if (!strList.IsEmpty()) 
+	{
+		strQuery.Format("SELECT email FROM MenInGroup_table WHERE GroupID IN (%s)", strList);
+		if(rs.Open(strQuery,CADORecordset::openQuery) == FALSE)
+		{
+			pAdodb.Close();
+			//delete pAdodb;//pAdodb=NULL;
+			return false ;
+		}
+		while (!rs.IsEOF()) 
+		{
+			rs.GetFieldValue("Email",strTemp);
+			MAN_CONFLICT man;
+			man.Email = strTemp;
+			man.Status = 0;
+			ListUser.SetAt(man.Email,man);
+			rs.MoveNext();
+		}
+		rs.Close();
+	}
+	rs.Close();
+	strList = "";
+	for (i=0; i <pListDep->size(); i++) 
+	{
+		if (strList.IsEmpty()) 
+		{
+			strTemp.Format("'%s'",pListDep->at(i).DepID);
+		} else
+		{
+			strTemp.Format(",'%s'",pListDep->at(i).DepID);
+		}
+		strList = strList + strTemp;
+	}
+	if (!strList.IsEmpty()) 
+	{
+		strQuery.Format("SELECT email FROM User_Dep_table WHERE DepID IN (%s)", strList);
+		if(rs.Open(strQuery,CADORecordset::openQuery) == FALSE)
+		{
+			pAdodb.Close();
+			//delete pAdodb;//pAdodb=NULL;
+			return false ;
+		}
+		while (!rs.IsEOF()) 
+		{
+			rs.GetFieldValue("Email",strTemp);
+			MAN_CONFLICT man;
+			man.Email = strTemp;
+			man.Status = 0;
+			ListUser.SetAt(man.Email,man);
+			rs.MoveNext();
+		}
+		rs.Close();
+	}
+	rs.Close();
+	long CalendarID;
+	CString strStartTime;
+	CString strEndTime;
+	COleDateTime dDate;
+	dDate.m_dt = atof(pCalendar->StartTime);
+	strStartTime = dDate.Format("'%m/%d/%y %H:%M:0'");
+	dDate.m_dt = atof(pCalendar->EndTime);
+	strEndTime = dDate.Format("'%m/%d/%y %H:%M:0'");
+	std::vector<int> vResourceQuantity;
+	CString strListRSID("");
+	for (i = 0; i <pListResource->size(); i++) 
+	{
+		if(strListRSID.IsEmpty())
+		{
+			strTemp.Format("%d",pListResource->at(i).ResourceID);
+		}
+		else strTemp.Format(",%d",pListResource->at(i).ResourceID);
+		strListRSID+=strTemp;
+		vResourceQuantity.push_back(0);
+	}
+	if(pListResource->size() > 0)
+	{
+		strQuery.Format("SELECT ResourceID, Quantity FROM [Resource_table] WHERE ResourceID IN (%s)",strListRSID);
+		if(rs.Open(strQuery,CADORecordset::openQuery))
+		{
+			while (!rs.IsEOF())
+			{
+				int iRSID,iQuantity;
+				rs.GetFieldValue("ResourceID",iRSID);
+				rs.GetFieldValue("Quantity",iQuantity);
+				rs.MoveNext();
+
+				for(i=0;i<pListResource->size();i++)
+					if(pListResource->at(i).ResourceID == iRSID)
+					{
+						vResourceQuantity[i]=iQuantity-pListResource->at(i).Quantity;
+					}
+			}
+			rs.Close();
+		}
+	}
+	if (bUpdate) 
+	{
+		strQuery.Format("SELECT * FROM Calendar_table\
+			   WHERE\
+			   (\
+				(\
+				 (StartTime >=%s AND StartTime < %s) OR (EndTime > %s AND EndTime <= %s) OR ( StartTime <= %s AND EndTime >= %s )\
+				 OR (\
+				   (RescureType > 0)AND\
+				   (\
+					(RescureTime > %s AND RescureTime<= %s) OR ( StartTime <= %s AND RescureTime >= %s)\
+				   )\
+				  )\
+				)\
+				AND (CalendarID <> %d)\
+			   )",strStartTime, strEndTime, strStartTime, strEndTime,strStartTime, strEndTime,strStartTime,strEndTime,strStartTime,strEndTime,pCalendar->CalendarID);
+	} else
+	{
+		strQuery.Format("SELECT * FROM Calendar_table\
+				WHERE\
+				(\
+				 (\
+				  (StartTime >=%s AND StartTime < %s) OR (EndTime > %s AND EndTime <= %s) OR ( StartTime <= %s AND EndTime >= %s )\
+				  OR (\
+					(RescureType > 0)AND\
+					(\
+					 (RescureTime > %s AND RescureTime<= %s) OR ( StartTime <= %s AND RescureTime >= %s)\
+					)\
+				   )\
+				 )\
+				)",strStartTime, strEndTime, strStartTime, strEndTime,strStartTime, strEndTime,strStartTime,strEndTime,strStartTime,strEndTime);
+	}
+	rs.Close();
+	if(rs.Open(strQuery,CADORecordset::openQuery) == FALSE)
+	{
+		pAdodb.Close();
+		//delete pAdodb;//pAdodb=NULL;
+		return false ;
+	}
+	if (rs.GetRecordCount() <= 0) 
+	{
+		rs.Close();
+		pAdodb.Close();
+		//delete pAdodb;//pAdodb=NULL;
+		return true;
+	} else
+	{
+		strList = "";
+		while (!rs.IsEOF()) 
+		{
+			rs.GetFieldValue("CalendarID",CalendarID);
+			rs.MoveNext();
+			if (strList.IsEmpty()) 
+			{
+				strTemp.Format("%d",CalendarID);
+			} else
+			{
+				strTemp.Format(",%d",CalendarID);
+			}
+			strList = strList + strTemp;
+		}
+		rs.MoveFirst();
+	}
+	LIST_MAN_CONFLICT ListUserInCalendar;
+	LIST_RESOURCE_IN_CALENDAR ResourceList;
+	while (!rs.IsEOF()) 
+	{
+		CALENDAR_CONFLICT CalendarConflict;
+		rs.GetFieldValue("CalendarID",CalendarConflict.CalendarID);
+		rs.GetFieldValue("CalendarName",CalendarConflict.CalendarName);
+		COleDateTime startTime,endTime,RescureTime, createTime;
+		rs.GetFieldValue("EndTime",endTime);
+		CalendarConflict.EndTime.Format("%f", endTime.m_dt);
+		rs.GetFieldValue("StartTime",startTime); 
+		CalendarConflict.StartTime.Format("%f", startTime.m_dt);
+		int iRescure;
+		rs.GetFieldValue("RescureType",iRescure);
+		CalendarConflict.RescureType=iRescure;
+		rs.GetFieldValue("RescureTime",RescureTime);
+		rs.GetFieldValue("Blocking",CalendarConflict.Blocking);
+		int iRecurrenceDay;
+		rs.GetFieldValue("RecurrenceDay",iRecurrenceDay);
+		rs.GetFieldValue("CreatorEmail",CalendarConflict.EmailCreator);
+		rs.GetFieldValue("CreateTime",createTime); 
+		CalendarConflict.CreateTime.Format("%f", createTime.m_dt);
+		rs.MoveNext();
+		bool bAdd=true;
+		if(iRescure > 0)
+		{
+			COleDateTime sTime,eTime;
+			sTime.m_dt= atof(pCalendar->StartTime);
+			eTime.m_dt= atof(pCalendar->EndTime);
+			bAdd=false;
+			bool bStop=false;
+			std::vector<int> vRecurrenceDay;
+			switch (iRescure)
+			{
+			case 1:// lap lai hang ngay
+				do 
+				{
+					if(startTime>=sTime && startTime < eTime)
+					{
+						bAdd = true;
+						bStop = true;
+					}
+					if(endTime > sTime && endTime <= eTime)
+					{
+						bAdd = true;
+						bStop = true;
+					}
+					if(startTime <= sTime && endTime >= eTime)
+					{
+						bAdd = true;
+						bStop = true;
+					}
+					startTime+=1;
+					endTime+=1;
+				} while (!bStop && endTime< RescureTime && startTime < eTime);
+				break;
+			case 2:// lap lai hang tuan
+				vRecurrenceDay.clear();
+				for (j=0; j<7; j++)
+				{
+					DWORD dwTmp=1;
+					dwTmp<<=j;
+					if (dwTmp&iRecurrenceDay)
+						vRecurrenceDay.push_back(j+1);
+				}
+				do 
+				{
+					if(startTime>=sTime && startTime < eTime)
+					{
+						bAdd = true;
+						bStop = true;
+					}
+					if(endTime > sTime && endTime <= eTime)
+					{
+						bAdd = true;
+						bStop = true;
+					}
+					if(startTime <= sTime && endTime >= eTime)
+					{
+						bAdd = true;
+						bStop = true;
+					}
+					
+					int nDayOfWeek = startTime.GetDayOfWeek();	
+					bool bNotIn=true;
+					for(j=0; j<vRecurrenceDay.size();j++)
+					{
+						if((nDayOfWeek==vRecurrenceDay[j]))
+						{
+							bNotIn=false;
+							if (j==vRecurrenceDay.size()-1)//Phan tu cuoi cung
+							{
+								int nIncreaseTime=7-vRecurrenceDay[j]+vRecurrenceDay[0];
+								startTime+=nIncreaseTime;
+								endTime+=nIncreaseTime;
+							}
+							else
+							{
+								int nIncreaseTime=vRecurrenceDay[j+1]-vRecurrenceDay[j];
+								startTime+=nIncreaseTime;
+								endTime+=nIncreaseTime;
+							}
+						}
+					}
+					if(bNotIn)
+					{
+						//Loi: lap theo tuan ma thu cua lich khong co trong RecurrenceDay
+						break;
+					}
+				} while (!bStop && endTime< RescureTime && startTime < eTime);
+				break;		
+			case 3:// lap lai hang thang
+				int nMonth=startTime.GetMonth();
+				int nYear=startTime.GetYear();
+				int nDay=startTime.GetDay();
+				int iHour=startTime.GetHour();
+				int iMinute=startTime.GetMinute();
+				COleDateTime runSTime,runETime;
+				runSTime=startTime;
+				runETime=endTime;
+				do 
+				{
+					if(runSTime>=sTime && runSTime < eTime)
+					{
+						bAdd = true;
+						bStop = true;
+					}
+					if(runETime > sTime && runETime <= eTime)
+					{
+						bAdd = true;
+						bStop = true;
+					}
+					if(runSTime<=sTime && runETime >= eTime)
+					{
+						bAdd = true;
+						bStop = true;
+					}
+					nMonth+=1;
+					if(nMonth>12)
+					{
+						nYear+=1;
+						nMonth-=12;
+					}
+					int nNextMonth=nMonth+1;
+					COleDateTime tmpTime;
+					if(nNextMonth>12)
+					{
+						tmpTime.SetDateTime(nYear+1,nNextMonth-12,1,0,0,0);
+					}
+					else
+						tmpTime.SetDateTime(nYear,nNextMonth,1,0,0,0);
+					tmpTime-=1; // Get Last Day Of current Month;
+					if(nDay > tmpTime.GetDay())
+					{
+						int iDay=tmpTime.GetDay();
+						runSTime.SetDateTime(nYear,nMonth,iDay,iHour,iMinute,0);
+					}
+					else runSTime.SetDateTime(nYear,nMonth,nDay,iHour,iMinute,0);
+					int nSpaceDay=runSTime-startTime;
+					runETime=endTime;
+					runETime+=nSpaceDay;
+				} while (!bStop && runETime< RescureTime && runSTime < eTime);
+				break;
+			}
+		}
+		if(bAdd)
+		{
+			ListUserInCalendar.clear();
+			ResourceList.clear();
+			GetListUserResource(&pAdodb,CalendarConflict.CalendarID,&ListUserInCalendar,&ResourceList);
+			MAN_CONFLICT UserConflict;
+
+			bool bHasConflict = false;
+			bool bRefuse=false;// kiem tra xem lich bi tu choi chua
+			CalendarConflict.CalendarID = CalendarID;
+			for (i = 0; i <ListUserInCalendar.size(); i++) 
+			{
+			//    CString strEmail=ListUserInCalendar.at(i).Email;
+				if ( 0!=ListUser.Lookup(ListUserInCalendar.at(i).Email,UserConflict) )
+				{
+					CalendarConflict.ListMen.push_back(UserConflict);
+					*bConflict = true;
+					bHasConflict = true;
+				}
+			}
+	   
+			int test = pListResource->size();
+			if(pListResource->size() > 0)
+			{
+				CADORecordset rs2(&pAdodb);
+				//tuantab 25/8 conflict lich voi Resource, neu lich bi tu choi Respond = -1 thi ko bao conflict
+				// conflict chi xet voi nhung tai nguyen thiet lap la public , iPublicType=0, cac tai nguyen khac dat vo tu
+				strQuery.Format(" SELECT [Tbl_Resource_Xetduyet].Respond FROM [Tbl_Resource_Xetduyet]\
+					   WHERE ([Tbl_Resource_Xetduyet].CalendarID =%i) AND\
+						 ([Tbl_Resource_Xetduyet].ResourceID IN (%s)) AND\
+						 ([Tbl_Resource_Xetduyet].ResourceID IN (SELECT [Resource_table].ResourceID FROM [Resource_table] WHERE PublicType=0)\
+					   )",CalendarConflict.CalendarID,strListRSID);
+				if(rs2.Open(strQuery,CADORecordset::openQuery))
+				{
+					int iRespond;
+					while (!rs2.IsEOF())
+					{
+						//duyet qua toan bo ket qua, neu lich bi tu choi thi set bRefuse= true
+						rs2.GetFieldValue("Respond",iRespond);
+						if (iRespond==-1)
+						{
+							bRefuse=true;
+							break;
+						}
+						rs2.MoveNext();
+					}
+					rs2.Close();
+				}
+				rs2.Close();
+				//////////////////////////////////////////////////////////////////////////
+				strQuery.Format(" SELECT [ResourceInCalendar_table].ResourceID, [ResourceInCalendar_table].Quantity, [ResourceInCalendar_table].Status FROM [ResourceInCalendar_table]\
+					 WHERE ([ResourceInCalendar_table].CalendarID =%i) AND\
+					   ([ResourceInCalendar_table].ResourceID IN (%s)) AND\
+					   ([ResourceInCalendar_table].ResourceID IN (SELECT [Resource_table].ResourceID FROM [Resource_table] WHERE PublicType=0)\
+					   )",CalendarConflict.CalendarID,strListRSID);
+				if(rs2.Open(strQuery,CADORecordset::openQuery))
+				{
+					while(!rs2.IsEOF())
+					{
+						int iID,iQuantity, iStatus;
+						rs2.GetFieldValue("ResourceID",iID);
+						rs2.GetFieldValue("Quantity",iQuantity);
+						rs2.GetFieldValue("Status",iStatus);
+						for(i=0;i<pListResource->size();i++)
+						if(pListResource->at(i).ResourceID == iID)
+						{
+							vResourceQuantity[i]-=iQuantity;
+							if(vResourceQuantity[i] < 0)
+							{
+								RESOURCE_CONFLICT Resource;
+								Resource.ResourceID =iID;
+								Resource.Status  =iStatus;
+								CalendarConflict.ListResource.push_back(Resource);
+								*bConflict = true;
+								bHasConflict = true;
+							}
+						}
+						rs2.MoveNext();
+					}
+					rs2.Close();
+				}
+				rs2.Close();
+			}
+	   
+			if (bHasConflict&&!bRefuse) 
+			{
+				pListConflictOut->push_back(CalendarConflict);
+				*bConflict=true;
+			}
+			else
+				*bConflict=false;
+		}
+		//   else
+		//   {
+		//    pListConflictOut->push_back(CalendarConflict);
+		//   }
+	}
+	rs.Close();
+	pAdodb.Close();
+	//delete pAdodb;//pAdodb=NULL;
+	return true;
+}

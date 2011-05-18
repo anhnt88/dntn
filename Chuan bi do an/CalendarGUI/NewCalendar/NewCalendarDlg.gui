@@ -1,0 +1,239 @@
+<Screen
+	CID = "1024796455"
+	AppID = "2"
+	AppVer = "4.2.116.0"
+	DocID = ""
+	HasCanvas = "0"
+	Width = "640"
+	Height = "480"
+	NextCID = "6"
+	RepresentativeRefID = "0"
+	UseDefRepresentative = "1">
+	<Elements
+		CID = "1">
+		<Element
+			CID = "1927565755"
+			Type = "FrameWindow"
+			X = "0"
+			Y = "8"
+			Width = "639"
+			Height = "472"
+			Flags = "0"
+			WindowColour = "236,233,216,0,0"
+			Typeface = ""
+			FontAttributes = "1"
+			TextSize = "Normal"
+			Title = "Calendar"
+			TitleBarHeight = "18"
+			IconMargin = "0"
+			BorderSize = "1"
+			IsBorderless = "1"
+			IsActive = "1"
+			IsDocWindow = "0"
+			HasSunkenWindow = "1"
+			CentreText = "0"
+			UseMutedColours = "0"
+			Mirror = "0"
+			Buttons = "11"
+			Icon = "DefaultApp"/>
+		<Element
+			CID = "1927575183"
+			Type = "MenuBar"
+			X = "3"
+			Y = "31"
+			Width = "637"
+			Height = "22"
+			Flags = "2"
+			TopEdge = "Flat"
+			BottotmEdge = "Raised"
+			LeftEdge = "Flat"
+			RightEdge = "Flat"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "6"
+			LeftMargin = "0"
+			Mirror = "0">
+			<MenuBarItem
+				Item = "&amp;Tệp"
+				ItemID = "1"/>
+			<MenuBarItem
+				Item = "&amp;Công cụ"
+				ItemID = "3"/>
+			<MenuBarItem
+				Item = "Trợ &amp;giúp"
+				ItemID = "4"/>
+		</Element>
+		<Element
+			CID = "1927566122"
+			Type = "ControlBar"
+			X = "3"
+			Y = "53"
+			Width = "637"
+			Height = "51"
+			Flags = "0"
+			TopEdge = "Flat"
+			BottotmEdge = "Raised"
+			LeftEdge = "Flat"
+			RightEdge = "Flat"/>
+		<Element
+			CID = "1927558559"
+			Type = "StatusBar"
+			X = "1"
+			Y = "458"
+			Width = "637"
+			Height = "21"
+			Flags = "2"
+			TopEdge = "Raised"
+			BottotmEdge = "Flat"
+			LeftEdge = "Flat"
+			RightEdge = "Flat"
+			TextColour = "0,0,0,0,19"
+			FillColour = "236,233,216,0,16"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			StatusText = "For Help, press F1"
+			Mirror = "0"/>
+		<Element
+			CID = "873546328"
+			Type = "Bitmap"
+			X = "3"
+			Y = "53"
+			Width = "179"
+			Height = "49"
+			Flags = "0"
+			FileID = "C0FE0BB2-52A0-4FDE-80350AB6D25941DC"
+			RootPath = "$Container"
+			Filename = "..\Bitmap\NewCaldToolbar.PNG"
+			Placement = "Stretch"
+			HorzAlign = "Left"
+			VertAlign = "Top"
+			ClipLeft = "0"
+			ClipRight = "0"
+			ClipTop = "0"
+			ClipBottom = "0"/>
+		<Element
+			CID = "1098998137"
+			Type = "EditBox"
+			X = "64"
+			Y = "107"
+			Width = "568"
+			Height = "21"
+			Flags = "2"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = "Edit Box"
+			IsDisabled = "0"
+			IsReadOnly = "0"
+			HorzAlign = "Left"
+			EditType = "Text"
+			OverrideTextColour = "0"
+			OverrideDisabledTextColour = "0"
+			OverrideFillColour = "0"
+			OverrideDisabledFillColour = "0"
+			OverrideBorderColour = "0"
+			MarginLeft = "0"
+			MarginRight = "0"
+			MarginTop = "0"
+			MarginBottom = "0"
+			TextColour = "0,0,0,0,9"
+			DisabledTextColour = "161,161,146,0,18"
+			FillColour = "255,255,153,0,0"
+			DisabledFillColour = "236,233,216,0,16"
+			BorderColour = "127,157,185,0,12"/>
+		<Element
+			CID = "1099000944"
+			Type = "StaticText"
+			X = "6"
+			Y = "107"
+			Width = "50"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = "Left Text"
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "1529904174"
+			Type = "HorizontalTabBar"
+			X = "2"
+			Y = "140"
+			Width = "637"
+			Height = "319"
+			Flags = "0"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "4"
+			LeftMargin = "0"
+			RightMargin = "0"
+			SelectedTab = "0"
+			IsProportional = "1"
+			IsFullWidth = "0"
+			IsReversed = "0"
+			EnableSimSelect = "1"
+			Mirror = "0"
+			TabMarginLeft = "0"
+			TabMarginRight = "0"
+			TabMarginTop = "0"
+			TabMarginBottom = "0">
+			<TabBarItem
+				ItemID = "1"
+				Text = "Thông tin chung"
+				IsDisabled = "0"/>
+			<TabBarItem
+				ItemID = "2"
+				Text = "chi tiết"
+				IsDisabled = "0"/>
+		</Element>
+		<Element
+			CID = "883775843"
+			Type = "Rectangle"
+			X = "4"
+			Y = "162"
+			Width = "633"
+			Height = "296"
+			Flags = "0"
+			HighlightColour = "246,246,246,0,21"
+			ShadowColour = "185,180,161,0,17"
+			FillColour = "236,233,216,0,16"
+			GradientColour = "185,180,161,0,17"
+			BorderColour = "0,20,88,0,7"
+			TextColour = "0,0,0,0,19"
+			Fill = "Solid"
+			Border = "None"
+			TextPlacement = "Top"
+			HorzAlign = "Left"
+			BorderDepth = "2"
+			BorderWidth = "2"
+			Text = ""
+			TextOutsideExtent = "1"
+			IsDisabled = "0"/>
+	</Elements>
+	<Connections
+		CID = "2"/>
+	<Groups
+		CID = "3"/>
+	<SelectionGroups
+		CID = "4"/>
+	<Notes
+		CID = "5">
+		<Note
+			CID = "1024813265"
+			Name = "Description"
+			NextCID = "2">
+			<Text
+				CID = "1">
+				
+			</Text>
+		</Note>
+	</Notes>
+</Screen>

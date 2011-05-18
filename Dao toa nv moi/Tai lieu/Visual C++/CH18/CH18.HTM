@@ -1,0 +1,2000 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 18 -- Doing Multiple Tasks at One Time--Multitasking</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch17/ch17.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch19/ch19.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 18 -<BR>
+Doing Multiple Tasks at One Time--Multitasking</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">What Is Multitasking?</A>
+	<UL>
+		<LI><A HREF="#Heading2">Performing Multiple Tasks at One Time</A>
+		<LI><A HREF="#Heading3">Idle Processing Threads</A>
+		<LI><A HREF="#Heading4">Spawning Independent Threads</A>
+	</UL>
+	<LI><A HREF="#Heading5">Building a Multitasking Application</A>
+	<UL>
+		<LI><A HREF="#Heading6">Creating a Framework</A>
+		<LI><A HREF="#Heading7">Designing Spinners</A>
+	</UL>
+	<LI><A HREF="#Heading8">Supporting the Spinners</A>
+	<UL>
+		<LI><A HREF="#Heading9">Adding the OnIdle Tasks</A>
+		<LI><A HREF="#Heading10">Adding Independent Threads</A>
+	</UL>
+	<LI><A HREF="#Heading11">Summary</A>
+	<LI><A HREF="#Heading12">Q&amp;A</A>
+	<LI><A HREF="#Heading13">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading14">Quiz</A>
+		<LI><A HREF="#Heading15">Exercises</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+Sometimes it is convenient to let your applications do more than one thing at a time.
+Your application could write a backup file or print in the background while the user
+is working on the same document. Your application could perform calculations while
+the user enters new data or draws multiple images simultaneously. There are many
+different reasons why you might want to add this capability, called multitasking,
+to your applications. Windows provides several facilities specifically for building
+this into applications.</P>
+
+<P>Today, you will learn</P>
+<P>
+
+<UL>
+	<LI>How tasks can be performed while an application is idle.
+	<P>
+	<LI>How tasks can run independently of the rest of the application.
+	<P>
+	<LI>How to coordinate access to resources that are shared between multiple independent
+	tasks.
+	<P>
+	<LI>How to start and stop independently running tasks.
+</UL>
+
+<H2><A NAME="Heading1"></A>What Is Multitasking?</H2>
+<P>In the days of Windows 3.<I>x</I>, all Windows applications were single-threaded,
+with only one path of execution at any point in time. The version of multitasking
+that Windows 3.<I>x</I> offered is known as cooperative multitasking. The key to
+cooperative multitasking is that each individual application makes the decision about
+when to give up the processor for another application to perform any processing that
+it might be waiting to perform. As a result, Windows 3.<I>x</I> was susceptible to
+an ill-behaved application that would hold other applications prisoner while it performed
+some long, winding process or even got itself stuck in some sort of loop.</P>
+<P>With Windows NT and Windows 95, the nature of the operating system changed. No
+more cooperative multitasking--the new method was preemptive multitasking. With preemptive
+multitasking, the operating system decides when to take the processor away from the
+current application and give the processor to another application that is waiting
+for it. It doesn't matter whether the application that has the processor is ready
+to give it up; the operating system takes the processor without the application's
+permission. This is how the operating system enables multiple applications to perform
+computation-intensive tasks and still let all the applications make the same amount
+of progress in each of their tasks. Giving this capability to the operating system
+prevents a single application from holding other applications prisoner while hogging
+the processor.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> With the 16/32 bit structure of Windows 95, it is still possible
+	for an ill-behaved 16-bit application to lock up the system because a large amount
+	of 16-bit code remains a core part of the operating system. The 16-bit code on Windows
+	95 is still a cooperative multitasking environment, so only one application can execute
+	16-bit code at a time. Because all the USER functions, and a good portion of the
+	GDI functions, thunk down to the 16-bit version, it is still possible for a single
+	16-bit application to lock up the entire system.<BR>
+	On Windows NT, if all of the 16-bit applications run in a shared memory space, an
+	ill-behaved application can lock up all of the 16-bit applications, but this has
+	no effect on any 32-bit applications.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading2"></A>Performing Multiple Tasks at One Time</H3>
+<P>Along with the capability to allow multiple applications to run simultaneously
+comes the capability for a single application to execute multiple threads of execution
+at any time. A thread is to an application what an application is to the operating
+system. If an application has multiple threads running, it is basically running multiple
+applications within the whole application. This lets the application accomplish more
+things simultaneously, such as when Microsoft Word checks your spelling at the same
+time you are typing your document.</P>
+<P>
+<H3><A NAME="Heading3"></A>Idle Processing Threads</H3>
+<P>One of the easiest ways to let your application perform multiple tasks at one
+time is to add some idle processing tasks. An idle processing task is a task that
+is performed when an application is sitting idle. Literally, a function in the application
+class is called when there are no messages in the application message queue. The
+idea behind this function is that while the application is idle, it can perform work
+such as cleaning up memory (also known as garbage collection) or writing to a print
+spool.</P>
+<P>The OnIdle function is a holdover from the Windows 3.<I>x</I> days. It is a member
+of the CWinApp class, from which your application class is inherited. By default,
+no processing in this function is added by the AppWizard, so if you want this function
+in your application, you must add it to your application class through the Class
+Wizard. (OnIdle is one of the available messages for the App class in your applications.)</P>
+<P>The OnIdle function receives one argument, which is the number of times the OnIdle
+function has been called since the last message was processed by your application.
+You can use this to determine how long the application has been idle and when to
+trigger any functionality that you need to run if the application is idle for more
+than a certain amount of time.</P>
+<P>One of the biggest concerns in adding OnIdle processing to your applications is
+that any functionality you add must be small and must quickly return control to the
+user. When an application performs any OnIdle processing, the user cannot interact
+with the application until the OnIdle processing finishes and returns control to
+the user. If you need to perform some long, drawn-out task in the OnIdle function,
+break it up into many small and quick tasks so that control can return to the user;
+then, you can continue your OnIdle task once the message queue is empty again. This
+means that you also have to track your application's progress in the OnIdle task
+so that the next time the OnIdle function is called, your application can pick up
+the task where it left off.</P>
+<P>
+<H3><A NAME="Heading4"></A>Spawning Independent Threads</H3>
+<P>If you really need to run a long background task that you don't want interfering
+with the user, you should spawn an independent thread. A thread is like another application
+running within your application. It does not have to wait until the application is
+idle to perform its tasks, and it does not cause the user to wait until it takes
+a break.</P>
+<P>The two methods of creating an independent thread use the same function to create
+and start the thread. To create and start an independent thread, you call the AfxBeginThread
+function. You can choose to pass it a function to call for performing the thread's
+tasks, or you can pass it a pointer to the runtime class for an object derived from
+the CWinThread class. Both versions of the function return a pointer to a CWinThread
+object, which runs as an independent thread.</P>
+<P>In the first version of the AfxBeginThread function, the first argument is a pointer
+to the main function for the thread to be started. This function is the equivalent
+of the main function in a C/C++ program. It controls the top-level execution for
+the thread. This function must be defined as a UINT function with a single LPVOID
+argument:</P>
+<P>
+<PRE>UINT MyThreadFunction( LPVOID pParam);
+</PRE>
+<P>This version of the AfxBeginThread function also requires a second argument that
+is passed along to the main thread function as the only argument to that function.
+This argument can be a pointer to a structure containing any information that the
+thread needs to know to perform its job correctly.</P>
+<P>The first argument to the second version of the AfxBeginThread function is a pointer
+to the runtime class of an object derived from the CWinThread class. You can get
+a pointer to the runtime class of your CWinThread class by using the RUNTIME_CLASS
+macro, passing your class as the only argument.</P>
+<P>After these initial arguments, the rest of the arguments to the AfxBeginThread
+function are the same for both versions, and they are all optional. The first of
+these arguments is the priority to be assigned to the thread, with a default priority
+of THREAD_PRIORITY_NORMAL. Table 18.1 lists the available thread priorities.</P>
+<P>
+<H4>TABLE 18.1. THREAD PRIORITIES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Priority</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">0		</TD>
+		<TD ALIGN="LEFT">The thread will inherit the thread priority of the application creating the thread.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">THREAD_PRIORITY_NORMAL		</TD>
+		<TD ALIGN="LEFT">A normal (default) priority.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">THREAD_PRIORITY_ABOVE_NORMAL		</TD>
+		<TD ALIGN="LEFT">1 point above normal priority.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">THREAD_PRIORITY_BELOW_NORMAL		</TD>
+		<TD ALIGN="LEFT">1 point below normal priority.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">THREAD_PRIORITY_HIGHEST		</TD>
+		<TD ALIGN="LEFT">2 points above normal priority.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">THREAD_PRIORITY_LOWEST		</TD>
+		<TD ALIGN="LEFT">2 points below normal priority.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">THREAD_PRIORITY_IDLE		</TD>
+		<TD ALIGN="LEFT">Priority level of 1 for most threads (all non-real-time threads).		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">THREAD_PRIORITY_TIME_CRITICAL		</TD>
+		<TD ALIGN="LEFT">Priority level of 15 for most threads (all non-real-time threads).		</TD>
+	</TR>
+</TABLE>
+
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Thread priority controls how much of the CPU's time the thread gets
+	in relation to the other threads and processes running on the computer. If a thread
+	will not be performing any tasks that need to be completed quickly, you should give
+	the thread a lower priority when creating it. It is not advisable to give a thread
+	a priority higher than normal unless it is vitally important that the thread perform
+	its tasks faster than other processes running on the computer. The higher a thread's
+	priority, the more CPU time that thread will receive, and the less CPU time all other
+	processes and threads on the computer will receive.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>The next argument to the AfxBeginThread function is the stack size to be provided
+for the new thread. The default value for this argument is 0, which provides the
+thread the same size stack as the main application.</P>
+<P>The next argument to the AfxBeginThread function is the thread-creation flag.
+This flag can contain one of two values and controls how the thread is started. If
+CREATE_SUSPENDED is passed as this argument, the thread is created in suspended mode.
+The thread does not run until the ResumeThread function is called for the thread.
+If you supply 0 as this argument, which is the default value, the thread begins executing
+the moment it is created.</P>
+<P>The final argument to the AfxBeginThread function is a pointer to the security
+attributes for the thread. The default value for this argument is NULL, which causes
+the thread to be created with the same security profile as the application. Unless
+you are building applications to run on Windows NT and you need to provide a thread
+with a specific security profile, you should always use the default value for this
+argument.</P>
+<P>
+<H4>Building Structures</H4>
+<P>Imagine that you have an application running two threads, each parsing its own
+set of variables at the same time. Imagine also that the application is using a global
+object array to hold these variables. If the method of allocating and resizing the
+array consisted of checking the current size and adding one position onto the end
+of the array, your two threads might build an array populated something like the
+one in Figure 18.1, where array positions populated by the first thread are intermingled
+with those created by the second thread. This could easily confuse each thread as
+it retrieves values from the array for its processing needs because each thread is
+just as likely to pull a value that actually belongs to the other thread. This would
+cause each thread to operate on wrong data and return the wrong results.</P>
+
+<P><A HREF="javascript:popUp('18fig01.gif')"><B>FIGURE 18.1.</B></A><B> </B><I>Two
+threads populating a common array.</I></P>
+
+<P>If the application built these arrays as localized arrays, instead of global arrays,
+it could keep access to each array limited to only the thread that builds the array.
+In Figure 18.2, for example, there is no intermingling of data from multiple threads.
+If you take this approach to using arrays and other memory structures, each thread
+can perform its processing and return the results to the client, confident that the
+results are correct because the calculations were performed on uncorrupted data.</P>
+
+<P><A HREF="javascript:popUp('18fig02.gif')"><B>FIGURE 18.2.</B></A><B> </B><I>Two
+threads populating localized arrays.</I></P>
+
+<P><I></I>
+<H4>Managing Access to Shared Resources</H4>
+<P>Not all variables can be localized, and you will often want to share some resources
+between all the threads running in your applications. Such sharing creates an issue
+with multithreaded applications. Suppose that three threads all share a single counter,
+which is generating unique numbers. Because you don't know when control of the processor
+is going to switch from one thread to the next, your application might generate duplicate
+&quot;unique&quot; numbers, as shown in Figure 18.3.</P>
+<P><A HREF="javascript:popUp('18fig03.gif')"><B>FIGURE 18.3.</B></A><B> </B><I>Three
+threads sharing a single counter.</I></P>
+
+<P>As you can see, this sharing doesn't work too well in a multithreaded application.
+You need a way to limit access to a common resource to only one thread at a time.
+In reality, there are four mechanisms for limiting access to common resources and
+synchronizing processing between threads, all of which work in different ways and
+whose suitability depends on the circumstances. The four mechanisms are</P>
+<P>
+
+<UL>
+	<LI>Critical sections
+	<P>
+	<LI>Mutexes
+	<P>
+	<LI>Semaphores
+	<P>
+	<LI>Events
+</UL>
+
+<P><B>Critical Sections</B></P>
+<P>A critical section is a mechanism that limits access to a certain resource to
+a single thread within an application. A thread enters the critical section before
+it needs to work with the specific shared resource and then exits the critical section
+after it is finished accessing the resource. If another thread tries to enter the
+critical section before the first thread exits the critical section, the second thread
+is blocked and does not take any processor time until the first thread exits the
+critical section, allowing the second to enter. You use critical sections to mark
+sections of code that only one thread should execute at a time. This doesn't prevent
+the processor from switching from that thread to another; it just prevents two or
+more threads from entering the same section of code.</P>
+<P>If you use a critical section with the counter shown in Figure 18.3, you can force
+each thread to enter a critical section before checking the current value of the
+counter. If each thread does not leave the critical section until after it has incremented
+and updated the counter, you can guarantee that--no matter how many threads are executing
+and regardless of their execution order--truly unique numbers are generated, as shown
+in Figure 18.4.</P>
+<P>If you need to use a critical section object in your application, create an instance
+of the CCriticalSection class. This object contains two methods, Lock and Unlock,
+which you can use to gain and release control of the critical section.</P>
+<P><B>Mutexes</B></P>
+<P>Mutexes work in basically the same way as critical sections, but you use mutexes
+when you want to share the resource between multiple applications. By using a mutex,
+you can guarantee that no two threads running in any number of applications will
+access the same resource at the same time.</P>
+<P>Because of their availability across the operating system, mutexes carry much
+more overhead than critical sections do. A mutex lifetime does not end when the application
+that created it shuts down. The mutex might still be in use by other applications,
+so the operating system must track which applications are using a mutex and then
+destroy the mutex once it is no longer needed. In contrast, critical sections have
+little overhead because they do not exist outside the application that creates and
+uses them. After the application ends, the critical section is gone.</P>
+<P>If you need to use a mutex in your applications, you will create an instance of
+the CMutex class. The constructor of the CMutex class has three available arguments.
+The first argument is a boolean value that specifies whether the thread creating
+the CMutex object is the initial owner of the mutex. If so, then this thread must
+release the mutex before any other threads can access it.</P>
+<P><A HREF="javascript:popUp('18fig04.gif')"><B>FIGURE 18.4.</B></A><B> </B><I>Three
+threads using the same counter, which is protected by a critical section.</I></P>
+
+<P>The second argument is the name for the mutex. All the applications that need
+to share the mutex can identify it by this textual name. The third and final argument
+to the CMutex constructor is a pointer to the security attributes for the mutex object.
+If a NULL is passed for this pointer, the mutex object uses the security attributes
+of the thread that created it.</P>
+<P>Once you create a CMutex object, you can lock and unlock it using the Lock and
+Unlock member functions. This allows you to build in the capabilities to control
+access to a shared resource between multiple threads in multiple applications.</P>
+<P><B>Semaphores</B></P>
+<P>Semaphores work very differently from critical sections and mutexes. You use semaphores
+with resources that are not limited to a single thread at a time-- a resource that
+should be limited to a fixed number of threads. A semaphore is a form of counter,
+and threads can increment or decrement it. The trick to semaphores is that they cannot
+go any lower than zero. Therefore, if a thread is trying to decrement a semaphore
+that is at zero, that thread is blocked until another thread increments the semaphore.</P>
+<P>Suppose you have a queue that is populated by multiple threads, and one thread
+removes the items from the queue and performs processing on each item. If the queue
+is empty, the thread that removes and processes items has nothing to do. This thread
+could go into an idle loop, checking the queue every so often to see whether something
+has been placed in it. The problem with this scenario is that the thread takes up
+processing cycles doing absolutely nothing. These processor cycles could go to another
+thread that does have something to do. If you use a semaphore to control the queue,
+each thread that places items into the queue can increment the semaphore for each
+item placed in the queue, and the thread that removes the items can decrement the
+semaphore just before removing each item from the queue. If the queue is empty, the
+semaphore is zero, and the thread removing items is blocked on the call to decrement
+the queue. This thread does not take any processor cycles until one of the other
+threads increments the semaphore to indicate that it has placed an item in the queue.
+Then, the thread removing items is immediately unblocked, and it can remove the item
+that was placed in the queue and begin processing it, as shown in Figure 18.5.</P>
+<P>If you need to use a semaphore in your application, you can create an instance
+of the CSemaphore class. This class has four arguments that can be passed to the
+class constructor. The first argument is the starting usage count for the semaphore.
+The second argument is the maximum usage count for the semaphore. You can use these
+two arguments to control how many threads and processes can have access to a shared
+resource at any one time. The third argument is the name for the semaphore, which
+is used to identify the semaphore by all applications running on the system, just
+as with the CMutex class.</P>
+<P><A HREF="javascript:popUp('18fig05.gif')"><B>FIGURE 18.5.</B></A><B> </B><I>Multiple
+threads placing objects into a queue.</I></P>
+
+<P>The final argument is a pointer to the security attributes for the semaphore.</P>
+<P>With the CSemaphore object, you can use the Lock and Unlock member functions to
+gain or release control of the semaphore. When you call the Lock function, if the
+semaphore usage count is greater than zero, the usage count is decremented and your
+program is allowed to continue. If the usage count is already zero, the Lock function
+waits until the usage count is incremented so that your process can gain access to
+the shared resource. When you call the Unlock function, the usage count of the semaphore
+is incremented.</P>
+<P><B>Events</B></P>
+<P>As much as thread synchronization mechanisms are designed to control access to
+limited resources, they are also intended to prevent threads from using unnecessary
+processor cycles. The more threads running at one time, the slower each of those
+threads performs its tasks. Therefore, if a thread does not have anything to do,
+block it and let it sit idle, allowing other threads to use more processor time and
+thus run faster until the conditions are met that provide the idle thread with something
+to do.</P>
+<P>This is why you use events--to allow threads to be idle until the conditions are
+such that they have something to do. Events take their name from the events that
+drive most Windows applications, only with a twist. Thread synchronization events
+do not use the normal event queuing and handling mechanisms. Instead of being assigned
+a number and then waiting for that number to be passed through the Windows event
+handler, thread synchronization events are actual objects held in memory. Each thread
+that needs to wait for an event tells the event that it is waiting for it to be triggered
+and then goes to sleep. When the event is triggered, it sends wake-up calls to every
+thread that told it that it was waiting to be triggered. The threads pick up their
+processing at the exact point where they each told the event that they were waiting
+for it.</P>
+<P>If you need to use an event in your application, you can create a CEvent object.
+You need to create the CEvent object when you need to access and wait for the event.
+Once the CEvent constructor has returned, the event has occurred and your thread
+can continue on its way.</P>
+<P>The constructor for the CEvent class can take four arguments. The first argument
+is a boolean flag to indicate whether the thread creating the event will own it initially.
+This value should be set to TRUE if the thread creating the CEvent object is the
+thread that will determine when the event has occurred.</P>
+<P>The second argument to the CEvent constructor specifies whether the event is an
+automatic or manual event. A manual event remains in the signaled or unsignaled state
+until it is specifically set to the other state by the thread that owns the event
+object. An automatic event remains in the unsignaled state most of the time. When
+the event is set to the signaled state, and at least one thread has been released
+and continued on its execution path, the event is returned to the unsignaled state.</P>
+<P>The third argument to the event constructor is the name for the event. This name
+will be used to identify the event by all threads that need to access the event.
+The fourth and final argument is a pointer to the security attributes for the event
+object.</P>
+<P>The CEvent class has several member functions that you can use to control the
+state of the event. Table 18.2 lists these functions.</P>
+<P>
+<H4>TABLE 18.2. CEvent MEMBER FUNCTIONS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Function</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">SetEvent		</TD>
+		<TD ALIGN="LEFT">Puts the event into the signaled state.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">PulseEvent		</TD>
+		<TD ALIGN="LEFT">Puts the event into the signaled state and then resets the event back to the unsignaled
+			state.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">ResetEvent		</TD>
+		<TD ALIGN="LEFT">Puts the event into the unsignaled state.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Unlock		</TD>
+		<TD ALIGN="LEFT">Releases the event object.		</TD>
+	</TR>
+</TABLE>
+
+<H2><A NAME="Heading5"></A>Building a Multitasking Application</H2>
+<P>To see how you can create your own multitasking applications, you'll create an
+application that has four spinning color wheels, each running on its own thread.
+Two of the spinners will use the OnIdle function, and the other two will run as independent
+threads. This setup will enable you to see the difference between the two types of
+threading, as well as learn how you can use each. Your application window will have
+four check boxes to start and stop each of the threads so that you can see how much
+load is put on the system as each runs alone or in combination with the others.</P>
+<P>
+<H3><A NAME="Heading6"></A>Creating a Framework</H3>
+<P>For the application that you will build today, you'll need an SDI application
+framework, with the view class inherited from the CFormView class, so that you can
+use the dialog editor to lay out the few controls on the window. It will use the
+document class to house the spinners and the independent threads, whereas the view
+will have the check boxes and variables that control whether each thread is running
+or idle.</P>
+<P>To create the framework for your application, create a new project workspace using
+the MFC Application Wizard. Give your application a suitable project name, such as
+Tasking.</P>
+<P>In the AppWizard, specify that you are creating a single document (SDI) application.
+You can accept the defaults through most of the rest of the AppWizard, although you
+won't need support for ActiveX controls, a docking toolbar, the initial status bar,
+or printing and print preview, so you can unselect these options if you so desire.
+Once you reach the final AppWizard step, specify that your view class is inherited
+from the CFormView class.</P>
+<P>Once you create the application framework, remove the static text from the main
+application window, and add four check boxes at approximately the upper-left corner
+of each quarter of the window space, as in Figure 18.6. Set the properties of the
+check boxes as in Table 18.3.</P>
+<P>
+<H4>TABLE 18.3. CONTROL PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Check Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_CBONIDLE1		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">On &amp;Idle Thread 1		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Check Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_CBTHREAD1		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Thread &amp;1		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Check Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_CBONIDLE2		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">On Idle &amp;Thread 2		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Check Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_CBTHREAD2		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Thread &amp;2		</TD>
+	</TR>
+</TABLE>
+</P>
+<P><A HREF="javascript:popUp('18fig06.gif')"><B>FIGURE 18.6.</B></A><B> </B><I>The
+main window design.</I></P>
+
+<P>Once you add the check boxes to the window and configure their properties, use
+the Class Wizard to add a variable to each of them. Make all of the variables BOOL,
+and give them names like in Table 18.4.</P>
+<P>
+<H4>TABLE 18.4. CONTROL VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+		<TD ALIGN="LEFT"><I>Category</I></TD>
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_CBONIDLE1		</TD>
+		<TD ALIGN="LEFT">m_bOnIdle1		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">BOOL		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_CBONIDLE2		</TD>
+		<TD ALIGN="LEFT">m_bOnIdle2		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">BOOL		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_CBTHREAD1		</TD>
+		<TD ALIGN="LEFT">m_bThread1		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">BOOL		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_CBTHREAD2		</TD>
+		<TD ALIGN="LEFT">m_bThread2		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">BOOL		</TD>
+	</TR>
+</TABLE>
+
+<H3><A NAME="Heading7"></A>Designing Spinners</H3>
+<P>Before you can start adding threads to your application, you'll create the spinning
+color wheel that the threads will operate. Because four of these color wheels will
+all spin independently of each other, it makes sense to encapsulate all of the functionality
+into a single class. This class will track what color is being drawn, where in the
+spinning it needs to draw the next line, the size of the color wheel, and the location
+of the color wheel on the application window. It will also need a pointer to the
+view class so that it can get the device context in which it is supposed to draw
+itself. For the independent spinners, the class will need a pointer to the flag that
+will control whether the spinner is supposed to be spinning.</P>
+<P>
+<PRE>To start the spinner class, create a new generic class, inherited from the CObject base class. Provide the new class with a name that is descriptive of what it will be doing, such as CSpinner.
+</PRE>
+<H4>Setting Spinner Variables</H4>
+<P>Once you create a new class for your spinner object, you'll add some variables
+to the class. To follow good object-oriented design principles, you need to make
+all these variables private and add methods to the class to set and retrieve the
+values of each.</P>
+<P>The variables you'll add are</P>
+<P>
+
+<UL>
+	<LI>The current color.
+	<P>
+	<LI>The current position in the rotation of the color wheel.
+	<P>
+	<LI>The size of the color wheel.
+	<P>
+	<LI>The position on the application window for the color wheel.
+	<P>
+	<LI>The color table from which the colors are picked for drawing in the color wheel.
+	<P>
+	<LI>A pointer to the view object so that the spinner can get the device context that
+	it will need for drawing on the window.
+	<P>
+	<LI>A pointer to the check box variable that specifies whether the thread should
+	be running.
+</UL>
+
+<P>You can add all these variables to the spinner class using the names and types
+specified in Table 18.5.</P>
+<P>
+<H4>TABLE 18.5. CSpinner CLASS VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_crColor		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+		<TD ALIGN="LEFT">The current color from the color table.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_nMinute		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+		<TD ALIGN="LEFT">The position in the rotation around the wheel.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_iRadius		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+		<TD ALIGN="LEFT">The radius (size) of the wheel.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_pCenter		</TD>
+		<TD ALIGN="LEFT">CPoint		</TD>
+		<TD ALIGN="LEFT">The center point of the wheel.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_crColors[8]		</TD>
+		<TD ALIGN="LEFT">static COLORREF		</TD>
+		<TD ALIGN="LEFT">The color table with all of the colors to be drawn in the color wheel.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_pViewWnd		</TD>
+		<TD ALIGN="LEFT">CWnd*		</TD>
+		<TD ALIGN="LEFT">A pointer to the view object.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_bContinue		</TD>
+		<TD ALIGN="LEFT">BOOL*		</TD>
+		<TD ALIGN="LEFT">A pointer to the check box variable that specifies whether this thread should be
+			running.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Once you add all the necessary variables, you need to make sure that your class
+either initializes them or provides a suitable means of setting and retrieving the
+values of each. All the integer variables can be initialized as zero, and they'll
+work their way up from that point. The pointers should be initialized with NULL.
+You can do all of this initialization in the class constructor, as in Listing 18.1.</P>
+<P>
+<H4>LISTING 18.1. THE CSpinner CONSTRUCTOR.</H4>
+<PRE> 1: CSpinner::CSpinner()
+ 2: {
+ 3:     // Initialize the position, size, and color
+ 4:     m_iRadius = 0;
+ 5:     m_nMinute = 0;
+ 6:     m_crColor = 0;
+ 7:     // Nullify the pointers
+ 8:     m_pViewWnd = NULL;
+ 9:     m_bContinue = NULL;
+10: }
+</PRE>
+<P>For those variables that you need to be able to set and retrieve, your spinner
+class is simple enough that you can write all the set and get functions as inline
+functions in the class declaration. The color and position will be automatically
+calculated by the spinner object, so you don't need to add set functions for those
+two variables, but you do need to add set functions for the rest of the variables
+(not counting the color table). The only variables that you need to retrieve from
+the spinner object are the pointers to the view class and the check box variable.
+You can add all these functions to the CSpinner class declaration by opening the
+Spinner header file and adding the inline functions in Listing 18.2.</P>
+<P>
+<H4>LISTING 18.2. THE CSpinner CLASS DECLARATION.</H4>
+<PRE> 1: class CSpinner : public CObject
+ 2: {
+ 3: public:
+ 4:     BOOL* GetContinue() {return m_bContinue;}
+ 5:     void SetContinue(BOOL* bContinue) { m_bContinue = bContinue;}
+ 6:     CWnd* GetViewWnd() { return m_pViewWnd;}
+ 7:     void SetViewWnd(CWnd* pWnd) { m_pViewWnd = pWnd;}
+ 8:     void SetLength(int iLength) { m_iRadius = iLength;}
+ 9:     void SetPoint(CPoint pPoint) { m_pCenter = pPoint;}
+10:     CSpinner();
+11:     virtual ~CSpinner();
+12: 
+13: private:
+14:     BOOL* m_bContinue;
+</PRE>
+<PRE>15:     CWnd* m_pViewWnd;
+</PRE>
+<PRE>16:     static COLORREF m_crColors[8];
+17:     int m_iRadius;
+18:     CPoint m_pCenter;
+19:     int m_nMinute;
+20:     int m_crColor;
+21: };
+</PRE>
+<P>Now that you have added all the support functions for setting and retrieving the
+necessary variables, you need to declare and populate the color table. This will
+look just like the color table definition you added to the drawing application on
+Day 10, &quot;Creating Single Document Interface Applications.&quot; The color table
+will consist of eight RGB values, with each value being either 0 or 255, with every
+combination of these two settings. The best place to add this table declaration is
+in the spinner source code file, just before the class constructor, as in Listing
+18.3.</P>
+<P>
+<H4>LISTING 18.3. THE CSpinner COLOR TABLE.</H4>
+<PRE> 1: static char THIS_FILE[]=__FILE__;
+ 2: #define new DEBUG_NEW
+ 3: #endif
+ 4: 
+ 5: COLORREF CSpinner::m_crColors[8] = {
+ 6:     RGB(   0,   0,   0),    // Black
+ 7:     RGB(   0,   0, 255),    // Blue
+ 8:     RGB(   0, 255,   0),    // Green
+ 9:     RGB(   0, 255, 255),    // Cyan
+10:     RGB( 255,   0,   0),    // Red
+11:     RGB( 255,   0, 255),    // Magenta
+12:     RGB( 255, 255,   0),    // Yellow
+13:     RGB( 255, 255, 255)        // White
+14: };
+15: 
+16: //////////////////////////////////////////////////////////////////////
+17: // Construction/Destruction
+18: //////////////////////////////////////////////////////////////////////
+19: 
+20: CSpinner::CSpinner()
+21: {
+22:     // Initialize the position, size, and color
+23:     m_iRadius = 0;
+24: .
+25: .
+26: . 
+</PRE>
+<H4>Drawing the Spinner</H4>
+<P>Now comes the fun part: getting the spinner object to actually spin. To accomplish
+this, you'll calculate the new position of the starting and ending points of each
+line, set the view port origination point, select the drawing color, and create a
+pen to draw in that color. Once you have all of this, you will be able to draw the
+line from the starting point to the ending point. Once the line is drawn, you can
+restore the pen to what it was before the line was drawn. Next, you'll calculate
+the position of the next line to draw before exiting the function.</P>
+<P>To add this functionality to your spinner object, add a member function to the
+CSpinner class. Specify the type as void, the name as Draw, and the access as public.
+Edit the function, adding the code in Listing 18.4.</P>
+<P>
+<H4>LISTING 18.4. THE CSpinner Draw FUNCTION.</H4>
+<PRE> 1: void CSpinner::Draw()
+ 2: {
+ 3:     // Get a pointer to the device context
+ 4:     CDC *pDC = m_pViewWnd-&gt;GetDC();
+ 5:     // Set the mapping mode
+ 6:     pDC-&gt;SetMapMode (MM_LOENGLISH);
+ 7:     // Copy the spinner center
+ 8:     CPoint org = m_pCenter;
+ 9:     CPoint pStartPoint;
+10:     // Set the starting point
+11:     pStartPoint.x = (m_iRadius / 2);
+12:     pStartPoint.y = (m_iRadius / 2);
+13:     // Set the origination point
+14:     org.x = m_pCenter.x + (m_iRadius / 2);
+15:     org.y = m_pCenter.y + m_iRadius;
+16:     // Set the viewport origination point
+17:     pDC-&gt;SetViewportOrg(org.x, org.y);
+18: 
+19:     CPoint pEndPoint;
+20:     // Calculate the angle of the next line
+21:     double nRadians = (double) (m_nMinute * 6) * 0.017453292;
+22:     // Set the end point of the line
+23:     pEndPoint.x = (int) (m_iRadius * sin(nRadians));
+24:     pEndPoint.y = (int) (m_iRadius * cos(nRadians));
+25: 
+26: 
+27:     // Create the pen to use
+28:     CPen pen(PS_SOLID, 0, m_crColors[m_crColor]);
+29:     // Select the pen for use
+30:     CPen* pOldPen = pDC-&gt;SelectObject(&amp;pen);
+31: 
+32:     // Move to the starting point
+33:     pDC-&gt;MoveTo (pEndPoint);
+34:     // Draw the line to the end point
+35:     pDC-&gt;LineTo (pStartPoint);
+</PRE>
+<PRE>36: 
+</PRE>
+<PRE>37:     // Reselect the previous pen
+38:     pDC-&gt;SelectObject(&amp;pOldPen);
+39: 
+40:     // Release the device context
+41:     m_pViewWnd-&gt;ReleaseDC(pDC);
+42: 
+43:     // Increment the minute
+44:     if (++m_nMinute == 60)
+45:     {
+46:         // If the minutes have gone full circle, reset to 0
+47:         m_nMinute = 0;
+48:         // Increment the color
+49:         if (++m_crColor == 8)
+50:             // If we've gone through all colors, start again
+51:             m_crColor = 0;
+52:     }
+53: }
+</PRE>
+<P>That was quite a bit of code to type. What does it do? Well, to understand what
+this function is doing, and how it's going to make your spinner draw a color wheel
+on the window, let's take a closer look at the code.</P>
+<P>To make efficient use of the spinner by the different threads, it'll only draw
+one line each time the function is called. This function will be called 60 times
+for each complete circle, once for each &quot;minute&quot; in the clockwise rotation.
+Each complete rotation will cause the spinner to switch to the next color in the
+color table.</P>
+<P>One of the first things that you need to do in order to perform any drawing on
+the window is get the device context of the window. You do this by calling the GetDC
+function on the view object pointer:</P>
+<P>
+<PRE>CDC *pDC = m_pViewWnd-&gt;GetDC();
+</PRE>
+<P>This function returns a CDC object pointer, which is an MFC class that encapsulates
+the device context.</P>
+<P>Once you have a pointer to the device context, you can call its member function,
+SetMapMode, to set the mapping mode:</P>
+<P>
+<PRE>pDC-&gt;SetMapMode (MM_LOENGLISH);
+</PRE>
+<P>The mapping mode determines how the x and y coordinates are translated into positions
+on the screen. The MM_LOENGLISH mode converts each logical unit to 0.01 inch on the
+screen. There are several different mapping modes, each converting logical units
+to different measurements on the screen.</P>
+<P>At this point, you start preparing to draw the current line for the color wheel.
+You start by calculating the starting point for the line that will be drawn. This
+point will be consistent for all lines drawn by the spinner object. After you calculate
+the starting point for the line, you calculate the position of the viewport. The
+viewport is used as the starting point for the coordinates used for drawing.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> The starting point for the line to be drawn is calculated in an off-center
+	position. If you want the starting point for the lines to be in the center of the
+	color wheel, set both the x and y coordinates of the starting point to 0.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>Once the viewport origination point is calculated, use the SetViewportOrg function
+to set the viewport:</P>
+<P>
+<PRE>pDC-&gt;SetViewportOrg(org.x, org.y);
+</PRE>
+<P>Now that you've got the drawing area specified, and the starting point for the
+line that you are going to be drawing, you need to figure out where the other end
+of the line will be. You'll perform this calculation using the following three lines
+of code:</P>
+<P>
+<PRE>double nRadians = (double) (m_nMinute * 6) * 0.017453292;
+pEndPoint.x = (int) (m_iRadius * sin(nRadians));
+pEndPoint.y = (int) (m_iRadius * cos(nRadians));
+</PRE>
+<P>In the first of these calculations, convert the minutes into degrees, which can
+then be fed into the sine and cosine functions to set the x and y coordinates to
+draw a circle. This sets the end point of the line that will be drawn.</P>
+<P>Now that you've figured out the starting and ending points of the line, you'll
+create a pen to use in drawing the line:</P>
+<P>
+<PRE>CPen pen(PS_SOLID, 0, m_crColors[m_crColor]);
+</PRE>
+<P>You've specified that the pen will be solid and thin, and you are picking the
+current color from the color table. Once you create the pen to use, select the pen
+for drawing, being sure to capture the current pen as the return value from the device
+context object:</P>
+<P>
+<PRE>CPen* pOldPen = pDC-&gt;SelectObject(&amp;pen);
+</PRE>
+<P>Now you are ready to draw the line, which is done using the MoveTo and LineTo
+functions that you're well familiar with by now. Once the line is drawn, release
+the device context so that you don't have a resource leak in your application:</P>
+<P>
+<PRE>m_pViewWnd-&gt;ReleaseDC(pDC);
+</PRE>
+<P>At this point, you've drawn the line, so all that's left to do is increment the
+minute counter, resetting it if you've made it all the way around the circle. Each
+time you complete a circle, you increment the color counter until you've gone through
+all eight colors, at which time you reset the color counter.</P>
+<P>In order to be able to use the trigonometric functions in this function, include
+the math.h header file in the Spinner class source file. To add this, scroll up to
+the top of the source code file and add another #include line, specifying the math.h
+header file as the file to be included, as in Listing 18.5.</P>
+<P>
+<H4>LISTING 18.5. THE CSpinner SOURCE FILE.</H4>
+<PRE> 1: // Spinner.cpp : implementation of the CSpinner class
+ 2: //
+ 3: //////////////////////////////////////////////////////////////////////
+ 4:
+ 5: #include &quot;stdafx.h&quot;
+ 6: #include &lt;math.h&gt;
+ 7: #include &quot;Tasking.h&quot;
+ 8: #include &quot;Spinner.h&quot;
+</PRE>
+<H2><A NAME="Heading8"></A>Supporting the Spinners</H2>
+<P>Now that you've created the spinner class for drawing the spinning color wheel
+on the window, add some support for the spinners. You can add an array to hold the
+four spinners in the document class, but you'll still need to calculate where each
+spinner should be placed on the application window and set all the variables in each
+of the spinners.</P>
+<P>You can add all of this code to the document class, starting with the array of
+spinners. Add a member variable to the document class (in this instance, CTaskingDoc),
+specifying the type as CSpinner, the name as m_cSpin[4], and the access as private.
+Once you add the array, open the source code to the document class and include the
+spinner header file, as in Listing 18.6.</P>
+<P>
+<H4>LISTING 18.6. THE CTaskingDoc SOURCE FILE.</H4>
+<PRE> 1: // TaskingDoc.cpp : implementation of the CTaskingDoc class
+ 2: //
+ 3: 
+ 4: #include &quot;stdafx.h&quot;
+ 5: #include &quot;Tasking.h&quot;
+ 6: 
+ 7: #include &quot;Spinner.h&quot;
+ 8: #include &quot;TaskingDoc.h&quot;
+ 9: #include &quot;TaskingView.h&quot;
+10: .
+11: .
+12: . 
+</PRE>
+<H4>Calculating the Spinner Positions</H4>
+<P>One of the preparatory things that needs to happen while initializing the application
+is determining the locations of all four spinners. The window is roughly broken up
+into four quarters by the check boxes that will turn the spinner threads on and off,
+so it makes sense to divide the window area into four quarter squares and place one
+spinner in each quarter.</P>
+<P>To calculate the location of each spinner, it is easiest to create a function
+that calculates the location for one spinner, placing the spinner into the quarter
+square appropriate for the spinner number. If the function was passed a pointer to
+the spinner object, it could update the spinner object directly with the location.</P>
+<P>To add this functionality to your application, add a new member function to the
+document class (for instance, in the CTaskingDoc class). Specify the function type
+as void, the declaration as CalcPoint(int nID, CSpinner *pSpin), and the access as
+private. Edit the function, adding the code in Listing 18.7.</P>
+<P>
+<H4>LISTING 18.7. THE CTaskingDoc CalcPoint FUNCTION.</H4>
+<PRE> 1: void CTaskingDoc::CalcPoint(int nID, CSpinner *pSpin)
+ 2: {
+ 3:     RECT lWndRect;
+ 4:     CPoint pPos;
+ 5:     int iLength;
+ 6:     CTaskingView *pWnd;
+ 7: 
+ 8:     // Get a pointer to the view window
+ 9:     pWnd = (CTaskingView*)pSpin-&gt;GetViewWnd();
+10:     // Get the display area rectangle
+11:     pWnd-&gt;GetClientRect(&amp;lWndRect);
+12:     // Calculate the size of the spinners
+13:     iLength = lWndRect.right / 6;
+14:     // Which spinner are we placing?
+15:     switch (nID)
+16:     {
+17:     case 0:    // Position the first spinner
+18:         pPos.x = (lWndRect.right / 4) - iLength;
+19:         pPos.y = (lWndRect.bottom / 4) - iLength;
+20:         break;
+21:     case 1:    // Position the second spinner
+22:         pPos.x = ((lWndRect.right / 4) * 3) - iLength;
+23:         pPos.y = (lWndRect.bottom / 4) - iLength;
+24:         break;
+25:     case 2:    // Position the third spinner
+26:         pPos.x = (lWndRect.right / 4) - iLength;
+27:         pPos.y = ((lWndRect.bottom / 4) * 3) - (iLength * 1.25);
+28:         break;
+29:     case 3:    // Position the fourth spinner
+30:         pPos.x = ((lWndRect.right / 4) * 3) - iLength;
+31:         pPos.y = ((lWndRect.bottom / 4) * 3) - (iLength * 1.25);
+32:         break;
+33:     }
+34:     // Set the size of the spinner
+35:     pSpin-&gt;SetLength(iLength);
+36:     // Set the location of the spinner
+37:     pSpin-&gt;SetPoint(pPos);
+38: }
+</PRE>
+<P>In this function, the first thing that you do is move the pointer to the view
+window from the spinner object by calling the GetViewWnd function:</P>
+<P>
+<PRE>pWnd = (CTaskingView*)pSpin-&gt;GetViewWnd();
+</PRE>
+<P>By moving the pointer directly from the spinner object, you save a few steps by
+taking a more direct route to get the information that you need.</P>
+<P>Once you have a pointer to the view object, you can call the window's GetClientRect
+function to get the size of the available drawing area:</P>
+<P>
+<PRE>pWnd-&gt;GetClientRect(&amp;lWndRect);
+</PRE>
+<P>Once you have the size of the drawing area, you can calculate a reasonable color
+wheel size by dividing the length of the drawing area by 6:</P>
+<P>
+<PRE>iLength = lWndRect.right / 6;
+</PRE>
+<P>Dividing the drawing area by 4 will position you at the middle of the upper-left
+square. Subtract the size of the circle from this point, and you have the upper-left
+corner of the drawing area for the first spinner:</P>
+<P>
+<PRE>pPos.x = (lWndRect.right / 4) - iLength;
+</PRE>
+<PRE>pPos.y = (lWndRect.bottom / 4) - iLength;
+</PRE>
+<P>You can then include variations on this position, mostly by multiplying the center
+of the quadrant by 3 to move it to the center of the right or lower quadrant, and
+you can calculate the positions of the other three spinners.</P>
+<P>Once you calculate the length and position for the spinner, you call the SetLength
+and SetPoint functions to pass these values to the spinner that they have been calculated
+for:</P>
+<P>
+<PRE>pSpin-&gt;SetLength(iLength);
+pSpin-&gt;SetPoint(pPos);
+</PRE>
+<H4>Initializing the Spinners</H4>
+<P>Because you wrote the previous function to calculate the location of each spinner
+on the window to work on only one spinner each time it is called, you need some routine
+that will initialize each spinner, calling the previous function once for each spinner.
+You need this function to get a pointer to the view object and pass that along to
+the spinner. You also need to get pointers to the check box variables for the spinners
+that will be used by the independently running threads. Your code can do all this
+by just looping through the array of spinners, setting both of these pointers for
+each spinner, and then passing the spinner to the function you just finished.</P>
+<P>To create this function for your application, add a new member function to the
+document class (CTaskingDoc in this instance). Specify the type as void, and give
+the function a suitable name (for instance, InitSpinners), and then specify the access
+as private because you'll only need to call this function once when the application
+is starting. Edit the new function, adding the code in Listing 18.8.</P>
+<P>
+<H4>LISTING 18.8. THE CTaskingDoc InitSpinners FUNCTION.</H4>
+<PRE> 1: void CTaskingDoc::InitSpinners()
+ 2: {
+ 3:     int i;
+ 4: 
+ 5:     // Get the position of the view
+ 6:     POSITION pos = GetFirstViewPosition();
+ 7:     // Did we get a valid position?
+ 8:     if (pos != NULL)
+ 9:     {
+10:         // Get a pointer to the view
+11:         CView* pView = GetNextView(pos);
+12: 
+13:         // Loop through the spinners
+14:         for (i = 0; i &lt; 4; i++)
+15:         {
+16:             // Set the pointer to the view
+17:             m_cSpin[i].SetViewWnd(pView);
+18:             // Initialize the pointer to the continuation indicator
+19:             m_cSpin[i].SetContinue(NULL);
+20:             switch (i)
+21:             {
+22:             case 1:    // Set the pointer to the first thread 
+23:                        // continuation indicator
+24:                 m_cSpin[i].SetContinue(&amp;((CTaskingView*)pView)-			&Acirc;&gt;m_bThread1);
+25:                 break;
+26:             case 3:    // Set the pointer to the second thread 
+27:                        // continuation indicator
+28:                 m_cSpin[i].SetContinue(&amp;((CTaskingView*)pView)-			&Acirc;&gt;m_bThread2);
+29:                 break;
+30:             }
+31:             // Calculate the location of the spinner
+32:             CalcPoint(i, &amp;m_cSpin[i]);
+33:         }
+34:     }
+35: }
+</PRE>
+<P>In this function, you first went through the steps of getting a pointer to the
+view class from the document, as you did initially back on Day 10. Once you have
+a valid pointer to the view, start a loop to initialize each of the spinners in the
+array. You call the SetViewWnd spinner function to set the spinner's pointer to the
+view window and then initialize the spinner's pointer to the check box variable to
+NULL for all spinners. If the spinner is either of the two that will be used by independent
+threads, you pass a pointer to the appropriate check box variable. Once you set all
+of this, call the CalcPoint function that you created just a few minutes earlier
+to calculate the location of the spinner on the view window.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Although you've seen several examples of using pointers, the way
+	that you are passing a pointer to the check box variable to the spinner deserves
+	taking a closer look:
+	<PRE>m_cSpin[i].SetContinue(&amp;((CTaskingView*)pView)-&gt;m_bThread1);</PRE>
+
+</BLOCKQUOTE>
+
+<PRE></PRE>
+
+
+<BLOCKQUOTE>
+	<P>In this statement, you take the pointer to the view object, pView, which is a
+	pointer for a CView object, and cast it as a pointer to the specific view class that
+	you have created in your application:
+	<PRE>(CTaskingView*)pView</PRE>
+
+</BLOCKQUOTE>
+
+<PRE></PRE>
+
+
+<BLOCKQUOTE>
+	<P>Now that you can treat the pointer to the view object as a CTaskingView object,
+	you can get to the check box variable, m_bThread1, which is a public member of the
+	CTaskingView class:
+	<PRE>((CTaskingView*)pView)-&gt;m_bThread1</PRE>
+
+</BLOCKQUOTE>
+
+<PRE></PRE>
+
+
+<BLOCKQUOTE>
+	<P>Once you access the m_bThread1 variable, get the address of this variable by placing
+	an ampersand in front of this whole string:
+	<PRE>&amp;((CTaskingView*)pView)-&gt;m_bThread1</PRE>
+
+</BLOCKQUOTE>
+
+<PRE></PRE>
+
+
+<BLOCKQUOTE>
+	<P>Passing this address for the m_bThread1 variable to the SetContinue function,
+	you are, in effect, passing a pointer to the m_bThread1 variable, which can be used
+	to set the pointer to this variable that the spinner object contains.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>Now that you've created the routines to initialize all the spinners, make sure
+that this routine is called when the application is started. The best place to put
+this logic is the OnNewDocument function in the document class. This function will
+be called when the application is started, so it is a logical place to trigger the
+initialization of the spinner objects. To add this code to the OnNewDocument function,
+add the code in Listing 18.9 to the OnNewDocument function in the document class.</P>
+<P>
+<PRE><B>Listing 18.9. </B>The CTASKINGDOC ONNEWDOCUMENT function. 
+ 1: BOOL CTaskingDoc::OnNewDocument()
+ 2: {
+ 3:     if (!CDocument::OnNewDocument())
+ 4:         return FALSE;
+ 5: 
+ 6:     // TODO: add reinitialization code here
+ 7:     // (SDI documents will reuse this document)
+ 8: 
+ 9:     ///////////////////////
+10:     // MY CODE STARTS HERE
+11:     ///////////////////////
+12: 
+13:     // Initialize the spinners
+14:     InitSpinners();
+15: 
+16:     ///////////////////////
+17:     // MY CODE ENDS HERE
+18:     ///////////////////////
+19: 
+20:     return TRUE;
+21: }
+</PRE>
+<H4>Spinning the Spinner</H4>
+<P>Once last thing that you'll add to the document class for now is a means of calling
+the Draw function for a specific spinner from outside the document class. Because
+the array of spinners was declared as a private variable, no outside objects can
+get access to the spinners, so you need to add access for the outside objects. You
+can add a function to provide this access by adding a new member function to your
+document class. Specify the function type as void, specify the function declaration
+with a name and a single integer argument for the spinner number, such as DoSpin(int
+nIndex), and then specify the function's access as public. Once you have added the
+function, you can add the code in Listing 18.10 to the function to perform the actual
+call to the specified spinner.</P>
+<P>
+<H4>LISTING 18.10. THE CTaskingDoc DoSpin FUNCTION.</H4>
+<PRE>1: void CTaskingDoc::DoSpin(int nIndex)
+2: {
+3:     // Spin the Spinner
+4:     m_cSpin[nIndex].Draw();
+5: }
+</PRE>
+<H3><A NAME="Heading9"></A>Adding the OnIdle Tasks</H3>
+<P>Now that you have the supporting functionality in place, it's time to turn your
+attention to adding the various threads that will turn the various spinners. The
+first threads to add are the ones executing while the application is idle. You'll
+add a clicked event handler for the two On Idle check boxes so that you can keep
+the variables for these two check boxes in sync with the window. You'll also add
+the code to the application's OnIdle function to run these two spinners when the
+application is idle and the check boxes for these two spinner threads are checked.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> The use of the term <I>thread</I> in the preceding is slightly misleading.
+	Any functionality that you place in the OnIdle function is running in the main application
+	thread. All the OnIdle processing that you add to the sample application won't be
+	running as an independent thread, but will be just functions that can be called from
+	the main thread.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>Starting and Stopping the OnIdle Tasks</H4>
+<P>The OnIdle function will check the values of the two check box variables that
+specify whether each should run, so all your application needs to do when either
+of these check boxes is clicked is make sure that the variables in the view object
+are synchronized with the controls on the window. All that you need to do to accomplish
+this is call the UpdateData function when either of these controls is clicked. You
+need to be able to start and stop the OnIdle tasks by adding a single event handler
+for both of the On Idle Thread check boxes and then calling the UpdateData function
+in this event function.</P>
+<P>To add this to your application, open the Class Wizard and select the view class
+(in this case, CTaskingView). Select one of the On Idle check boxes and add a function
+for the BN_CLICKED event. Change the name of the suggested function to OnCbonidle
+and click OK. Do the same thing for the other On Idle check box. Once you specify
+that both of these events use the same code, click on the Edit Code button and add
+the code in Listing 18.11.</P>
+<P>
+<H4>LISTING 18.11. THE CTaskingView OnCbonidle FUNCTION.</H4>
+<PRE> 1: void CTaskingView::OnCbonidle()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Sync the variables with the dialog
+10:     UpdateData(TRUE);
+11: 
+12:     ///////////////////////
+13:     // MY CODE ENDS HERE
+14:     ///////////////////////
+15: }
+</PRE>
+<H4>Building the OnIdle Threads</H4>
+<P>If you examine the application class (CTaskingApp) source code, you'll find that
+the OnIdle function isn't there. All the functionality that the OnIdle function needs
+to perform by default is in the ancestor class of the application class that was
+created for your project. The only reason to have an OnIdle function in your application
+class is that your application needs some specific functionality to be performed
+during this event. As a result, you need to specifically add this event handler to
+your application using the Class Wizard.</P>
+<P>Once you add the OnIdle function to your application class, what does it need
+to do? First, it needs to get a pointer to the view so that it can check the status
+of the check box variables. Next, it needs to get a pointer to the document class
+so that it can call the DoSpin function to trigger the appropriate spinner object.
+The key to both of these actions is getting pointers to each of these objects. When
+you begin looking at what is necessary to get these pointers, you'll find that you
+have to reverse the order in which you get the pointers. You need to get a pointer
+to the document object in order to get a pointer to the view. However, to get a pointer
+to the document, you have to go through the document template, getting a pointer
+to the template before you can get a pointer to the document. Each of these steps
+requires the same sequence of events, first getting the position of the first object
+and then getting a pointer to the object in that position. What you'll do is get
+the position of the first document template and then get a pointer to the document
+template in that position. Next, you'll use the document template to get the position
+of the first document and then use the document template to get a pointer to the
+document in that first position. Finally, you'll use the document to get the position
+of the first view and then use the document again to get a pointer to the view in
+the position specified. Once you've got a pointer to the view, you can check the
+value of the check boxes and call the appropriate spinner.</P>
+<P>To add this functionality to your application, use the Class Wizard to add a function
+to the OnIdle event message for the application class (in this case, CTaskingApp).
+Once you add the function, click the Edit Code button and add the code in Listing
+18.12.</P>
+<P>
+<H4>LISTING 18.12. THE CTaskingApp OnIdle FUNCTION.</H4>
+<PRE> 1: BOOL CTaskingApp::OnIdle(LONG lCount)
+ 2: {
+ 3:     // TODO: Add your specialized code here and/or call the base class
+ 4: 
+</PRE>
+<PRE> 5:     // Get the position of the first document template
+</PRE>
+<PRE> 6:     POSITION pos = GetFirstDocTemplatePosition();
+ 7:     // Do we have a valid template position?
+ 8:     if (pos)
+ 9:     {
+10:         // Get a pointer to the document template
+11:         CDocTemplate* pDocTemp = GetNextDocTemplate(pos);
+12:         // Do we have a valid pointer?
+13:         if (pDocTemp)
+14:         {
+15:             // Get the position of the first document
+16:             POSITION dPos = pDocTemp-&gt;GetFirstDocPosition();
+17:             // Do we have a valid document position?
+18:             if (dPos)
+19:             {
+20:                 // Get a pointer to the document
+21:                 CTaskingDoc* pDocWnd =
+22:                     (CTaskingDoc*)pDocTemp-&gt;GetNextDoc(dPos);
+23:                 // Do we have a valid pointer?
+24:                 if (pDocWnd)
+25:                 {
+26:                     // Get the position of the view
+27:                     POSITION vPos = pDocWnd-&gt;GetFirstViewPosition();
+28:                     // Do we have a valid view position?
+29:                     if (vPos)
+30:                     {
+31:                         // Get a pointer to the view
+32:                         CTaskingView* pView = 
+        &Acirc;(CTaskingView*)pDocWnd-&gt;GetNextView(vPos);
+33:                         // Do we have a valid pointer?
+34:                         if (pView)
+35:                         {
+36:                             // Should we spin the first idle thread?
+37:                             if (pView-&gt;m_bOnIdle1)
+38:                                 // Spin the first idle thread
+39:                                 pDocWnd-&gt;DoSpin(0);
+40:                             // Should we spin the second idle thread?
+41:                             if (pView-&gt;m_bOnIdle2)
+42:                                 // Spin the second idle thread
+43:                                 pDocWnd-&gt;DoSpin(2);
+44:                         }
+45:                     }
+46:                 }
+47:             }
+48:         }
+49:     }
+50: 
+51:     // Call the ancestor's idle processing
+52:     return CWinApp::OnIdle(lCount);
+53: }
+</PRE>
+<P>If you compile and run your application now, you should be able to check either
+of the On Idle Thread check boxes, and see the spinner drawing a color wheel, as
+shown in Figure 18.7, as long as you are moving the mouse. However, the moment you
+let the application become totally idle--no mouse movement or anything else--the
+spinner will stop spinning.</P>
+<P><A HREF="javascript:popUp('18fig07.gif')"><B>FIGURE 18.7.</B></A><B> </B><I>On
+Idle Thread drawing a color wheel.</I></P>
+
+<P><I></I>
+<H4>Making the OnIdle Tasks Continuous</H4>
+<P>It's not very practical to keep moving the mouse around to make your application
+continue performing the tasks that it's supposed to do when the application is idle.
+There must be a way to get the application to continue to call the OnIdle function
+as long as the application is idle. Well, there is. If you look at the last line
+in the OnIdle function, you'll notice that the OnIdle function returns the result
+value from the ancestor OnIdle function. It just so happens that this function returns
+FALSE as soon as there is no OnIdle functionality to be performed.</P>
+<P>You want the OnIdle function to always return TRUE. This will cause the OnIdle
+function to continue to be called, over and over, whenever the application is idle.
+If you move the call to the ancestor OnIdle function to the first part of the function
+and then return TRUE, as in Listing 18.13, you will get your spinner to continue
+turning, no matter how long the application sits idle.</P>
+<P>
+<H4>LISTING 18.13. THE MODIFIED CTaskingApp OnIdle FUNCTION.</H4>
+<PRE> 1: BOOL CTaskingApp::OnIdle(LONG lCount)
+ 2: {
+ 3:     // TODO: Add your specialized code here and/or call the base class
+ 4: 
+ 5:     // Call the ancestor's idle processing
+ 6:     CWinApp::OnIdle(lCount);
+ 7: 
+ 8:     // Get the position of the first document template
+ 9:     POSITION pos = GetFirstDocTemplatePosition();
+10:     // Do we have a valid template position?
+11:     if (pos)
+12:     {
+.
+.
+</PRE>
+<PRE>.
+</PRE>
+<PRE>51:     }
+52:     return TRUE;
+53: }
+</PRE>
+<P>If you compile and run your application, you can turn on the OnIdle tasks and
+see them continue to turn, even when you are not moving the mouse. However, if you
+activate any of the menus, or if you open the About window, both of these tasks come
+to a complete stop, as in Figure 18.8. The reason is that the open menus, and any
+open modal dialog windows, prevent the OnIdle function from being called. One of
+the limitations of OnIdle processing is that certain application functionality prevents
+it from being performed.</P>
+<P><A HREF="javascript:popUp('18fig08.gif')"><B>FIGURE 18.8.</B></A><B> </B><I>On
+Idle Thread stopped by the menu.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading10"></A>Adding Independent Threads</H3>
+<P>Now that you've seen what is involved in adding an OnIdle task, it's time to see
+what's involved in adding an independent thread to your application. To add a thread
+to your application, you'll add a main function for the threads. You'll also add
+the code to start and stop the threads. Finally, you'll add the code to the independent
+thread check boxes to start and stop each of these threads.</P>
+<P>
+<H4>Creating the Main Thread Function</H4>
+<P>Before you can spin off any independent threads, the thread must know what to
+do. You will create a main thread function to be executed by the thread when it starts.
+This function will act as the main function for the thread, and the thread will end
+once the function ends. Therefore, this function must act as the primary control
+of the thread, keeping the thread running as long as there is work for the thread
+to do and then exiting once the thread's work is completed.</P>
+<P>When you create a function to be used as the main function for a thread, you can
+pass a single parameter to this function. This parameter is a pointer to anything
+that contains all the information the thread needs to perform its tasks. For the
+application you've been building in this chapter, the parameter can be a pointer
+to the spinner that the thread will operate. Everything else that the thread needs
+can be extracted from the spinner object.</P>
+<P>Once the thread has a pointer to its spinner, it can get a pointer to the check
+box variable that tells it whether to continue spinning or stop itself. As long as
+the variable is TRUE, the thread should continue spinning.</P>
+<P>To add this function to your application, add a new member function to the document
+class in your application. Specify the function type as UINT, the function declaration
+as ThreadFunc(LPVOID pParam), and the access as private. You'll start the thread
+from within the document class, so there's no need for any other classes to see this
+function. Once you've added this function, edit it with the code in Listing 18.14.</P>
+<P>
+<H4>LISTING 18.14. THE CTaskingDoc ThreadFunc FUNCTION.</H4>
+<PRE> 1: UINT CTaskingDoc::ThreadFunc(LPVOID pParam)
+ 2: {
+ 3:     // Convert the argument to a pointer to the
+ 4:     // spinner for this thread
+ 5:     CSpinner* lpSpin = (CSpinner*)pParam;
+ 6:     // Get a pointer to the continuation flag
+ 7:     BOOL* pbContinue = lpSpin-&gt;GetContinue();
+ 8: 
+ 9:     // Loop while the continue flag is true
+10:     while (*pbContinue)
+11:         // Spin the spinner
+12:         lpSpin-&gt;Draw();
+13:     return 0;
+14: }
+</PRE>
+<H4>Starting and Stopping the Threads</H4>
+<P>Now that you have a function to call for the independent threads, you need some
+way of controlling the threads, starting and stopping them. You need to be able to
+hold onto a couple of pointers for CWinThread objects, which will encapsulate the
+threads. You'll add these pointers as variables to the document object and then use
+them to capture the return variable from the AfxBeginThread function that you will
+use to start both of the threads.</P>
+<P>To add these variables to your application, add a new member variable to your
+document class. Specify the variable type as CWinThread*, the variable name as m_pSpinThread[2],
+and the variable access as private. This will provide you with a two slot array for
+holding these variables.</P>
+<P>Now that you have a place to hold the pointers to each of the two threads, you'll
+add the functionality to start the threads. You can add a single function to start
+either thread, if it's not currently running, or to wait for the thread to stop itself,
+if it is running. This function will need to know which thread to act on and whether
+to start or stop the thread.</P>
+<P>To add this functionality, add a new member function to the document class. Specify
+the function type as void, the function declaration as SuspendSpinner(int nIndex,
+BOOL bSuspend), and the function access as public, and check the Static check box.
+Edit the code for this function, adding the code in Listing 18.15.</P>
+<P>
+<H4>LISTING 18.15. THE CTaskingDoc SuspendSpinner FUNCTION.</H4>
+<PRE> 1: void CTaskingDoc::SuspendSpinner(int nIndex, BOOL bSuspend)
+ 2: {
+ 3:     // if suspending the thread
+ 4:     if (!bSuspend)
+ 5:     {
+ 6:         // Is the pointer for the thread valid?
+ 7:         if (m_pSpinThread[nIndex])
+ 8:         {
+ 9:             // Get the handle for the thread
+10:             HANDLE hThread = m_pSpinThread[nIndex]-&gt;m_hThread;
+11:             // Wait for the thread to die
+12:             ::WaitForSingleObject (hThread, INFINITE);
+13:         }
+14:     }
+15:     else    // We are running the thread
+16:     {
+17:         int iSpnr;
+18:         // Which spinner to use?
+19:         switch (nIndex)
+20:         {
+21:         case 0:
+22:             iSpnr = 1;
+23:             break;
+24:         case 1:
+25:             iSpnr = 3;
+26:             break;
+27:         }
+28:         // Start the thread, passing a pointer to the spinner
+29:         m_pSpinThread[nIndex] = AfxBeginThread(ThreadFunc,
+30:             (LPVOID)&amp;m_cSpin[iSpnr]);
+31:     }
+32: }
+</PRE>
+<P>The first thing that you do in this function is check to see if the thread is
+being stopped or started. If the thread is being stopped, check to see if the pointer
+to the thread is valid. If the pointer is valid, you retrieve the handle for the
+thread by reading the value of the handle property of the CWinThread class:</P>
+<P>
+<PRE>HANDLE hThread = m_pSpinThread[nIndex]-&gt;m_hThread;
+</PRE>
+<P>Once you have the handle, you use the handle to wait for the thread to stop itself
+with the WaitForSingleObject function.</P>
+<P>
+<PRE>::WaitForSingleObject (hThread, INFINITE);
+</PRE>
+<P>The WaitForSingleObject function is a Windows API function that tells the operating
+system you want to wait until the thread, whose handle you are passing, has stopped.
+The second argument to this function specifies how long you are willing to wait.
+By specifying INFINITE, you tell the operating system that you will wait forever,
+until this thread stops. If you specify a timeout value, and the thread does not
+stop by the time you specify, the function returns a value that indicates whether
+the thread has stopped. Because you specify INFINITE for the timeout period, you
+don't need to worry about capturing the return value because this function does not
+return until the thread stops.</P>
+<P>If the thread is being started, you determine which spinner to use and then start
+that thread by calling the AfxBeginThread function.</P>
+<P>
+<PRE>m_pSpinThread[nIndex] = AfxBeginThread(ThreadFunc,
+            (LPVOID)&amp;m_cSpin[iSpnr]);
+</PRE>
+<P>You passed the function to be called as the main function for the thread and the
+address of the spinner to be used by that thread.</P>
+<P>
+<H4>Triggering the Threads from the View Object</H4>
+<P>Now that you have a means of starting and stopping each of the independent threads,
+you need to be able to trigger the starting and stopping from the check boxes on
+the window. When each of the two check boxes is checked, you'll start each of the
+threads. When the check boxes are unchecked, each of the threads must be stopped.
+The second part of this is easy: As long as the variable tied to the check box is
+kept in sync with the control, once the check box is unchecked, the thread will stop
+itself. However, when the check box is checked, you'll need to call the document
+function that you just created to start the thread.</P>
+<P>To add this functionality to the first of the two thread check boxes, use the
+Class Wizard to add a function to the BN_CLICKED event for the check box. Once you
+add the function, edit it with the code in Listing 18.16.</P>
+<P>
+<H4>LISTING 18.16. THE CTaskingView OnCbthread1 FUNCTION.</H4>
+<PRE> 1: void CTaskingView::OnCbthread1()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Sync the variables with the dialog
+10:     UpdateData(TRUE);
+11: 
+12:     // Get a pointer to the document
+13:     CTaskingDoc* pDocWnd = (CTaskingDoc*)GetDocument();
+14:     // Did we get a valid pointer?
+15:     ASSERT_VALID(pDocWnd);
+16: 
+17:     // Suspend or start the spinner thread
+18:     pDocWnd-&gt;SuspendSpinner(0, m_bThread1);
+19: 
+20:     ///////////////////////
+21:     // MY CODE ENDS HERE
+22:     ///////////////////////
+23: }
+</PRE>
+<P>In this function, the first thing that you do is to call UpdateData to keep the
+variables in sync with the controls on the window. Next, you retrieve a pointer to
+the document. Once you have a valid pointer, you call the document's SuspendSpinner
+function, specifying the first thread and passing the current value of the variable
+tied to this check box to indicate whether the thread is to be started or stopped.</P>
+<P>To add this same functionality to the other thread check box, perform the same
+steps, adding the code in Listing 18.17.</P>
+<P>
+<H4>LISTING 18.17. THE CTaskingView OnCbthread2 FUNCTION.</H4>
+<PRE> 1: void CTaskingView::OnCbthread2()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Sync the variables with the dialog
+10:     UpdateData(TRUE);
+11: 
+12:     // Get a pointer to the document
+13:     CTaskingDoc* pDocWnd = (CTaskingDoc*)GetDocument();
+14:     // Did we get a valid pointer?
+15:     ASSERT_VALID(pDocWnd);
+16: 
+17:     // Suspend or start the spinner thread
+18:     pDocWnd-&gt;SuspendSpinner(1, m_bThread2);
+19: 
+20:     ///////////////////////
+21:     // MY CODE ENDS HERE
+22:     ///////////////////////
+23: }
+</PRE>
+<PRE>Now that you've added the ability to start and stop the independent threads, compile and run your application. You'll see that you can start and stop the independent threads with their check boxes, as well as the OnIdle tasks.
+</PRE>
+<P>At this point, if you play around with your application for a while, you'll notice
+a bit of a difference between the two types of threads. If you have all threads running
+and are actively moving the mouse, you might notice the OnIdle spinners slowing down
+in their spinning (unless you have a very fast machine). The independent threads
+are taking a good deal of the processor time away from the main application thread,
+leaving less processor time to be idle. As a result, it's easier to keep your application
+busy. The other thing that you might notice is that if you activate the menus or
+open the About window, although the OnIdle tasks come to a complete stop, the independent
+threads continue to run, as in Figure 18.9. These two threads are completely independent
+processes running within your application, so they are not affected by the rest of
+the application.</P>
+<P><A HREF="javascript:popUp('18fig09.gif')"><B>FIGURE 18.9.</B></A><B> </B><I>The
+threads are not affected by the menu.</I></P>
+
+<P><I></I>
+<H4>Shutting Down Cleanly</H4>
+<P>You might think that you are done with this application until you try to close
+the application while one or both of the independent threads is running. You'll see
+an unpleasant notification that you still have some work to do, as in Figure 18.10.
+It seems that leaving the threads running when you closed the application caused
+it to crash.</P>
+<P><A HREF="javascript:popUp('18fig10.gif')"><B>FIGURE 18.10.</B></A><B> </B><I>Application
+error notification.</I></P>
+
+<P>Even though the application was closing, the threads were continuing to run. When
+these threads checked the value of the variable indicating whether to continue running
+or spin their spinners, they were trying to access a memory object that no longer
+existed. This problem causes one of the most basic and most fatal application memory
+errors, which you should eliminate before allowing anyone else to use the application.</P>
+<P>What you need to do to prevent this error is stop both of the threads before allowing
+the application to close. The logical place to take this action is the OnDestroy
+event message processing in the view class. This event message is sent to the view
+class to tell it to clean up anything that it needs to clean up before closing the
+application. You can add code to set both of the check box variables to FALSE so
+that the threads will stop themselves and then call the SuspendSpinner function for
+each thread to make sure that both threads have stopped before allowing the application
+to close. You do not need to call UpdateData to sync the variables with the controls
+because the user doesn't need to see when you've change the value of either check
+box.</P>
+<P>To add this functionality to your application, add an event-handler function for
+the OnDestroy event message to the view class. This function does not normally exist
+in the view class that is created by the AppWizard, so you need to add it when it
+is needed in the descendent view class. Edit the function, adding the code in Listing
+18.18.</P>
+<P>
+<H4>LISTING 18.18. THE CTaskingView OnDestroy FUNCTION.</H4>
+<PRE> 1: void CTaskingView::OnDestroy()
+ 2: {
+ 3:     CFormView::OnDestroy();
+ 4: 
+ 5:     // TODO: Add your message handler code here
+ 6: 
+ 7:     ///////////////////////
+ 8:     // MY CODE STARTS HERE
+ 9:     ///////////////////////
+10: 
+11:     // Is the first thread running?
+12:     if (m_bThread1)
+13:     {
+14:         // Specify to stop the first thread
+15:         m_bThread1 = FALSE;
+16:         // Get a pointer to the document
+17:         CTaskingDoc* pDocWnd = (CTaskingDoc*)GetDocument();
+18:         // Did we get a valid pointer?
+19:         ASSERT_VALID(pDocWnd);
+20: 
+21:         // Suspend the spinner thread
+22:         pDocWnd-&gt;SuspendSpinner(0, m_bThread1);
+23:     }
+24:     // Is the second thread running?
+25:     if (m_bThread2)
+26:     {
+27:         // Specify to stop the second thread
+28:         m_bThread2 = FALSE;
+29:         // Get a pointer to the document
+30:         CTaskingDoc* pDocWnd = (CTaskingDoc*)GetDocument();
+31:         // Did we get a valid pointer?
+32:         ASSERT_VALID(pDocWnd);
+33: 
+34:         // Suspend the spinner thread
+35:         pDocWnd-&gt;SuspendSpinner(1, m_bThread2);
+36:     }
+37: 
+38:     ///////////////////////
+39:     // MY CODE ENDS HERE
+40:     ///////////////////////
+41: }
+</PRE>
+<P>In this function, you do exactly what you need to do. You check first one check
+box variable and then the other. If either is TRUE, you set the variable to FALSE,
+get a pointer to the document, and call the SuspendSpinner function for that thread.
+Now when you close your application while the independent threads are running, your
+application will close without crashing.</P>
+<P>
+<H2><A NAME="Heading11"></A>Summary</H2>
+<P>Today, you learned quite a bit. You learned about the different ways you can make
+your applications perform multiple tasks at one time. You also learned about some
+of the considerations to take into account when adding this capability to your applications.
+You learned how to make your application perform tasks when the application is sitting
+idle, along with some of the limitations and drawbacks associated with this approach.
+You also learned how to create independent threads in your application that will
+perform their tasks completely independently of the rest of the application. You
+implemented an application that uses both of these approaches so that you could experience
+how each approach works.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> When you start adding multitasking capabilities to your applications
+	to perform separate tasks, be aware that this is a very advanced aspect of programming
+	for Windows. You need to understand a lot of factors and take into account far more
+	than we can reasonably cover in a single day. If you want to build applications using
+	this capability, get an advanced book on programming Windows applications with MFC
+	or Visual C++. The book should include a substantial section devoted to multithreading
+	with MFC and cover all the synchronization classes in much more detail than we did
+	here. Remember that you need a book that focuses on MFC, not the Visual C++ development
+	environment. (MFC is supported by most commercial C++ development tools for building
+	Windows applications, including Borland and Symantec's C++ compilers, so coverage
+	for this topic extends beyond the Visual C++ environment.)
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H2><A NAME="Heading12"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q How can I use the other version of the AfxBeginThread to encapsulate a thread
+	in a custom class?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> First, the other version of AfxBeginThread is primarily for creating
+	user-interface threads. The version that you used in today's sample application is
+	for creating what are called worker threads that immediately take off on a specific
+	task. If you want to create a user-interface thread, you need to inherit your custom
+	class from the CWinThread class. Next, override several ancestor functions in your
+	custom class. Once the class is ready to use, you use the RUNTIME_CLASS macro to
+	get a pointer to the runtime class of your class and pass this pointer to the AfxBeginThread
+	function, as follows:
+	<P>
+</DL>
+
+<PRE>CWinThread* pMyThread = 
+            AfxBeginThread(RUNTIME_CLASS(CMyThreadClass));
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q Can I use SuspendThread and ResumeThread to start and stop my independent
+	threads in my sample application?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> Yes, but you need to make a few key changes to your application. First,
+	in the OnNewDocument function, initialize the two thread pointers to NULL, as shown
+	in Listing 18.19.
+	<P>
+</DL>
+
+<H4>LISTING 18.19. THE MODIFIED CTaskingDoc OnNewDocument FUNCTION.</H4>
+<PRE> 1: BOOL CTaskingDoc::OnNewDocument()
+ 2: {
+ 3:     if (!CDocument::OnNewDocument())
+ 4:         return FALSE;
+ 5: 
+ 6:     // TODO: add reinitialization code here
+ 7:     // (SDI documents will reuse this document)
+ 8: 
+ 9:     ///////////////////////
+10:     // MY CODE STARTS HERE
+11:     ///////////////////////
+12: 
+13:     // Initialize the spinners
+14:     InitSpinners();
+15: 
+16:     // Initialize the thread pointers
+17:     m_pSpinThread[0] = NULL;
+18:     m_pSpinThread[1] = NULL;
+19: 
+20:     ///////////////////////
+21:     // MY CODE ENDS HERE
+22:     ///////////////////////
+23: 
+24:     return TRUE;
+25: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD>Next, modify the thread function so that the thread does not stop itself when
+	the check box variable is FALSE but continues to loop, as shown in Listing 18.20.
+	<P>
+</DL>
+
+<H4>LISTING 18.20. THE MODIFIED CTaskingDoc ThreadFunc FUNCTION.</H4>
+<PRE> 1: UINT CTaskingDoc::ThreadFunc(LPVOID pParam)
+ 2: {
+ 3:     // Convert the argument to a pointer to the
+ 4:     // spinner for this thread
+ 5:     CSpinner* lpSpin = (CSpinner*)pParam;
+ 6:     // Get a pointer to the continuation flag
+ 7:     BOOL* pbContinue = lpSpin-&gt;GetContinue();
+ 8: 
+ 9:     // Loop while the continue flag is true
+10:     while (TRUE)
+11:         // Spin the spinner
+12:         lpSpin-&gt;Draw();
+13:     return 0;
+14: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD>Finally, modify the SuspendSpinner function so that if the thread pointer is
+	valid, it calls the SuspendThread function on the thread pointer to stop the thread
+	and the ResumeThread function to restart the thread, as shown in Listing 18.21.
+	<P>
+</DL>
+
+<H4>LISTING 18.21. THE MODIFIED CTaskingDoc SuspendSpinner FUNCTION.</H4>
+<PRE> 1: void CTaskingDoc::SuspendSpinner(int nIndex, BOOL bSuspend)
+ 2: {
+ 3:     // if suspending the thread
+ 4:     if (!bSuspend)
+ 5:     {
+ 6:         // Is the pointer for the thread valid?
+ 7:         if (m_pSpinThread[nIndex])
+ 8:         {
+ 9:             // Suspend the thread
+10:             m_pSpinThread[nIndex]-&gt;SuspendThread();
+11:         }
+12:     }
+13:     else    // We are running the thread
+14:     {
+15:         // Is the pointer for the thread valid?
+16:         if (m_pSpinThread[nIndex])
+17:         {
+18:             // Resume the thread
+19:             m_pSpinThread[nIndex]-&gt;ResumeThread();
+20:         }
+21:         else
+22:         {
+23:             int iSpnr;
+24:             // Which spinner to use?
+25:             switch (nIndex)
+26:             {
+27:             case 0:
+28:                 iSpnr = 1;
+29:                 break;
+30:             case 1:
+</PRE>
+<PRE>31:                 iSpnr = 3;
+</PRE>
+<PRE>32:                 break;
+33:             }
+34:             // Start the thread, passing a pointer to the spinner
+35:             m_pSpinThread[nIndex] = AfxBeginThread(ThreadFunc,
+36:                 (LPVOID)&amp;m_cSpin[iSpnr]);
+37:         }
+38:     }
+39: }
+</PRE>
+<H2><A NAME="Heading13"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading14"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>When is the OnIdle function called?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>How can you cause the OnIdle function to be repeatedly called while
+	the application is sitting idle?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What is the difference between an OnIdle task and a thread?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>What are the four thread synchronization objects?
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>Why shouldn't you specify a higher than normal priority for the threads
+	in your application?
+	<P>
+</DL>
+
+<H3><A NAME="Heading15"></A>Exercises</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>If you open a performance monitor on your system while the application
+	that you built today is running, you'll find that even without any of the threads
+	running, the processor usage remains 100 percent, as shown in Figure 18.11. The OnIdle
+	function is continuously being called even when there is nothing to be done.
+	<P>
+	<DT></DT>
+	<DD>Modify the OnIdle function so that if there's nothing to be done, neither of
+	the OnIdle tasks are active. Then, the OnIdle function will not continue to be called
+	until one of these threads is active, at which time it should be continuously called
+	until both threads are once again turned off. This will allow the processor to drop
+	to a minimal utilization, as shown in Figure 18.12.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('18fig11.gif')"><B>FIGURE 18.11.</B></A><B> </B><I>Processor
+utilization at 100 percent.</I></P>
+
+<P><A HREF="javascript:popUp('18fig12.gif')"><B>FIGURE 18.12.</B></A><B> </B><I>Processor
+utilization at normal levels.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>2. </B>When starting the independent threads, give one of the threads a priority
+	of THREAD_PRIORITY_NORMAL and the other a priority of THREAD_PRIORITY_LOWEST.
+</DL>
+
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch17/ch17.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch19/ch19.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

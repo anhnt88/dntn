@@ -1,0 +1,1069 @@
+<Screen
+	CID = "1553793318"
+	AppID = "2"
+	AppVer = "4.1.109.0"
+	DocID = ""
+	HasCanvas = "0"
+	Width = "320"
+	Height = "320"
+	NextCID = "6"
+	RepresentativeRefID = "0"
+	UseDefRepresentative = "1">
+	<Elements
+		CID = "1">
+		<Element
+			CID = "769222807"
+			Type = "Rectangle"
+			X = "2"
+			Y = "14"
+			Width = "290"
+			Height = "275"
+			Flags = "0"
+			HighlightColour = "246,246,246,0,21"
+			ShadowColour = "185,180,161,0,17"
+			FillColour = "236,233,216,0,16"
+			GradientColour = "185,180,161,0,17"
+			BorderColour = "0,20,88,0,7"
+			TextColour = "0,0,0,0,19"
+			Fill = "Solid"
+			Border = "Solid"
+			TextPlacement = "Top"
+			HorzAlign = "Left"
+			BorderDepth = "2"
+			BorderWidth = "1"
+			Text = ""
+			TextOutsideExtent = "1"
+			IsDisabled = "0"/>
+		<Element
+			CID = "1895372400"
+			Type = "StaticText"
+			X = "-165"
+			Y = "-194"
+			Width = "100"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = "Centre Text"
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Centre"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "769213971"
+			Type = "HorizontalTabBar"
+			X = "3"
+			Y = "38"
+			Width = "165"
+			Height = "250"
+			Flags = "0"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "71"
+			NextItemID = "4"
+			LeftMargin = "0"
+			RightMargin = "0"
+			SelectedTab = "0"
+			IsProportional = "1"
+			IsFullWidth = "1"
+			IsReversed = "1"
+			EnableSimSelect = "0"
+			Mirror = "0"
+			TabMarginLeft = "0"
+			TabMarginRight = "0"
+			TabMarginTop = "0"
+			TabMarginBottom = "0">
+			<TabBarItem
+				ItemID = "1"
+				Text = "Thuộc CV"
+				IsDisabled = "0"/>
+			<TabBarItem
+				ItemID = "2"
+				Text = "Phân cấp"
+				IsDisabled = "0"/>
+			<TabBarItem
+				ItemID = "3"
+				Text = "Theo User"
+				IsDisabled = "0"/>
+		</Element>
+		<Element
+			CID = "769217546"
+			Type = "EditBox"
+			X = "4"
+			Y = "16"
+			Width = "164"
+			Height = "21"
+			Flags = "2"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = "anhntI"
+			IsDisabled = "0"
+			IsReadOnly = "0"
+			HorzAlign = "Left"
+			EditType = "Text"
+			OverrideTextColour = "0"
+			OverrideDisabledTextColour = "0"
+			OverrideFillColour = "0"
+			OverrideDisabledFillColour = "0"
+			OverrideBorderColour = "1"
+			MarginLeft = "0"
+			MarginRight = "0"
+			MarginTop = "0"
+			MarginBottom = "0"
+			TextColour = "0,0,0,0,9"
+			DisabledTextColour = "161,161,146,0,18"
+			FillColour = "255,255,153,0,0"
+			DisabledFillColour = "236,233,216,0,16"
+			BorderColour = "127,157,185,0,12"/>
+		<Element
+			CID = "769197590"
+			Type = "Table"
+			X = "170"
+			Y = "16"
+			Width = "121"
+			Height = "272"
+			Flags = "0"
+			HeaderBackgroundColour = "236,233,216,0,16"
+			HeaderBorderColour = "185,180,161,0,17"
+			HeaderTextColour = "0,0,0,0,19"
+			BackgroundColour = "172,168,153,0,13"
+			BorderColour = "127,157,185,0,12"
+			GridLineColour = "232,232,224,0,23"
+			SortedBlendColour = "64,64,64,0,0"
+			DefOddBackgroundColour = "255,255,255,0,6"
+			DefEvenBackgroundColour = "255,255,255,0,6"
+			DefTextColour = "0,0,0,0,9"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextColumnID = "5"
+			IsFlat = "0"
+			IsHeaderBold = "0"
+			IsTransparent = "0"
+			HasBorder = "1"
+			HasHorzScrollBar = "0"
+			HasVertScrollBar = "0"
+			Mirror = "0"
+			HasHorzLines = "1"
+			HasVertLines = "1"
+			HasExtHorzLines = "0"
+			HasExtVertLines = "0"
+			ExtendColumnHeaders = "1"
+			ExtendColumns = "1"
+			ExtendRows = "1"
+			VariableHeightRows = "1"
+			FullRowSelection = "1"
+			HeaderWordWrap = "0"
+			WordWrap = "0"
+			HeaderSpace = "0"
+			HeaderHeight = "22"
+			RowHeight = "18"
+			FirstVisibleRow = "0"
+			FixedColumns = "0"
+			SortedColumn = "0"
+			SortedBlendFactor = "0.000000"
+			ColumnSort = "Ascending"
+			HeaderStyle = "Standard"
+			FixedCellStyle = "SemiFlat">
+			<Columns>
+				<ColumnItem
+					OddBackgroundColour = "255,255,255,0,6"
+					EvenBackgroundColour = "255,255,255,0,6"
+					TextColour = "0,0,0,0,9"
+					ColumnID = "1"
+					Heading = "Thực hiện"
+					Width = "60"
+					HeaderMargin = "0"
+					CellMargin = "0"
+					HasCustomOddBgColour = "0"
+					HasCustomEvenBgColour = "0"
+					HasCustomTextColour = "0"
+					HeadingAlignment = "Left"
+					CellAlignment = "Left"/>
+				<ColumnItem
+					OddBackgroundColour = "255,255,255,0,6"
+					EvenBackgroundColour = "255,255,255,0,6"
+					TextColour = "0,0,0,0,9"
+					ColumnID = "2"
+					Heading = "Vai trò"
+					Width = "60"
+					HeaderMargin = "0"
+					CellMargin = "0"
+					HasCustomOddBgColour = "0"
+					HasCustomEvenBgColour = "0"
+					HasCustomTextColour = "0"
+					HeadingAlignment = "Left"
+					CellAlignment = "Left"/>
+			</Columns>
+			<Data>
+				<Row
+					IsSelected = "0">
+					<Cell>
+						AnhNTb
+					</Cell>
+					<Cell>
+						Phụ trách
+					</Cell>
+				</Row>
+				<Row
+					IsSelected = "0">
+					<Cell>
+						ThuNN
+					</Cell>
+					<Cell>
+						Phối hợp
+					</Cell>
+				</Row>
+				<Row
+					IsSelected = "0">
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+				</Row>
+				<Row
+					IsSelected = "0">
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+				</Row>
+				<Row
+					IsSelected = "0">
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+				</Row>
+				<Row
+					IsSelected = "0">
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+				</Row>
+			</Data>
+		</Element>
+		<Element
+			CID = "1715865626"
+			Type = "CheckListBox"
+			X = "5"
+			Y = "40"
+			Width = "161"
+			Height = "225"
+			Flags = "0"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "4"
+			IsDisabled = "0"
+			HasHorzScrollBar = "0"
+			HasVertScrollBar = "0"
+			Mirror = "0"
+			WordWrap = "0"
+			IsFlat = "0"
+			AutoHeight = "0"
+			HorzOffset = "0"
+			HorzMargin = "2"
+			FirstVisibleItem = "1"
+			ItemHeight = "16"
+			MaxVisibleItems = "20"
+			HorzAlign = "Left"
+			VertAlign = "Centre">
+			<CheckListBoxItem
+				ItemID = "1"
+				Value = "AnhNTb"
+				CheckState = "1"
+				IsSelected = "0"/>
+			<CheckListBoxItem
+				ItemID = "2"
+				Value = "TanNV"
+				CheckState = "0"
+				IsSelected = "0"/>
+			<CheckListBoxItem
+				ItemID = "3"
+				Value = "ThuNN"
+				CheckState = "1"
+				IsSelected = "0"/>
+		</Element>
+		<Element
+			CID = "1715875702"
+			Type = "CheckTree"
+			X = "167"
+			Y = "331"
+			Width = "157"
+			Height = "226"
+			Flags = "0"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "22"
+			IsDisabled = "0"
+			HasBorder = "1"
+			HasButtons = "1"
+			HasLines = "1"
+			HasLinesAtRoot = "0"
+			HasHorzScrollBar = "0"
+			HasVertScrollBar = "1"
+			Mirror = "0"
+			WordWrap = "0"
+			IconMargin = "0"
+			ItemHeight = "16"
+			Icons = "Blank">
+			<TreeItem
+				ItemID = "1"
+				Text = "Bkav"
+				IsBold = "1"
+				IsChecked = "0"
+				IsExpanded = "1"
+				IsSelected = "0">
+				<Icon
+					FileID = "50784E81-E33F-4E83-AE5387086271E6AF"
+					RootPath = "$Container"
+					Filename = "..\..\_Icons\root.ico"
+					IconIndex = "0"/>
+				<TreeItem
+					ItemID = "2"
+					Text = "anhcd"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\user.ico"
+						IconIndex = "0"/>
+				</TreeItem>
+				<TreeItem
+					ItemID = "3"
+					Text = "anhld"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\user.ico"
+						IconIndex = "0"/>
+				</TreeItem>
+				<TreeItem
+					ItemID = "4"
+					Text = "anhngt"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\user.ico"
+						IconIndex = "0"/>
+				</TreeItem>
+				<TreeItem
+					ItemID = "12"
+					Text = "anhngtb"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\user.ico"
+						IconIndex = "0"/>
+				</TreeItem>
+				<TreeItem
+					ItemID = "13"
+					Text = "anhnt"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\user.ico"
+						IconIndex = "0"/>
+				</TreeItem>
+				<TreeItem
+					ItemID = "14"
+					Text = "anhntb"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\user.ico"
+						IconIndex = "0"/>
+				</TreeItem>
+				<TreeItem
+					ItemID = "15"
+					Text = "anhntt"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\user.ico"
+						IconIndex = "0"/>
+				</TreeItem>
+				<TreeItem
+					ItemID = "16"
+					Text = "anhntvb"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\user.ico"
+						IconIndex = "0"/>
+				</TreeItem>
+				<TreeItem
+					ItemID = "17"
+					Text = "anhpl"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\user.ico"
+						IconIndex = "0"/>
+				</TreeItem>
+				<TreeItem
+					ItemID = "18"
+					Text = "anhpl"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\user.ico"
+						IconIndex = "0"/>
+				</TreeItem>
+				<TreeItem
+					ItemID = "19"
+					Text = "anhtn"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\user.ico"
+						IconIndex = "0"/>
+				</TreeItem>
+				<TreeItem
+					ItemID = "20"
+					Text = "anhtt"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\user.ico"
+						IconIndex = "0"/>
+				</TreeItem>
+				<TreeItem
+					ItemID = "21"
+					Text = "anhvm"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\user.ico"
+						IconIndex = "0"/>
+				</TreeItem>
+			</TreeItem>
+		</Element>
+		<Element
+			CID = "1715864829"
+			Type = "CheckTree"
+			X = "-55"
+			Y = "334"
+			Width = "157"
+			Height = "224"
+			Flags = "0"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "27"
+			IsDisabled = "0"
+			HasBorder = "1"
+			HasButtons = "1"
+			HasLines = "1"
+			HasLinesAtRoot = "0"
+			HasHorzScrollBar = "1"
+			HasVertScrollBar = "1"
+			Mirror = "0"
+			WordWrap = "0"
+			IconMargin = "0"
+			ItemHeight = "16"
+			Icons = "Blank">
+			<TreeItem
+				ItemID = "1"
+				Text = "Bkis"
+				IsBold = "1"
+				IsChecked = "0"
+				IsExpanded = "1"
+				IsSelected = "0">
+				<Icon
+					FileID = "50784E81-E33F-4E83-AE5387086271E6AF"
+					RootPath = "$Container"
+					Filename = "..\..\_Icons\root.ico"
+					IconIndex = "0"/>
+				<TreeItem
+					ItemID = "2"
+					Text = "Bkav SmartHome"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\depart.ico"
+						IconIndex = "0"/>
+					<TreeItem
+						ItemID = "5"
+						Text = "Sinh Viên Thực Tập"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\depart.ico"
+							IconIndex = "0"/>
+						<TreeItem
+							ItemID = "25"
+							Text = "Sinh Viên Thực Tập"
+							IsBold = "0"
+							IsChecked = "0"
+							IsExpanded = "0"
+							IsSelected = "0">
+							<Icon
+								FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+								RootPath = "$Container"
+								Filename = "..\..\_Icons\depart.ico"
+								IconIndex = "0"/>
+						</TreeItem>
+					</TreeItem>
+					<TreeItem
+						ItemID = "6"
+						Text = "Phòng Nghiên Cứu phát triển"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\depart.ico"
+							IconIndex = "0"/>
+						<TreeItem
+							ItemID = "26"
+							Text = "Phòng Nghiên Cứu phát triển"
+							IsBold = "0"
+							IsChecked = "0"
+							IsExpanded = "0"
+							IsSelected = "0">
+							<Icon
+								FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+								RootPath = "$Container"
+								Filename = "..\..\_Icons\depart.ico"
+								IconIndex = "0"/>
+						</TreeItem>
+					</TreeItem>
+				</TreeItem>
+				<TreeItem
+					ItemID = "3"
+					Text = "Bkav Head Office"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "1"
+					IsSelected = "0">
+					<Icon
+						FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\depart.ico"
+						IconIndex = "0"/>
+					<TreeItem
+						ItemID = "7"
+						Text = "Văn phòng BK"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\depart.ico"
+							IconIndex = "0"/>
+						<TreeItem
+							ItemID = "16"
+							Text = "lendt"
+							IsBold = "0"
+							IsChecked = "0"
+							IsExpanded = "0"
+							IsSelected = "0">
+							<Icon
+								FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+								RootPath = "$Container"
+								Filename = "..\..\_Icons\user.ico"
+								IconIndex = "0"/>
+						</TreeItem>
+					</TreeItem>
+					<TreeItem
+						ItemID = "13"
+						Text = "Văn phòng CG"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\depart.ico"
+							IconIndex = "0"/>
+						<TreeItem
+							ItemID = "17"
+							Text = "phuongtt"
+							IsBold = "0"
+							IsChecked = "0"
+							IsExpanded = "0"
+							IsSelected = "0">
+							<Icon
+								FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+								RootPath = "$Container"
+								Filename = "..\..\_Icons\user.ico"
+								IconIndex = "0"/>
+						</TreeItem>
+					</TreeItem>
+					<TreeItem
+						ItemID = "14"
+						Text = "Văn phòng HCM"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\depart.ico"
+							IconIndex = "0"/>
+						<TreeItem
+							ItemID = "18"
+							Text = "hangntt"
+							IsBold = "0"
+							IsChecked = "0"
+							IsExpanded = "0"
+							IsSelected = "0">
+							<Icon
+								FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+								RootPath = "$Container"
+								Filename = "..\..\_Icons\user.ico"
+								IconIndex = "0"/>
+						</TreeItem>
+					</TreeItem>
+					<TreeItem
+						ItemID = "15"
+						Text = "Bếp ăn"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\depart.ico"
+							IconIndex = "0"/>
+						<TreeItem
+							ItemID = "19"
+							Text = "chiennv"
+							IsBold = "0"
+							IsChecked = "0"
+							IsExpanded = "0"
+							IsSelected = "0">
+							<Icon
+								FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+								RootPath = "$Container"
+								Filename = "..\..\_Icons\user.ico"
+								IconIndex = "0"/>
+						</TreeItem>
+					</TreeItem>
+					<TreeItem
+						ItemID = "20"
+						Text = "chienla"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\user.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+					<TreeItem
+						ItemID = "21"
+						Text = "dainq"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\user.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+					<TreeItem
+						ItemID = "22"
+						Text = "giangvt"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\user.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+					<TreeItem
+						ItemID = "23"
+						Text = "hainv"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "3B73431B-AF78-4D90-A5F1EE21FA60A19B"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\user.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+				</TreeItem>
+				<TreeItem
+					ItemID = "4"
+					Text = "Bkav VMG"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\depart.ico"
+						IconIndex = "0"/>
+					<TreeItem
+						ItemID = "8"
+						Text = "Ban Kỹ Thuất"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\depart.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+					<TreeItem
+						ItemID = "9"
+						Text = "Ban hệ thống"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\depart.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+					<TreeItem
+						ItemID = "10"
+						Text = "Trung Tâm iSpace"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\depart.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+				</TreeItem>
+				<TreeItem
+					ItemID = "11"
+					Text = "Ban Kinh Doanh"
+					IsBold = "0"
+					IsChecked = "0"
+					IsExpanded = "0"
+					IsSelected = "0">
+					<Icon
+						FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+						RootPath = "$Container"
+						Filename = "..\..\_Icons\depart.ico"
+						IconIndex = "0"/>
+					<TreeItem
+						ItemID = "24"
+						Text = "Ban Kinh Doanh"
+						IsBold = "0"
+						IsChecked = "0"
+						IsExpanded = "0"
+						IsSelected = "0">
+						<Icon
+							FileID = "6CE51996-D00B-4EC5-8B592BB379381798"
+							RootPath = "$Container"
+							Filename = "..\..\_Icons\depart.ico"
+							IconIndex = "0"/>
+					</TreeItem>
+				</TreeItem>
+			</TreeItem>
+		</Element>
+		<Element
+			CID = "1895383328"
+			Type = "RectangleShape"
+			X = "184"
+			Y = "-50"
+			Width = "92"
+			Height = "40"
+			Flags = "0"
+			TextColour = "0,0,0,0,0"
+			FillColour = "255,255,224,0,0"
+			BorderColour = "0,0,0,0,0"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = "Gõ để thêm người nhanh"
+			BorderWidth = "1"
+			Fill = "Solid"
+			Border = "Single"
+			HorzAlign = "Centre"
+			VertAlign = "Centre"
+			MarginLeft = "0"
+			MarginRight = "0"
+			MarginTop = "0"
+			MarginBottom = "0"/>
+		<Element
+			CID = "1895386938"
+			Type = "RectangleShape"
+			X = "35"
+			Y = "31"
+			Width = "47"
+			Height = "21"
+			Flags = "0"
+			TextColour = "0,0,0,0,0"
+			FillColour = "255,255,255,0,0"
+			BorderColour = "0,0,0,0,0"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = "anhntb"
+			BorderWidth = "1"
+			Fill = "Solid"
+			Border = "Single"
+			HorzAlign = "Centre"
+			VertAlign = "Centre"
+			MarginLeft = "0"
+			MarginRight = "0"
+			MarginTop = "0"
+			MarginBottom = "0"/>
+		<Element
+			CID = "1895391517"
+			Type = "StaticText"
+			X = "57"
+			Y = "16"
+			Width = "100"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,255,0,0"
+			Typeface = ""
+			FontAttributes = "4"
+			TextSize = "Normal"
+			Text = ""
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "1895367374"
+			Type = "RectangleShape"
+			X = "299"
+			Y = "35"
+			Width = "92"
+			Height = "40"
+			Flags = "0"
+			TextColour = "0,0,0,0,0"
+			FillColour = "255,255,224,0,0"
+			BorderColour = "0,0,0,0,0"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = "Click để thay đổi vai trò"
+			BorderWidth = "1"
+			Fill = "Solid"
+			Border = "Single"
+			HorzAlign = "Centre"
+			VertAlign = "Centre"
+			MarginLeft = "0"
+			MarginRight = "0"
+			MarginTop = "0"
+			MarginBottom = "0"/>
+		<Element
+			CID = "1895379934"
+			Type = "ListBox"
+			X = "317"
+			Y = "82"
+			Width = "75"
+			Height = "50"
+			Flags = "2"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "4"
+			IsDisabled = "0"
+			HasHorzScrollBar = "0"
+			HasVertScrollBar = "0"
+			Mirror = "0"
+			WordWrap = "0"
+			IsFlat = "1"
+			AutoHeight = "1"
+			HorzOffset = "0"
+			HorzMargin = "0"
+			FirstVisibleItem = "1"
+			ItemHeight = "16"
+			MaxVisibleItems = "20"
+			HorzAlign = "Left"
+			VertAlign = "Centre">
+			<ListBoxItem
+				ItemID = "1"
+				Value = "Phụ trách"
+				IsSelected = "0"/>
+			<ListBoxItem
+				ItemID = "3"
+				Value = "Phối hợp"
+				IsSelected = "0"/>
+			<ListBoxItem
+				ItemID = "2"
+				Value = "Theo dõi"
+				IsSelected = "0"/>
+		</Element>
+		<Element
+			CID = "1895385524"
+			Type = "StaticText"
+			X = "233"
+			Y = "40"
+			Width = "47"
+			Height = "13"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,255,0,0"
+			Typeface = ""
+			FontAttributes = "4"
+			TextSize = "Normal"
+			Text = ""
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+	</Elements>
+	<Connections
+		CID = "2">
+		<Connection
+			CID = "61895084"
+			Layer = "DesignElements"
+			Trigger = "LeftClick"
+			Type = "Navigation"
+			SubType = "ModelessSwitch"
+			SourceSubItemID = "3"
+			SourceRefID = "769213971"
+			TargetRefID = "1715875702"
+			ConLineWidth = "2"
+			ConLineColour = "60,179,113,0,0"/>
+		<Connection
+			CID = "1895369431"
+			Layer = "DesignElements"
+			Trigger = "LeftClick"
+			Type = "Navigation"
+			SubType = "Modal"
+			SourceSubItemID = ""
+			SourceRefID = "1895383328"
+			TargetRefID = "1895391517"
+			ConLineWidth = "2"
+			ConLineColour = "60,179,113,0,0"/>
+		<Connection
+			CID = "1895368303"
+			Layer = "DesignElements"
+			Trigger = "LeftClick"
+			Type = "Navigation"
+			SubType = "Modal"
+			SourceSubItemID = ""
+			SourceRefID = "1895385524"
+			TargetRefID = "1895379934"
+			ConLineWidth = "2"
+			ConLineColour = "60,179,113,0,0"/>
+		<Connection
+			CID = "1438416470"
+			Layer = "DesignElements"
+			Trigger = "LeftClick"
+			Type = "Navigation"
+			SubType = "ModelessSwitch"
+			SourceSubItemID = "2"
+			SourceRefID = "769213971"
+			TargetRefID = "1715864829"
+			ConLineWidth = "2"
+			ConLineColour = "60,179,113,0,0"/>
+	</Connections>
+	<Groups
+		CID = "3"/>
+	<SelectionGroups
+		CID = "4"/>
+	<Notes
+		CID = "5">
+		<Note
+			CID = "1553800933"
+			Name = "Description"
+			NextCID = "2">
+			<Text
+				CID = "1">
+				
+			</Text>
+		</Note>
+	</Notes>
+</Screen>

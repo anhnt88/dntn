@@ -1,0 +1,6 @@
+SELECT dbo.ResourceInCalendar_table.ResourceID, SUM(dbo.ResourceInCalendar_table.Quantity) AS da_dung, AVG(dbo.Resource_table.Quantity )AS tong_so--, SUM (Quantity) AS Quantity
+FROM dbo.Calendar_table INNER JOIN dbo.ResourceInCalendar_table ON dbo.Calendar_table.CalendarID=dbo.ResourceInCalendar_table.CalendarID
+INNER JOIN dbo.Resource_table ON dbo.ResourceInCalendar_table.ResourceID=dbo.Resource_table.ResourceID
+WHERE (StartTime BETWEEN  '1/1/2011 2:20:00 PM' AND '1/25/2011 4:00:00 PM') OR (EndTime BETWEEN  '1/25/2011 2:24:00 PM' AND '1/25/2011 4:00:00 PM') 
+GROUP BY dbo.ResourceInCalendar_table.ResourceID
+

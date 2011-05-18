@@ -1,0 +1,802 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 21 -- Adding Web Browsing Functionality to Your Applications</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch20/ch20.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../apa/apa.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 21 -<BR>
+Adding Web Browsing Functionality to Your Applications</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">The Internet Explorer ActiveX Model</A>
+	<LI><A HREF="#Heading2">The CHtmlView Class</A>
+	<UL>
+		<LI><A HREF="#Heading3">Navigating the Web</A>
+		<LI><A HREF="#Heading4">Controlling the Browser</A>
+		<LI><A HREF="#Heading5">Getting the Browser Status</A>
+	</UL>
+	<LI><A HREF="#Heading6">Building a Web-Browsing Application</A>
+	<UL>
+		<LI><A HREF="#Heading7">Creating the Application Shell</A>
+		<LI><A HREF="#Heading8">Adding Navigation Functionality</A>
+	</UL>
+	<LI><A HREF="#Heading9">Summary</A>
+	<LI><A HREF="#Heading10">Q&amp;A</A>
+	<LI><A HREF="#Heading11">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading12">Quiz</A>
+		<LI><A HREF="#Heading13">Exercises</A>
+	</UL>
+	<LI><A HREF="#Heading14">In Review</A>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+When Microsoft made the decision a few years ago to make all its applications Internet-enabled,
+it wasn't just talking about making Word read and write HTML pages. It wanted to
+make the Internet an integrated part of every application, in some way or another.
+Well, when it comes to development tools, making the editor double as an email client
+isn't really a practical integration. However, making it easy for the users of development
+tools to build Internet-enabled applications is a very practical feature. And this
+is exactly what Microsoft did.</P>
+<P>One of the capabilities that Microsoft made available to its application development
+tools is using Internet Explorer as an integrated part of any application. This means
+that you can include Internet Explorer, and all its associated components, in your
+own applications. The possibilities extend far beyond providing your users Web browsing
+capability; your applications can also house, and interact with, Java applets. You
+can provide your users with not one, but two macro languages, VBScript and JScript
+(Microsoft's version of JavaScript).</P>
+<P>Today, you will learn</P>
+
+<UL>
+	<LI>How the Internet Explorer ActiveX Object Model enables you to integrate all the
+	components into your applications.
+	<P>
+	<LI>How the CHtmlView view class encapsulates most of the Internet Explorer functionality
+	in a ready-made class.
+	<P>
+	<LI>How to build a simple Web browser using the CHtmlView class and Internet Explorer.
+</UL>
+
+<H2><A NAME="Heading1"></A>The Internet Explorer ActiveX Model</H2>
+<P>When Microsoft came up with the idea of integrating ActiveX with its Web browser,
+Internet Explorer, it realized that it would need to reengineer Internet Explorer
+to support the use of ActiveX controls. Well, the developers looked at what they
+would need to do, and what was possible, and decided to make Internet Explorer a
+lot more than just a Web browser.</P>
+<P>The first thing that Microsoft did was separate the Web browser from the ActiveX
+objects that perform all the work. As a result, it ended up with the Internet Explorer
+application, which is little more than an ActiveX document container, and the Internet
+Explorer HTML viewer control, which ran as an ActiveX document server inside the
+application. This meant that the Internet Explorer application could host more than
+just Web pages; it could also be used to host Word documents, Excel spreadsheets,
+PowerPoint presentations, and any other ActiveX document that had an ActiveX document
+server installed on the same computer, as shown in Figure 21.1.</P>
+<P>Within the HTML viewer component, Microsoft added the capability to host other
+controls, including scripting engines and ActiveX controls, as shown in Figure 21.2.
+This gave Microsoft the flexibility to add more scripting languages to Internet Explorer
+as they were requested and created. This also enabled Internet Explorer to host any
+ActiveX controls that developers might want to create.</P>
+<P>In designing Internet Explorer this way, Microsoft not only gave itself a lot
+of flexibility for future expansion of the functionality supported by Internet Explorer,
+but it also made the entire workings of Internet Explorer available to any developer
+that wants to take advantage of it and integrate Internet Explorer into his or her
+applications.</P>
+<P><A HREF="javascript:popUp('21fig01.gif')"><B>FIGURE 21.1.</B></A><B> </B><I>The
+Internet Explorer ActiveX document model.</I></P>
+<P><A HREF="javascript:popUp('21fig02.gif')"><B>FIGURE 21.2.</B></A><B> </B><I>The
+Internet Explorer HTML viewer ActiveX object model.</I></P>
+<P>
+<H2><A NAME="Heading2"></A>The CHtmlView Class</H2>
+<P>To make it easy to incorporate the Internet Explorer HTML viewer into Visual C++
+applications, Microsoft wrapped it in the CHtmlView class. This class can be used
+as the base class for the view class in your Single Document Interface (SDI) or Multiple
+Document Interface (MDI) applications. You can easily create applications that have
+built-in Web browsing capabilities.</P>
+<P>
+<H3><A NAME="Heading3"></A>Navigating the Web</H3>
+<P>Several functions available in the CHtmlView class cover navigating the Web. There
+are functions for returning the browser to the starting page of the user or for taking
+the user to an Internet search page. There are also functions for taking the user
+to the previous or next page or even to a remote Web page. All these functions are
+members of the CHtmlView class and thus are member functions of your application
+view class (when using the CHtmlView class as the base class for your view class).</P>
+<P>The navigation functions for the CHtmlView class are listed in Table 21.1.</P>
+<P>
+<H4>TABLE 21.1. CHtmlView NAVIGATION FUNCTIONS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Function Definition</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">GoBack()</TD>
+		<TD ALIGN="LEFT">Takes the user to the previous Web page.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">GoForward()</TD>
+		<TD ALIGN="LEFT">Takes the user to the next Web page. (This assumes that the user has backed up from
+			at least one Web page.)</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">GoHome()</TD>
+		<TD ALIGN="LEFT">Takes the user to the start page for Internet Explorer.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">GoSearch()</TD>
+		<TD ALIGN="LEFT">Takes the user to an Internet search page.</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Navigate(LPCTSTR URL)</TD>
+		<TD ALIGN="LEFT">Takes the user to the Web page specified in the URL variable.</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The first four functions do not take any arguments and perform the exact same
+function as their toolbar equivalents in Internet Explorer. The last function does
+take arguments; the only required argument is the URL of the Web page to display.</P>
+<P>
+<H3><A NAME="Heading4"></A>Controlling the Browser</H3>
+<P>Along with the functions for navigating around the Web, you use some functions
+for controlling the browser. Two of these functions are Refresh(), which makes the
+HTML viewer control reload the current Web page, and Stop(), which halts a download
+in progress. As with most of the navigation functions, these functions do not take
+any arguments and work just like their equivalent toolbar buttons in Internet Explorer.</P>
+<P>
+<H3><A NAME="Heading5"></A>Getting the Browser Status</H3>
+<P>Another category of functions that are available in the CHtmlView class is informational
+in nature. You can use these functions to get information about the current state
+of the browser. For instance, if you want to get the current Web page in the browser,
+you can call GetLocationURL(), which returns a CString containing the URL. If you
+want to determine if the browser is busy with a download, you can call GetBusy(),
+which returns a boolean value specifying whether the browser is busy.</P>
+<P>Many more functions are available in the CHtmlView class, and some of them only
+work on Internet Explorer itself, not on the browser control.</P>
+<P>
+<H2><A NAME="Heading6"></A>Building a Web-Browsing Application</H2>
+<P>For an example of how you can integrate the Internet Explorer Web browser component
+into your own applications, you will build a simple Web browser application. You
+will create an SDI application using the CHtmlView class as the base for your own
+view class. You'll add a menu with functions for the back and forward navigation
+options. You'll also add a dialog for getting from the user a URL that you will use
+to navigate the browser to the specified Web page.</P>
+<P>
+<H3><A NAME="Heading7"></A>Creating the Application Shell</H3>
+<P>To create a Web browser application, you can create a standard SDI or MDI application
+shell. The only other thing that you need to ensure is that Internet Explorer is
+installed on the computer where your application will run. For your development computer,
+this is not a problem because the Visual C++ installation probably required you to
+install the latest version of Internet Explorer. On any computers where you run your
+application, however, you might need to make sure that Internet Explorer is installed
+or install it yourself.</P>
+<P>To create the shell of the application that you will build today, start a new
+project using the MFC AppWizard to create the application shell. Give the project
+a suitable name, such as WebBrowse, and click the OK button to start the AppWizard.</P>
+<P>In the AppWizard, you can just as easily create an MDI Web browsing application
+as you can create an SDI application. For the purposes of the sample application
+that you are building today, go ahead and specify that the application is a Single
+document (SDI) application. You can accept the default settings for the rest of the
+AppWizard; for this example, however, choose the Internet Explorer ReBars for the
+toolbar appearance on the fourth AppWizard step.</P>
+<P>Finally, on the sixth step, specify the CHtmlView class as the base class for
+your view class. This causes your application to be created using the Internet Explorer
+Web browser control as the main application view.</P>
+<P>Once you finish generating the shell for your application, if you compile and
+run it while connected to the Internet, you'll find that you already have a working
+Web browser, as shown in Figure 21.3. However, you do not have the ability to specify
+where your browser will take you, other than clicking links in the Web pages displayed.</P>
+<P><A HREF="javascript:popUp('21fig03.gif')"><B>FIGURE 21.3.</B></A><B> </B><I>The
+initial Web browsing application.</I></P>
+<P>
+<H3><A NAME="Heading8"></A>Adding Navigation Functionality</H3>
+<P>Now that you've got a working Web browser, it would be nice if you could control
+where it takes you. What you need to add is an edit control where the user can enter
+a URL. Looking at the toolbar of the running application, you notice there's a place
+to put this control.</P>
+<P>
+<H4>Specifying a URL</H4>
+<P>You probably noticed when you ran your application that the second toolbar had
+some static text telling you to lay out the dialog bar. The dialog bar is different
+from what you have worked with before. It is a toolbar with dialog controls on it.
+You even design the bar in the dialog layout designer. When you look for this dialog
+bar in the resource tab, you won't find it in the toolbar folder; it's in the dialogs
+folder.</P>
+<P>If you open the dialogs folder and double-click the IDR_MAINFRAME dialog to open
+it in the dialog designer, you'll see that it's the second toolbar in your application.
+You can place edit boxes, buttons, combo boxes, and check boxes on this toolbar.
+You can place any control that you can use on a dialog window on this toolbar.</P>
+<P>For your Web browser, modify the static text control already on the dialog bar
+and add an edit box, as shown in Figure 21.4. Specify an ID for the edit box; for
+this example, use the ID IDC_EADDRESS.</P>
+<P>Before you open the Class Wizard to begin adding variables and event functions
+to the dialog bar, be aware that the dialog bar will automatically send its events
+to the main frame class in your application. When you open the Class Wizard, it assumes
+that you need to associate the dialog bar with a class and prompts you to create
+a new class. This association is not necessary because you can map all its events
+through the frame and from there feed them to the view or document classes.</P>
+<P><A HREF="javascript:popUp('21fig04.gif')"><B>FIGURE 21.4.</B></A><B> </B><I>The
+dialog bar layout.</I></P>
+<P>For this example, you don't even need to use the Class Wizard to add any event
+handlers to the dialog bar. You need to trigger an action when the user finishes
+entering a URL into the edit box. The closest event available to you through the
+Class Wizard is the EN_CHANGED event, which will trigger for each letter the user
+types. What you need is an event that will trigger when the user presses the Enter
+key. Fortunately, when the user types in the edit box on the dialog bar and presses
+the Enter key, the IDOK command ID is sent to the frame class. What you can do is
+add a command handler in the message map to call a function on the IDOK command.</P>
+<P>In your command handler, you need to get the window text from the edit box on
+the dialog bar. You can pass this string to the Navigate function in the view class,
+making the browser go to the page specified by the user.</P>
+<P>To add this functionality to your application, add a new member function to the
+CMainFrame class. Specify the function type as void, the function declaration as
+OnNewAddress, and the access as public. Edit the new function, adding the code in
+Listing 21.1.</P>
+<P>
+<H4>LISTING 21.1. THE CMainFrame OnNewAddress FUNCTION.</H4>
+<PRE>1: void CMainFrame::OnNewAddress()
+2: {
+3:     CString sAddress;
+4:
+5:     // Get the new URL
+6:     m_wndDlgBar.GetDlgItem(IDC_EADDRESS)-&gt;GetWindowText(sAddress);
+7:     // Navigate to the new URL
+8:     ((CWebBrowseView*)GetActiveView())-&gt;Navigate(sAddress);
+9: }</PRE>
+<P>In this function, line 6 got the text in the edit box using the GetWindowText
+function, placing the text into the m_sAddress variable. The dialog bar was declared
+in the CMainFrame class as the m_wndDlgBar variable, so you were able to use the
+GetDlgItem function on the dialog bar variable to get a pointer to the edit box.</P>
+<P>In line 8, you cast the return pointer from the GetActiveView function as a pointer
+to the CWebBrowseView class. This allowed you to call the Navigate function on the
+view class, passing it the URL that was entered into the edit box.</P>
+<P>Now that you are able to take the URL that the user entered and tell the browser
+component to go to that Web page, how do you trigger this function? You have to add
+the message-map entry by hand because this is one that the Class Wizard isn't able
+to add. In the message map, after the closing marker of the AFX_MSG_MAP (the section
+maintained by the Class Wizard), add the ON_COMMAND macro, specifying the IDOK command
+and your new function as the handler to be called, as in Listing 21.2. You can also
+add this entry before the Class Wizard section as long as it's on either side and
+not inside the section maintained by the Class Wizard.</P>
+<P>
+<H4>LISTING 21.2. THE CMainFrame MESSAGE MAP.</H4>
+<PRE>1: BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
+2:     //{{AFX_MSG_MAP(CMainFrame)
+3:         // NOTE - the ClassWizard will add and remove mapping macros             &Acirc;here.
+4:         //    DO NOT EDIT what you see in these blocks of generated             &Acirc;code !
+5:     ON_WM_CREATE()
+6:     //}}AFX_MSG_MAP
+7:     ON_COMMAND(IDOK, OnNewAddress)
+8: END_MESSAGE_MAP()</PRE>
+<P>If you compile and run your application, you can enter a URL into the edit box
+on the toolbar and press the Enter key, and your application should browse to the
+Web page you specified, as in Figure 21.5.</P>
+<P><A HREF="javascript:popUp('21fig05.gif')"><B>FIGURE 21.5.</B></A><B> </B><I>Browsing
+to a specified URL.</I></P>
+<P>
+<H4>Displaying the Current URL</H4>
+<P>When surfing the Web, you often follow links on Web pages that take you to other
+Web sites. When you do this, you wouldn't know what Web site you accessed if your
+browser didn't place the URL into the address box, indicating the site where you
+are and providing the opportunity to copy or modify the URL to find another page
+on the same site.</P>
+<P>Getting the current URL from the browser is a simple matter of calling the GetLocationURL
+function and passing the result to the dialog bar. The problem is when to get the
+URL. It turns out that some event functions in the CHtmlView class can be overridden
+in your class. These functions will be triggered on various events that are triggered
+by the browser control. There are event functions for starting the navigation, beginning
+a download, monitoring a download's progress, and, most important for our needs,
+indicating a download has finished. None of these event handler functions can be
+added to your view class through the Class Wizard. You have to add them all.</P>
+<P>To add the download-complete event handler to your application, add a new member
+function to the view class of your application. Specify the function type as void,
+the function declaration as OnDocumentComplete(LPCTSTR lpszUrl), and the access as
+public. Edit the function, adding the code in Listing 21.3.</P>
+<P>
+<H4>LISTING 21.3. THE CWEBBROWSEVIEW ONDOCUMENTCOMPLETE FUNCTION.</H4>
+<PRE>1: void CWebBrowseView::OnDocumentComplete(LPCTSTR lpszUrl)
+2: {
+3:     // Pass the new URL to the address bar
+4:     ((CMainFrame*)GetParentFrame())-&gt;SetAddress(lpszUrl);
+5: }</PRE>
+<P>You'll notice in this function that you didn't need to call the GetLocationURL
+function after all. The URL that is downloaded is passed as an argument to this function.
+This allows you to pass the URL along to the frame, where you'll add another function
+to populate the edit box on the dialog bar with the URL.</P>
+<P>To add the function to populate the dialog bar with the new URL, add a member
+function to the main frame class, CMainFrame. Specify the function type as void,
+the function declaration as SetAddress(LPCTSTR lpszURL), and the access as public.
+Edit the function, adding the code in Listing 21.4.</P>
+<P>
+<H4>LISTING 21.4. THE CMainFrame SetAddress FUNCTION.</H4>
+<PRE>1: void CMainFrame::SetAddress(LPCTSTR lpszURL)
+2: {
+3:     // Set the new URL in the address edit control
+4:     m_wndDlgBar.GetDlgItem(IDC_EADDRESS)-&gt;SetWindowText(lpszURL);
+5: }</PRE>
+<P>In this function, you took the opposite path from the one you used to get the
+text from the edit box. You used the SetWindowText to change the text in the edit
+box to the URL that you are passing in. When you run your application, you should
+be able to see the URL address on the dialog bar change to reflect the Web page that
+you are viewing.</P>
+<P>
+<H4>Back and Forth</H4>
+<P>Now that you can enter a URL into the dialog bar and have your application go
+to that Web site, and you can see the address of any Web sites that you view, it'd
+be nice if you could back up from where you might have gone. This is a simple matter
+of calling the GoBack and GoForward functions on the view class in your application.
+You can call these functions from menu entries, which also allows you to attach toolbar
+buttons to perform the same calls.</P>
+<P>To add this functionality, open the main menu in the Menu Designer. You can delete
+the Edit menu from the bar, and all of the entries below it, because they are of
+no use in the application that you are building today. Grab the blank menu entry
+on the bar, and drag it to the left of the Help menu. Open the properties dialog
+for this menu entry and give it a caption of &amp;Go. This is the menu where all
+navigation functions will be located.</P>
+<P>To provide the back-and-forth functionality, you need to add two menu entries,
+one for the GoBack function and one for the GoForward function. Specify the properties
+for these two menu entries as shown in Table 21.2.</P>
+<P>
+<H4>TABLE 21.2. MENU PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Menu Entry</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDM_GO_BACK</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">&amp;Back\tCtrl + B</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Prompt</TD>
+		<TD ALIGN="LEFT">Back to the previous page\nBack</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Menu Entry</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDM_GO_NEXT</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">&amp;Next\tCtrl + N</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Prompt</TD>
+		<TD ALIGN="LEFT">Go forward to the next page\nNext</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Once you add the menu entries, you can use the Class Wizard to add functions to
+the view class on both of these menu events. For the IDM_GO_BACK menu ID, add an
+event function on the COMMAND event message. Edit the function, adding the code in
+Listing 21.5.</P>
+<P>
+<H4>LISTING 21.5. THE CWebBrowseView OnGoBack FUNCTION.</H4>
+<PRE>1: void CWebBrowseView::OnGoBack()
+2: {
+3:     // TODO: Add your command handler code here
+4:
+5:     // Go to the previous page
+6:     GoBack();
+7: }</PRE>
+<P>Open the Class Wizard again, and add an event-handler function for the IDM_GO_NEXT
+object ID on the COMMAND event message. Edit this function with the code in Listing
+21.6.</P>
+<P>
+<H4>LISTING 21.6. THE CWebBrowseView OnGoNext FUNCTION.</H4>
+<PRE>1: void CWebBrowseView::OnGoNext()
+2: {
+3:     // TODO: Add your command handler code here
+4:
+5:     // Go to the next page
+6:     GoForward();
+7: }</PRE>
+<P>Now you can run your application and use the menus to back up to the previous
+Web pages from wherever you surfed to and then trace your steps forward again. However,
+it's somewhat difficult using the menus, so what you need to do is add an accelerator
+for each of these menu entries.</P>
+<P>If you open the accelerator table in the resources tree, you see a bunch of accelerators
+tied to menu IDs. Each of these accelerators consist of an ID and a key combination.
+If you right-click anywhere in the accelerator table, you see the option of adding
+a new accelerator to the table. Choosing this option presents you a dialog to enter
+the accelerator information. First, you need to specify the menu ID that the accelerator
+will be tied to. (As with toolbar buttons, accelerators are tied to menu entries.)
+Below that, you can enter the key that will trigger the accelerator, or you can select
+a key from the drop-down list.</P>
+<P>On the right side of the dialog, you can select the modifiers for the key. Modifiers
+are the other keys that must be pressed in combination with the key that you've already
+specified for the accelerator to be triggered. Once you've entered all the necessary
+information for the accelerator, close the dialog and the information you specified
+is added to the table.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> It's recommended that you use either the Ctrl or Alt key as
+	one of the modifier keys on all accelerators using standard keys. If you don't use
+	one of these two keys as part of the accelerator, your application might get confused
+	about when the user is typing information into your application and when the user
+	is triggering an accelerator. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>To add accelerators to the back and forward menus in your application, delete
+the accelerator for the ID_FILE_OPEN menu ID because you won't use it in this application.
+Add a new accelerator and specify the ID as IDM_GO_BACK and the key as B and select
+the Ctrl modifier. Add a second accelerator, specifying the ID as IDM_GO_NEXT and
+the key as N and select the Ctrl modifier. When you run your application, you can
+use the Ctrl+B key combination to back up to the previous page and the Ctrl+N key
+combination to go forward.</P>
+<P>To really make your application work like most available Web browsers, you would
+also add toolbar buttons for these two menu entries with arrows pointing to the left
+for back and to the right for forward.</P>
+<P>
+<H4>Controlling the Browser</H4>
+<P>Often when browsing, you come across a Web page that you don't want to wait to
+download. You'll want to stop the transfer part-way through. Maybe you entered the
+wrong URL or maybe the download is taking too long. It doesn't matter why you want
+to stop the download; it's enough that you want to stop it. This is why the CHtmlView
+class has the Stop function. It cancels the download currently in progress. To add
+this functionality to your application, add a new menu entry to the View menu in
+the Menu Designer. Specify the menu entry properties in Table 21.3.</P>
+<P>
+<H4>TABLE 21.3. MENU PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Menu Entry</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDM_VIEW_STOP</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">Sto&amp;p</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Prompt</TD>
+		<TD ALIGN="LEFT">Stop the current transfer\nStop</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Using the Class Wizard, add an event-handler function to the view class for this
+menu ID on the COMMAND event message. Edit the function with the code in Listing
+21.7.</P>
+<P>
+<H4>LISTING 21.7. THE CWebBrowseView OnViewStop FUNCTION.</H4>
+<PRE>1: void CWebBrowseView::OnViewStop()
+2: {
+3:     // TODO: Add your command handler code here
+4:
+5:     // Stop the current download
+6:     Stop();
+7: }</PRE>
+<P>If you run your application, you can use this menu entry to stop any download
+of a Web page that you don't want to wait on. It would be more convenient if you
+added a toolbar button for this menu ID.</P>
+<P>Another control function that most browsers have is the capability to reload the
+current Web page. This function is handy for Web pages that contain dynamic elements
+that change each time the page is downloaded. It's also helpful for Web pages that
+your browser may have in its cache so that it doesn't retrieve the newest version
+of the page. It's necessary to be able to force the browser to reload the page and
+not just display the cached version (especially if it's a Web page that you are in
+the process of creating). The browser component has the capability built in with
+the Refresh function. One call to this function means the current page is reloaded.</P>
+<P>You can add this functionality to your application by adding another menu entry
+to the View menu. Specify the properties for the new menu entry using the settings
+in Table 21.4. You can add a separator bar between the two View menu entries that
+were originally there, and the two new entries, to make your menu look like the one
+in Figure 21.6.</P>
+<P>
+<H4>TABLE 21.4. MENU PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Menu Entry</TD>
+		<TD ALIGN="LEFT">ID</TD>
+		<TD ALIGN="LEFT">IDM_VIEW_REFRESH</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Caption</TD>
+		<TD ALIGN="LEFT">&amp;Refresh</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"></TD>
+		<TD ALIGN="LEFT">Prompt</TD>
+		<TD ALIGN="LEFT">Refresh the current page\nRefresh</TD>
+	</TR>
+</TABLE>
+</P>
+<P><A HREF="javascript:popUp('21fig06.gif')"><B>FIGURE 21.6.</B></A><B> </B><I>The
+modified View menu.</I></P>
+<P>Once you add the menu entry, use the Class Wizard to add an event-handler function
+to the view class for the COMMAND event message for this menu entry. Edit the function,
+adding the code in Listing 21.8.</P>
+<P>
+<H4>LISTING 21.8. THE CWebBrowseView OnViewRefresh FUNCTION.</H4>
+<PRE>1: void CWebBrowseView::OnViewRefresh()
+2: {
+3:     // TODO: Add your command handler code here
+4:
+5:     // Reload the current page
+6:     Refresh();
+7: }</PRE>
+<P>Now you can test this functionality by finding a Web site that returns a different
+page each time that you refresh the browser, such as the Random Monty Python Skit
+Server in Figure 21.7. As with the rest of the menu functions that you added to this
+application, this one should also be added to the toolbar.</P>
+<P><A HREF="javascript:popUp('21fig07.gif')"><B>FIGURE 21.7.</B></A><B> </B><I>The
+Refresh function will perform a new download.</I></P>
+<P>
+<H2><A NAME="Heading9"></A>Summary</H2>
+<P>Today you learn how Microsoft designed its Internet Explorer Web browser as a
+series of ActiveX components that could be used in other applications. You saw how
+Microsoft encapsulated the browser into the CHtmlView class, which can be used in
+SDI and MDI applications to provide Web browsing functionality to almost any application.
+You learned how you can use this view class to build a Web browser. You saw how you
+could use the dialog bar to place controls on a toolbar and how the events for these
+controls can be handled in the frame class for the application. Finally, you learned
+how to add menus to your application to call the various functions of the Web browser
+to provide a complete surfing experience.</P>
+<P>
+<H2><A NAME="Heading10"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q Why is Print Preview not included on the default menus when I choose CHtmlView
+	as the base class for my view class?</B>
+	<P>
+	<DT></DT>
+	<DD><B>A</B> The printing for the CHtmlView class is performed by the browser, not
+	the view class. You don't have print preview because the browser doesn't support
+	it.
+	<P>
+	<DT></DT>
+	<DD><B>Q How can I get the HTML source code from the browser so that I can see or
+	edit it?</B>
+	<P>
+	<DT></DT>
+	<DD><B>A</B> The CHtmlView class has a member function, GetHtmlDocument, that returns
+	a pointer to the IDispatch interface of the document object in the browser. You have
+	to use the Invoke IDispatch function to call the functions in the document object
+	to retrieve the HTML source code. For documentation on how to do this, check out
+	the Microsoft Developer Network CD that you received with your copy of Visual C++
+	6.
+	<P>
+</DL>
+
+<H2><A NAME="Heading11"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading12"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What does the CHtmlView class encapsulate for use in Visual C++ applications?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>How can you get the URL for the current Web page from the CHtmlView
+	class?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What command is triggered for the frame class when the user presses
+	the Enter key in the edit box on the dialog bar?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>What functions can you call to navigate the browser to the previous
+	and the next Web pages?
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>How can you stop a download in progress?
+	<P>
+</DL>
+
+<H3><A NAME="Heading13"></A>Exercises</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Add the GoSearch function to the menu and toolbar.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Add the GoHome function to the menu and toolbar.
+	<P>
+	<DT>Disable the Stop toolbar button and menu entry when the application is not downloading
+	a Web page.</DT>
+	<P>
+</DL>
+
+<H2><A NAME="Heading14"></A>In Review</H2>
+<P>You made it! You now have the skills to tackle most of the Windows programming
+tasks in Visual C++, with the exception of those that require specialized knowledge
+and understanding. Although there's still plenty for you to learn, you have covered
+the vast majority of the topics in a very short amount of time. From here you will
+probably want to delve into one or two more specialized areas of Windows programming--the
+type that an entire book can be written on--because at this point, you've got just
+about all the generalized skills down.</P>
+<P>Just in case you don't have them all down, it's not a bad idea to take some time
+once again to come up with some of your own applications where you can apply the
+things you've learned. This will help pinpoint any areas that you might need to go
+back and review before jumping into any more advanced topics. Let's take a quick
+look back at what you should have learned during the past week, just to make sure.</P>
+<P>You started off the week by learning about Microsoft's latest database application
+development technology, ActiveX Data Objects (ADO). You learned how ADO sits on top
+of the OLE DB technology, simplifying database access considerably. You learned how
+you can easily build a database application by using ADO as an ActiveX control and
+connecting it to some ADO-compatible, data-bound ActiveX controls. You also learned
+how you can import the DLL and dive into the code, exerting complete control over
+how your application deals with the database. You learned how you can read and write
+each of the fields in a record in the record set by converting it from and to the
+variant data type. You also learned how you can design your own custom record class
+and can bind it to the record set object, providing you with a much more convenient
+way to access the individual field values in the database. If you are having problems
+with any of this, you might want to review Day 15 once more.</P>
+<P>You learned three different ways of sharing the functionality modules that you
+develop with other programmers, without having to share your code. First you learned
+how to build your modules into library files that can be linked into applications
+by other Visual C++ developers. You saw how with this approach, if any change is
+made to the library module, then all the applications that it's used in have to be
+rebuilt. You learned how you can create these modules without making any special
+changes to the way you write your code. If you don't remember how you did all of
+this, you can go back to Day 16 to review it.</P>
+<P>The second way that you learned to share your functionality with other programmers
+was to build DLLs. You learned how you can create two different types of DLLs: one
+that can be used only by other Visual C++ applications and one that can be used by
+any other application, regardless of what programming language was used to build
+it. You saw how you can create a DLL for use by other Visual C++ programmers without
+having to make any real changes to the way you design or code your modules. You also
+learned how you need to make dramatic changes to how your module is used and interacted
+with when creating DLLs that can be used by all programming languages. You learned
+how to provide straight function calls as an interface for use by other applications,
+with all necessary information to be passed in as parameters to the functions. You
+also learned how to build a definition file, with the names of all functions to be
+exported included in it. If you need any reminders of how you can do any of this,
+you'll want to look over Day 17 again.</P>
+<P>The third and final way that you learned to share the functionality of your modules
+without sharing the code was to package it as an ActiveX control. You learned how
+to use the Control and Class Wizards to add in all the properties, methods, and events
+that you want to have in your control. You learned how to read and write the properties
+in your control. You saw how there are two different ways that the properties in
+your control can be implemented, and you learned how to determine which type is appropriate
+for each of your control's properties. You learned how you can raise events in the
+container application from your control by firing the event in your code. Along with
+all of this, you learned how you can use the ActiveX Control Test Container utility
+to test your control, calling all its methods and triggering all the events that
+it's capturing. You saw how you can monitor the events that your control is firing
+in the containing application to make sure that they are being fired as and when
+they should. If you need any reminders of how all this works, you can look back at
+Day 19 for a refresher.</P>
+<P>An important thing that you learned was how you can enable your applications to
+perform more than one task at a time. This is an important piece of functionality,
+and more applications are requiring this capability every day. Not only did you learn
+how to make your applications perform multiple tasks at once, but you also learned
+two different ways to do so. First, you learned about the OnIdle function and how
+you can hook into this function to trigger your own functionality to be run when
+the application is sitting idle. You also learned about the shortcomings of using
+this approach to adding a second task to your application and how it can prevent
+your application from responding to the user. You need to slice the background task
+into little pieces that can be done quickly, which requires you to develop some elaborate
+way of keeping track of where the task is and where it needs to pick back up when
+the application is idle again.</P>
+<P>The second way that you learned to give your applications a second or third task
+to do is by spinning off separate threads, which run completely independent of the
+main user-interface thread. You learned how to create a callback function that controls
+the top level of execution for the threads and how you can start and stop the thread
+as necessary. You also saw how these independent threads are completely independent
+from the rest of the application and how they'll continue to run, even when the rest
+of the application is also busy. If you feel the need to look at all this a second
+time, you might want to read Day 18 again.</P>
+<P>Another area of growing importance that you learned about was how to build Internet
+applications using the Winsock interface classes. You learned how you can build one
+application that connects to another over a network and sends messages back and forth.
+You learned that, just like with a telephone, for one application to connect to another,
+the second application has to be listening for the connection. You saw how easy it
+is to send messages and to be notified when a message has arrived after the connection
+between the two applications has been made. If you need to review some of this, you
+might want to look back at Day 20.</P>
+<P>Finally, you learned how you can incorporate the Microsoft Internet Explorer Web
+browser into your application without any effort whatsoever. You learned how you
+can control the browser by specifying the URL that it should load and display for
+the user and how you can display informational messages to the user to show what
+the browser is doing and when it's busy. If you need to look back at this to refresh
+your memory, you can go back to Day 21.</P>
+<P>That's it. You're done. You've covered a lot of ground and learned some advanced
+topics, especially over this last week. Now it's time to put this book down and get
+busy programming, building your own applications using what you've learned. Good
+luck. If you find that you need a little help or advice, a good place to turn is
+the Microsoft newsgroups on the Internet. They are full of people who are both knowledgeable
+and helpful.</P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch20/ch20.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../apa/apa.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

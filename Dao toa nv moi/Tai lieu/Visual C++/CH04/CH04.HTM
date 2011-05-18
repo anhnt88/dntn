@@ -1,0 +1,903 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 4 -- Working with Timers</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch03/ch03.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch05/ch05.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 4 -<BR>
+Working with Timers</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Understanding Windows Timers</A>
+	<LI><A HREF="#Heading2">Placing a Clock on Your Application</A>
+	<UL>
+		<LI><A HREF="#Heading3">Creating the Project and Application</A>
+		<LI><A HREF="#Heading4">Adding the Timer IDs</A>
+		<LI><A HREF="#Heading5">Starting the Clock Timer</A>
+		<LI><A HREF="#Heading6">Handling the Clock Timer Event</A>
+	</UL>
+	<LI><A HREF="#Heading7">Adding a Second Timer to Your Application</A>
+	<UL>
+		<LI><A HREF="#Heading8">Adding the Application Variables</A>
+		<LI><A HREF="#Heading9">Starting and Stopping the Counting Timer</A>
+		<LI><A HREF="#Heading10">Enabling the Stop Button</A>
+	</UL>
+	<LI><A HREF="#Heading11">Summary</A>
+	<LI><A HREF="#Heading12">Q&amp;A</A>
+	<LI><A HREF="#Heading13">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading14">Quiz</A>
+		<LI><A HREF="#Heading15">Exercise</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+You may often find yourself building an application that needs to perform a specific
+action on a regular basis. The task can be something simple such as displaying the
+current time in the status bar every second or writing a recovery file every five
+minutes. Both of these actions are regularly performed by several applications that
+you probably use on a daily basis. Other actions that you might need to perform include
+checking specific resources on a regular basis, as a resource monitor or performance
+monitor does. These examples are just a few of the situations where you want to take
+advantage of the availability of timers in the Windows operating system.</P>
+
+<P>Today you are going to learn</P>
+<P>
+
+<UL>
+	<LI>How to control and use timers in your Visual C++ applications.
+	<P>
+	<LI>How to set multiple timers, each with a different recurrence interval.
+	<P>
+	<LI>How to know which timer has triggered.
+	<P>
+	<LI>How you can incorporate this important resource into all your Visual C++ applications.
+</UL>
+
+<H2><A NAME="Heading1"></A>Understanding Windows Timers</H2>
+<P>Windows timers are mechanisms that let you set one or more timers to be triggered
+at a specific number of milliseconds. If you set a timer to be triggered at a 1,000
+millisecond interval, it triggers every second. When a timer triggers, it sends a
+WM_TIMER message to your application. You can use the Class Wizard to add a function
+to your application to handle this timer message.</P>
+<P>Timer events are placed only in the application event queue if that queue is empty
+and the application is idle. Windows does not place timer event messages in the application
+event queue if the application is already busy. If your application has been busy
+and has missed several timer event messages, Windows places only a single timer message
+in the event queue. Windows does not send your application all the timer event messages
+that occurred while your application was busy. It doesn't matter how many timer messages
+your application may have missed; Windows still places only a single timer message
+in your queue.</P>
+<P>When you start or stop a timer, you specify a timer ID, which can be any integer
+value. Your application uses this timer ID to determine which timer event has triggered,
+as well as to start and stop timers. You'll get a better idea of how this process
+works as you build your application for today.</P>
+<P>
+<H2><A NAME="Heading2"></A>Placing a Clock on Your Application</H2>
+<P>In the application that you will build today, you will use two timers. The first
+timer maintains a clock on the window. This timer is always running while the application
+is running. The second timer is configurable to trigger at whatever interval the
+user specifies in the dialog. The user can start and stop this timer at will. Let's
+get started.</P>
+<P>
+<H3><A NAME="Heading3"></A>Creating the Project and Application</H3>
+<P>You will build today's sample application in three phases. In the first phase,
+you will add all the controls necessary for the entire application. In the second
+phase, you will add the first of the two timers. This first timer will control the
+clock on the application dialog. In the third phase, you will add the second timer,
+which the user can tune, start, and stop as desired.</P>
+<P>To create today's application, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Create a new project, named <B>Timers</B>, using the same AppWizard
+	settings that you've used for the past three days. Specify the application title
+	as <B>Timers</B>.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Lay out the dialog window as shown in Figure 4.1, using the control
+	properties in Table 4.1. Remember that when you place a control on the window, you
+	can right-click the mouse to open the control's properties from the pop-up menu.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('04fig01.gif')"><B>FIGURE 4.1.</B></A><B> </B><I>The
+Timers application dialog layout.</I></P>
+
+<P><I></I>
+<H4>TABLE 4.1. CONTROL PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Timer &amp;Interval:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_INTERVAL		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STARTTIME		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Start Timer		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STOPTIMER		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">S&amp;top Timer		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Disabled		</TD>
+		<TD ALIGN="LEFT">Checked		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Time:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATICTIME		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Current Time		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Count:		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATICCOUNT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">0		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Button		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EXIT		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">E&amp;xit		</TD>
+	</TR>
+</TABLE>
+</P>
+
+<DL>
+	<DT><B></B></DT>
+	<DD><B>3. </B>Set the tab order as you learned on Day 2, &quot;Using Controls in
+	Your Application.&quot;
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Add code to the Exit button to close the application, as you did on
+	Day 2.
+	<P>
+</DL>
+
+<H3><A NAME="Heading4"></A>Adding the Timer IDs</H3>
+<P>Because you will be using two timers in this application, you should add two IDs
+to your application to represent the two timer IDs. This can be done by following
+these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>On the Resource View tab in the workspace pane, right-click the mouse
+	over the Timers resources folder at the top of the resource tree. Select Resource
+	Symbols from the pop-up menu, as in Figure 4.2.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('04fig02.gif')"><B>FIGURE 4.2.</B></A><B> </B><I>The
+Resource pop-up menu.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>2. </B>On the Resource Symbols dialog, click the New button.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>On the New Symbol dialog, enter <B>ID_CLOCK_TIMER</B> as the symbol
+	name and <B>1</B> as the value, as shown in Figure 4.3.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('04fig03.gif')"><B>FIGURE 4.3.</B></A><B> </B><I>Adding
+a new resource symbol.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>4. </B>Repeat steps 2 and 3, specifying <B>ID_COUNT_TIMER</B> as the symbol
+	name and <B>2</B> as the value.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>Click the Close button to close the Resource Symbols dialog. The two
+	timer IDs are now in your application and ready for use.
+	<P>
+</DL>
+
+<H3><A NAME="Heading5"></A>Starting the Clock Timer</H3>
+<P>To start the clock timer, you need to edit the OnInitDialog function, as you did
+in the previous two days. Add the new code in Listing 4.1.</P>
+<P>
+<H4>LISTING 4.1. THE OnInitDialog FUNCTION.</H4>
+<PRE> 1: BOOL CTimersDlg::OnInitDialog()
+ 2: {
+ 3:     CDialog::OnInitDialog();
+ 4: .
+ 5: .
+ 6: .
+ 7:     // TODO: Add extra initialization here
+ 8: 
+ 9:     ///////////////////////
+10:     // MY CODE STARTS HERE
+11:     ///////////////////////
+12: 
+13:     // Start the clock timer
+14:     SetTimer(ID_CLOCK_TIMER, 1000, NULL);
+15: 
+16:     ///////////////////////
+17:     // MY CODE ENDS HERE
+18:     ///////////////////////
+19: 
+20:     return TRUE;  // return TRUE  unless you set the focus to a                       &Acirc;control
+</PRE>
+
+<PRE>21: }.</PRE>
+<P>In this listing, you started the clock timer with the SetTimer function. The first
+argument that you passed to the SetTimer function is the ID for the clock timer.
+The second argument is how often you want to trigger the event. In this case, the
+clock timer event is triggered every 1,000 milliseconds, or about every second. The
+third argument is the address of an optional callback function that you can specify
+to bypass the WM_TIMER event. If you pass NULL for this argument, the WM_TIMER event
+is placed in the application message queue.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> A callback function is a function you create that is called directly
+	by the Windows operating system. Callback functions have specific argument definitions,
+	depending on which subsystem calls the function and why. After you get past the function
+	definition, however, you can do whatever you want or need to do in the function.<BR>
+	A callback function works by passing the address of the function as an argument to
+	a Windows function that accepts callback functions as arguments. When you pass the
+	function address to Windows, your function is called directly every time the circumstances
+	occur that require Windows to call the callback function.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading6"></A>Handling the Clock Timer Event</H3>
+<P>Now that you've started a timer, you need to add the code to handle the timer
+event message. You can do this by following these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Using the Class Wizard, add a variable to the IDC_STATICTIME control
+	of type CString named m_sTime.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Using the Class Wizard, add a function to handle the WM_TIMER message
+	for the CTimersDlg object.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Edit the OnTimer function, adding the code in Listing 4.2.
+	<P>
+</DL>
+
+<H4>LISTING 4.2. THE OnTimer FUNCTION.</H4>
+<PRE> 1: void CTimersDlg::OnTimer(UINT nIDEvent)
+ 2: {
+ 3:     // TODO: Add your message handler code here and/or call default
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Get the current time
+10:     CTime curTime = CTime::GetCurrentTime();
+11: 
+12:     // Display the current time
+13:     m_sTime.Format(&quot;%d:%d:%d&quot;, curTime.GetHour(),
+14:         curTime.GetMinute(),
+15:         curTime.GetSecond());
+16: 
+17:     // Update the dialog
+18:     UpdateData(FALSE);
+19: 
+20:     ///////////////////////
+21:     // MY CODE ENDS HERE
+22:     ///////////////////////
+23: 
+24:     CDialog::OnTimer(nIDEvent);
+25: }
+</PRE>
+<P>In this listing, you declare an instance of the CTime class, initializing it to
+the current system time. The next thing that you do is set the m_sTime string to
+the current time, using the Format method to format the time in the familiar HH:MM:SS
+format. Finally, you update the dialog window with the current time. If you compile
+and run your application now, you should see a clock running in the middle of your
+dialog window, as in Figure 4.4.</P>
+<P><A HREF="javascript:popUp('04fig04.gif')"><B>FIGURE 4.4.</B></A><B> </B><I>A running
+clock on your application dialog.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading7"></A>Adding a Second Timer to Your Application</H2>
+<P>As you have seen, adding a single timer to an application is a pretty simple task.
+All it takes is calling the SetTimer function and then placing the timer code in
+the OnTimer function. However, sometimes you need more than one timer running simultaneously
+in the same application. Then things get a little bit more involved.</P>
+<P>
+<H3><A NAME="Heading8"></A>Adding the Application Variables</H3>
+<P>Before you add the second timer to your application, you need to add a few variables
+to the controls. With the clock timer, you needed only a single variable for updating
+the clock display. Now you need to add a few other variables for the other controls,
+as listed in Table 4.2.</P>
+<P>
+<H4>TABLE 4.2. CONTROL VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+		<TD ALIGN="LEFT"><I>Category</I></TD>
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_STATICCOUNT		</TD>
+		<TD ALIGN="LEFT">m_sCount		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_INTERVAL		</TD>
+		<TD ALIGN="LEFT">m_iInterval		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">int		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_STARTTIME		</TD>
+		<TD ALIGN="LEFT">m_cStartTime		</TD>
+		<TD ALIGN="LEFT">Control		</TD>
+		<TD ALIGN="LEFT">CButton		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_STOPTIMER		</TD>
+		<TD ALIGN="LEFT">m_cStopTime		</TD>
+		<TD ALIGN="LEFT">Control		</TD>
+		<TD ALIGN="LEFT">CButton		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>After you add all the variables using the Class Wizard, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Using the Class Wizard, select the m_iInterval variable and specify
+	a Minimum Value of 1 and a Maximum Value of 100000 in the two edit boxes below the
+	list of variables, as shown in Figure 4.5.
+
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('04fig05.gif')"><B>FIGURE 4.5.</B></A><B> </B><I>Specifying
+a range for a variable.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>2. </B>On the Class View tab in the workspace pane, add a member variable
+	to the CTimersDlg class as you learned yesterday. Specify the variable type as int,
+	the variable name as m_iCount, and the access as Private.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Using the Class Wizard, add a function on the EN_CHANGE event message
+	for the IDC_INTERVAL control ID (the edit box). Edit the function and add the code
+	in Listing 4.3.
+	<P>
+</DL>
+
+<H4>LISTING 4.3. THE OnChangeInterval FUNCTION.</H4>
+<PRE> 1: void CTimersDlg::OnChangeInterval()
+ 2: {
+ 3:     // TODO: If this is a RICHEDIT control, the control will not
+ 4:     // send this notification unless you override the         &Acirc;CDialog::OnInitialUpdate()
+ 5:     // function and call CRichEditCrtl().SetEventMask()
+ 6:     // with the EN_CHANGE flag ORed into the mask.
+ 7: 
+ 8:     // TODO: Add your control notification handler code here
+ 9: 
+10:     ///////////////////////
+11:     // MY CODE STARTS HERE
+12:     ///////////////////////
+13: 
+14:     // Update the variables
+15:     UpdateData(TRUE);
+16: 
+17:     ///////////////////////
+18:     // MY CODE ENDS HERE
+19:     ///////////////////////
+</PRE>
+
+<PRE>20: }</PRE>
+<P>When you specify a value range for the timer interval variable, Visual C++ automatically
+prompts the user, stating the available value range if the user enters a value outside
+of the specified range. This prompt is triggered by the UpdateData function call
+in the OnChangeInterval function. The last variable that was added through the workspace
+pane is used as the actual counter, which is incremented with each timer event.</P>
+<P>
+<H3><A NAME="Heading9"></A>Starting and Stopping the Counting Timer</H3>
+<P>To make your second timer operational, you need to</P>
+<P>
+
+<UL>
+	<LI>Initialize the m_iInterval variable.
+	<P>
+	<LI>Start the timer when the IDC_STARTTIME button is clicked.
+	<P>
+	<LI>Increment the m_iCount variable and update the dialog on each timer event.
+	<P>
+	<LI>Stop the timer when the IDC_STOPTIMER button is clicked.
+</UL>
+
+<P>To implement this additional functionality, perform the following steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Edit the OnInitDialog function, updating the code as in Listing 4.4.
+	<P>
+</DL>
+
+<H4>LISTING 4.4. THE UPDATED OnInitDialog FUNCTION.</H4>
+<PRE> 1: BOOL CTimersDlg::OnInitDialog()
+ 2: {
+ 3:     CDialog::OnInitDialog();
+ 4: .
+ 5: .
+ 6: .
+ 7:     // TODO: Add extra initialization here
+ 8: 
+ 9:     ///////////////////////
+10:     // MY CODE STARTS HERE
+11:     ///////////////////////
+12: 
+13:     // Initialize the counter interval
+14:     m_iInterval = 100;
+15: 
+16:     // Update the dialog
+17:     UpdateData(FALSE);
+18: 
+19:     // Start the clock timer
+20:     SetTimer(ID_CLOCK_TIMER, 1000, NULL);
+21: 
+22:     ///////////////////////
+23:     // MY CODE ENDS HERE
+24:     ///////////////////////
+25: 
+26:     return TRUE;  // return TRUE  unless you set the focus to a                       &Acirc;control
+</PRE>
+
+<PRE>27: }</PRE>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>2. </B>Using the Class Wizard, add a function to the BN_CLICKED message on
+	the IDC_STARTTIME button. Edit the OnStarttime function as in Listing 4.5.
+	<P>
+</DL>
+
+<H4>LISTING 4.5. THE OnStarttime FUNCTION.</H4>
+<PRE> 1: void CTimersDlg::OnStarttime()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Update the variables
+10:     UpdateData(TRUE);
+11: 
+12:     // Initialize the count
+13:     m_iCount = 0;
+14:     // Format the count for displaying
+15:     m_sCount.Format(&quot;%d&quot;, m_iCount);
+16: 
+17:     // Update the dialog
+18:     UpdateData(FALSE);
+19:     // Start the timer
+20:     SetTimer(ID_COUNT_TIMER, m_iInterval, NULL);
+21: 
+22:     ///////////////////////
+23:     // MY CODE ENDS HERE
+24:     ///////////////////////
+</PRE>
+
+<PRE>25: }</PRE>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>3. </B>Using the Class Wizard, add a function to the BN_CLICKED message on
+	the IDC_STOPTIMER button. Edit the OnStoptimer function as in Listing 4.6.
+	<P>
+</DL>
+
+<H4>LISTING 4.6. THE OnStoptimer FUNCTION.</H4>
+<PRE> 1: void CTimersDlg::OnStoptimer()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Stop the timer
+10:     KillTimer(ID_COUNT_TIMER);
+11: 
+12:     ///////////////////////
+13:     // MY CODE ENDS HERE
+14:     ///////////////////////
+</PRE>
+
+<PRE>15: }</PRE>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>4. </B>Edit the OnTimer function, updating the code as in Listing 4.7.
+	<P>
+</DL>
+
+<H4>LISTING 4.7. THE UPDATED OnTimer FUNCTION.</H4>
+<PRE> 1: void CTimersDlg::OnTimer(UINT nIDEvent)
+ 2: {
+ 3:     // TODO: Add your message handler code here and/or call default
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Get the current time
+10:     CTime curTime = CTime::GetCurrentTime();
+11: 
+12:     // Which timer triggered this event?
+13:     switch (nIDEvent)
+14:     {
+15:         // The clock timer?
+16:     case ID_CLOCK_TIMER:
+17:         // Display the current time
+18:         m_sTime.Format(&quot;%d:%d:%d&quot;, curTime.GetHour(),
+19:             curTime.GetMinute(),
+20:             curTime.GetSecond());
+21:         break;
+22:         // The count timer?
+23:     case ID_COUNT_TIMER:
+24:         // Increment the count
+25:         m_iCount++;
+26:         // Format and display the count
+27:         m_sCount.Format(&quot;%d&quot;, m_iCount);
+28:         break;
+29:     }
+30: 
+31:     // Update the dialog
+32:     UpdateData(FALSE);
+33: 
+34:     ///////////////////////
+35:     // MY CODE ENDS HERE
+36:     ///////////////////////
+37: 
+38:     CDialog::OnTimer(nIDEvent);
+</PRE>
+
+<PRE>39: }</PRE>
+<P>In the OnInitDialog function, you added the initialization of the m_iInterval
+variable, starting it at 100. This initialization is reflected on the dialog window
+by calling the UpdateData function.</P>
+<P>In the OnStarttime function, you first synchronize the variables with the control
+values, allowing you to get the current setting of the m_iInterval variable. Next,
+you initialize the m_iCount variable, setting it to 0, and then format the value
+in the m_sCount CString variable, which is updated in the dialog window. The last
+thing that you do is to start the timer, specifying the ID_COUNT_TIMER ID and using
+the interval from the m_iInterval variable.</P>
+<P>In the OnStoptimer function, all you really need to do is stop the timer. You
+do this by calling the KillTimer function, passing the timer ID as the only argument.</P>
+<P>It is in the OnTimer function that things begin to get interesting. Here, you
+still see the code for handling the clock timer event. To add the functionality for
+the counter timer, you need to determine which timer has triggered this function.
+The only argument to the OnTimer function just happens to be the timer ID. You can
+use this ID in a switch statement to determine which timer has called this function
+and to control which set of code is executed. The clock timer code is still the same
+as it was in Listing 4.2. The counter timer code is placed into its spot in the switch
+statement, incrementing the counter and then updating the m_sCount variable with
+the new value. You can compile and run your application at this point, and you can
+specify a timer interval and start the timer running, as in Figure 4.6.</P>
+<P><A HREF="javascript:popUp('04fig06.gif')"><B>FIGURE 4.6.</B></A><B> </B><I>A running
+counter on your application dialog.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading10"></A>Enabling the Stop Button</H3>
+<P>If you run your application, you'll find that it works well except for one small
+problem. When you start your second timer, you can't stop it. When you were specifying
+all the properties of the controls, you disabled the Stop Timer button. Before you
+can stop the timer, you need to enable this button.</P>
+<P>What makes the most sense is enabling the stop button and disabling the start
+button once the timer starts. Then you reverse the situation when the timer stops
+again. You can do this in the same way you enabled and disabled controls on Day 2,
+or you can modify your approach just a little.</P>
+<P>Remember that when you added variables to the controls, you added variables to
+the start and stop buttons. These were not normal variables, but control variables.
+Instead of getting a pointer to these controls using their IDs, you can work directly
+with the control variables. Try that now by updating the OnStarttime and OnStoptimer
+functions as in Listing 4.8.</P>
+<P>
+<H4>LISTING 4.8. THE REVISED OnStarttime AND OnStoptimer FUNCTIONS.</H4>
+<PRE> 1: void CTimersDlg::OnStarttime()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Update the variables
+10:     UpdateData(TRUE);
+11: 
+12:     // Initialize the count
+13:     m_iCount = 0;
+14:     // Format the count for displaying
+15:     m_sCount.Format(&quot;%d&quot;, m_iCount);
+16: 
+17:     // Update the dialog
+18:     UpdateData(FALSE);
+19:     // Start the timer
+20:     SetTimer(ID_COUNT_TIMER, m_iInterval, NULL);
+21: 
+22:     // Enable the Stop Timer button
+23:     m_cStopTime.EnableWindow(TRUE);
+24:     // Disable the Start Timer button
+25:     m_cStartTime.EnableWindow(FALSE);
+26: 
+27:     ///////////////////////
+28:     // MY CODE ENDS HERE
+29:     ///////////////////////
+30: }
+31: 
+32: void CTimersDlg::OnStoptimer()
+33: {
+34:     // TODO: Add your control notification handler code here
+35: 
+36:     ///////////////////////
+37:     // MY CODE STARTS HERE
+38:     ///////////////////////
+39: 
+40:     // Stop the timer
+41:     KillTimer(ID_COUNT_TIMER);
+42: 
+43:     // Disable the Stop Timer button
+44:     m_cStopTime.EnableWindow(FALSE);
+45:     // Enable the Start Timer button
+46:     m_cStartTime.EnableWindow(TRUE);
+47: 
+48:     ///////////////////////
+49:     // MY CODE ENDS HERE
+50:     ///////////////////////
+</PRE>
+
+<PRE>51: }</PRE>
+<P>Now when you compile and run your application, it looks more like Figure 4.7,
+where you can start and stop the counter timer. This enables you to play with the
+timer interval, putting in a variety of time intervals and observing the difference,
+with the clock ticking above the counter for reference.</P>
+<P><A HREF="javascript:popUp('04fig07.gif')"><B>FIGURE 4.7.</B></A><B> </B><I>The
+finished appli- cation.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading11"></A>Summary</H2>
+<P>Today you learned how to use the timers built into the Windows operating system
+to trigger your application at various time intervals that you can control. You learned
+how to use multiple timers in the same application, running them simultaneously and
+triggering different actions.</P>
+<P>In the coming days, you'll learn how to use additional dialog windows to get feedback
+from the user so that you can integrate that feedback into how your application behaves.
+After that, you will learn how to a create menus for your applications. Then you
+will learn how you can work with text and fonts in your applications.</P>
+<P>
+<H2><A NAME="Heading12"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q What is the interval range that I can set for timers in my applications?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> The available range that you can set for timers in your applications
+	is around 55 milliseconds on the short end to 2<SUP>32</SUP> - 1 milliseconds, or
+	around 49 1/2 days, on the long end.
+	<P>
+	<DT></DT>
+	<DD><B>Q How many timers can I have running at the same time in my application?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> That depends. There are a limited number of timers available to all
+	applications in the Windows operating system. Although the number that is available
+	should be more than sufficient for all running applications using no more than a
+	handful of timers, if an application goes overboard and begins hogging the timers,
+	the operating system may run out. It could be your application that is denied the
+	use of some timers, or it could be other applications that don't have any to use.
+	As a general rule, if you use more than two or three timers at the same time, you
+	might want to reconsider your application design and determine if there is another
+	way to design and build your application so that it can work with fewer timers.
+	<P>
+	<DT></DT>
+	<DD><B>Q Is there any way to trigger my application to perform some work when it
+	is idle, instead of using a timer to trigger the work when I think my app might be
+	idle?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> Yes, there is. All Windows applications have an OnIdle function that
+	can be used to trigger idle processing. OnIdle is discussed later on Day 18, &quot;Doing
+	Multiple Tasks at One Time--Multitasking.&quot;
+	<P>
+</DL>
+
+<H2><A NAME="Heading13"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading14"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What did you accomplish by adding the two timer IDs to the resource
+	symbols?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>What is another way to add these two IDs to the application?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>How can you tell two timers apart in the OnTimer function?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>How many timer events does your application receive if the timer is
+	set for one second and your application has been busy for one minute, preventing
+	it from receiving any timer event messages?
+	<P>
+</DL>
+
+<H3><A NAME="Heading15"></A>Exercise</H3>
+<P>Update your application so that when the counter timer is started, the clock timer
+is reset to run at the same interval as the counter timer. When the counter timer
+is stopped, return the clock timer to a one-second interval.</P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch03/ch03.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch05/ch05.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

@@ -1,0 +1,796 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Appendix D -- Understanding and Exception Handling</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../apc/apc.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ape/ape.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- D -<BR>
+Understanding and Exception Handling</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Using Exceptions</A>
+	<UL>
+		<LI><A HREF="#Heading2">Running Code and Catching the Errors</A>
+		<LI><A HREF="#Heading3">Throwing Exceptions</A>
+		<LI><A HREF="#Heading4">Deleting Exceptions</A>
+	</UL>
+	<LI><A HREF="#Heading5">MFC Exception Types</A>
+	<UL>
+		<LI><A HREF="#Heading6">Using the CException Base Class</A>
+		<LI><A HREF="#Heading7">Using the Memory Exception</A>
+		<LI><A HREF="#Heading8">Using the Resource Exceptions</A>
+		<LI><A HREF="#Heading9">Using the File and Archive Exceptions</A>
+		<LI><A HREF="#Heading10">Using the Database Exceptions</A>
+		<LI><A HREF="#Heading11">Using OLE Exceptions</A>
+		<LI><A HREF="#Heading12">Using the Not Supported Exception</A>
+		<LI><A HREF="#Heading13">Using the User Exception</A>
+		<LI><A HREF="#Heading14">Generating Your Own Custom Exception Classes</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+<I>by Jon Bates</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading1"></A>Using Exceptions</H2>
+<P>An <I>exception</I> is an object that holds details about something that has gone
+wrong. The clever thing about exception handling is that you can create an exception
+when something goes wrong in a low-level function and have it automatically bubble
+back up to a calling function that can deal with all such exceptions in one place.</P>
+<P>
+<H3><A NAME="Heading2"></A>Running Code and Catching the Errors</H3>
+<P>The system automatically detects certain error conditions and generates exceptions
+for them. If you don't deal with them in your application, they will bubble back
+out of your code and be handled by Windows's own exception-catching mechanisms. If
+you want to see this in action, just add the following two lines to any of your code
+and run it:</P>
+<P>
+<PRE>CDC* pNullDC = 0;
+pNullDC-&gt;SetPixel(0,0,0);
+</PRE>
+<P>The first line declares a device context pointer pNullDC and sets it to point
+the memory address to zero (which isn't a good place for any object to be). Obviously
+there isn't a valid object at this address, so when the following SetPixel() function
+is called, the system tries to find the object at address zero. The memory management
+hardware and software know that the program has no right being at this memory address
+and raise a memory access violation exception.</P>
+<P>If you run these lines of code from outside the Visual C++ debugger, you'll see
+a dialog box familiar to all Windows users, as shown in Figure D.1.</P>
+<P><A HREF="javascript:popUp('29fig01.gif')"><B>FIGURE D.1.</B></A><B> </B><I>The
+Windows memory access violation Exception dialog box.</I></P>
+
+<P>However, if you run the application from the Visual C++ debugger, the debugger
+first catches the exception for you and displays the Developer Studio dialog box
+instead, as shown in Figure D.2.</P>
+<P><A HREF="javascript:popUp('29fig02.gif')"><B>FIGURE D.2.</B></A><B> </B><I>The
+Developer Studio-handled memory access violation exception.</I></P>
+
+<P>Memory access violations are very severe exceptions that will crash your program
+without any chance to catch them. There are many less severe exceptions, such as
+the file-handling exception CFileException. This exception is thrown when erroneous
+file operations occur, such as attempting to seek to the beginning of an unopened
+file:</P>
+<P>
+<PRE>CFile fileNotOpen;
+fileNotOpen.SeekToBegin();
+</PRE>
+<P>This results in a system-generated dialog box (see Figure D.3). If you click OK,
+your program will continue as usual.</P>
+<P><A HREF="javascript:popUp('29fig03.gif')"><B>FIGURE D.3.</B></A><B> </B><I>The
+Windows default dialog box for a file exception.</I></P>
+
+<P>Rather than letting the system catch the exception, you can catch the exception
+and deal with it yourself in a more graceful manner. To do this, you must use the
+C++ try and catch keywords. You can use these by defining a block of code to try;
+then, when a specified exception is raised, an action is defined in the catch block
+(see Listing D.1).</P>
+<P>
+<H4>LISTING D.1.&nbsp;LST29_1.CPP--USING A try AND catch BLOCK TO CATCH CFileExceptions.</H4>
+<PRE>1: // ** Try a block of code
+2: try
+3: {
+4:     CFile fileNotOpen;
+5:     fileNotOpen.SeekToBegin();
+6: }
+7: catch(CFileException* e)    // Catch File Exceptions
+8: {
+9:     // ** Check the cause of the exception
+10:     if (e-&gt;m_cause == CFileException::fileNotFound)
+11:        AfxMessageBox(&quot;Oops, forgot to open the file!&quot;);
+12:     e-&gt;Delete();
+13: } 
+</PRE>
+<P>In Listing D.1, a try block is defined around the file operations at lines 4 and
+5. If these lines don't raise an exception, the code will continue as normal. However,
+if a CFileException is raised, it will be caught by the catch keyword in line 7,
+and the variable e will point to the new exception. The CFileException object has
+an m_cause code that defines exactly why the exception was raised. This is checked
+on line 10, and if this was a CFileException::fileNotFound code, the message box
+on line 11 is displayed.</P>
+<P>Notice that the Delete() member function of the CException class (the base class
+of CFileException) in line 12 will delete the exception for you. You must ensure
+that exceptions are always deleted when you are finished with them.</P>
+<P>The try block can include calls to other functions and could be used to catch
+any specified exceptions raised in a large portion of the application, as shown in
+Listing D.2.</P>
+<P>
+<H4>LISTING D.2.&nbsp;LST29_2.CPP--A try BLOCK CAN INCLUDE MANY FUNCTION CALLS AND
+CALLS FROM THOSE FUNCTIONS.</H4>
+<PRE>1: try
+2: {
+3:     // ... Lots of code
+4:     DoLotsOfFileHandling();
+5:     // ... More code
+6:     EvenMoreFileHandling();
+7:     // ... And more Code
+8: }
+9: catch(CFileException* e)    // Catch File Exceptions
+10: {
+11:     // ** Check the cause of the exception
+12:     if (e-&gt;m_cause == CFileException::fileNotFound)
+13:        AfxMessageBox(&quot;Oops, forgot to open the file!&quot;);
+14:     e-&gt;Delete();
+15: }
+</PRE>
+<P>In Listing D.2 the DoLotsOfFileHandling() function on line 4 could implement some
+file handling itself, as well as calls to other functions, as with EvenMoreFileHandling()
+on line 6. Should a file exception arise through any of these file operations, the
+exception will bubble back so that the same catch block will be executed in lines
+9 through 13 with e pointing to the CFileException object. Finally the exception
+is deleted in line 14.</P>
+<P>If you want to catch two different exceptions from the try block, you can add
+catch blocks to handle each different exception, as shown in Listing D.3.</P>
+<P>
+<H4>LISTING D.3.&nbsp;LST29_3.CPP--HANDLING TWO DIFFERENT EXCEPTIONS WITH THE EXCEPTION-
+SPECIFIC catch BLOCKS.</H4>
+<PRE>1: try
+2: {
+3:     // ** This file operation is ok
+4:     CMemFile fileMemFile;
+5:     fileMemFile.SeekToBegin();
+6: 
+7:     // ** But you can't have two different system 
+8:     // ** resources with the same name.
+9:     CMutex        mutex1(0,&quot;Same Name&quot;);
+10:     CSemaphore    semaphore1(1,1,&quot;Same Name&quot;);
+11: }
+12: catch(CFileException* e)    // Catch File Exceptions
+13: {
+14:     if (e-&gt;m_cause == CFileException::fileNotFound)
+15:        AfxMessageBox(&quot;Oops, forgot to open the file!&quot;);
+16:     e-&gt;Delete();
+17: }
+18: catch(CResourceException* e) 
+    &Acirc;// Catch Resource Exceptions
+19: {
+20:     // ** Report the Resource exception error
+21:     AfxMessageBox(&quot;Oops, duplicate resource name&quot;);
+22:     e-&gt;Delete();
+23: } 
+</PRE>
+<P>In Listing D.3, the memory file is automatically created in line 4, so line 5
+won't cause a file exception. However, naming two different system resources (a mutex
+and a semaphore) with the same name does cause a CResourceException in line 10 that
+is then caught by the second catch block in line 18, which displays the message box
+in line 21. If you try this code yourself, remember to add an #include &lt;afxmt.h&gt;
+line for the CMutex and CSemaphore definitions.</P>
+<P>If you want to do a blanket exception catch, you don't need to have a catch block
+for each type of exception; instead, you can catch the CException base class exception
+from which all the other more specific exception classes are derived (see Listing
+D.4).</P>
+<P>
+<H4>LISTING D.4.&nbsp;LST29_4.CPP--USING THE catch BLOCK TO CATCH ALL TYPES OF EXCEPTIONS.</H4>
+<PRE>1: // ** Try a block of code
+2: try
+3: {
+4:     // ** Lots of code ...
+5: }
+6: catch(CException* e)
+7: {
+8:     // ** General Error message, details in e
+9:     AfxMessageBox(&quot;Oops, something went wrong!&quot;);
+10:     e-&gt;Delete();
+11: }
+</PRE>
+<P>Notice that on line 6 the CException base class is used rather than a specific
+exception such as CFileException or CResourceException. You can test which type of
+exception was raised using the IsKindOf() function inside the catch block. For example,
+to test whether a file exception has been raised, you might use the following lines:</P>
+<P>
+<PRE>if (e-&gt;IsKindOf(RUNTIME_CLASS(CFileException)))
+AfxMessageBox(&quot;File Exception&quot;);
+</PRE>
+<P>Because exceptions are derived from CObject, they support the MFC runtime class
+information<I>.</I> By using DECLARE_DYNAMIC and IMPLEMENT_DYNAMIC, the class information
+is bundled into the derived exception object so that the IsKindOf() function can
+be used to check for a specific class type. The RUNTIME_CLASS macro turns class names
+into a pointer to a CRuntimeClass object for the specified object. The IsKindOf()
+member function will then return TRUE if the object being called is of that runtime
+class.</P>
+<P>The &quot;MFC Exception Types&quot; section later in this chapter covers how you
+can determine exception-specific information from each type of MFC exception caught
+in a catch block.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>FREEING SYSTEM RESOURCES</B></P>
+
+	<P>This exception-catching principle becomes very useful when you want to detect
+	and handle errors arising from large portions of code. It can save coding lots of
+	individual error-checking lines, but you must still free up any system resources
+	that you've allocated in lines before the exception was raised.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading3"></A>Throwing Exceptions</H3>
+<P>You can throw exceptions yourself from code embedded in any enclosing try block
+when an error condition arises. The corresponding catch block will then handle the
+exception. Or you can throw the exception again from within a catch section to a
+higher-level catch section, enclosing the first.</P>
+<P>Several AfxThrow... functions will automatically generate and throw various types
+of MFC exceptions up to the next catch level, such as AfxThrowFileException() or
+AfxThrowMemoryException(). These are covered in detail in the &quot;MFC Exception
+Types&quot; section. However, these functions create a new instance of a specific
+CException-derived object for you--using the C++ new<I> </I>keyword and then the
+throw keyword to raise an exception, as shown in the code fragment in Listing D.5.</P>
+<P>
+<H4>LISTING D.5.&nbsp;LST29_5.CPP--RAISING AN EXCEPTION WITH THE throw KEYWORD.</H4>
+<PRE>1: try
+2: {
+3:     DoSomeFileHandling();
+4: }
+5: catch(CFileException* e)
+6: {
+7:     e-&gt;ReportError();
+8:     e-&gt;Delete();
+9: }
+10: 
+11: return TRUE;
+12: }
+13: 
+14: BOOL bSomeThingWentWrong = TRUE;
+15: 
+16: void CExceptionalDlg::DoSomeFileHandling()
+17: {
+18:     // ** ... File handling functions
+19:     if (bSomeThingWentWrong == TRUE)
+20:     {
+21:         CFileException* pException = 
+22:            new CFileException(CFileException::generic);
+23:         throw(pException);
+24:     }
+25: 
+26: // ** ... Yet More file handling
+27: } 
+</PRE>
+<P>In Listing D.5 the try block encloses a call to the DoSomeFileHandling() function
+in line 16. This function may implement some file-handling procedures and raises
+an exception when the error condition on line 19 is found to be TRUE. Line 22 creates
+a new CFileException object passing the CFileException::generic flag to its constructor
+and then throws the new object in line 23 to be caught by the catch section in line
+5.</P>
+<P>This process of newing a CException-derived object and then using the throw keyword
+is the basis of the exception-raising mechanism. The specific details indicating
+the cause of the error can be attached to the CException object, or extra information
+can be added by deriving a class from the CException base class and adding extra
+variables to store more specific information.</P>
+<P>Your catch block can then determine whether the error is too severe to be handled
+at that level. If so, you might want to throw the exception out to a higher-level
+enclosing catch block. You can use the throw keyword (with no parameters) from within
+the catch block to rethrow the exception before you delete it. Instead of deleting
+the exception, you could rethrow it to a higher level catch block by changing the
+catch block shown in Listing D.5 to add the throw keyword like this:</P>
+<P>
+<PRE>e-&gt;ReportError();
+throw;
+</PRE>
+<P>Then after reporting the error, the exception will be thrown again for an enclosing
+try block to catch. If you haven't implemented this nesting, the overall MFC outside
+the catch block will catch it. You can use this nesting mechanism to determine the
+error severity and implement appropriate recovery mechanisms at various hierarchical
+levels in your program.</P>
+<P>
+<H3><A NAME="Heading4"></A>Deleting Exceptions</H3>
+<P>As you've seen, you are fundamentally responsible for new-ing exceptions and must
+also delete these objects when you've handled them. If you delete one of the MFC
+exceptions, you shouldn't use the normal C++ delete keyword (as you've seen) because
+the exception might be a global object or a heap object. Instead, the CException
+base class has a Delete() function that first checks to see whether the exception
+should be deleted. The creator of the exception can specify whether the exception
+should be deleted or not by passing TRUE into the b_AutoDelete parameter of the CException
+class's constructor (which is the only parameter).</P>
+<P>
+<H2><A NAME="Heading5"></A>MFC Exception Types</H2>
+<P>The Microsoft Foundation Classes have several predefined CException-derived classes
+that are used during different types of MFC operations. You've already seen CFileException
+and CResourceException in use. The following section covers each of these various
+classes and how it is raised in more detail. Each class is based on the CException
+class and extends the functionality of CException for different types of exception
+handling. You can also derive your own exception classes from CException, and a generic
+CUserException is used for user-oriented application exceptions.</P>
+<P>
+<H3><A NAME="Heading6"></A>Using the CException Base Class</H3>
+<P>CException itself has a constructor that takes an AutoDelete flag as discussed
+earlier, and is defined like this:</P>
+<P>
+<PRE>CException( BOOL b_AutoDelete );
+</PRE>
+<P>If you new a CException or derived class, you should ensure that this is set to
+TRUE so that it will be deleted with the C++ delete keyword. Otherwise, a global
+or stack-based exception should pass TRUE so that it is deleted only when it goes
+out of scope (at the end of a function or program that declares it).</P>
+<P>The base class contains the Delete()function and two error-reporting functions.
+GetErrorMessage() can be used to store the error message into a predefined buffer
+and specify the ID of a help message to show the user context-specific help pertinent
+to the error. Its first parameter is the address of a destination buffer to hold
+the associated error message. The second parameter specifies the maximum size of
+the buffer so that messages stored in the buffer don't over-spill outside the buffer
+area. The third optional parameter can specify the context help ID as a UINT value.</P>
+<P>You might use this function to help format an error message more relevant to your
+application:</P>
+<P>
+<PRE>char msg[512];
+e-&gt;GetErrorMessage(msg,sizeof(msg));
+CString strMsg;
+strMsg.Format(&quot;The following error occurred in 
+&Acirc;MyApp: %s&quot;,msg);
+AfxMessageBox(strMsg);
+</PRE>
+<P>The sizeof() C++ operator in the GetErrorMessage() function returns the size of
+an array or variable, so if the msg array is changed, you don't have to change any
+other code. The message is then formatted into the strMsg CString object and displayed
+in a message box.</P>
+<P>The ReportError()function displays the message text directly in the familiar exception
+message box and would be used from the catch block:</P>
+<P>
+<PRE>e-&gt;ReportError();
+</PRE>
+<H3><A NAME="Heading7"></A>Using the Memory Exception</H3>
+<P>The CMemoryException is raised automatically when a C++ new<I> </I>keyword fails.
+You can also raise it yourself using the AfxThrowMemoryException(); function. The
+meaning of this exception is exclusively that Windows can't allocate any more memory
+via its GlobalAlloc() or other memory allocation functions. This is a pretty dire
+situation for any program; you would usually handle this exception by writing code
+that lets your program die gracefully, freeing up memory and system resources as
+it goes. There are rare cases in which you could take recovery action if you had
+a large block of memory allocated and could free it without too much detriment to
+the users' activities.</P>
+<P>Due to the exclusivity of this exception, no other cause attributes or specific
+functions extend the CException class's functionality.</P>
+<P>You can watch new automatically raise a CMemoryException with these lines:</P>
+<P>
+<PRE>MEMORYSTATUS mem;
+GlobalMemoryStatus(&amp;mem);
+BYTE* pBig = new BYTE[mem.dwAvailVirtual+1];
+</PRE>
+<P>The mem.dwAvailVirtual structure member of MEMORYSTATUS will hold the total available
+memory after the GlobalMemoryStatus() function retrieves the details. The new on
+the next line requests one more byte than it could possibly have, thus throwing the
+exception.</P>
+<P>
+<H3><A NAME="Heading8"></A>Using the Resource Exceptions</H3>
+<P>CResourceException is thrown in many places where system resources are compromised,
+as you saw in the mutex and semaphore example in Listing D.3. If you want to throw
+these exceptions yourself, use the corresponding AfxThrowResourceException() function.</P>
+<P>Windows can't find or allocate the requested resource and doesn't give any more
+specific guidance; hence it has no other functions or attributes.</P>
+<P>
+<H3><A NAME="Heading9"></A>Using the File and Archive Exceptions</H3>
+<P>You already looked at CFileException in Listing D.5. This is probably one of the
+more sophisticated MFC exceptions because of the number of things that can go wrong
+with file access. You can throw these yourself using the AfxThrowFileException()
+function, which takes three parameters, one mandatory and the other two optional.
+The first mandatory parameter, cause, is a cause code for the exception. This will
+be placed in the file exception's m_cause member variable for interrogation in a
+catch block.</P>
+<P>Table D.1 shows a list of the various cause codes. The second parameter, lOsError,
+can be used to specify an operating system error code to be placed in the file exception's
+m_lOsError member variable. This long value can help clarify an error in more detail
+by drawing on the operating system's own list of file access errors. The third parameter,
+strFileName, is placed into the file exception's m_strFileName member string variable
+to indicate the filename of the file that was being accessed when the error occurred.</P>
+<P>
+<H4>TABLE D.1.&nbsp;THE CFileException m_cause CODES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Cause Code		</TD>
+		<TD ALIGN="LEFT">Meaning		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::none		</TD>
+		<TD ALIGN="LEFT">There was no error.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::generic		</TD>
+		<TD ALIGN="LEFT">No error code specified.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::tooManyOpenFiles		</TD>
+		<TD ALIGN="LEFT">Too many concurrently open files.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::fileNotFound		</TD>
+		<TD ALIGN="LEFT">Can't find the specified file.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::badPath		</TD>
+		<TD ALIGN="LEFT">The path name specified is invalid.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::invalidFile		</TD>
+		<TD ALIGN="LEFT">An attempt was made to use an invalid file handle.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::badSeek		</TD>
+		<TD ALIGN="LEFT">The seek operation failed.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::endOfFile		</TD>
+		<TD ALIGN="LEFT">The end of the file was reached.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::diskFull		</TD>
+		<TD ALIGN="LEFT">There is no spare disk space.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::hardIO		</TD>
+		<TD ALIGN="LEFT">A hardware error occurred.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::accessDenied		</TD>
+		<TD ALIGN="LEFT">Permissions deny access to the file.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::directoryFull		</TD>
+		<TD ALIGN="LEFT">The directory has too many files and can't add another.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::removeCurrentDir		</TD>
+		<TD ALIGN="LEFT">Can't remove the current working directory.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::lockViolation		</TD>
+		<TD ALIGN="LEFT">Can't lock an already locked region of the file.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFileException::sharingViolation		</TD>
+		<TD ALIGN="LEFT">A shared region is locked or can't be shared.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>There is also a ThrowOsError()static member function that throws and configures
+a file exception based on an operating system error code. You must pass ThrowOsError()
+the operating system error code as its first parameter and an optional filename as
+its second parameter. Another member function, ThrowErrno(), does the same thing
+but uses the UNIX-style errno error codes as its only parameter (from the Errno.h
+header file). Because these are static functions, you would use them with static
+scope to raise exceptions with lines like this:</P>
+<P>
+<PRE>CFileException::ThrowOsError(ERROR_BAD_PATHNAME); 
+&Acirc;// Invalid Path
+CFileException::ThrowErrno (ENOSPC); // Disk Full
+</PRE>
+<P>Another static member function, OsErrorToException(), automatically converts between
+operating system error codes and CFileException cause codes. By passing an OS error
+code, it will return the corresponding cause code. A corresponding function ErrnoToException()
+does the same when passed an errno error code.</P>
+<P>When using archives with the CArchive class, you normally handle both CFileExceptions
+and CArchiveException cases in conjunction: Many of the CArchive operations are tied
+in with their underlying file and file access functions. CArchiveException has its
+own m_cause member to hold archive-specific cause codes, as shown in Table D.2. You
+can raise archive exceptions yourself through the AfxThrowArchiveException() function,
+which requires a cause code parameter and a lpszArchiveName string pointer for the
+archive object throwing the exception.</P>
+<P>
+<H4>TABLE D.2.&nbsp;THE CArchiveException m_cause CODE VALUES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Cause Code		</TD>
+		<TD ALIGN="LEFT">Meaning		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CArchiveException::none		</TD>
+		<TD ALIGN="LEFT">No error occurred.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CArchiveException::generic		</TD>
+		<TD ALIGN="LEFT">The specific cause wasn't specified.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CArchiveException::badSchema		</TD>
+		<TD ALIGN="LEFT">The wrong version of an object was read.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CArchiveException::badClass		</TD>
+		<TD ALIGN="LEFT">The class of the object being read was unexpected.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CArchiveException::badIndex		</TD>
+		<TD ALIGN="LEFT">The file format is invalid.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CArchiveException::readOnly		</TD>
+		<TD ALIGN="LEFT">Attempt to write on an archive opened for loading.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CArchiveException::writeOnly		</TD>
+		<TD ALIGN="LEFT">Attempt to read on an archive opened for storing.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CArchiveException::endOfFile		</TD>
+		<TD ALIGN="LEFT">The end of the file was reached unexpectedly while reading.		</TD>
+	</TR>
+</TABLE>
+
+<H3><A NAME="Heading10"></A>Using the Database Exceptions</H3>
+<P>There are two database exception classes: CDBException is used for ODBC-based
+database access, and CDAOException is used for DAO-based database access. You can
+throw these exceptions yourself with the AfxThrowDBException() function, which needs
+three parameters. The first, nRetCode, specifies one of a huge number of database
+return codes to define the type of error (you should look in the ODBC documentation
+for these). The second parameter, pDB, is a pointer to the database associated with
+the exception, and the third parameter, hstmt, is an ODBC handle to the SQL statement
+object that was executed, causing the exception.</P>
+<P>The RETCODE type is available from the CDBException object via its m_nRetCode
+member. You can also access a human-readable piece of error text from the m_strError
+member string and the error text returned from the ODBC driver itself in the m_strStateNativeOrigin
+member.</P>
+<P>The CDAOException class has a corresponding AfxThrowDaoException() function that
+can throw the DAO exception objects. This function needs just two optional parameters.
+The first, nAfxDaoError, is a DAO-specific error code that indicates problems with
+DAO itself (see Table D.3). The second parameter is an OLE SCODE value that is the
+return code from a DAO-based OLE call (see the section &quot;Using OLE Exceptions&quot;
+for a definition of SCODEs).</P>
+<P>
+<H4>TABLE D.3.&nbsp;DAO COMPONENT-SPECIFIC ERROR CODES FROM nAfxDaoError.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Error Code		</TD>
+		<TD ALIGN="LEFT">Meaning		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">NO_AFX_DAO_ERROR		</TD>
+		<TD ALIGN="LEFT">The exception was due to a DAO-specific problem; you should check the supplied CDaoErrorInfo
+			object and SCODE value.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">AFX_DAO_ERROR_ENGINE_INITIALIZATION		</TD>
+		<TD ALIGN="LEFT">The Microsoft Jet Engine database engine failed during initialization.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">AFX_DAO_ERROR_DFX_BIND		</TD>
+		<TD ALIGN="LEFT">A DAO record set field exchange address is invalid.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">
+			<PRE>AFX_DAO_ERROR_OBJECT_NOT_OPEN</PRE>
+		</TD>
+		<TD ALIGN="LEFT">
+			<PRE>The queried table hasn't been opened.</PRE>
+		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The CDAOException class has three member attributes: m_scode, which holds an asso-ciated
+OLE SCODE value with the attempted operation; or S_OK, if the OLE operation was successful.
+The m_nAfxDaoError member holds one of the DAO-specific values from Table D.3. The
+m_pErrorInfo is a pointer to a CDaoErrorInfo structure that holds an error code,
+descriptive error strings, and a help context ID that is defined like this:</P>
+<P>
+<PRE>struct CDaoErrorInfo
+{
+   long m_lErrorCode;
+   CString m_strSource;
+   CString m_strDescription;
+   CString m_strHelpFile;
+   long m_lHelpContext;
+};
+</PRE>
+<P>By interrogating this structure, you can find most of the specific database error
+details pertaining to the DAO exception.</P>
+<P>DAO exceptions can describe more than one error at a time, so you can use the
+GetErrorCount() member function to find out how many are being referenced. These
+other errors can then be obtained by passing the GetErrorInfo() function a zero-based
+index to the specific error. After calling GetErrorInfo() with a specific index in
+the range returned by the GetErrorCount() function, m_pErrorInfo will be updated
+to point to the specified object, and thus you can retrieve those values.</P>
+<P>
+<H3><A NAME="Heading11"></A>Using OLE Exceptions</H3>
+<P>There are two types of OLE exceptions, represented by two classes: the COleException
+class, which is normally used for server-side or OLE-specific operations, and the
+COleDispatchException class, which is used when dealing with client-side IDispatch-based
+operations such as calling ActiveX object functions.</P>
+<P>The simpler of the two is the COleException class, which can be generated by calling
+the AfxThrowOleException() function passing an OLE SCODE value. An OLE SCODE is a
+32-bit error code that is used to represent any kind of error arising from an OLE
+function.</P>
+<P>This value would probably arise from the return code of a function call to a function
+on one of the interfaces of an OLE object. This SCODE value will then be stored in
+the exception's m_sc member for analysis from within a catch block.</P>
+<P>There is also a Process() static member function that is passed an exception object
+and will turn that exception into an SCODE value to represent that exception.</P>
+<P>The COleDispatchException class is used in conjunction with OLE IDispatch interfaces
+and is thrown by the AfxThrowOleDispatchException() function. This function has two
+forms, both with two mandatory parameters and an optional parameter. The first parameter
+for both forms is a wCode WORD value that is an application-specific error code.
+The second parameter is an lpszDescription string pointer in one form, or nDescriptionID
+for a UINT resource code; both types represent either a verbal string or a string
+resource code for a verbal string describing the error. The last optional parameter
+is a help context ID.</P>
+<P>These values are then available as member variables of the COleDispatchException
+object via m_wCode, m_strDescription, and m_dwHelpContext. If a help context is specified
+and a help file available, the framework will fill in an m_strHelpFile string identifying
+the help file. The name of the application producing the error can also be sought
+from the m_strSource attribute.</P>
+<P>If you raise this exception from an OLE object such as an ActiveX control, Visual
+Basic or any other application using the control or object will display these exception
+details.</P>
+<P>
+<H3><A NAME="Heading12"></A>Using the Not Supported Exception</H3>
+<P>The CNotSupportedException class represents exception objects that are generated
+when an unsupported MFC, operating system, or user-application-specific feature is
+requested. If you want to raise this exception, use AfxThrowNotSupportedException(),
+which doesn't required any parameters. There are also no extended members or functions
+associated with this exception--it just means unsupported.</P>
+<P>
+<H3><A NAME="Heading13"></A>Using the User Exception</H3>
+<P>You can use the CUserException class to generate application-specific exception
+objects. You might want to do this when your program is interacting with the user
+to halt the process should she choose a certain option. For example, when you are
+using the AppWizard, you can press Esc at any time to cancel the whole process. Microsoft
+might have used CUserException to do this by detecting the Esc key and then raising
+a user exception object.</P>
+<P>This exception can be raised by a call to the AfxThrowUserException() function
+and then caught in the usual try and catch blocks. There are some places in the MFC
+where this exception is raised, such as during dialog box validation or if the file
+is too big for an edit view.</P>
+<P>
+<H3><A NAME="Heading14"></A>Generating Your Own Custom Exception Classes</H3>
+<P>You can derive your own exception classes from CException and add your specific
+extended functionality. Listing D.6 shows the class definition for such a custom
+exception class that extends the normal functionality by adding a m_strMessage CString
+variable to the exception, enabling you to specify your own message when constructing
+the exception.</P>
+<P>
+<H4>LISTING D.6.&nbsp;LST29_6.CPP--CLASS DEFINITION FOR CCustomException IMPLEMENTED
+IN CustomException.h.</H4>
+<PRE>1:  // ** CustomException.h
+2:  // ** Header file for CCustomException
+3: 
+4:  class CCustomException : public CException
+5:  {
+6:      DECLARE_DYNAMIC(CCustomException);
+7: 
+8:  public:
+9:      CCustomException(CString strMessage);
+10: 
+11:      CString m_strMessage;
+12:  };
+</PRE>
+<P>In Listing D.6 the class is implemented in its own CustomException.h header file
+and derives from CException in line 4. The DECLARE_DYNAMIC macro in line 6 supplies
+the MFC CObject-derived runtime class information required for you to decide the
+exception type in a catch-all catch block. The constructor definition in line 9 takes
+a CString strMessage parameter to let you create the custom exception with the message
+that will be stored in the m_strMessage CString variable declared in line 11.</P>
+<P>The corresponding CCustomException class implementation is shown in Listing D.7.</P>
+<P>
+<H4>LISTING D.7.&nbsp;LST29_7.CPP--IMPLEMENTATION OF THE CCustomException CLASS.</H4>
+<PRE>1:  // ** CustomException.cpp
+2:  // ** Implementation for CCustomException exception
+3: 
+4:  #include &quot;stdafx.h&quot;
+5:  #include &quot;CustomException.h&quot;
+6: 
+7:  IMPLEMENT_DYNAMIC(CCustomException,CException);
+8: 
+9:  CCustomException::CCustomException(CString strMessage)
+10:      : m_strMessage(strMessage)
+11:  {
+12:  }
+</PRE>
+<P>In Listing D.7 the usual header files are included, and the IMPLEMENT_DYNAMIC
+macro is used in line 7 to implement the MFC runtime class information functions.
+The constructor in line 9 takes the strMessage parameters and initializes the m_strMessage<I>
+</I>member variable with this string value in line 10.</P>
+<P>You can then use the custom exception class in your application, as shown in Listing
+D.8.</P>
+<P>
+<H4>LISTING D.8.&nbsp;LST29_8.CPP--USING THE NEW CCustomException CLASS.</H4>
+<PRE>1: try
+2: {
+3:     // ** Something goes wrong
+4:     CCustomException* pCustomEx = 
+5:         new CCustomException(&quot;My custom error occured&quot;);
+6:     throw(pCustomEx);
+7: }    
+8: catch(CCustomException* e)
+9: {
+10:     // ** Access the extended m_strMessage string
+11:     AfxMessageBox(e-&gt;m_strMessage);
+12:     e-&gt;Delete();
+13: }
+</PRE>
+<P>In Listing D.8 a new CCustomException object is created with the application-specific
+error text in lines 4 and 5 and is thrown in line 6. This is then caught by the catch
+keyword in line 8 and the custom information used by the message box in line 11.
+The exception is then deleted in line 12.</P>
+<P>If you try this, remember that the implementation code must also have an #include
+for the CustomException.h header file to retrieve the class definition like this:</P>
+<P>
+<PRE>#include &quot;CustomException.h&quot;</PRE>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../apc/apc.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ape/ape.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

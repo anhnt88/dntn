@@ -1,0 +1,18 @@
+http://www.sqlite.org/cvstrac/wiki?p=SqliteWrappers
+http://www.sqlite.org/omitted.html
+http://haitv.webchuyennghiep.net/blog/2010/08/s%E1%BB%AD-d%E1%BB%A5ng-sqlite/
+http://video.tailieu.vn/xem-media/gioi-thieu-ve-sqlite.8913.html
+http://forums.congdongcviet.com/showthread.php?t=30156
+
+//SQLite Wrapper
+http://www.codeproject.com/KB/windows/SQLite3Wrapper.aspx
+http://www.codeproject.com/KB/database/CppSQLite.aspx
+
+//lap trinh su dung thu vien SQLite
+http://myshop4vn.com/forum/viewtopic.php?t=96
+
+//protec database
+http://stackoverflow.com/questions/1381264/password-protect-a-sqlite-db-is-it-possible
+
+http://sql.entersources.com/sql-like.aspx
+

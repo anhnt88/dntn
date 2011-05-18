@@ -1,0 +1,1078 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 3 -- Allowing User Interaction--Integrating the Mouse and Keyboard in Your Application</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch02/ch02.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch04/ch04.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 3 -<BR>
+Allowing User Interaction--Integrating the Mouse and Keyboard in Your Application</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Understanding Mouse Events</A>
+	<UL>
+		<LI><A HREF="#Heading2">Drawing with the Mouse</A>
+		<LI><A HREF="#Heading3">Improving the Drawing Program</A>
+		<LI><A HREF="#Heading4">Adding the Finishing Touches</A>
+	</UL>
+	<LI><A HREF="#Heading5">Capturing Keyboard Events</A>
+	<UL>
+		<LI><A HREF="#Heading6">Changing the Drawing Cursor</A>
+		<LI><A HREF="#Heading7">Making the Change Stick</A>
+	</UL>
+	<LI><A HREF="#Heading8">Summary</A>
+	<LI><A HREF="#Heading9">Q&amp;A</A>
+	<LI><A HREF="#Heading10">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading11">Quiz</A>
+	</UL>
+	<LI><A HREF="#Heading12">Exercises</A>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+Depending on the type of application you are creating, you might need to notice what
+the user is doing with the mouse. You need to know when and where the mouse was clicked,
+which button was clicked, and when the button was released. You also need to know
+what the user did while the mouse button was being held down.</P>
+
+<P>Another thing that you might need to do is read the keyboard events. As with the
+mouse, you might need to know when a key was pressed, how long it was held down,
+and when it was released.</P>
+<P>Today you are going to learn</P>
+<P>
+
+<UL>
+	<LI>What mouse events are available for use and how to determine which one is appropriate
+	for your application's needs.
+	<P>
+	<LI>How you can listen to mouse events and how to react to them in your Visual C++
+	application.
+	<P>
+	<LI>What keyboard events are available for use and what actions will trigger each
+	of these events.
+	<P>
+	<LI>How to capture keyboard events and take action based on what the user pressed.
+</UL>
+
+<H2><A NAME="Heading1"></A>Understanding Mouse Events</H2>
+<P>As you learned yesterday, when you are working with most controls, you are limited
+to a select number of events that are available in the Class Wizard. When it comes
+to mouse events, you are limited for the most part to click and double-click events.
+Just looking at your mouse tells you that there must be more to capturing mouse events
+than recognizing these two. What about the right mouse button? How can you tell if
+it has been pressed? And what about drawing programs? How can they follow where you
+drag the mouse?</P>
+<P>If you open the Class Wizard in one of your projects, select the dialog in the
+list of object IDs, and then scroll through the list of messages that are available,
+you will find a number of mouse-related events, which are also listed in Table 3.1.
+These event messages enable you to perform any task that might be required by your
+application.</P>
+<P>
+<H4>TABLE 3.1. MOUSE EVENT MESSAGES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Message</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WM_LBUTTONDOWN		</TD>
+		<TD ALIGN="LEFT">The left mouse button has been pressed.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WM_LBUTTONUP		</TD>
+		<TD ALIGN="LEFT">The left mouse button has been released.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WM_LBUTTONDBLCLK		</TD>
+		<TD ALIGN="LEFT">The left mouse button has been double-clicked.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WM_RBUTTONDOWN		</TD>
+		<TD ALIGN="LEFT">The right mouse button has been pressed.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WM_RBUTTONUP		</TD>
+		<TD ALIGN="LEFT">The right mouse button has been released.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WM_RBUTTONDBLCLK		</TD>
+		<TD ALIGN="LEFT">The right mouse button has been double-clicked.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WM_MOUSEMOVE		</TD>
+		<TD ALIGN="LEFT">The mouse is being moved across the application window space.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WM_MOUSEWHEEL		</TD>
+		<TD ALIGN="LEFT">The mouse wheel is being moved.		</TD>
+	</TR>
+</TABLE>
+
+<H3><A NAME="Heading2"></A>Drawing with the Mouse</H3>
+<P>Today you are going to build a simple drawing program that uses some of the available
+mouse events to let the user draw simple figures on a dialog window. This application
+depends mostly on the WM_MOUSEMOVE event message, which signals that the mouse is
+being moved. You will look at how you can tell within this event function whether
+the left mouse button is down or up. You will also learn how you can tell where the
+mouse is on the window. Sound's fairly straight ahead, so let's get going by following
+these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Create a new MFC AppWizard workspace project, calling the project <B>Mouse</B>.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Specify that this project will be a dialog-based application in the
+	first AppWizard step.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Use the default settings in the AppWizard. In the second step, specify
+	a suitable dialog title, such as <B>Mouse and Keyboard</B>.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>After the application shell is created, remove all controls from the
+	dialog window. This provides the entire dialog window surface for drawing. This step
+	is also necessary for your application to capture any keyboard events.
+	<P>
+</DL>
+
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> If there are any controls on a dialog, all keyboard events are directed
+	to the control that currently has input focus--the control that is highlighted or
+	has the cursor visible in it. To capture any keyboard events in a dialog, you have
+	to remove all controls from the dialog.
+<HR>
+
+
+</BLOCKQUOTE>
+
+
+<DL>
+	<DT><B></B></DT>
+	<DD><B>5. </B>Open the Class Wizard. Select WM_MOUSEMOVE from the list of messages,
+	and add a function by clicking the Add Function button. Click the OK button to accept
+	the suggested function name.
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>Click the Edit Code button to edit the OnMouseMove function you just
+	created, adding the code in Listing 3.1.
+	<P>
+</DL>
+
+<H4>LISTING 3.1. THE OnMouseMove FUNCTION.</H4>
+<PRE> 1: void CMouseDlg::OnMouseMove(UINT nFlags, CPoint point)
+ 2: {
+ 3:     // TODO: Add your message handler code here and/or call default
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Check to see if the left mouse button is down
+10:     if ((nFlags &amp; MK_LBUTTON) == MK_LBUTTON)
+11:     {
+12:         // Get the Device Context
+13:         CClientDC dc(this);
+14: 
+15:         // Draw the pixel
+16:         dc.SetPixel(point.x, point.y, RGB(0, 0, 0));
+17:     }
+18: 
+19:     ///////////////////////
+20:     // MY CODE ENDS HERE
+21:     ///////////////////////
+22: 
+23:     CDialog::OnMouseMove(nFlags, point);
+24: }
+</PRE>
+<P>Look at the function definition at the top of the listing. You will notice that
+two arguments are passed into this function. The first of these arguments is a set
+of flags that can be used to determine whether a mouse button is depressed (and which
+one). This determination is made in the first line of your code with the if statement:</P>
+<P>
+<PRE>if ((nFlags &amp; MK_LBUTTON) == MK_LBUTTON)
+</PRE>
+<P>In the first half of the condition being evaluated, the flags are filtered down
+to the one that indicates that the left mouse button is down. In the second half,
+the filtered flags are compared to the flag that indicates that the left mouse button
+is down. If the two match, then the left mouse button is down.</P>
+<P>The second argument to this function is the location of the mouse. This argument
+gives you the coordinates on the screen where the mouse currently is. You can use
+this information to draw a spot on the dialog window.</P>
+
+<P>Before you can draw any spots on the dialog window, you need to get the device
+context for the dialog window. This is done by declaring a new instance of the CClientDC
+class. This class encapsulates the device context and most of the operations that
+can be performed on it, including all the screen drawing operations. In a sense,
+the device context is the canvas upon which you can draw with your application. Until
+you have a canvas, you cannot do any drawing or painting. After the device context
+object is created, you can call its SetPixel function, which colors the pixel at
+the location specified in the first two arguments with the color specified in the
+third argument. If you compile and run your program, you can see how it allows you
+to draw on the window surface with the mouse, as shown in Figure 3.1.</P>
+
+<P><A HREF="javascript:popUp('03fig01.gif')"><B>FIGURE 3.1.</B></A><B> </B><I>Drawing
+on the window with the mouse.</I></P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> In Windows, colors are specified as a single number that is a combination
+	of three numbers. The three numbers are the brightness levels for the red, green,
+	and blue pixels in your computer display. The RGB function in your code is a macro
+	that combines these three separate values into the single number that must be passed
+	to the SetPixel function or to any other function that requires a color value. These
+	three numbers can be any value between and including 0 and 255.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>Using the AND and OR Binaries</H4>
+<P>If you are new to C++, you need to understand how the different types of AND and
+OR work. The two categories of ANDs and ORs are logical and binary. The logical ANDs
+and ORs are used in logical or conditional statements, such as an if or while statement
+that is controlling the logic flow. The binary ANDs and ORs are used to combine two
+values on a binary level.</P>
+<P>The ampersand character (&amp;) is used to denote AND. A single ampersand (&amp;)
+is a binary AND, and a double ampersand (&amp;&amp;) is a logical AND. A logical
+AND works much like the word AND in Visual Basic or PowerBuilder. It can be used
+in an if statement to say &quot;if this condition AND this other condition...&quot;
+where both conditions must be true before the entire statement is true. A binary
+AND is used to set or unset bits. When two values are binary ANDed, only the bits
+that are set to 1 in both values remain as 1; all the rest of the bits are set to
+0. To understand how this works, start with two 8-bit values such as the following:</P>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Value 1		</TD>
+		<TD ALIGN="LEFT">01011001		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Value 2		</TD>
+		<TD ALIGN="LEFT">00101001		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>If you binary AND these two values together, you wind up with the following value:</P>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">ANDed Value		</TD>
+		<TD ALIGN="LEFT">00001001		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>All the bits that had 1 in one of the values, but not in the other value, were
+set to 0. All the bits that were 1 in both values remained set to 1. All the bits
+that were 0 in both values remained 0.</P>
+<P>OR is represented by the pipe character (|), and as with AND, a single pipe (|)
+is a binary OR, whereas a double pipe (||) is a logical OR. As with AND, a logical
+OR can be used in conditional statements such as if or while statements to control
+the logical flow, much like the word OR in Visual Basic and PowerBuilder. It can
+be used in an if statement to say &quot;if this condition OR this other condition...&quot;
+and if either condition is true, the entire statement is true. You can use a binary
+OR to combine values on a binary level. With OR, if a bit is set to 1 in either value,
+the resulting bit is set to 1. With a binary OR, the only way that a bit is set to
+0 in the resulting value is if the bit was already 0 in both values. Take the same
+two values that were used to illustrate the binary AND:</P>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Value 1		</TD>
+		<TD ALIGN="LEFT">01011001		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Value 2		</TD>
+		<TD ALIGN="LEFT">00101001		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>If you binary OR these two values together, you get the following value:</P>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">ORed Value		</TD>
+		<TD ALIGN="LEFT">01111001		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>In this case, every bit that was set to 1 in either value was set to 1 in the
+resulting value. Only those bits that were 0 in both values were 0 in the resulting
+value.</P>
+<P>
+<H4>Binary Attribute Flags</H4>
+<P>Binary ANDs and ORs are used in C++ for setting and reading attribute flags. Attribute
+flags are values where each bit in the value specifies whether a specific option
+is turned on or off. This enables programmers to use defined flags. A defined flag
+is a value with only one bit set to 1 or a combination of other values in which a
+specific combination of bits is set to 1 so that multiple options are set with a
+single value. The flags controlling various options are ORed together, making a composite
+flag specifying which options should be on and which should be off.</P>
+<P>If two flags that specify certain conditions are specified as two different bits
+in a byte, those two flags can often be ORed together as follows:</P>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Flag 1		</TD>
+		<TD ALIGN="LEFT">00001000		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Flag 2		</TD>
+		<TD ALIGN="LEFT">00100000		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><B>Combination</B></TD>
+		<TD ALIGN="LEFT"><B>00101000</B></TD>
+	</TR>
+</TABLE>
+</P>
+<P>This is how flags are combined to specify a number of settings in a limited amount
+of memory space. In fact, this is what is done with most of the check box settings
+on the window and control properties dialogs. These on/off settings are ORed together
+to form one or two sets of flags that are examined by the Windows operating system
+to determine how to display the window or control and how it should behave.</P>
+<P>On the flip side of this process, when you need to determine if a specific flag
+is included in the combination, you can AND the combination flag with the specific
+flag that you are looking for as follows:</P>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Combination		</TD>
+		<TD ALIGN="LEFT">00101000		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Flag 1		</TD>
+		<TD ALIGN="LEFT">00001000		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><B>Result</B></TD>
+		<TD ALIGN="LEFT"><B>00001000</B></TD>
+	</TR>
+</TABLE>
+</P>
+<P>The result of this operation can be compared to the flag that you used to filter
+the combined flag. If the result is the same, the flag was included. Another common
+approach is to check whether the filtered combination flag is nonzero. If the flag
+being used for filtering the combination had not been included, the resulting flag
+would be zero. As a result, you could have left the comparison out of the if statement
+in the preceding code, leaving you with an if statement that looks like the following:</P>
+<P>
+<PRE>if (nFlags &amp; MK_LBUTTON)
+</PRE>
+<P>You can modify this approach to check whether a flag is not in the combination
+as follows:</P>
+<P>
+<PRE>if (!(nFlags &amp; MK_LBUTTON))
+</PRE>
+<P>You might find one of these ways of checking for a flag easier to understand than
+the others. You'll probably find all of them in use.</P>
+<P>
+<H3><A NAME="Heading3"></A>Improving the Drawing Program</H3>
+<P>If you ran your program, you probably noticed a small problem. To draw a solid
+line, you need to move the mouse very slowly. How do other painting programs solve
+this problem? Simple, they draw a line between two points drawn by the mouse. Although
+this seems a little like cheating, it's the way that computer drawing programs work.</P>
+<P>As you move the mouse across the screen, your computer is checking the location
+of the mouse every few clock ticks. Because your computer doesn't have a constant
+trail of where your mouse has gone, it has to make some assumptions. The way your
+computer makes these assumptions is by taking the points that the computer does know
+about and drawing lines between them. When you draw lines with the freehand tool
+in Paint, your computer is playing connect the dots.</P>
+<P>Because all the major drawing programs draw lines between each pair of points,
+what do you need to do to adapt your application so that it also uses this technique?
+First, you need to keep track of the previous position of the mouse. This means you
+need to add two variables to the dialog window to maintain the previous X and Y coordinates.
+You can do this by following these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>In the workspace pane, select the Class View tab.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Select the dialog class--in this case, the CMouseDlg class.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Right-click the mouse and select Add Member Variable from the pop-up
+	menu.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Enter <B>int</B> as the Variable Type and <B>m_iPrevY</B> as the Variable
+	Name and specify Private for the access in the Add Member Variable dialog, as shown
+	in Figure 3.2.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('03fig03.gif')"><B>FIGURE 3.2.</B></A><B> </B><I>The
+Add Member Variable dialog.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>5. </B>Click OK to add the variable.
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>Repeat steps 3 through 5, specifying the Variable Name as <B>m_iPrevX</B>
+	to add the second variable.
+	<P>
+</DL>
+
+<P>After you add the variables needed to keep track of the previous mouse position,
+you can make the necessary modifications to the OnMouseMove function, as shown in
+Listing 3.2.</P>
+<P>
+<H4>LISTING 3.2. THE REVISED OnMouseMove FUNCTION.</H4>
+<PRE> 1: void CMouseDlg::OnMouseMove(UINT nFlags, CPoint point)
+ 2: {
+ 3:     // TODO: Add your message handler code here and/or call default
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Check to see if the left mouse button is down
+10:     if ((nFlags &amp; MK_LBUTTON) == MK_LBUTTON)
+11:     {
+12:         // Get the Device Context
+13:         CClientDC dc(this);
+14: 
+15:         // Draw a line from the previous point to the current point
+16:         dc.MoveTo(m_iPrevX, m_iPrevY);
+17:         dc.LineTo(point.x, point.y);
+18: 
+19:         // Save the current point as the previous point
+20:         m_iPrevX = point.x;
+21:         m_iPrevY = point.y;
+22:     }
+23: 
+24:     ///////////////////////
+25:     // MY CODE ENDS HERE
+26:     ///////////////////////
+27: 
+28:     CDialog::OnMouseMove(nFlags, point);
+29: }
+</PRE>
+<P>Look at the code that draws the line from the previous point to the current point:</P>
+<P>
+<PRE>dc.MoveTo(m_iPrevX, m_iPrevY);
+dc.LineTo(point.x, point.y);
+</PRE>
+<P>You see that you need to move to the first position and then draw a line to the
+second point. The first step is important because without it, there is no telling
+where Windows might think the starting position is. If you compile and run your application,
+it draws a bit better. However, it now has a peculiar behavior. Every time you press
+the left mouse button to begin drawing some more, your application draws a line from
+where you ended the last line you drew, as shown in Figure 3.3.</P>
+<P><A HREF="javascript:popUp('03fig04.gif')"><B>FIGURE 3.3.</B></A><B> </B><I>The
+drawing program with a peculiar behavior.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading4"></A>Adding the Finishing Touches</H3>
+<P>Your application is doing all its drawing on the mouse move event when the left
+button is held down. Initializing the previous position variables with the position
+of the mouse when the left button is pressed should correct this application behavior.
+Let's try this approach by following these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Using the Class Wizard, add a function for the WM_LBUTTONDOWN message
+	on the dialog object.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Edit the OnLButtonDown function that you just created, adding the code
+	in Listing 3.3.
+	<P>
+</DL>
+
+<H4>LISTING 3.3. THE OnLButtonDown FUNCTION.</H4>
+<PRE> 1: void CMouseDlg::OnLButtonDown(UINT nFlags, CPoint point)
+ 2: {
+ 3:     // TODO: Add your message handler code here and/or call default
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Set the current point as the starting point
+10:     m_iPrevX = point.x;
+11:     m_iPrevY = point.y;
+12: 
+13:     ///////////////////////
+14:     // MY CODE ENDS HERE
+15:     ///////////////////////
+16: 
+17:     CDialog::OnLButtonDown(nFlags, point);
+18: }
+</PRE>
+<P>When you compile and run your application, you should find that you can draw much
+like you would expect with a drawing program, as shown in Figure 3.4.</P>
+
+<P><A HREF="javascript:popUp('03fig05.gif')"><B>FIGURE 3.4.</B></A><B> </B><I>The
+finished drawing program.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading5"></A>Capturing Keyboard Events</H2>
+<P>Reading keyboard events is similar to reading mouse events. As with the mouse,
+there are event messages for when a key is pressed and when it is released. These
+events are listed in Table 3.2.</P>
+<P>
+<H4>TABLE 3.2. KEYBOARD EVENT MESSAGES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Message</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WM_KEYDOWN		</TD>
+		<TD ALIGN="LEFT">A key has been pressed down.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">WM_KEYUP		</TD>
+		<TD ALIGN="LEFT">A key has been released.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>The keyboard obviously has fewer messages than the mouse does. Then again, there
+are only so many things that you can do with the keyboard. These event messages are
+available on the dialog window object and are triggered only if there are no enabled
+controls on the window. Any enabled controls on the window have input focus, so all
+keyboard events go to them. That's why you remove all controls from the main dialog
+for your drawing application.</P>
+<P>
+<H3><A NAME="Heading6"></A>Changing the Drawing Cursor</H3>
+<P>To get a good idea of how you can use keyboard-related event messages, why don't
+you use certain keys to change the mouse cursor in your drawing application? Make
+the A key change the cursor to the default arrow cursor, which your application starts
+with. Then you can make B change the cursor to the I-beam and C change the cursor
+to the hourglass. To get started adding this functionality, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Using the Class Wizard, add a function for the WM_KEYDOWN message on
+	the dialog object.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Edit the OnKeyDown function that you just created, adding the code
+	in Listing 3.4.
+	<P>
+</DL>
+
+<H4>LISTING 3.4. THE OnKeyDown FUNCTION.</H4>
+<PRE> 1: void CMouseDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+ 2: {
+ 3:     // TODO: Add your message handler code here and/or call default
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     char lsChar;        // The current character being pressed
+10:     HCURSOR lhCursor;    // The handle to the cursor to be displayed
+11: 
+12:     // Convert the key pressed to a character
+13:     lsChar = char(nChar);
+14: 
+15:     // Is the character &quot;A&quot;
+16:     if (lsChar == `A')
+17:     {
+18:         // Load the arrow cursor
+19:         lhCursor = AfxGetApp()-&gt;LoadStandardCursor(IDC_ARROW);
+20:         // Set the screen cursor
+21:         SetCursor(lhCursor);
+22:     }
+23: 
+24:     // Is the character &quot;B&quot;
+25:     if (lsChar == `B')
+</PRE>
+<PRE>26:     {
+</PRE>
+<PRE>27:         // Load the I beam cursor
+28:         lhCursor = AfxGetApp()-&gt;LoadStandardCursor(IDC_IBEAM);
+29:         // Set the screen cursor
+30:         SetCursor(lhCursor);
+31:     }
+32: 
+33:     // Is the character &quot;C&quot;
+34:     if (lsChar == `C')
+35:     {
+36:         // Load the hourglass cursor
+37:         lhCursor = AfxGetApp()-&gt;LoadStandardCursor(IDC_WAIT);
+38:         // Set the screen cursor
+39:         SetCursor(lhCursor);
+40:     }
+41: 
+42:     // Is the character &quot;X&quot;
+43:     if (lsChar == `X')
+44:     {
+45:         // Load the arrow cursor
+46:         lhCursor = AfxGetApp()-&gt;LoadStandardCursor(IDC_ARROW);
+47:         // Set the screen cursor
+48:         SetCursor(lhCursor);
+49:         // Exit the application
+50:         OnOK();
+51:     }
+52: 
+53:     ///////////////////////
+54:     // MY CODE ENDS HERE
+55:     ///////////////////////
+56: 
+57:     CDialog::OnKeyDown(nChar, nRepCnt, nFlags);
+58: }
+</PRE>
+<P>In the function definition, you see three arguments to the OnKeyDown function.
+The first is the key that was pressed. This argument is the character code of the
+character, which needs to be converted into a character in the first line of your
+code. After you convert the character, you can perform straight-ahead comparisons
+to determine which key was pressed:</P>
+<P>
+<PRE>void CMouseDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+</PRE>
+<P>The second argument to the OnKeyDown function is the number of times that the
+key is pressed. Normally, if the key is pressed and then released, this value is
+1. If the key is pressed and held down, however, the repeat count rises for this
+key. In the end, this value tells you how many times that Windows thinks the key
+has been pressed.</P>
+<P>The third argument to the OnKeyDown function is a combination flag that can be
+examined to determine whether the Alt key was pressed at the same time as the key
+or whether the key being pressed is an extended key. This argument does not tell
+you whether the shift or control keys were pressed.</P>
+<P>When you determine that a specific key was pressed, then it's time to change the
+cursor to whichever cursor is associated with that key. There are two steps to this
+process. The first step is to load the cursor into memory. You accomplish this step
+with the LoadStandardCursor function, which loads one of the standard Windows cursors
+and returns a handle to the cursor.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> A sister function, LoadCursor, can be passed the file or resource
+	name of a custom cursor so that you can create and load your own cursors. If you
+	design your own cursor in the resource editor in Visual C++, you can pass the cursor
+	name as the only argument to the LoadCursor function. For example, if you create
+	your own cursor and name it IDC_MYCURSOR, you can load it with the following line
+	of code:
+	<PRE>lhCursor = AfxGetApp()-&gt;LoadCursor(IDC_MYCURSOR);</PRE>
+
+</BLOCKQUOTE>
+
+<PRE></PRE>
+
+
+<BLOCKQUOTE>
+	<P>After you load your own cursor, you can set the mouse pointer to your cursor using
+	the SetCursor function, as with a standard cursor. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>After the cursor is loaded into memory, the handle to that cursor is passed to
+the SetCursor function, which switches the cursor to the one the handle points to.
+If you compile and run your application, you should be able to press one of these
+keys and get the cursor to change, as in Figure 3.5. However, the moment you move
+the mouse to do any drawing, the cursor switches back to the default arrow cursor.
+The following section describes how to make your change stick.</P>
+<P><A HREF="javascript:popUp('03fig06.gif')"><B>FIGURE 3.5.</B></A><B> </B><I>Changing
+the cursor with specific keys.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading7"></A>Making the Change Stick</H3>
+<P>The problem with your drawing program is that the cursor is redrawn every time
+you move the mouse. There must be some way of turning off this behavior.</P>
+<P>Each time the cursor needs to be redrawn--because the mouse has moved, because
+another window that was in front of your application has gone away, or because of
+whatever other reason--a WM_SETCURSOR event message is sent to your application.
+If you override the native behavior of your application on this event, the cursor
+you set remains unchanged until you change it again. To do this, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Add a new variable to the CMouseDlg class, as you did for the previous
+	position variables. This time, declare the type as BOOL and name the variable <B>m_bCursor</B>,
+	as shown in Figure 3.6.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('03fig07.gif')"><B>FIGURE 3.6.</B></A><B> </B><I>Defining
+a class member variable.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>2. </B>Initialize the m_bCursor variable in the OnInitDialog with the code
+	in Listing 3.5.
+	<P>
+</DL>
+
+<H4>LISTING 3.5. THE OnInitDialog FUNCTION.</H4>
+<PRE> 1: BOOL CMouseDlg::OnInitDialog()
+ 2: {
+ 3:     CDialog::OnInitDialog();
+ 4: 
+ 5: .
+ 6: .
+ 7: .
+ 8:     // Set the icon for this dialog.  The framework does this 			      &Acirc;automatically
+</PRE>
+<PRE> 9:     //  when the application's main window is not a dialog
+</PRE>
+<PRE>10:     SetIcon(m_hIcon, TRUE);            // Set big icon
+11:     SetIcon(m_hIcon, FALSE);        // Set small icon
+12: 
+13:     // TODO: Add extra initialization here
+14: 
+15:     ///////////////////////
+16:     // MY CODE STARTS HERE
+17:     ///////////////////////
+18: 
+19:     // Initialize the cursor to the arrow
+20:     m_bCursor = FALSE;
+21: 
+22:     ///////////////////////
+23:     // MY CODE ENDS HERE
+24:     ///////////////////////
+25: 
+26:     return TRUE;  // return TRUE  unless you set the focus to a 			      &Acirc;control
+27: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>3. </B>Alter the OnKeyDown function to set the m_bCursor flag to TRUE when
+	you change the cursor, as in Listing 3.6.
+	<P>
+</DL>
+
+<H4>LISTING 3.6. THE OnKeyDown FUNCTION.</H4>
+<PRE> 1: void CMouseDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+ 2: {
+ 3:     // TODO: Add your message handler code here and/or call default
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     char lsChar;        // The current character being pressed
+10:     HCURSOR lhCursor;    // The handle to the cursor to be displayed
+11: 
+12:     // Convert the key pressed to a character
+13:     lsChar = char(nChar);
+14: 
+15:     // Is the character &quot;A&quot;
+16:     if (lsChar == `A')
+17:         // Load the arrow cursor
+18:         lhCursor = AfxGetApp()-&gt;LoadStandardCursor(IDC_ARROW);
+19: 
+20:     // Is the character &quot;B&quot;
+21:     if (lsChar == `B')
+22:         // Load the I beam cursor
+23:         lhCursor = AfxGetApp()-&gt;LoadStandardCursor(IDC_IBEAM);
+24: 
+25:     // Is the character &quot;C&quot;
+26:     if (lsChar == `C')
+27:         // Load the hourglass cursor
+28:         lhCursor = AfxGetApp()-&gt;LoadStandardCursor(IDC_WAIT);
+29: 
+30:     // Is the character &quot;X&quot;
+31:     if (lsChar == `X')
+32:     {
+33:         // Load the arrow cursor
+34:         lhCursor = AfxGetApp()-&gt;LoadStandardCursor(IDC_ARROW);
+35:         // Set the cursor flag
+36:         m_bCursor = TRUE;
+37:         // Set the screen cursor
+38:         SetCursor(lhCursor);
+39:         // Exit the application
+40:         OnOK();
+41:     }
+42:     else
+43:     {
+44:         // Set the cursor flag
+45:         m_bCursor = TRUE;
+46:         // Set the screen cursor
+47:         SetCursor(lhCursor);
+48:     }
+49: 
+50:     ///////////////////////
+51:     // MY CODE ENDS HERE
+52:     ///////////////////////
+53: 
+54:     CDialog::OnKeyDown(nChar, nRepCnt, nFlags);
+55: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>4. </B>Using the Class Wizard, add a function for the WM_SETCURSOR message
+	on the dialog object.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>Edit the OnSetCursor function that you just created, adding the code
+	in Listing 3.7.
+	<P>
+</DL>
+
+<H4>LISTING 3.7. THE OnSetCursor FUNCTION.</H4>
+<PRE> 1: BOOL CMouseDlg::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
+</PRE>
+<PRE> 2: {
+ 3:     // TODO: Add your message handler code here and/or call default
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // If the cursor has been set, then return TRUE
+10:     if (m_bCursor)
+11:         return TRUE;
+12:     else
+13: 
+14:     ///////////////////////
+15:     // MY CODE ENDS HERE
+16:     ///////////////////////
+17: 
+18:     return CDialog::OnSetCursor(pWnd, nHitTest, message);
+19: }
+</PRE>
+<P>The OnSetCursor function needs to always return TRUE or else call the ancestor
+function. The ancestor function resets the cursor and does need to be called when
+the application first starts. Because of this, you need to initialize your variable
+to FALSE so that until the user presses a key to change the cursor, the default OnSetCursor
+processing is executed. When the user changes the cursor, you want to bypass the
+default processing and return TRUE instead. This allows the user to draw with whichever
+cursor has been selected, including the hourglass, as shown in Figure 3.7.</P>
+<P><A HREF="javascript:popUp('03fig08.gif')"><B>FIGURE 3.7.</B></A><B> </B><I>Drawing
+with the hourglass cursor.</I></P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> The most common cursor change that you are likely to use in your
+	programs is setting the cursor to the hourglass while your program is working on
+	something that might take a while. There are actually two functions available in
+	MFC that you can use to handle this task. The first is BeginWaitCursor, which displays
+	the hourglass cursor for the user. The second function is EndWaitCursor, which restores
+	the cursor to the default cursor. Both of these functions are members of the CCmdTarget
+	class, from which all of the MFC window and control classes are derived.<BR>
+	If you have a single function controlling all the processing during which you need
+	to display the hourglass and you don't need to display the hourglass after the function
+	has finished, an easier way to show the hourglass cursor is to declare a variable
+	of the CWaitCursor class at the beginning of the function. This automatically displays
+	the hourglass cursor for the user. As soon as the program exits the function, the
+	cursor will be restored to the previous cursor.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H2><A NAME="Heading8"></A>Summary</H2>
+<P>In this chapter, you learned about how you can capture mouse event messages and
+perform some simple processing based upon these events. You used the mouse events
+to build a simple drawing program that you could use to draw freehand figures on
+a dialog window.</P>
+<P>You also learned how to grab keyboard events and determine which key is being
+pressed. You used this information to determine which cursor to display for drawing.
+For this to work, you had to learn about the default cursor drawing in MFC applications
+and how you could integrate your code with this behavior to make your application
+behave the way you want it to.</P>
+<P>From here, you will learn how to use the Windows timer to trigger events at regular
+intervals. You will also learn how to use additional dialog windows to get feedback
+from the user so that you can integrate that feedback into how your application behaves.
+After that, you will learn how to create menus for your applications.</P>
+<P>
+<H2><A NAME="Heading9"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q How can I change the type of line that I am drawing? I would like to draw
+	a larger line with a different color.</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> When you use any of the standard device context commands to draw on
+	the screen, you are drawing with what is known as a pen, much like the pen you use
+	to draw on a piece of paper. To draw bigger lines, or different color lines, you
+	need to select a new pen. You can do this by adapting the code in the OnMouseMove
+	function, starting where you get the device context. The following code enables you
+	to draw with a big red pen:
+	<P>
+</DL>
+
+<PRE>// Get the Device Context
+CClientDC dc(this);
+// Create a new pen
+CPen lpen(PS_SOLID, 16, RGB(255, 0, 0));
+// Use the new pen
+dc.SelectObject(&amp;lpen);
+// Draw a line from the previous point to the current point
+dc.MoveTo(m_iPrevX, m_iPrevY);
+dc.LineTo(point.x, point.y);
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q How can you tell whether the Shift or Ctrl keys are being held down when
+	you receive the WM_KEYDOWN message?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> You can call another function, ::GetKeyState, with a specific key code
+	to determine whether that key is being held down. If the return value of the ::GetKeyState
+	function is negative, the key is being held down. If the return value is nonnegative,
+	the key is not being held down. For instance, if you want to determine whether the
+	Shift key is being held down, you can use this code:
+	<P>
+</DL>
+
+<PRE>if (::GetKeyState(VK_SHIFT) &lt; 0)
+   MessageBox(&quot;Shift key is down!&quot;);
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD>A number of virtual key codes are defined in Windows for all the special keys.
+	These codes let you look for special keys without worrying about OEM scan codes or
+	other key sequences. You can use these virtual key codes in the ::GetKeyState function
+	and pass them to the OnKeyDown function as the nChar argument. Refer to the Visual
+	C++ documentation for a list of the virtual key codes.
+	<P>
+</DL>
+
+<H2><A NAME="Heading10"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading11"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What are the possible mouse messages that you can add functions for?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>How can you tell if the left mouse button is down on the WM_MOUSEMOVE
+	event message?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>How can you prevent the cursor from changing back to the default cursor
+	after you set it to a different one?
+	<P>
+</DL>
+
+<H2><A NAME="Heading12"></A>Exercises</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Modify your drawing program so that the left mouse button can draw
+	in red and the right mouse button can draw in blue.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Extend the OnKeyDown function to add some of the following standard
+	cursors:
+	<P>
+</DL>
+
+
+<UL>
+	<LI>IDC_CROSS
+	<P>
+	<LI>IDC_UPARROW
+	<P>
+	<LI>IDC_SIZEALL
+	<P>
+	<LI>IDC_SIZENWSE
+	<P>
+	<LI>IDC_SIZENESW
+	<P>
+	<LI>IDC_SIZEWE
+	<P>
+	<LI>IDC_SIZENS
+	<P>
+	<LI>IDC_NO
+	<P>
+	<LI>IDC_APPSTARTING
+	<P>
+	<LI>IDC_HELP
+</UL>
+
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch02/ch02.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch04/ch04.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

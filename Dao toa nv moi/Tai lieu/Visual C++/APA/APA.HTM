@@ -1,0 +1,1654 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Appendix A -- C++ Review</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch21/ch21.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../apb/apb.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- A -<BR>
+C++ Review</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Creating Your First Application</A>
+	<UL>
+		<LI><A HREF="#Heading2">Helloworld.cpp</A>
+		<LI><A HREF="#Heading3">The if Statement, Operators, and Polymorphism</A>
+		<LI><A HREF="#Heading4">Global and Local Variables</A>
+	</UL>
+	<LI><A HREF="#Heading5">Pointers</A>
+	<UL>
+		<LI><A HREF="#Heading6">References</A>
+	</UL>
+	<LI><A HREF="#Heading7">Classes</A>
+	<UL>
+		<LI><A HREF="#Heading8">Constructors and Destructors</A>
+	</UL>
+	<LI><A HREF="#Heading9">Inheritance</A>
+	<LI><A HREF="#Heading10">Summary</A>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+The appendix is designed to provide you with a quick review of the fundamentals of
+the C++ programming language. After reading this appendix, you will have a thorough
+understanding of the various aspects of C++ and its syntax.</P>
+<P>
+<H2><A NAME="Heading1"></A>Creating Your First Application</H2>
+<P>Your first example is a simple program that displays &quot;Hello World&quot; on
+the screen. For this, you create a workspace and the C++ file required for the program.
+The procedure for writing a C++ program using Visual C++ is simple and easy. Follow
+these steps:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>From the main menu, select Visual C++.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Select File | New from the Visual C++ toolbar.
+	<P>
+	<DT></DT>
+	<DD>Make sure the Projects tab is selected (see Figure A.1).
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Select Win32 Console Application from the options on the left.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('0afig01.gif')"><B>FIGURE A.1.</B></A><B> </B><I>Setting
+up the Hello workspace.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>4. </B>Type <B>Hello</B> on the right side under Project Name.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>Select OK.
+	<P>
+</DL>
+
+<P>Visual C++ creates the workspace of your application. Visual C++ actually creates
+a directory Hello, which enables you to store all files related to a particular project
+in one area. You will begin adding the files you require for this project:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Once again, select File | New from the toolbar.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Select the Files tab if it is not already selected.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Highlight C++ Source File.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Check the Add to Project box on the right side.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>In the File Name edit box, type <B>Helloworld</B> (see Figure A.2).
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>Click OK.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('0afig02.gif')"><B>FIGURE A.2.</B></A><B> </B><I>Setting
+up the Helloworld project.</I></P>
+<P>The Helloworld.cpp file is where you add the C++ source code. All C++ source code
+files have a .cpp extension. Later, I will cover other file types.</P>
+<P>You create all the tutorial examples in this section in a similar way. The only
+difference is that the names of the workspaces and the files are different.</P>
+<P>
+<H3><A NAME="Heading2"></A>Helloworld.cpp</H3>
+<P>The Helloworld program displays HELLO WORLD on the screen. Listing A.1 contains
+the code. Type the code exactly as shown in the Helloworld.cpp window. Do not type
+the line numbers; they are for reference only. C++ is case sensitive, so main is
+not the same as MAIN, which is not the same as Main.</P>
+<P>
+<H4>LISTING A.1. Helloworld.cpp.</H4>
+<PRE> 1: // Workspace Name:   Hello
+ 2: // Program Name:  Helloworld.cpp
+ 3: 
+ 4: # include &lt;iostream.h&gt;
+ 5: 
+ 6: int main()
+ 7: 
+ 8: {
+ 9: cout&lt;&lt; &quot;HELLO WORLD \n&quot;;
+10: return 0;
+11: }
+</PRE>
+<P>To run the program, follow these steps:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select File | Save to save your work.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Select Build | Set Active Configuration<I> </I>(see Figure A.3).
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Highlight Hello - Win32 Debug and click OK (see Figure A.4).
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Select Build | Build Hello.exe.
+	<P>
+</DL>
+
+<P>Visual C++ compiles and links the program to create an executable file. The configuration
+window indicates the success or failure of the compilation. A successful compilation
+returns</P>
+<P>
+<PRE>Hello.exe - 0 error(s), 0 warning(s)
+</PRE>
+<P>If you encounter any errors, verify that all the lines of the program were typed
+exactly as shown.</P>
+<P>To execute the Helloworld program, select Build | Execute Hello.exe.</P>
+<P><A HREF="javascript:popUp('0afig03.gif')"><B>FIGURE A.3.</B></A><B> </B><I>Setting
+the active configuration.</I></P>
+<P><A HREF="javascript:popUp('0afig04.gif')"><B>FIGURE A.4.</B></A><B> </B><I>Selecting
+Win32 Debug.</I></P>
+<P>The program executes by opening an MS-DOS shell and displaying the text HELLO
+WORLD (see Figure A.5).</P>
+<P><A HREF="javascript:popUp('0afig05.gif')"><B>FIGURE A.5.</B></A><B> </B><I>HELLO
+WORLD display.</I></P>
+<P>
+<H4>Components of Helloworld.cpp</H4>
+<P>The first two lines of the program are comment lines:</P>
+<P>
+<PRE>// Workspace Name:   Hello
+// Program Name:  Helloworld.cpp
+</PRE>
+<P>The double slash command (//) tells the compiler to ignore everything after the
+slash. It is good programming practice to comment your work because it makes the
+program easier to read, especially for someone who did not write it. Comments become
+important when you are working on a complex program for months. When you want to
+make changes, comments assist you in recollecting your thoughts from more than a
+month ago.</P>
+<P>The third line begins with the pound symbol (#):</P>
+<P>
+<PRE># include &lt;iostream.h&gt;
+</PRE>
+<P>This is a directive to the preprocessor to search for the filename that follows
+(iostream.h) and include it. The angled brackets (&lt; &gt;) cause the preprocessor
+to search for the file in the default directories. The iostream.h file contains definitions
+for the insertion (&lt;&lt;) and extraction (&gt;&gt;) operators. This directive
+is required to process the cout statement defined on line 9 in the program. The iostream.h
+file is a precompiled header provided with your compiler. You may experiment with
+the Helloworld program by commenting out the include line. To do this, insert the
+backslash (//) before the pound sign (#). When you compile and execute this program,
+you get an error:</P>
+<P>
+<PRE>Compiling...
+Helloworld.cpp
+C:\cplusplus\Hello\Helloworld.cpp(9) : error C2065: 
+&Acirc; `cout' : undeclared identifier
+C:\cplusplus\Hello\Helloworld.cpp(9) : error C2297: `&lt;&lt;' : bad right &Acirc;operand
+Error executing cl.exe.
+Hello.exe - 2 error(s), 0 warning(s)
+</PRE>
+<P>Without the iostream.h file, the program does not recognize the cout command or
+the insertion operator (&lt;&lt;).</P>
+<P>The next line of code, line 6, is actually where program execution begins. This
+is the entry point of your code:</P>
+<P>
+<PRE>int main()
+</PRE>
+<P>This line tells the compiler to process a function named main. Every C++ program
+is a collection of functions. You will cover functions in greater detail later in
+this appendix. For now, you define a function as the entry point for a block of code
+with a given name. The empty parentheses indicate that the function does not pass
+any parameters. Passing parameters by functions is described in the section &quot;Functions
+and Variables,&quot; later in this chapter.</P>
+<P>Every C++ program must have the function main()<I>.</I> It is the entry point
+to begin program execution. If a function returns a value, its name must be preceded
+by the type of value it will return; in this case, main() returns a value of type
+int.</P>
+<P>The block of code defined by any function should be enclosed in curly brackets
+({ }):</P>
+<P>
+<PRE>{
+cout&lt;&lt; &quot;HELLO WORLD \n&quot;;
+return 0;
+}
+</PRE>
+<P>All code within these brackets belongs to the named function--in this case, main().</P>
+<P>The next line executes the cout object. It is followed by the redirection operator
+&lt;&lt;, which passes the information to be displayed. The text to be displayed
+is enclosed in quotes. This is followed by the newline operator (\n). The redirection
+or insertion operator (&lt;&lt;) tells the code that whatever follows is to be inserted
+to cout.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Line 9 ends with a semicolon. All statements in C++ must end
+	with a semicolon. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>Line 10 of the code has a return statement. Programmers often use return statements
+either to return certain values or to return errors. Also remember that on line 7
+when you defined the main() function, you defined its return type to be an integer
+(int). You may rerun this code by deleting the return statement on line 10, in which
+case line 7 would have to be modified as follows:</P>
+<P>
+<PRE>void main()
+</PRE>
+<P>It is good programming practice to include return codes for complex programs.
+They will help you identify and track down bugs in your program.</P>
+<P><B>Functions and Variables</B></P>
+<P>The Helloworld program consists of only one function, main(). A functional C++
+program typically consists of more than a single function. To use a function, you
+must first declare it. A function declaration is also called its prototype. A prototype
+is a concise representation of the entire function. When you prototype a function,
+you are actually writing a statement, and as mentioned before, all statements in
+C++ should end with semicolons. A function prototype consists of a return type, name,
+and parameter list. The return type in the main() function is int, the name is main,
+and the parameter list is (), null.</P>
+<P>A function must have a prototype and a definition. The prototype and the definition
+of a function must agree in terms of return type, name, and parameter list. The only
+difference is that the prototype is a statement and must end with a semicolon. Listing
+A.2 illustrates this point with a simple program to calculate the area of a triangle.</P>
+<P>
+<H4>LISTING A.2. Area.cpp.</H4>
+<PRE> 1: // Workspace:  Triangle
+</PRE>
+<PRE> 2: // Program name:  Area.cpp
+</PRE>
+<PRE> 3: // The area of a triangle is half its base times height
+ 4: // Area of triangle = (Base length of triangle * Height of triangle)/2
+ 5: 
+ 6: #include &lt;iostream.h&gt;       // Precompiled header
+ 7: 
+ 8: double  base,height,area;    // Declaring the variables
+ 9: double Area(double,double);   // Function Prototype/declaration
+10: 
+11: int  main()
+12: {
+13: cout &lt;&lt; &quot;Enter Height of Triangle: &quot;;  // Enter a number
+14: cin &gt;&gt; height;              // Store the input in variable
+15: cout &lt;&lt; &quot;Enter Base of Triangle: &quot;;   // Enter a number
+16: cin &gt;&gt; base;               // Store the input in variable
+17: 
+18: area = Area(base,height);        // Store the result from the Area 		&Acirc;function
+19:                                  // in the variable area
+20: cout &lt;&lt; &quot;The Area of the Triangle is: &quot;&lt;&lt; area &lt;&lt; endl ; // Output the 	&Acirc;area
+21: 
+22: return 0;
+23: }
+24: 
+25: double  Area (double base, double height)    // Function definition
+26: {
+27: area = (0.5*base*height);
+28: return area;
+29: }
+</PRE>
+<P>This program declares three variables, base, height, and area, on line 8. Variables
+store values that are used by the program. The type of a variable specifies the values
+to be stored in the variable. Table A.1 shows the various types supported by C++.</P>
+<P>
+<H4>TABLE A.1. VARIABLE DATA TYPES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Variable Data Type</I></TD>
+		<TD ALIGN="LEFT"><I>Values</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">unsigned short int</TD>
+		<TD ALIGN="LEFT">0 to 65,535</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">short int</TD>
+		<TD ALIGN="LEFT">-32,768 to 32,767</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">unsigned long int</TD>
+		<TD ALIGN="LEFT">0 to 4,294,967,925</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">long int</TD>
+		<TD ALIGN="LEFT">-2,147,483,648 to 2,147,483,647</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">int</TD>
+		<TD ALIGN="LEFT">-2,147,483,648 to 2,147,483,647 (32 bit)</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">unsigned int</TD>
+		<TD ALIGN="LEFT">0 to 4,294,967,295 (32 bit)</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">char</TD>
+		<TD ALIGN="LEFT">256 character values</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">float</TD>
+		<TD ALIGN="LEFT">1.2e-38 to 3.4e38</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">double</TD>
+		<TD ALIGN="LEFT">2.2e-308 to 1.8e308</TD>
+	</TR>
+</TABLE>
+</P>
+<P>To define a variable, you first define its type, followed by the name. You may
+also assign values to variables by using the assignment (=) operator, as in these
+two examples:</P>
+<P>
+<PRE>double base = 5;
+unsigned long int base =5;
+</PRE>
+<P>In C++, you may also define your own type definition. You do this by using the
+keyword typedef, followed by the existing type and name:</P>
+<P>
+<PRE>typedef unsigned long int ULONG;
+ULONG base =5;
+</PRE>
+<P>Defining your own type does save you the trouble of typing the entire declaration.</P>
+<P>The next line of the code, line 9, defines the prototype of your function:</P>
+<P>
+<PRE>double Area (double,double);
+</PRE>
+<P>This function has a type double, a name Area, and a parameter list of two variables
+of type double. When you define the prototype, it is not necessary to define the
+parameters, but it is a good practice to do so. This program takes two inputs from
+the user, namely base and height of the triangle, and calculates the area of the
+triangle. The base, height, and area are all variables. The Helloworld.cpp example
+used the insertion (&lt;&lt;) operator. In this example, you use the extraction (&gt;&gt;)
+operator. The program queries the user to enter a value for the height of the triangle
+on line 13. When the user enters a value for height, the data from the screen is
+extracted and placed into the variable height. The process is repeated for the base
+of the triangle on lines 15 and 16. After accepting the input from the user, the
+function main() passes execution to the function Area(base,height) along with the
+parameter values for base and height. When main()<I> </I>passes the execution to
+the function Area(base, height), it expects a value of type double in return from
+the function. The calculation of the area of the triangle is conducted on line 27:</P>
+<P>
+<PRE>area = (0.5*base*height);
+</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Area is the name of a function, and area is a variable name.
+	Because C++ is case sensitive, it clearly distinguishes these two names. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>This statement uses the standard operators, the assignment operator (=), and the
+multiplication operator (*). The assignment operator assigns the result of (0.5*base*height)
+to the variable area. The multiplication operator (*) calculates the resulting values
+of (0.5*base*height). The assignment operator (=) has an evaluation order from right-to-left.
+Hence, the multiplication is carried out prior to assigning the values to area. The
+five basic mathematical operators are addition (+), subtraction (-), multiplication
+(*), division (/), and modulus (%).</P>
+<P>Line 28 of the Area function returns the value of the variable area to the main()
+function. At this point, the control of the program is returned to line 18 of the
+main() function. The remainder of the program displays the result of area to the
+screen.</P>
+<P>
+<H3><A NAME="Heading3"></A>The if Statement, Operators, and Polymorphism</H3>
+<PRE>While programming large complex programs, it is often necessary to query the user and provide direction to the program based on his input. This is accomplished by using the if statement. The next example demonstrates the application of an if statement. The format of the if statement is
+</PRE>
+<PRE>if (<I>this expression</I>)
+   <I>do this</I>;
+</PRE>
+<P>The if statement is often used in conjunction with relational operators. Another
+format of the if statement is</P>
+<P>
+<PRE>if (<I>this expression</I>)
+   <I>do this</I>;
+else
+   <I>do this</I>;
+</PRE>
+<P>Because if statements often use relational operators, let's review relational
+operators. Relational operators are used to determine if two expressions or numbers
+are equal. If the two expressions or numbers are not equal, the statement will evaluate
+to either 0 or false. Table A.2 lists the six relational operators defined in C++.</P>
+<P>
+<H4>TABLE A.2. RELATIONAL OPERATORS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Operator</I></TD>
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">==</TD>
+		<TD ALIGN="LEFT">Comparative</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">!=</TD>
+		<TD ALIGN="LEFT">Not equal</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&gt;</TD>
+		<TD ALIGN="LEFT">Greater than</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&lt;</TD>
+		<TD ALIGN="LEFT">Less than</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&gt;=</TD>
+		<TD ALIGN="LEFT">Greater than or equal to</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&lt;=</TD>
+		<TD ALIGN="LEFT">Less than or equal to</TD>
+	</TR>
+</TABLE>
+</P>
+<P>C++ also has logical operators. The advantage of logical operators is the ability
+to compare two individual expressions and conclude whether they are true or false.
+Table A.3 lists the three logical operators.</P>
+<P>
+<H4>TABLE A.3. LOGICAL OPERATORS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Symbol</I></TD>
+		<TD ALIGN="LEFT"><I>Operator</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">&amp;&amp;</TD>
+		<TD ALIGN="LEFT">AND</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">||</TD>
+		<TD ALIGN="LEFT">OR</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">!</TD>
+		<TD ALIGN="LEFT">NOT</TD>
+	</TR>
+</TABLE>
+</P>
+<P>An important and powerful feature of C++ is function overloading, or polymorphism.
+<I>Polymorphism</I> is the ability to have more than one function with the same name
+that differ in their parameter lists. The next example is an extension of the previous
+triangle code. In this program, you will calculate the area of a triangle and a circle.
+You will be asked whether you want to calculate the area of a triangle or a circle.
+Depending upon your response, 1 for triangle and 2 for circle, the program collects
+your input and calculates the area. In Listing A.3, the Area function is overloaded.
+The same function name is used to calculate the area of the triangle or the circle.
+The functions differ only in their parameter lists.</P>
+<P>
+<H4>LISTING A.3. Overload.ccp.</H4>
+<PRE> 1: // Workspace Name:  Overload
+ 2: // Program Name:  Overload.cpp
+ 3: 
+ 4: # include &lt;iostream.h&gt;
+ 5: 
+ 6: double  base,height,radius;        // Global variables
+ 7: double  Area_of_triangle,Area_of_circle;  // Global variables
+ 8: int  choice;                // Global variable
+ 9: 
+10: double  Area (double,double);       // Function prototype
+11: double  Area (double);           // Function prototype
+12: 
+13: const double  pi = 3.14;          // Constant variable
+14: 
+15: void main()                 // main function
+16: 
+17: {
+18:   cout &lt;&lt; &quot;To find the area of a Triangle, input 1 \n&quot;;
+19:   cout &lt;&lt; &quot;To find the area of a Circle, input 2 \n&quot;;
+20:   cin &gt;&gt; choice;
+21: 
+22: if (choice == 1)
+23: 
+</PRE>
+<PRE>24: {
+</PRE>
+<PRE>25:   cout &lt;&lt; &quot;Enter the base of the triangle: &quot;;
+26:   cin &gt;&gt; base;
+27:   cout &lt;&lt; &quot;Enter the height of the triangle: &quot;;
+28:   cin &gt;&gt; height;
+29: 
+30: Area_of_triangle = Area(base,height);
+31: 
+32:   cout &lt;&lt; &quot;The Area of the Triangle is: &quot;&lt;&lt;Area_of_triangle&lt;&lt;endl;
+33: }
+34: 
+35: if (choice == 2)
+36: 
+37: {
+38:   cout &lt;&lt; &quot;Enter radius of the Circle: &quot;;
+39:   cin &gt;&gt; radius;
+40:   Area_of_circle = Area(radius);
+41:   cout &lt;&lt; &quot;The area of the Circle is: &quot;&lt;&lt;Area_of_circle&lt;&lt;endl;
+42: }
+43: 
+44: if (choice != 1 &amp;&amp; choice != 2)
+45: 
+46: {
+47:   cout &lt;&lt; &quot;Sorry! You must enter either 1 or 2 \n&quot;;
+48: }
+49: }
+50: 
+51: double Area (double base, double height)
+52: {
+53:   return (0.5*base*height)
+54: }
+55: 
+56: double Area(double radius)
+57: {
+58:   return (pi*radius*radius);
+59: }
+</PRE>
+<H3><A NAME="Heading4"></A>Global and Local Variables</H3>
+<P>In all of the preceding examples, the variables have been declared at the beginning
+of the program, prior to defining the main() function. Declaring variables in this
+fashion is more akin to C programs than C++. They are global variables and can be
+accessed by all the functions. However, you may also define local variables that
+have a scope only in a particular function. Local variables can have the same names
+as the global variables, but they do not change the global variables. Local variables
+refer only to the function in which they are defined. This difference can be confusing
+and lead to erratic results.</P>
+<P>The program in Listing A.4 clearly shows the difference between global and local
+variables. You will calculate the area of a circle using global variables and local
+variables.</P>
+<P>
+<H4>LISTING A.4. Global.cpp.</H4>
+<PRE> 1: // Workspace:  Variable
+ 2: // Program name:  Global.cpp
+ 3: 
+ 4: #include &lt;iostream.h&gt;
+ 5: 
+ 6: double  area;
+ 7: double Area (double);
+ 8: const double pi = 3.14;
+ 9: double  radius = 5;
+10: 
+11: int main()
+12: 
+13: {
+14: cout&lt;&lt;&quot;This Program Calculates The Area Of A Circle \n&quot;;
+15: area = Area (radius);
+16: cout &lt;&lt; &quot;The Area of the Circle is: &quot;&lt;&lt;area&lt;&lt;endl;
+17: cout &lt;&lt; &quot;The Radius In the Main() Function is: &quot;&lt;&lt;radius&lt;&lt;endl;
+18: return 0;
+19: }
+20: 
+21: double  Area (double radius)
+22: {
+23: area = (pi*radius*radius);
+24: cout&lt;&lt;&quot;The Radius In the Area() Function is: &quot;&lt;&lt;radius&lt;&lt;endl;
+25: return area;
+26: }
+</PRE>
+<P>The variable radius is accessible in the main() function and also the Area() function,
+and it is the same. The result of executing this program is shown in Figure A.6.</P>
+<P><A HREF="javascript:popUp('0afig06.gif')"><B>FIGURE A.6.</B></A><B> </B><I>Global.cpp--using
+a global variable.</I></P>
+<P>As the program executes, it shows the value of the variable radius in the different
+functions. You will now modify the global variable to be a local variable. Add an
+additional line to the Area function defining a local variable:</P>
+<P>
+<PRE>double radius = 2;
+</PRE>
+<P>Compile and execute this program. The results are shown in Figure A.7.</P>
+<P><A HREF="javascript:popUp('0afig07.gif')"><B>FIGURE A.7.</B></A><B> </B><I>Global.cpp--global
+and local variables.</I></P>
+<P>You will notice that the value of the variable radius remains unchanged in the
+main() function and changes locally in the Area() function. The area of the circle
+is calculated based on the value of the local variable, whereas at the same time,
+the value of the global variable is not changed but is hidden from the function Area().</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> It is always advisable to differentiate your global and local
+	variables by prefixing them with a g for global and l for local. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H2><A NAME="Heading5"></A>Pointers</H2>
+<P>Pointers are one of the most important features of C++, and they are always confusing
+to new programmers of C++. Pointers work by providing access to the original data
+directly, which increases efficiency. Pointers primarily work with two operators,
+the indirection operator (*) and the address-of operator (&amp;). It is common practice
+to add a p to the beginning of a pointer variable's name to distinguish it from other
+variables. A pointer is just another variable, but the difference is it holds a memory
+address. You declare a pointer by putting an asterisk (*) in front of the pointer
+name. To access the address of the variable, you put the &amp; operator in front
+of the variable name.</P>
+<P>To understand pointers, you need a brief overview of how variables are stored.
+You covered different variable types in Table A.1. Table A.4 shows the size of the
+variable types.</P>
+<P>
+<H4>TABLE A.4. VARIABLE TYPE SIZES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Variable Type</I></TD>
+		<TD ALIGN="LEFT"><I>Size in Bytes</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">unsigned short int</TD>
+		<TD ALIGN="LEFT">2 bytes</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">short int</TD>
+		<TD ALIGN="LEFT">2 bytes</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">unsigned long int</TD>
+		<TD ALIGN="LEFT">4 bytes</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">long int</TD>
+		<TD ALIGN="LEFT">4 bytes</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">int</TD>
+		<TD ALIGN="LEFT">4 bytes (32 bit)</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">unsigned int</TD>
+		<TD ALIGN="LEFT">2 bytes(32 bit)</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">char</TD>
+		<TD ALIGN="LEFT">1 byte</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">float</TD>
+		<TD ALIGN="LEFT">4 bytes</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">double</TD>
+		<TD ALIGN="LEFT">8 bytes</TD>
+	</TR>
+</TABLE>
+</P>
+<P>In the program address.cpp in Listing A.5, the two variables base and radius each
+occupy 8 and 4 bytes. Assume that your computer memory has a certain space to store
+these variables, they are sequentially numbered from 1 through 12, and each space
+is 1 byte. When you declare the variable base of type double, it occupies 8 bytes.
+Assume these 8 bytes reside at locations beginning from 1 through 8. You also declared
+another variable radius of type int, which occupies 4 bytes and its location is byte
+9 through byte 12. The location of each of these variables is termed as its address.
+Hence, the variable base has an address beginning at address 1 and ending at address
+8. Similarly, the variable radius has an address beginning at address 9 and ending
+at address 12. When you use the address-of operator (&amp;) on a variable, this is
+the address returned. The variable base has an address from 1 through 8, but the
+address-of operator returns its address as 1. Internally, the system already knows
+that the total addresses occupied are 8 because you defined its type as double.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> The byte size shown in Table A.4 is not fixed. It can be different
+	depending on your compiler and the hardware on which it runs. To determine the size
+	of the variable for your individual compiler and hardware settings, use the sizeof()
+	function as implemented in Listing A.5 on lines 13 and 16. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>The program in Listing A.5 shows how to access the memory address of variables.</P>
+<P>
+<H4>LISTING A.5. Address.cpp.</H4>
+<PRE> 1: // Workspace:  Pointers
+ 2: // Program name:  Address.cpp
+ 3: 
+ 4: #include &lt;iostream.h&gt;
+ 5: 
+ 6: double base = 5.0;
+ 7: int radius = 2;
+ 8: 
+ 9: void main()
+10: {
+11: cout&lt;&lt;&quot;The VALUE of base is: &quot;&lt;&lt;base&lt;&lt;endl;
+12: cout&lt;&lt;&quot;The ADDRESS of base is: &quot;&lt;&lt;&amp;base&lt;&lt;endl;
+13: cout&lt;&lt;&quot;The SIZE of double base is: &quot;&lt;&lt;sizeof(double)&lt;&lt; &quot;bytes \n&quot;;
+14: cout&lt;&lt;&quot;The VALUE of radius is: &quot;&lt;&lt;radius&lt;&lt;endl;
+15: cout&lt;&lt;&quot;The ADDRESS of radius is: &quot;&lt;&lt;&amp;radius&lt;&lt;endl;
+16: cout&lt;&lt;&quot;The SIZE of integer radius is: &quot;&lt;&lt;sizeof(int)&lt;&lt;&quot; bytes \n&quot;;
+17: }
+</PRE>
+<P>The address of the variables is accessed directly on lines 12 and 15 by using
+the address-of operator (&amp;).The addresses of the variables base and radius are
+shown in Figure A.8. The addresses of the variables depend on your system, so they
+might not be the same.</P>
+<P><A HREF="javascript:popUp('0afig08.gif')"><B>FIGURE A.8.</B></A><B> </B><I>Using
+the address-of operator.</I></P>
+<P>The indirection operator (*) operates by providing access to the value stored
+in the address of the variable. When a pointer is declared for a specific variable
+type (such as int), it should not be used with any other type unless it is recast
+to a new type. You should remember that a pointer is a variable, and like all other
+variables, it should be declared and initialized. A pointer that is not initialized
+could be dangerous. The program in Listing A.5 is modified to access the values of
+the variables radius and base. The modified program is provided in Listing A.6.</P>
+<P>
+<H4>LISTING A.6. Address.cpp.</H4>
+<PRE> 1: // Workspace:  Pointers
+</PRE>
+<PRE> 2: // Program name:  Address.cpp
+ 3: 
+ 4: #include &lt;iostream.h&gt;
+ 5: 
+ 6: double base =5.0;
+ 7: int radius =2;
+ 8: 
+ 9: double *pBase =0;           // Initialize the pointer variable
+10: int *pRadius =0;            // Initialize the pointer variable
+11: 
+12: void main()
+13: {
+14: pBase = &amp;base;                   // Assign the address of base
+15: pRadius = &amp;radius;               // Assign the address of radius
+16: cout&lt;&lt;&quot;The VALUE of base is: &quot;&lt;&lt;base&lt;&lt;endl;    // Output value of base
+17: cout&lt;&lt;&quot;The ADDRESS of base is: &quot;&lt;&lt;&amp;base&lt;&lt;endl; // Output address of           &Acirc;base
+18: cout&lt;&lt;&quot;The SIZE of double base is: &quot;&lt;&lt;sizeof(double)&lt;&lt; &quot;bytes \n 
+19: cout&lt;&lt;&quot;The VALUE of pBase is: &quot;&lt;&lt;*pBase&lt;&lt;endl;  
+	            &Acirc; // Output redirected value of base
+20: 
+21: cout&lt;&lt;&quot;The VALUE of radius is: &quot;&lt;&lt;radius&lt;&lt;endl;     
+	            &Acirc;// Output value of radius
+22: cout&lt;&lt;&quot;The ADDRESS of radius is: &quot;&lt;&lt;&amp;radius&lt;&lt;endl;   
+	            &Acirc;// Output address of base
+23: cout&lt;&lt;&quot;The SIZE of integer radius is: &quot;&lt;&lt;sizeof(int)&lt;&lt;&quot; bytes \n&quot;; 
+24: cout&lt;&lt;&quot;The VALUE of pRadius is: &quot;&lt;&lt;*pRadius&lt;&lt;endl;  
+	            &Acirc;// Output redirected value of radius
+25: 
+26: }
+</PRE>
+<H3><A NAME="Heading6"></A>References</H3>
+<P>An important feature in C++ that is used often with function parameters is <I>references</I>.
+Reference is simply a synonym for variable. Until now, you have passed parameters
+in functions by value. You will learn how to pass parameters by reference. You create
+a reference variable by specifying its type and preceding the name with the reference
+operator (&amp;). If you have a variable float radius, you create a reference with</P>
+<P>
+<PRE>void functionname (float &amp;rfradius);
+</PRE>
+<P>You can give the reference variable any name you want; in the following example,
+the reference variable names have an rf prefix. The advantage of a reference is that
+you can pass it as a parameter, like any other variable. However, unlike regular
+parameters, changes made to the reference's value while in a function are stored
+in the original variable. The example in Listing A.7 shows how the reference changes
+the value of the variable in the main() function.</P>
+<P>
+<H4>LISTING A.7. Refer.cpp.</H4>
+<PRE> 1: // Workspace:  Reference
+ 2: // Program name:  Refer.cpp
+ 3: 
+ 4: #include &lt;iostream.h&gt;
+ 5: 
+ 6: void squareit (float &amp;num);
+ 7: int main()
+ 8: 
+ 9: {
+10: float num=5.0;
+11: 
+12: cout&lt;&lt;&quot;In Main: before squaring number: &quot;&lt;&lt;num*num&lt;&lt;&quot;\n&quot;;
+13: 
+14: squareit (num);
+15: cout&lt;&lt;&quot;In Main: after squaring number: &quot;&lt;&lt;num*num&lt;&lt;&quot;\n&quot;;
+16: return 0;
+17: 
+18: }
+19: 
+20: void  squareit (float &amp;rfnum)
+21: {
+22: 
+23: cout&lt;&lt;&quot;In Squareit: before squaring number: &quot;&lt;&lt;rfnum*rfnum&lt;&lt;&quot;\n&quot;;
+24: 
+25: rfnum = rfnum+5;
+26: 
+27: cout&lt;&lt;&quot;In Squareit: after squaring number: &quot;&lt;&lt;rfnum*rfnum&lt;&lt;&quot;\n&quot;;
+28: 
+29: }
+</PRE>
+<P>You define a function squareit on line 6, and its parameters are references. This
+is the function prototype. On line 10, the variable num is given a value of 5. The
+square of the number is displayed to the screen on line 15. On line 14, you call
+the squareit function.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> You pass the variable num and not its address. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>Only when execution jumps to line 20 from line 14 are the variables identified
+as references. On line 27, the references are squared and displayed. They should
+be the same as the variables because they are just like aliases for the variables.
+On line 25, you add 5 to the reference, which in turn changes the variable num. The
+incremented value is squared and displayed to the screen. Execution returns to main()
+on line 15, where the display confirms the variable was changed. The output for this
+program is shown in Figure A.9.</P>
+<P><A HREF="javascript:popUp('0afig09.gif')"><B>FIGURE A.9.</B></A><B> </B><I>Passing
+parameters by reference.</I>
+
+<DL>
+	<P>
+</DL>
+
+<H2><A NAME="Heading7"></A>Classes</H2>
+<P>In the previous sections, you used data types (int, float, and so on) that are
+inherently built into C++. In large complex programs, it is easier to define your
+own type, which could be a combination of the inherent types. Classes were added
+to C++ primarily for this purpose--to enable the programmer to be able to define
+custom data types and methods. The concept of classes in C++ evolved due to certain
+limitations of the concept of structures in C. To thoroughly understand classes,
+you have to step back into C and understand structures first.</P>
+<P>A structure in C/C++ is a way of representing your own custom data. When you defined
+variables, you first defined their data types, followed by their names:</P>
+<P>
+<PRE>int radius;
+</PRE>
+<P>To define your own data types, you use the keyword struct. The syntax for declaring
+a structure is</P>
+<P>
+<PRE><I>struct</I> [<I>structure_name</I>]
+  {
+  <I>data_members</I>
+  }
+</PRE>
+<P>The <I>data_members</I> of a structure are variables and functions. When functions
+are associated with classes, they are more appropriately referred to as methods.
+From now on, you use the term function for program code that is not a part of a structure
+or class. A reference to methods indicates that the function is associated with a
+class structure. To understand how structures are used, review the example in Listing
+A.8.</P>
+<P>
+<H4>LISTING A.8. Struct.cpp.</H4>
+<PRE> 1: // Workspace Name: Class1
+ 2: // Program Name:  Struct.cpp
+ 3: #include &lt;iostream.h&gt;
+ 4: 
+ 5: struct farm_house 
+ 6: {
+ 7: int pig_values;
+ 8: };
+ 9: 
+10: int main()
+11: {
+12: farm_house pig1, pig2, pig3;
+13: 
+14: pig1.pig_values = 12;
+15: pig2.pig_values = 13;
+16: pig3.pig_values = 14;
+17: 
+18: cout &lt;&lt; &quot;The value of pig1 is &quot; &lt;&lt; pig1.pig_values&lt;&lt; &quot;\n&quot;;
+19: cout &lt;&lt; &quot;The value of pig2 is &quot; &lt;&lt; pig2.pig_values &lt;&lt; &quot;\n&quot;;
+20: cout &lt;&lt; &quot;The value of pig3 is &quot; &lt;&lt; pig3.pig_values &lt;&lt; &quot;\n&quot;;
+21:  
+22: return 0;
+23: }.
+</PRE>
+<P>On line 5, the struct keyword is followed by the name of the structure. The actual
+definition of the structure is enclosed in the curly brackets. This particular structure
+defines a data member of type int and name pig_value. If you remember, I mentioned
+earlier that when you define a structure, you basically define a custom-made data
+type. All data types end with a semicolon, so the structure should also end with
+a semicolon. On line 12, you define three instances of the same type of farm_house,
+each of which contains a single int type variable.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> If you strictly use C, then to define instances on line 12,
+	you must use the keyword struct:</P>
+	<PRE>struct farm_house pig1, pig2, pig3;</PRE>
+
+</BLOCKQUOTE>
+
+<PRE></PRE>
+
+
+<BLOCKQUOTE>
+	<P>This is no longer required in C++. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>On lines 14 through 16, you assign values to the member variables of each structure.
+The structure member operator (.), also called the dot operator, is used to access
+member variables of the structure. On lines 18 through 20, the assigned values are
+output to the screen. Figure A.10 shows the output from this program.</P>
+<P><A HREF="javascript:popUp('0afig10.gif')"><B>FIGURE A.10.</B></A><B> </B><I>Structure
+output.</I></P>
+<P>The most important concept of object-oriented programming is encapsulation. Encapsulation
+can involve one or more classes. Encapsulation promotes safeguards and data hiding.
+The struct.cpp program had no encapsulation or classes. What do encapsulation and
+classes mean in object-oriented programming?</P>
+<P>Let's start with describing the syntax and components of a class:</P>
+<P>
+<PRE><B>class</B> class_name
+{
+<B>public</B>:
+class_name_constructor;
+~class_name_destructor;
+class_method_prototypes();
+class_member_variables;
+<B>private</B>:
+class_method_prototypes();
+class_member_variables;
+};
+</PRE>
+<P>The words in bold are keywords. You declare a class by using the class keyword.
+This is followed by the name of the class. The data and methods of a class are enclosed
+in curly brackets ({ }). The methods of a class are function prototypes. They determine
+the behavior of the objects of your class. The member variables are the variables
+in your class. Classes have constructors and destructors. The methods and variables
+can be classified as either public or private.</P>
+<P>
+<PRE>You will now re-create the previous example of Struct.cpp in Listing A.8, employing the class and encapsulation methodology. The output from this program in Listing A.9 is identical to the previous example, Struct.cpp. 
+</PRE>
+<H4>LISTING A.9. Clasfarm.cpp.</H4>
+<PRE> 1: // Workspace:  Class2
+ 2: // Program Name:  Clasfarm.cpp
+ 3: #include &lt;iostream.h&gt;
+ 4: 
+ 5: class farm_house 
+ 6: {
+ 7: int pig_values;
+ 8: public:
+ 9:  void set(int input);
+10:  int get(void);
+11: };
+12: 
+13: void farm_house::set(int input)
+14: {
+15:   pig_values = input;
+16: }
+17: 
+18: int farm_house::get(void)
+19: {
+20:  return pig_values;
+21: }
+22: 
+23: int main()
+24: {
+25: farm_house pig1, pig2, pig3;
+26: 
+27: 
+28:  pig1.set(12);
+29:  pig2.set(13);
+30:  pig3.set(14);
+31: 
+32:  cout &lt;&lt; &quot;The value of pig1 is &quot; &lt;&lt; pig1.get() &lt;&lt; &quot;\n&quot;;
+33:  cout &lt;&lt; &quot;The value of pig2 is &quot; &lt;&lt; pig2.get() &lt;&lt; &quot;\n&quot;;
+34:  cout &lt;&lt; &quot;The value of pig3 is &quot; &lt;&lt; pig3.get() &lt;&lt; &quot;\n&quot;;
+35: 
+36:  return 0;
+37: 
+38: }
+</PRE>
+<P>Compare the struct declaration of the Struct.cpp program in Listing A.8 (lines
+5 through 7) to the class declaration of the Clasfarm.cpp program in Listing A.9
+(lines 5 through 11). The difference is in the private and public portions of their
+declarations. In the struct declaration, everything is public, whereas in the class
+declaration, you begin with a private section. All data and methods at the beginning
+of a class are private. This means the member variable</P>
+<P>
+<PRE>int pig_values; 
+</PRE>
+<P>is private and hidden to methods outside the class. This means that the variable
+pig_ values is not accessible inside main(). In other words, this member variable
+is hidden. This member variable is accessible to the methods of its class, mainly</P>
+<P>
+<PRE>void set (int input);
+int get(void);
+</PRE>
+<P>These methods are defined to be public. Because they are public, these methods
+can be accessed by any objects of this class. On line 25, you defined pig1, pig2,
+and pig3 to be instances or objects of the class. What? I am sure you are wondering
+why pig1 is an object.</P>
+<P>You defined on line 5 a class farm_house. Remember when you declare a class, all
+you are doing is declaring a new type. When you declare a variable, you declare its
+type and then the variable name, as shown here:</P>
+<P>
+<PRE>long somevariable, anotherone, onemore;
+</PRE>
+<P>Similarly, to define an object of a class, you declare the type, which in this
+case is farm_house, and the object name, which is pig1:</P>
+<P>
+<PRE>farm_house pig1,pig2,pig3;
+</PRE>
+<P>On line 28, you set the value of pig1 to 12. This is done using the dot operator
+(.). The object pig1 has access to the method set(). The set() method is a method
+of the class farm_house, so it has access to its private data. The implementation
+of the set() method is shown on line 13. For the program to know that the set() method
+is within the scope of the class farm_house, you use the scope (::) operator. On
+line 15, the variable input is set to the variable pig_values.</P>
+<P>The class farm_house declared two public methods. The other method is the get()
+method. The get() method is implemented on line 18. The get() method takes no parameters
+but only returns the pig_values because it also is within the scope of the class
+farm_house.</P>
+<P>On line 32, the get() method is again called by the objects pig1, pig2, and pig3
+to return the pig_values to the screen.</P>
+<P>If you compare the two programs struct.cpp and clasfarm.cpp, you notice that one
+is about 23 lines, whereas the other is 38 lines. The code just got longer by implementing
+classes! This is true. The big benefits of using classes are really seen in more
+complex and larger programs. Also, because you hide critical data from the user,
+using classes is safer and less error prone. It enables the compiler to find mistakes
+before they become bugs.</P>
+<P>
+<H3><A NAME="Heading8"></A>Constructors and Destructors</H3>
+<P>Earlier, I defined the syntax of a class. In the syntax, I mentioned constructors
+and destructors. However, in the example clasfarm.cpp, you did not define any constructors
+or destructors. If a constructor or a destructor is not defined, the compiler creates
+one for you.</P>
+<P>
+<H4>The Constructor Function</H4>
+<P>A <I>constructor</I> is a class initialization function that is executed automatically
+when a class instance is created. A constructor must abide by the following rules:</P>
+
+<UL>
+	<LI>The constructor must have the same name as its class name:
+</UL>
+
+<PRE>class farm_house
+{
+public:
+farm_house();    //constructor
+.....
+.....
+}
+</PRE>
+
+<UL>
+	<LI>The constructor cannot be defined with a return value.
+	<P>
+	<LI>A constructor without any arguments is a default constructor.
+	<P>
+	<LI>The constructor must be declared with the public keyword.
+</UL>
+
+<H4>The Destructor Function</H4>
+<P>A destructor function is the opposite of a constructor function, which is executed
+automatically when the block in which the object is initialized is exited. A destructor
+releases the object and hence frees up the memory that was allocated. A destructor
+must abide by the following rules:</P>
+
+<UL>
+	<LI>The destructor must have the same name as the class.
+	<P>
+	<LI>The destructor function must be preceded by ~.
+	<P>
+	<LI>The destructor has neither arguments nor a return value.
+	<P>
+	<LI>The destructor function must be declared with the keyword public.
+</UL>
+
+<PRE>class farm_house
+{
+public:
+farm_house ();        // Constructor function
+~farm_house();        // Destructor function
+.....
+}
+</PRE>
+<H4>Friend Functions and Friend Classes</H4>
+<P>Methods and members that are declared private are accessible only to that part
+of the program that is part of the class. However, a function outside the class or
+another class may be defined as a friend class or function. You can declare an entire
+class or individual functions as friends. You must follow some critical rules when
+declaring friend functions:</P>
+
+<UL>
+	<LI>The use of friends should be kept to a minimum because it overrides the benefit
+	of hiding the data.
+	<P>
+	<LI>Declaring x as a friend of y does not necessarily mean that y has access to the
+	methods and members of x.
+</UL>
+
+<H4>Class Declarations and Definitions</H4>
+<P>Whenever you use classes, they have their own private and public member variables
+and methods. As you saw in the previous Clasfarm.cpp example, the program is getting
+lengthy. There are no hard rules, but there are some standard practices followed
+by almost all programmers. The procedure is to put all class declarations in the
+header files. A header file is a file with an .h or .hpp extension. All the class
+definitions are placed in the .cpp file. The beginning of the .cpp file has an include
+directive for the header file. For example, the clasfarm program would be separated
+into clasfarm.h and Clasfarm.cpp. The Clasfarm.h file would look like Listing A.10.</P>
+<P>
+<H4>LISTING A.10. Clasfarm.h.</H4>
+<PRE> 1: // Workspace:  Class2
+ 2: // Program Name:  Clasfarm.hpp
+ 3: #include &lt;iostream.h&gt;
+ 4: 
+ 5: class farm_house 
+ 6: {
+ 7:  int pig_values;
+ 8: public:
+ 9:  void set(int input);
+10:  int get(void);
+11: };
+</PRE>
+<P>The Clasfarm.cpp file is in Listing A.11.</P>
+<P>
+<H4>LISTING A.11. Clasfarm.cpp.</H4>
+<PRE> 1: #include &lt;clasfarm.h&gt;
+ 2: void farm_house::set(int input)
+ 3: {
+ 4:  pig_values = input;
+ 5: }
+ 6: 
+ 7: int farm_house::get(void)
+ 8: {
+ 9:  return pig_values;
+10: }
+11: 
+12: int main()
+13: {
+14: farm_house pig1, pig2, pig3;
+15: 
+16: 
+17:  pig1.set(12);
+18:  pig2.set(13);
+19:  pig3.set(14);
+20: 
+21:  cout &lt;&lt; &quot;The value of pig1 is &quot; &lt;&lt; pig1.get() &lt;&lt; &quot;\n&quot;;
+22:  cout &lt;&lt; &quot;The value of pig2 is &quot; &lt;&lt; pig2.get() &lt;&lt; &quot;\n&quot;;
+23:  cout &lt;&lt; &quot;The value of pig3 is &quot; &lt;&lt; pig3.get() &lt;&lt; &quot;\n&quot;;
+24: 
+25:  return 0;
+26: 
+27: };
+</PRE>
+<H4>Classes Within a Class</H4>
+<P>It is perfectly legal to have another class declaration within a given class.
+This is often referred to as nesting classes. The following example declares two
+classes, Lot_size and Tax_assessment. The Tax_assessment class object taxes is defined
+within the Lot_size class. The main() method has no objects of the Tax_assessment
+class, so the methods or members of the Tax_assessment class cannot be directly accessed
+from the main() function. Let's review the program in Listing A.12.</P>
+<P>
+<H4>LISTING A.12. Class3.cpp.</H4>
+<PRE> 1: // Workspace Name: Class3
+ 2: // Program Name:   Class3.cpp
+ 3: #include &lt;iostream.h&gt;
+ 4: 
+ 5: class Tax_assessment 
+ 6: {
+ 7:  int city_tax;
+ 8:  int prop_tax;
+ 9: public:
+</PRE>
+<PRE>10:  void set(int in_city, int in_prop)
+</PRE>
+<PRE>11:      {city_tax = in_city; prop_tax = in_prop; }
+12:  int get_prop_tax(void) {return prop_tax;}
+13:  int get_city_tax(void) {return city_tax;}
+14: };
+15: 
+16: 
+17: class Lot_size {
+18:  int length;
+19:  int width;
+20:  Tax_assessment taxes;
+21: public:
+22:  void set(int l, int w, int s, int p) {
+23:     length = l; 
+24:     width = w;
+25:     taxes.set(s, p); }
+26:  int get_area(void) {return length * width;}
+27:  int get_data(void) {return taxes.get_prop_tax() ;}
+28:  int get_data2(void) {return taxes.get_city_tax() ;}
+29: };
+30: 
+31: 
+32: int main()
+33: {
+34: Lot_size small, medium, large;
+35: 
+36:  small.set(5, 5, 5, 25);
+37:  medium.set(10, 10, 10, 50);
+38:  large.set(20, 20, 15, 75);
+39: 
+40: 
+41:  cout &lt;&lt; &quot;For a small lot of area &quot;&lt;&lt; small.get_area ()&lt;&lt; &quot;\n&quot;;
+42:  cout &lt;&lt; &quot;the city taxes are $ &quot;&lt;&lt; small.get_data2 () &lt;&lt; &quot;\n&quot;;
+43:  cout &lt;&lt; &quot;and property taxes are $ &quot; &lt;&lt; small.get_data ()&lt;&lt; &quot;\n&quot;;
+44: 
+45:  cout &lt;&lt; &quot;For a medium lot of area &quot;&lt;&lt; medium.get_area ()&lt;&lt; &quot;\n&quot;;
+46:  cout &lt;&lt; &quot;the city taxes are $ &quot;&lt;&lt; medium.get_data2 () &lt;&lt; &quot;\n&quot;;
+47:  cout &lt;&lt; &quot;and property taxes are $ &quot; &lt;&lt; medium.get_data ()&lt;&lt; &quot;\n&quot;;
+48: 
+49:  cout &lt;&lt; &quot;For a Large lot of area &quot;&lt;&lt; large.get_area ()&lt;&lt; &quot;\n&quot;;
+50:  cout &lt;&lt; &quot;the city taxes are $ &quot;&lt;&lt; large.get_data2 () &lt;&lt; &quot;\n&quot;;
+51:  cout &lt;&lt; &quot;and property taxes are $ &quot; &lt;&lt; large.get_data ()&lt;&lt; &quot;\n&quot;;
+52:  return 0;
+53: }
+</PRE>
+<P>When you execute this program, it outputs the area of an rectangle and also the
+hypothetical taxes on rectangular area. The output is shown in Figure A.11.</P>
+<P><A HREF="javascript:popUp('0afig11.gif')"><B>FIGURE A.11.</B></A><B> </B><I>Output
+from Class3.cpp.</I></P>
+<P>In lines 5 through 14, the class Tax_assessment is defined. It consists of two
+private data members, int city_tax and int prop_tax. The class has three public methods.
+It is important to note the declaration and definition of these methods. In the earlier
+examples, you only declared the methods in the class. The function definitions were
+accessed using the scope (::) operator. In this example, you declare the method and
+also write its definition. This technique is referred to as inline implementation
+of the function. If a function definition is small and concise, this is a good technique
+to employ. This technique is also used to increase program efficiency (speed of execution)
+because the program does not have to jump in and out of a function definition.</P>
+<P>The data members city_tax and prop_tax are private so they can only be accessed
+via their member methods--namely, set(), get_prop_tax(), and get_city_tax().</P>
+<P>Lines 17 through 29 declare the class Lot_size with its data members and methods.
+On line 20, the class Tax_assessment is embedded in this class. The object taxes
+is also declared on this line, and it is under the privacy of the class Lot_size.
+The only methods that would be able to access this object are the ones belonging
+to the Lot_size class. The Lot_size class has four public methods declared and defined
+on line 22 and lines 26 through 28. Line 25 of the set() method has another set()
+method defined. This is not a recursive method but rather another example of function
+overloading. The set() method on line 10 and line 22 differ in the number of parameters.
+The set() method on line 25 can access the object taxes because it is defined under
+the class Tax_assessment on line 20.</P>
+<P>The main() function begins on line 32 and has a return type int. On line 34, the
+objects of class Lot_size are declared. On lines 36 through line 38, the values of
+the objects are set using the set() method. An important point to note is that the
+class Tax_assessment has no objects in the main() method, so you cannot access any
+data member or method of this class from main().</P>
+<P>On line 41, the area of the Lot_size is output by operating the get_area() method
+on an object of class Lot_size. On line 42, the city taxes are output by operating
+the method get_data2 on an object of Lot_size. This approach is required because
+the city_tax is a member data of class Tax_assessment, which cannot be operated on
+directly in the main() method. You use the method get_data2, which is a method of
+Lot_size and has access to the object taxes, which in turn can be accessed via get_city_tax.</P>
+<P>
+<H2><A NAME="Heading9"></A>Inheritance</H2>
+<P>One of the advantages of programming in C++ or any other object-oriented language
+is taking a global to local approach. Suppose you need to develop a program that
+comprehends all metals and their characteristics. If you take the class approach
+of the previous section, you would probably have one class named metals. The data
+members of metals would probably be density and volume. You could have another class
+named gold and one for aluminum. The data members describing gold and aluminum would
+need all the properties of metals in addition to their own data members such as color
+and shine. If you could devise a hierarchy of classes such that the classes for gold
+and aluminum would have only their individual data members but inherit the generic
+properties from the parent metals class--then you would be using inheritance.</P>
+<P>Inheritance is also called derivation. The new class inherits the functionality
+of an existing class. The existing class is called the base class, and the new class
+is called the derived class. A similar inheritance can be derived for animals, mammals,
+and dogs.</P>
+<P>To derive a new class from a base class, you use the colon (:) operator:</P>
+<P>
+<PRE>class human : public mammal
+</PRE>
+<P>In this example, the new class human is derived from the base class mammal. The
+derived class human would have all the functionality of the base class mammal. In
+addition, the human class can have other functionality, such as the ability to drive
+a car and work for food. The example in Listing A.13 shows how to create the objects
+of type human and access its data and functions.</P>
+<P>
+<H4>LISTING A.13. Inherit1.cpp.</H4>
+<PRE> 1: // Workspace Name:  Inherit
+ 2: // Program Name :  Inherit1.cpp
+ 3: 
+ 4: #include &lt;iostream.h&gt;
+ 5: enum GENDER { MALE, FEMALE };
+ 6: 
+ 7: class Mammal
+ 8: {
+ 9: public:
+10:   // constructors
+11:   Mammal():itsAge(35), itsWeight(180){}
+12:   ~Mammal(){}
+13: 
+14:   int GetAge()const { return itsAge; }
+15:   void SetAge(int age) { itsAge = age; }
+16:   int GetWeight() const { return itsWeight; }
+</PRE>
+<PRE>17:   void SetWeight(int weight) { itsWeight = weight; }
+</PRE>
+<PRE>18: 
+19: 
+20: protected:
+21:   int itsAge;
+22:   int itsWeight;
+23:  };
+24: 
+25: class Human : public Mammal
+26: {
+27: public:
+28: 
+29:   // Constructors
+30:   Human():itsGender(MALE){}
+31:   ~Human(){}
+32: 
+33:   GENDER GetGender() const { return itsGender; }
+34:   void SetGender(GENDER gender) { itsGender = gender; }
+35: 
+36:   void Drive() { cout &lt;&lt; &quot;Driving to work...\n&quot;; }
+37:   void Work() { cout &lt;&lt; &quot;working...\n&quot;; }
+38: 
+39: private:
+40:   GENDER itsGender;
+41: };
+42: 
+43: void main()
+44: {
+45:   Human John_doe;
+46:   John_doe.Drive();
+47:   John_doe.Work();
+48:   cout &lt;&lt; &quot;John_doe is &quot; &lt;&lt; John_doe.GetAge() &lt;&lt; &quot; years old\n&quot;;
+49: cout &lt;&lt; &quot;And weighs &quot; &lt;&lt;John_doe.GetWeight() &lt;&lt; &quot; lbs \n&quot;;
+50: }
+</PRE>
+<P>The output from Listing A.13 is shown in Figure A.12.</P>
+<P><A HREF="javascript:popUp('0afig12.gif')"><B>FIGURE A.12.</B></A><B> </B><I>Inheritance
+output.</I></P>
+<P>On line 5, a new keyword enum is defined. Enumerate defines a new data type with
+a list of identifiers. The identifiers are fixed values that increment automatically.
+In this example, the variable MALE has a value 0 and the variable FEMALE has a value
+1 by default. You could also specify a value:</P>
+<P>
+<PRE>enum Alphabets ( A, B, C=5, D=1)
+</PRE>
+<P>In this case, A has a value 0, B is 1, C is 5, and D is 1. If you did not specify
+any values, then</P>
+<P>A is 0</P>
+<P>B is 1</P>
+<P>C is 2</P>
+<P>D is 3</P>
+<P>On line 20, another new keyword protected is defined in the class Mammal. You
+covered public and private in the section on classes where all the data members were
+defined under the private keyword. When the data member is defined as private, the
+derived class cannot access them. For the derived classes to be able to access the
+data members and methods of a class, they must be defined as protected. The protected
+keyword restricts the access only to the derived classes. Another alternative is
+to define these methods and members as public, in which case all classes have free
+access. Although this is a solution, it is not a desired solution because it moves
+you away from encapsulation.</P>
+<P>Line 7 declares the base class Mammal. The constructor is on line 11, and the
+destructor is on line 12. In classes, whenever an object of the class is created,
+the class constructor is called. The constructor class performs an additional function
+of initializing its member data, itsAge(35) and itsWeight(180). This could have been
+accomplished by initializing the member data in the body of the constructor, as shown
+in the following:</P>
+<P>
+<PRE>Mammal()
+{
+itsAge = 35;
+itsWeight = 180;
+};
+</PRE>
+<P>The technique of initializing the data members in the constructor declaration
+(as shown on line 11 of Listing A.14) is far more efficient due to the internal initialization
+of classes in C++. Use this technique whenever possible because it increases code
+efficiency.</P>
+<P>With derived classes, when an object is created in the derived class, the constructor
+of the base class is called first and then the constructor of the derived class is
+called. In this example, when the object John_doe is created for the first time,
+the constructor of the base class Mammal is called. The object John_doe is not created
+until both the base constructor and derived class constructor are called. With destructors,
+the reverse order is followed; when the object John_doe ceases to exist, the derived
+class destructor is called before the base class destructor. On line 25, you define
+the name of the derived class and its relevant base class.</P>
+<P>Line 48 and line 49 are critical in terms of how the data is accessed and output.
+On lines 48 and 49, the Human object John_doe accesses information directly from
+the base class of Mammal. Remember from the example class3.cpp, to output data from
+a nested class, you had to use indirect access to the class Tax_assessment.</P>
+<P>Inheritance is a significant tool in object-oriented programming, and if it's
+used effectively, it provides code reusability. The inherit1.cpp program gave you
+an overall flavor of inheritance and its properties. However, when programs are written
+in real life, they are structured more efficiently. The next program involves a more
+logical and formal process of writing a program.</P>
+<P>Assume you are writing a program for the automobile market. The automobile market
+consists of cars, trucks, minivans, and SUVs (sport utility vehicles). automobile
+is the parent or base class, and the others are the derived classes. Let's start
+by defining the automobile class. Listing A.14 shows the code.</P>
+<P>
+<H4>LISTING A.14. Auto.h.</H4>
+<PRE> 1: // Workspace name: Inherit2
+ 2: // Program name:  Auto.h
+ 3: 
+ 4: #ifndef AUTO_H
+ 5: #define AUTO_H
+ 6: 
+ 7: class automobile 
+ 8: {
+ 9: protected:
+10:  int miles_per_gallon;
+</PRE>
+<PRE>11:  float fuel_capacity;
+</PRE>
+<PRE>12: public:
+13:  void initialize(int in_mpg, float in_fuel);
+14:  int get_mpg(void);
+15:  float get_fuel(void);
+16:  float travel_distance(void);
+17: }
+18: 
+19: #endif
+</PRE>
+<P>Lines 4 and 5 include directives to the preprocessor. The directive on line 4
+is covered in detail toward the end of this section. On line 7, the class automobile
+is defined. This class has two data members and four methods. The class is included
+in the header file only. The definition of the methods of this class are contained
+in the Auto.cpp file in Listing A.15.</P>
+<P>
+<H4>LISTING A.15. Auto.cpp.</H4>
+<PRE> 1: // Workspace name : Inherit2
+ 2: // Program name :  Auto.cpp
+ 3: #include &quot;auto.h&quot;
+ 4: 
+ 5: 
+ 6: void automobile::initialize(int in_mpg, float in_fuel)
+ 7: {
+ 8:  miles_per_gallon = in_mpg;
+ 9:  fuel_capacity = in_fuel;
+10: }
+11: 
+12:        // Get the rated fuel economy - miles per gallon
+13: int automobile::get_mpg()
+14: {
+15:  return miles_per_gallon;
+16: }
+17: 
+18:        // Get the fuel tank capacity
+19: float automobile::get_fuel()
+20: {
+21:  return fuel_capacity;
+22: }
+23: 
+24:        // Return the travel distance possible
+25: float automobile::travel_distance()
+26: {
+27:  return miles_per_gallon * fuel_capacity;
+28: }
+</PRE>
+<P>The method get_mpg provides the value for the miles per gallon for a particular
+vehicle. The get_fuel<I> </I>method provides the gas tank capacity. Next, you define
+the first derived class, a car, in Listing A.16.</P>
+<P>
+<H4>LISTING A.16. Car.h.</H4>
+<PRE> 1: // Workspace name: Inherit2
+ 2: // Program name:  Car.h 
+ 3: 
+ 4: #ifndef CAR_H
+ 5: #define CAR_H
+ 6: 
+ 7: #include &quot;auto.h&quot;
+ 8: 
+ 9: class car : public automobile 
+10: {
+11:  int Total_doors;
+12: public:
+13:  void initialize(int in_mpg, float in_fuel, int door = 4);
+14:  int doors(void);
+15: };
+16: 
+17: #endif
+</PRE>
+<P>The class car is a derived class from the automobile class. Because it is a derived
+class, it has access to all of the methods of the base class automobile. In addition,
+this class has a data member for the number of doors in the car. The methods of this
+class are defined in Car.cpp in Listing A.17.</P>
+<P>
+<H4>LISTING A.17. Car.cpp.</H4>
+<PRE> 1: // Workspace name: Inherit2
+ 2: // Program name:  Car.cpp 
+ 3: 
+ 4: #include &quot;car.h&quot;
+ 5: 
+ 6: void car::initialize(int in_mpg, float in_fuel, int door)
+ 7: {
+ 8:  Total_doors = door;
+</PRE>
+<PRE> 9:  miles_per_gallon = in_mpg;
+</PRE>
+<PRE>10:  fuel_capacity = in_fuel;
+11: }
+12: 
+13: 
+14: int car::doors(void)
+15: {
+16:  return Total_doors;
+17: }
+</PRE>
+<P>The initialization method is defined in lines 6 through 11. It is important to
+note that the base class of the automobile (auto.h) also had an initialization method.
+The initialization in the car class overrides the base class initialization. Last
+but not least is the main() definition. The main() method is defined in Allauto.cpp
+in Listing A.18.</P>
+<P>
+<H4>LISTING A.18. Allauto.cpp.</H4>
+<PRE> 1: // Workspace name: Inherit2
+ 2: // Program name:  Allauto.cpp 
+ 3: 
+ 4: #include &lt;iostream.h&gt;
+ 5: #include &quot;auto.h&quot;
+ 6: #include &quot;car.h&quot;
+ 7: 
+ 8: int main()
+ 9: {
+10: 
+11: car sedan;
+12: 
+13:  sedan.initialize(24, 20.0, 4);
+14:  cout &lt;&lt; &quot;The sedan can travel &quot; &lt;&lt; sedan.travel_distance() &lt;&lt; 
+15:                           &quot; miles.\n&quot;;
+16:  cout &lt;&lt; &quot;The sedan has &quot; &lt;&lt; sedan.doors() &lt;&lt; &quot; doors.\n&quot;;
+17: 
+18:  return 0;
+19: }
+</PRE>
+<P>The main() definition has only one object defined. On line 11, an object of class
+car is declared. The initialization is on line 13. The initialization passes the
+fuel efficiency of the car (miles per gallon) and the tank capacity. This information
+is used to access the method travel_distance in the base class define in auto.cpp.
+The derived class has access to the methods of the base class. Additionally, the
+derived class passes information to its own data member about the number of doors
+in the vehicle. The result of executing this program is shown in Figure A.13.</P>
+<P><A HREF="javascript:popUp('0afig13.gif')"><B>FIGURE A.13.</B></A><B> </B><I>Vehicle
+class results.</I></P>
+<P>You can now add more classes for other vehicle types. You can make your own classes
+for a truck and minivan and derive them from the base class exactly like the car
+class.</P>
+<P>If you add another class for trucks, it is important to include the preprocessor
+directives from Listing A.14's lines 4 and 19. These lines are listed again in the
+following:</P>
+<P>
+<PRE>4    #ifndef AUTO.H
+5    #define AUTO.H
+.
+.
+.
+19    #endif
+</PRE>
+<P>Because the truck class is derived from the parent class automobile, it must include
+the file Auto.h in Truck.h. The header of the car class, Car.h, already includes
+Auto.h for the same reason. Now, if you create a method that uses both the truck
+and car classes, you could potentially include Auto.h twice, which would generate
+in a compiler error. To prevent this, you add lines 4 and 5 of Listing A.14. Line
+4 issues a command to the compiler to verify whether the class AUTO.H has been defined;
+if it hasn't been defined, the program jumps to line 5 and defines it, and if it
+has been defined, the program jumps to line 19 and ends.</P>
+<P>
+<H2><A NAME="Heading10"></A>Summary</H2>
+<P>Congratulations! You have covered almost all of the features and properties of
+C++. You should now have a solid footing to take full advantage of Visual C++ and
+object-oriented programming.</P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch21/ch21.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../apb/apb.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A></P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

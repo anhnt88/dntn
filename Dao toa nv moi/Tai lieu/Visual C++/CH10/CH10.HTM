@@ -1,0 +1,1588 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 10 -- Creating Single Document Interface Applications8</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch09/ch09.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch11/ch11.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 10 -<BR>
+Creating Single Document Interface Applications</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">The Document/View Architecture</A>
+	<LI><A HREF="#Heading2">Creating an SDI Application</A>
+	<UL>
+		<LI><A HREF="#Heading3">Building the Application Shell</A>
+		<LI><A HREF="#Heading4">Creating a Line Class</A>
+		<LI><A HREF="#Heading5">Implementing the Document Functionality</A>
+		<LI><A HREF="#Heading6">Showing the User</A>
+	</UL>
+	<LI><A HREF="#Heading7">Saving and Loading the Drawing</A>
+	<UL>
+		<LI><A HREF="#Heading8">Deleting the Current Drawing</A>
+		<LI><A HREF="#Heading9">Saving and Restoring the Drawing</A>
+	</UL>
+	<LI><A HREF="#Heading10">Interacting with the Menu</A>
+	<UL>
+		<LI><A HREF="#Heading11">Adding Color to the CLine Class</A>
+		<LI><A HREF="#Heading12">Adding Color to the Document</A>
+		<LI><A HREF="#Heading13">Modifying the Menu</A>
+	</UL>
+	<LI><A HREF="#Heading14">Summary</A>
+	<LI><A HREF="#Heading15">Q&amp;A</A>
+	<LI><A HREF="#Heading16">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading17">Quiz</A>
+		<LI><A HREF="#Heading18">Exercise</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+Today you will learn a different way of approaching application development with
+Visual C++ than you have used with the previous days' lessons. Today you will learn
+how to create Single Document Interface (SDI) applications. An SDI application is
+a document-centric application that can only work with one document at a time, and
+can only work with one type of document.</P>
+
+<P>Some good examples of SDI applications are Notepad, WordPad, and Paint. All of
+these applications can do only one type of task and can only work on one task at
+a time. WordPad is almost like an SDI version of Word. It's able to perform a large
+number of the tasks that Word does, but although Word allows you to work on numerous
+documents at the same time, WordPad limits you to only one document.</P>
+<P>Some of the things that you will learn today are</P>
+<P>
+
+<UL>
+	<LI>The Document/View architecture that Visual C++ uses for creating SDI applications.
+	<P>
+	<LI>How to create an SDI application shell.
+	<P>
+	<LI>How to separate your data from the visual representation of the data.
+	<P>
+	<LI>How to encapsulate your data in its own C++ class.
+	<P>
+	<LI>How to create interaction between the data and the menus.
+</UL>
+
+<H2><A NAME="Heading1"></A>The Document/View Architecture</H2>
+<P>When you create an SDI application, more classes are created for an SDI application
+than for a dialog-style application. Each of these classes serves a specific purpose
+in how SDI applications operate. Ignoring the About window dialog class, four specific
+classes make up an SDI application:</P>
+<P>
+
+<UL>
+	<LI>The CWinApp-derived class
+	<P>
+	<LI>The CFrameView-derived class
+	<P>
+	<LI>The CDocument-derived class
+	<P>
+	<LI>The CView-derived class
+</UL>
+
+<P>The CWinApp class creates all the other components in the application. It is the
+class that receives all the event messages and then passes the messages to the CFrameView
+and CView classes.</P>
+<P>The CFrameView class is the window frame. It holds the menu, toolbar, scrollbars,
+and any other visible objects attached to the frame. This class determines how much
+of the document is visible at any time. Very little (if any) of your programming
+efforts on SDI applications will require making any modifications or additions to
+either of these first two classes.</P>
+<P>The CDocument class houses your document. This class is where you will build the
+data structures necessary to house and manipulate the data that makes up your document.
+This class receives input from the CView class and passes display information to
+the CView class. This class is also responsible for saving and retrieving the document
+data from files.</P>
+<P>The CView class is the class that displays the visual representation of your document
+for the user. This class passes input information to the CDocument class and receives
+display information from the CDocument class. Most of the coding that you will do
+for this class consists of drawing the document for the user and handling the input
+from the user. The CView class has several descendent classes that can be used as
+the ancestor for the view class. These descendent classes are listed in Table 10.1.</P>
+<P>
+<H4>TABLE 10.1. THE CView DESCENDENT CLASSES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Class</I></TD>
+		<TD ALIGN="LEFT"><I>Description</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CEditView		</TD>
+		<TD ALIGN="LEFT">Provides the functionality of a edit box control. Can be used to implement simple
+			text-editor functionality.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CFormView		</TD>
+		<TD ALIGN="LEFT">The base class for views containing controls. Can be used to provide form-based documents
+			in applications.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CHtmlView		</TD>
+		<TD ALIGN="LEFT">Provides the functionality of a Web browser. This view directly handles the URL navigation,
+			hyperlinking, and so on. Maintains a history list for browsing forward and back.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CListView		</TD>
+		<TD ALIGN="LEFT">Provides list-control functionality in the Document/View architecture.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRichEditView		</TD>
+		<TD ALIGN="LEFT">Provides character and paragraph formatting functionality. Can be used to implement
+			a word-processor application.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CScrollView		</TD>
+		<TD ALIGN="LEFT">Provides scrolling capabilities to a CView class.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CTreeView		</TD>
+		<TD ALIGN="LEFT">Provides tree-control functionality in the Document/View architecture.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>All four of these classes work together to make up the full functionality of an
+SDI application, as shown in Figure 10.1. By taking advantage of this architecture,
+you can build powerful document-centric applications with relative ease.</P>
+<P><A HREF="javascrip:popUp('10fig01.gif')"><B>FIGURE 10.1.</B></A><B> </B><I>The
+Document/View architecture.</I></P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Don't let the term document mislead you. This doesn't mean that you
+	can only create applications such as word processors and spreadsheets. In this situation,
+	the term document refers to the data that is processed by your application, whereas
+	view refers to the visual representation of that data. For instance, the Solitaire
+	application could be implemented as a Document/View application, with the document
+	being the cards and their position in the playing area. In this case, the view is
+	the display of the cards, drawing each card where the document specifies it should
+	be.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H2><A NAME="Heading2"></A>Creating an SDI Application</H2>
+<P>To get a good idea of how the Document/View architecture works, and of how you
+can use it to build applications, you will build a new version of the drawing application
+you created on Day 3, &quot;Allowing User Interaction--Integrating the Mouse and
+Keyboard in Your Application.&quot; In this version, the user's drawing will be persistent,
+which means it is not erased each time another window is placed in front of the application.
+This version will also be able to save and restore drawings.</P>
+<P>
+<H3><A NAME="Heading3"></A>Building the Application Shell</H3>
+<P>To create the application shell for today's application, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Create a new AppWizard project. Name the project <B>Day10</B>.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>On the first step of the AppWizard, select Single Document.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Use the default values on the second step of the AppWizard.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>On the third step of the AppWizard, uncheck the support for ActiveX
+	Controls.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>On the fourth step of the AppWizard, leave all the default values.
+	Click the Advanced button.
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>In the Advanced Options dialog, enter a three-letter file extension
+	for the files that your application will generate (for example, dhc or dvp). Click
+	the Close button to close the dialog and then click Next to move to the next step
+	of the AppWizard.
+	<P>
+	<DT></DT>
+	<DD><B>7. </B>Use the default settings on the fifth step of the AppWizard.
+	<P>
+	<DT></DT>
+	<DD><B>8. </B>On the sixth and final AppWizard step, you can choose the base class
+	on which your view class will be based. Leave the base class as CView and click Finish.
+	The AppWizard will generate the application shell.
+	<P>
+</DL>
+
+<H3><A NAME="Heading4"></A>Creating a Line Class</H3>
+<P>One of the first issues that you will need to tackle is how to represent your
+data in the document class. For the drawing application, you have a series of lines.
+Each line consists of a starting point and ending point. You might think that you
+can use a series of points for the data representation. If you do this, you also
+have to make special accommodations for where one series of lines between points
+ends and the next begins. It makes much more sense to represent the drawing as a
+series of lines. This allows you to store each individual line that is drawn on the
+window without having to worry where one set of contiguous lines ends and where the
+next begins.</P>
+<P>
+<PRE>Unfortunately, the Microsoft Foundation Classes (MFC) does not have a line object class, although it does have a point object class (CPoint). I guess you'll just have to create your own line class by following these steps:
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>In the Class View tab of the workspace pane, select the top-level object
+	in the tree (Day10 classes). Right-click the mouse and select New Class from the
+	pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>In the New Class dialog, select Generic Class for the class type. Enter
+	CLine for the class name and click in the first line in the Base Class list box.
+	Enter CObject as the base class, leaving the class access as public, as in Figure
+	10.2.
+	<P>
+</DL>
+
+<P><A HREF="javascrip:popUp('10fig06.gif')"><B>FIGURE 10.2.</B></A><B> </B><I>The
+New Class Wizard.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>3. </B>When you click the OK button to add the CLine class, you may be told
+	that the Class Wizard cannot find the appropriate header file for inheriting the
+	CLine class from the CObject class, as in Figure 10.3. Click on the OK button on
+	this message box.
+	<P>
+</DL>
+
+<P><A HREF="javascrip:popUp('10fig07.gif')"><B>FIGURE 10.3.</B></A><B> </B><I>Warning
+about including the base class definition.</I></P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> The appropriate header class is already included in the CLine class
+	files. Until your compiler complains because it can't find the definition for the
+	CObject class, don't worry about this message. However, if you are using a base class
+	that's a bit further down the MFC class hierarchy, you might need to heed this message
+	and add the appropriate header file to the include statements in the class source
+	code file.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>Constructing the CLine Class</H4>
+<P>At this time, your CLine class needs to hold only two data elements, the two end
+points of the line that it represents. You want to add those two data elements and
+add a class constructor that sets both values when creating the class instance. To
+do this, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>In the Class View tab of the workspace pane, select the CLine class.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Right-click the CLine class and choose Add Member Variable from the
+	pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Enter CPoint as the variable type and m_ptFrom as the variable name,
+	and mark the access as Private. Click OK to add the variable.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Repeat steps 2 and 3, naming this variable m_ptTo.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>Right-click the CLine class and choose Add Member Function from the
+	pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>Leave the function type blank, and enter CLine(CPoint ptFrom, CPoint
+	ptTo) for the function declaration. Click OK to add the function.
+	<P>
+	<DT></DT>
+	<DD><B>7. </B>Edit the new function, adding the code in Listing 10.1.
+	<P>
+</DL>
+
+<H4>LISTING 10.1. THE CLine CONSTRUCTOR.</H4>
+<PRE>1: CLine::CLine(CPoint ptFrom, CPoint ptTo)
+2: {
+3:     //Initialize the from and to points
+4:     m_ptFrom = ptFrom;
+5:     m_ptTo = ptTo;
+6: }
+</PRE>
+<P>In this object constructor, you are initializing the from and to points with the
+points that were passed in to the constructor.</P>
+<P>
+<H4>Drawing the CLine Class</H4>
+<P>To follow correct object-oriented design, your CLine class should be able to draw
+itself so that when the view class needs to render the line for the user, it can
+just pass a message to the line object, telling it to draw itself. To add this functionality,
+follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Add a new function to the CLine class by selecting Add Member Function
+	from the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Specify the function type as void and the function declaration as Draw(CDC
+	*pDC).
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Add the code in Listing 10.2 to the Draw function you just added.
+	<P>
+</DL>
+
+<H4>LISTING 10.2. THE CLine Draw FUNCTION.</H4>
+<PRE>1: void CLine::Draw(CDC * pDC)
+2: {
+3:     // Draw the line
+4:     pDC-&gt;MoveTo(m_ptFrom);
+5:     pDC-&gt;LineTo(m_ptTo);
+6: }
+</PRE>
+<P>This function is taken almost directly from the application you built a week ago.
+It's a simple function that moves to the first point on the device context and then
+draws a line to the second point on the device context.</P>
+<P>
+<H3><A NAME="Heading5"></A>Implementing the Document Functionality</H3>
+<P>Now that you have an object to use for representing the drawings made by the user,
+you can store these CLine objects on the document object in a simple dynamic array.
+To hold this array, you can add a CObArray member variable to the document class.</P>
+<P>The CObArray class is an object array class that dynamically sizes itself to accommodate
+the number of items placed in it. It can hold any objects that are descended from
+the CObject class, and it is limited in size only by the amount of memory in the
+system. Other dynamic array classes in MFC include CStringArray, CByteArray, CWordArray,
+CDWordArray, and CPtrArray. These classes differ by the type of objects they can
+hold.</P>
+<P>Add the CObArray to CDay10Doc, using the Add Member Variable Wizard and giving
+it a name of m_oaLines.</P>
+<P>
+<H4>Adding Lines</H4>
+<PRE>The first functionality that you need to add to the document class is the ability to add new lines. This should be a simple process of getting the from and to points, creating a new line object, and then adding it to the object array. To implement this function, add  a new member function to the CDay10Doc class, specifying the type as CLine* and the declaration as AddLine(CPoint ptFrom, CPoint ptTo) with public access. Edit the function, adding the code in Listing 10.3.
+</PRE>
+<H4>LISTING 10.3. THE CDay10Doc AddLine FUNCTION.</H4>
+<PRE> 1: CLine * CDay10Doc::AddLine(CPoint ptFrom, CPoint ptTo)
+ 2: {
+ 3:     // Create a new CLine object
+ 4:     CLine *pLine = new CLine(ptFrom, ptTo);
+ 5:     try
+ 6:     {
+ 7:         // Add the new line to the object array
+ 8:         m_oaLines.Add(pLine);
+ 9:         // Mark the document as dirty
+10:         SetModifiedFlag();
+11:     }
+12:     // Did we run into a memory exception?
+13:     catch (CMemoryException* perr)
+14:     {
+15:         // Display a message for the user, giving him or her the
+16:         // bad news
+17:         AfxMessageBox(&quot;Out of memory&quot;, MB_ICONSTOP | MB_OK);
+18:         // Did we create a line object?
+19:         if (pLine)
+20:         {
+21:             // Delete it
+22:             delete pLine;
+23:             pLine = NULL;
+24:         }
+25:         // Delete the exception object
+26:         perr-&gt;Delete();
+27:     }
+28:     return pLine;
+29: }
+</PRE>
+<P>At first, this function is understandable. You create a new CLine instance, passing
+the from and to points as constructor arguments. Right after that, however, you have
+something interesting, the following flow control construct:</P>
+<P>
+<PRE> 1: try
+ 2: {
+ 3: .
+ 4: .
+ 5: .
+ 6: }
+ 7: catch (...)
+ 8: {
+ 9: .
+10: .
+11: .
+12: }
+</PRE>
+<P>What is this? This construct is an example of structured exception handling. Some
+code could fail because of a factor beyond your control, such as running out of memory
+or disk space, you can place a try section around the code that might have a problem.
+The try section should always be followed by one or more catch sections. If a problem
+occurs during the code in the try section, the program immediately jumps to the catch
+sections. Each catch section specifies what type of exception it handles (in the
+case of the AddLine function, it specifically handles memory exceptions only), and
+if there is a matching catch section for the type of problem that did occur, that
+section of code is executed to give the application a chance to recover from the
+problem. If there is no catch section for the type of problem that did occur, your
+program jumps to a default exception handler, which will most likely shut down your
+application. For more information on structured exception handling, see Appendix
+A, &quot;C++ Review.&quot;</P>
+<P>Within the try section, you add the new CLine instance to the array of line objects.
+Next, you call the SetModifiedFlag function, which marks the document as &quot;dirty&quot;
+(unsaved) so that if you close the application or open another file without saving
+the current drawing first, the application prompts you to save the current drawing
+(with the familiar Yes, No, Cancel message box).</P>
+<P>In the catch section, you inform the user that the system is out of memory and
+then clean up by deleting the CLine object and the exception object.</P>
+<P>Finally, at the end of the function, you return the CLine object to the calling
+routine. This enables the view object to let the line object draw itself.</P>
+<P>
+<H4>Getting the Line Count</H4>
+<P>The next item you will add to the document class is a function to return the number
+of lines in the document. This functionality is necessary because the view object
+needs to loop through the array of lines, asking each line object to draw itself.
+The view object will need to be able to determine the total number of lines in the
+document and retrieve any specific line from the document.</P>
+<P>Returning the number of lines in the document is a simple matter of returning
+the number of lines in the object array, so you can just return the return value
+from the GetSize method of the CObArray class. To implement this function, add a
+new member function to the CDay10Doc class, specifying the type as int and the declaration
+as GetLineCount with public access. Edit the function, adding the code in Listing
+10.4.</P>
+<P>
+<H4>LISTING 10.4. THE CDay10Doc GetLineCount FUNCTION.</H4>
+<PRE>1: int CDay10Doc::GetLineCount()
+2: {
+3:     // Return the array count
+4:     return m_oaLines.GetSize();
+5: }
+</PRE>
+<H4>Retrieving a Specific Line</H4>
+<P>Finally, you need to add a function to return a specific line from the document.
+This is a simple matter of returning the object at the specified position in the
+object array. To implement this function, add a new member function to the CDay10Doc
+class, specifying the type as CLine* and the declaration as GetLine(int nIndex) with
+public access. Edit the function, adding the code in Listing 10.5.</P>
+<P>
+<H4>LISTING 10.5. THE CDay10Doc GetLine FUNCTION.</H4>
+<PRE>1: CLine * CDay10Doc::GetLine(int nIndex)
+2: {
+3:     // Return a pointer to the line object
+4:     // at the specified point in the object array
+5:     return (CLine*)m_oaLines[nIndex];
+6: }</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Notice that the object being returned had to be cast as a pointer
+	to a CLine object. Because the CObArray class is an array of CObjects, every element
+	that is returned by the array is a CObject instance, not a CLine object instance.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading6"></A>Showing the User</H3>
+<P>Now that you have built the capability into the document class to hold the drawing,
+you need to add the functionality to the view object to read the user's drawing input
+and to draw the image. The mouse events to capture the user input are almost identical
+to those you created a week ago. The second part of the functionality that you need
+to implement is drawing the image. You will make an addition to a function that already
+exists in the view object class.</P>
+<P>Before adding these functions, you need to add a member variable to the CDay10View
+class to maintain the previous mouse point, just as you did a week ago. Add a member
+variable to the CDay10View class through the workspace pane, specifying the type
+as CPoint, the name as m_ptPrevPos, and the access as private.</P>
+<P>
+<H4>Adding the Mouse Events</H4>
+<P>To add the mouse events to capture the user's drawing efforts, open the Class
+Wizard and add functions to the CDay10View class for the WM_LBUTTONDOWN, WM_LBUTTONUP,
+and WM_MOUSEMOVE event messages. Edit the functions as in Listing 10.6.</P>
+<P>
+<H4>LISTING 10.6. THE CDay10View MOUSE FUNCTIONS.</H4>
+<PRE> 1: void CDay10View::OnLButtonDown(UINT nFlags, CPoint point)
+ 2: {
+ 3:     // TODO: Add your message handler code here and/or call default
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Capture the mouse, so no other application can
+10:     // grab it if the mouse leaves the window area
+11:     SetCapture();
+12:     // Save the point
+13:     m_ptPrevPos = point;
+14: 
+15:     ///////////////////////
+16:     // MY CODE ENDS HERE
+17:     ///////////////////////
+18: 
+19:     CView::OnLButtonDown(nFlags, point);
+20: }
+21: 
+22: void CDay10View::OnLButtonUp(UINT nFlags, CPoint point)
+23: {
+24:     // TODO: Add your message handler code here and/or call default
+25: 
+26:     ///////////////////////
+27:     // MY CODE STARTS HERE
+28:     ///////////////////////
+29: 
+30:     // Have we captured the mouse?
+31:     if (GetCapture() == this)
+32:         // If so, release it so other applications can
+33:         // have it
+34:         ReleaseCapture();
+35: 
+36:     ///////////////////////
+37:     // MY CODE ENDS HERE
+38:     ///////////////////////
+39: 
+40:     CView::OnLButtonUp(nFlags, point);
+41: }
+42: 
+43: void CDay10View::OnMouseMove(UINT nFlags, CPoint point)
+44: {
+45:     // TODO: Add your message handler code here and/or call default
+46: 
+47:     ///////////////////////
+48:     // MY CODE STARTS HERE
+49:     ///////////////////////
+50: 
+51:     // Check to see if the left mouse button is down
+52:     if ((nFlags &amp; MK_LBUTTON) == MK_LBUTTON)
+53:     {
+54:         // Have we captured the mouse?
+55:         if (GetCapture() == this)
+56:         {
+57:             // Get the Device Context
+58:             CClientDC dc(this);
+59: 
+60:             // Add the line to the document
+61:             CLine *pLine = GetDocument()-&gt;AddLine(m_ptPrevPos, point);
+62: 
+63:             // Draw the current stretch of line
+64:             pLine-&gt;Draw(&amp;dc);
+65: 
+66:             // Save the current point as the previous point
+67:             m_ptPrevPos = point;
+68:         }
+69:     }
+70: 
+71:     ///////////////////////
+</PRE>
+<PRE>72:     // MY CODE ENDS HERE
+</PRE>
+<PRE>73:     ///////////////////////
+74: 
+75:     CView::OnMouseMove(nFlags, point);
+76: }
+</PRE>
+<P>In the OnLButtonDown function, the first thing you do is call the SetCapture function.
+This function &quot;captures&quot; the mouse, preventing any other applications from
+receiving any mouse events, even if the mouse leaves the window space of this application.
+This enables the user to drag the mouse outside the application window while drawing
+and then drag the mouse back into the application window, without stopping the drawing.
+All mouse messages are delivered to this application until the mouse is released
+in the OnLButtonUp function, using the ReleaseCapture function. In the meantime,
+by placing the GetCapture function in an if statement and comparing its return value
+to this, you can determine whether your application has captured the mouse. If you
+capture the mouse, you want to execute the rest of the code in those functions; otherwise,
+you don't.</P>
+<P>In the OnMouseMove function, after you create your device context, you do several
+things in a single line of code. The line</P>
+<P>
+<PRE>CLine *pLine = GetDocument()-&gt;AddLine(m_ptPrevPos, point);
+</PRE>
+<P>creates a new pointer to a CLine class instance. Next, it calls the GetDocument
+function, which returns a pointer to the document object. This pointer is used to
+call the document class's AddLine function, passing the previous and current points
+as arguments. The return value from the AddLine function is used to initialize the
+CLine object pointer. The CLine pointer can now be used to call the line object's
+Draw function.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> A pointer is the address of an object. It is used to pass an object
+	more efficiently around a program. Passing a pointer to an object, instead of the
+	object itself, is like telling someone that the remote control is &quot;on the couch
+	between the second and third cushion, beside the loose pocket change&quot; instead
+	of handing the remote to the person. Actually, in programming terms, handing the
+	remote to the person requires making an exact copy of the remote and handing the
+	copy to the other person. It is obviously more efficient to tell the person where
+	to find the remote than to manufacture an exact copy of the remote.<BR>
+	The notation -&gt; denotes that the object's functions or properties are accessed
+	through a pointer, as opposed to directly through the object itself with the period
+	(.) notation.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H4>Drawing the Painting</H4>
+<P>In the view class, the function OnDraw is called whenever the image presented
+to the user needs to be redrawn. Maybe another window was in front of the application
+window, the window was just restored from being minimized, or a new document was
+just loaded from a file. Why the view needs to be redrawn doesn't matter. All you
+need to worry about as the application developer is adding the code to the OnDraw
+function to render the document that your application is designed to create.</P>
+<P>Locate the OnDraw function in the CDay10View class and add the code in Listing
+10.7.</P>
+<P>
+<H4>LISTING 10.7. THE CDay10View OnDraw FUNCTION.</H4>
+<PRE> 1: void CDay10View::OnDraw(CDC* pDC)
+ 2: {
+ 3:     CDay10Doc* pDoc = GetDocument();
+ 4:     ASSERT_VALID(pDoc);
+ 5: 
+ 6:     // TODO: add draw code for native data here
+ 7: 
+ 8:     ///////////////////////
+ 9:     // MY CODE STARTS HERE
+10:     ///////////////////////
+11: 
+12:     // Get the number of lines in the document
+13:     int liCount = pDoc-&gt;GetLineCount();
+14: 
+15:     // Are there any lines in the document?
+16:     if (liCount)
+17:     {
+18:         int liPos;
+19:         CLine *lptLine;
+20: 
+21:         // Loop through the lines in the document
+22:         for (liPos = 0; liPos &lt; liCount; liPos++)
+23:         {
+24:             // Get the from and to point for each line
+25:             lptLine = pDoc-&gt;GetLine(liPos);
+26:             // Draw the line
+27:             lptLine-&gt;Draw(pDC);
+28:         }
+29:     }
+30: 
+31:     ///////////////////////
+32:     // MY CODE ENDS HERE
+33:     ///////////////////////
+34: }
+</PRE>
+<P>In this function, the first thing you did was find out how many lines are in the
+document to be drawn. If there aren't any lines, then there is nothing to do. If
+there are lines in the document, you loop through the lines using a for loop, getting
+each line object from the document and then calling the line object's Draw function.</P>
+<P>Before you can compile and run your application, you'll need to include the header
+file for the Cline class in the source code file for the document and view classes.
+To add this to your application, edit both of these files (Day10Doc.cpp and Day10View.cpp),
+adding the Line.h file to the includes, as shown in Listing 10.8.</P>
+<P>
+<H4>LISTING 10.8. THE CDay10Doc includes.</H4>
+<PRE> 1: #include &quot;stdafx.h&quot;
+ 2: #include &quot;Day10.h&quot;
+ 3: #include &quot;MainFrm.h&quot;
+ 4: #include &quot;Line.h&quot;
+ 5: #include &quot;Day10Doc.h&quot;
+</PRE>
+<P>At this point, you should be able to compile and run your application, drawing
+figures in it as shown in Figure 10.4. If you minimize the window and then restore
+it, or if you place another application window in front of your application window,
+your drawing should still be there when your application window is visible again
+(unlike the application you built a week ago).</P>
+<P><A HREF="javascrip:popUp('10fig08.gif')"><B>FIGURE 10.4.</B></A><B> </B><I>Drawing
+with your application.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading7"></A>Saving and Loading the Drawing</H2>
+<P>Now that you can create drawings that don't disappear the moment you look away,
+it'd be nice if you could make them even more persistent. If you play with the menus
+on your application, it appears that the Open, Save, and Save As menu entries on
+the File menu activate, but they don't seem to do anything. The printing menu entries
+all work, but the entries for saving and loading a drawing don't. Not even the New
+menu entry works! Well, you can do something to fix this situation.</P>
+<P>
+<H3><A NAME="Heading8"></A>Deleting the Current Drawing</H3>
+<P>If you examine the CDay10Doc class, you'll see the OnNewDocument function that
+you can edit to clear out the current drawing. Wrong! This function is intended for
+initializing any class settings for starting work on a new drawing and not for clearing
+out an existing drawing. Instead, you need to open the Class Wizard and add a function
+on the DeleteContents event message. This event message is intended for clearing
+the current contents of the document class. Edit this new function, adding the code
+in Listing 10.9.</P>
+<P>
+<H4>LISTING 10.9. THE CDay10Doc DeleteContents FUNCTION.</H4>
+<PRE> 1: void CDay10Doc::DeleteContents()
+ 2: {
+ 3:     // TODO: Add your specialized code here and/or call the base class
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Get the number of lines in the object array
+10:     int liCount = m_oaLines.GetSize();
+11:     int liPos;
+12: 
+13:     // Are there any objects in the array?
+14:     if (liCount)
+15:     {
+16:         // Loop through the array, deleting each object
+17:         for (liPos = 0; liPos &lt; liCount; liPos++)
+18:             delete m_oaLines[liPos];
+19:         // Reset the array
+20:         m_oaLines.RemoveAll();
+21:     }
+22: 
+23:     ///////////////////////
+24:     // MY CODE ENDS HERE
+25:     ///////////////////////
+26: 
+27:     CDocument::DeleteContents();
+28: }
+</PRE>
+<P>This function loops through the object array, deleting each line object in the
+array. Once all the lines are deleted, the array is reset by calling its RemoveAll
+method. If you compile and run your application, you'll find that you can select
+File|New, and if you decide not to save your current drawing, your window is wiped
+clean.</P>
+<P>
+<H3><A NAME="Heading9"></A>Saving and Restoring the Drawing</H3>
+<P>Adding the functionality to save and restore your drawings is pretty easy to implement,
+but it might not be so easy to understand. That's okay; you'll spend an entire day
+on understanding saving and restoring files, also known as serialization, in three
+days. In the meantime, find the Serialize function in the CDay10Doc class. The function
+should look something like</P>
+<P>
+<PRE> 1: void CDay10Doc::Serialize(CArchive&amp; ar)
+ 2: {
+ 3:     if (ar.IsStoring())
+ 4:     {
+ 5:         // TODO: add storing code here
+ 6:     }
+ 7:     else
+ 8:     {
+ 9:         // TODO: add loading code here
+10:     }
+11: }
+</PRE>
+<P>Remove all the contents of this function, and edit the function so that it looks
+like Listing 10.10.</P>
+<P>
+<H4>LISTING 10.10. THE CDay10Doc Serialize FUNCTION.</H4>
+<PRE> 1: void CDay10Doc::Serialize(CArchive&amp; ar)
+ 2: {
+ 3:     ///////////////////////
+ 4:     // MY CODE STARTS HERE
+ 5:     ///////////////////////
+ 6: 
+ 7:     // Pass the serialization on to the object array
+ 8:     m_oaLines.Serialize(ar);
+ 9: 
+10:     ///////////////////////
+11:     // MY CODE ENDS HERE
+12:     ///////////////////////
+13: }
+</PRE>
+<P>This function takes advantage of the functionality of the CObArray class. This
+object array will pass down its array of objects, calling the Serialize function
+on each of the objects. This means that you need to add a Serialize function to the
+CLine class. Specify it as a void function type with the declaration of Serialize(CArchive&amp;
+ar). Edit the function, adding the code in Listing 10.11.</P>
+<P>
+<H4>LISTING 10.11. THE CLine Serialize FUNCTION.</H4>
+<PRE> 1: void CLine::Serialize(CArchive &amp;ar)
+</PRE>
+<PRE> 2: {
+ 3:     CObject::Serialize(ar);
+ 4: 
+ 5:     if (ar.IsStoring())
+ 6:         ar &lt;&lt; m_ptFrom &lt;&lt; m_ptTo;
+ 7:     else
+ 8:         ar &gt;&gt; m_ptFrom &gt;&gt; m_ptTo;
+ 9: }
+</PRE>
+<P>This function follows basically the same flow that the original Serialize function
+would have followed in the CDay10Doc class. It uses the I/O stream functionality
+of C++ to save and restore its contents.</P>
+<P>At this point, if you compile and run your application, you expect the save and
+open functions to work. Unfortunately, they don't (yet). If you run your application
+and try to save a drawing, a message box will tell you that the application was unable
+to save the file, as in Figure 10.5.</P>
+<P><A HREF="javascrip:popUp('10fig09.gif')"><B>FIGURE 10.5.</B></A><B> </B><I>Unable
+to save drawings.</I></P>
+
+<P>The reason that you are unable to save your drawing is that Visual C++ must be
+told that a class should be serializable. To do this, you add one line to the CLine
+class header file and one line to the CLine source code file. Open the CLine header
+file (Line.h), and add the DECLARE_SERIAL line in Listing 10.12 just after the first
+line of the class definition.</P>
+<P>
+<H4>LISTING 10.12. THE Line.h EDIT FOR SERIALIZATION.</H4>
+<PRE>1: class CLine : public CObject
+2: {
+3:     DECLARE_SERIAL (CLine)
+4: public:
+5:     CLine(CPoint ptFrom, CPoint ptTo, UINT nWidth, COLORREF crColor);
+</PRE>
+<P>Next, open the CLine source code file, and add the IMPLEMENT_SERIAL line in Listing
+10.13 just before the class constructor functions.</P>
+<P>
+<H4>LISTING 10.13. THE Line.cpp EDIT FOR SERIALIZATION.</H4>
+<PRE> 1: // Line.cpp: implementation of the CLine class.
+ 2: //
+ 3: //////////////////////////////////////////////////////////////////////
+ 4: 
+ 5: #include &quot;stdafx.h&quot;
+ 6: #include &quot;Day10.h&quot;
+ 7: #include &quot;Line.h&quot;
+ 8: 
+ 9: #ifdef _DEBUG
+10: #undef THIS_FILE
+11: static char THIS_FILE[]=__FILE__;
+12: #define new DEBUG_NEW
+13: #endif
+14: 
+15: IMPLEMENT_SERIAL (CLine, CObject, 1)
+16: //////////////////////////////////////////////////////////////////////
+17: // Construction/Destruction
+18: //////////////////////////////////////////////////////////////////////
+19: 
+20: CLine::CLine()
+21: {
+22: 
+23: }
+</PRE>
+<P>Now if you compile and run your application, you should be able to draw your own
+self-portrait and save it for posterity, as shown in Figure 10.6.</P>
+<P><A HREF="javascrip:popUp('10fig10.gif')"><B>FIGURE 10.6.</B></A><B> </B><I>My
+self-portrait.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading10"></A>Interacting with the Menu</H2>
+<P>Now that you have a working drawing program, it would be nice if the user could
+choose the color with which she wants to draw. Adding this functionality requires
+making changes in the CLine class to associate the color with the line and to CDay10Doc
+to maintain the currently selected color. Finally, you need to add a pull-down menu
+to select the desired color.</P>
+<P>
+<H3><A NAME="Heading11"></A>Adding Color to the CLine Class</H3>
+<P>The changes to the CLine class are fairly straightforward. The first thing that
+you need to do is to add another member variable to the CLine class to hold the color
+of each line. Next, you need to modify the class constructor to add color to the
+list of attributes to be passed in. Third, you need to modify the Draw function to
+use the specified color. Finally, you need to modify the Serialize function to save
+and restore the color information along with the point information. To do all these
+things, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select the CLine class in the Class View tab of the workspace pane.
+	Right-click the mouse and select Add Member Variable from the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Specify the variable type as COLORREF, the name as m_crColor, and the
+	access as private. Click OK to add the variable.
+	<P>
+	<DD><B>3. </B>Right-click the CLine constructor in the Class View tree. Select Go
+	to Declaration from the pop-up menu.
+	<DT></DT>
+	<DD><B>4. </B>Add COLORREF crColor as a third argument to the constructor declaration.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>Right-click the CLine constructor in the Class View tree. Select Go
+	to Definition from the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>Modify the constructor to add the third argument and to set the m_crColor
+	member to the new argument, as in Listing 10.14.
+	<P>
+</DL>
+
+<H4>LISTING 10.14. THE MODIFIED CLine CONSTRUCTOR.</H4>
+<PRE>1: CLine::CLine(CPoint ptFrom, CPoint ptTo, COLORREF crColor)
+2: {
+3:     //Initialize the from and to points
+4:     m_ptFrom = ptFrom;
+5:     m_ptTo = ptTo;
+6:     m_crColor = crColor;
+7: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>7. </B>Scroll down to the Draw function and modify it as in Listing 10.15.
+	<P>
+</DL>
+
+<H4>LISTING 10.15. THE MODIFIED Draw FUNCTION.</H4>
+<PRE> 1: void CLine::Draw(CDC * pDC)
+ 2: {
+ 3:     // Create a pen
+ 4:     CPen lpen (PS_SOLID, 1, m_crColor);
+ 5: 
+ 6:     // Set the new pen as the drawing object
+ 7:     CPen* pOldPen = pDC-&gt;SelectObject(&amp;lpen);
+ 8:     // Draw the line
+ 9:     pDC-&gt;MoveTo(m_ptFrom);
+10:     pDC-&gt;LineTo(m_ptTo);
+11:     // Reset the previous pen
+12:     pDC-&gt;SelectObject(pOldPen);
+13: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>8. </B>Scroll down to the Serialize function and modify it as in Listing 10.16.
+	<P>
+</DL>
+
+<H4>LISTING 10.16. THE MODIFIED Serialize FUNCTION.</H4>
+<PRE> 1: void CLine::Serialize(CArchive &amp;ar)
+ 2: {
+ 3:     CObject::Serialize(ar);
+ 4: 
+ 5:     if (ar.IsStoring())
+ 6:         ar &lt;&lt; m_ptFrom &lt;&lt; m_ptTo &lt;&lt; (DWORD) m_crColor;
+ 7:     else
+ 8:         ar &gt;&gt; m_ptFrom &gt;&gt; m_ptTo &gt;&gt; (DWORD) m_crColor;
+ 9: }
+</PRE>
+<P>The only part of any of these steps that should be a surprise is that you are
+capturing the return value from the SelectObject function when you are specifying
+the pen to use in drawing the lines. You didn't do this last week. The return value
+from the SelectObject function is the pen that was in use before you changed it.
+This way, you can use the previous pen to restore it to the device context when you
+are done drawing.</P>
+<P>
+<H3><A NAME="Heading12"></A>Adding Color to the Document</H3>
+<P>The changes that you need to make to the CDay10Doc class are just slightly more
+extensive than those made to the CLine class. You need to add a member variable to
+hold the current color and a color table to convert color IDs into RGB values. You
+need to initialize the current color variable in the OnNewDocument function. Then,
+you need to modify the AddLine function to add the current color to the CLine constructor.
+Finally, you add a function to return the current color. That's all that you need
+to do for now until you start adding menu message handlers for setting the current
+color. To do these things, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select the CDay10Doc class in the Class View tab on the workspace pane.
+	Right-click the mouse and choose Add Member Variable from the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Specify the variable type as UINT, the name as m_nColor, and the access
+	as private. Click OK to add the variable.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Repeat step 1.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Specify the variable type as &quot;static const COLORREF,&quot; the
+	name as m_crColors[8], and the access as public.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>Open the CDay10Doc source code (Day10Doc.cpp) and add the population
+	of the m_crColors color table as in Listing 10.17.
+	<P>
+</DL>
+
+<H4>LISTING 10.17. THE COLOR TABLE SPECIFICATION.</H4>
+<PRE> 1:     //}}AFX_MSG_MAP
+ 2: END_MESSAGE_MAP()
+ 3: 
+ 4: const COLORREF CDay10Doc::m_crColors[8] = {
+ 5:     RGB(   0,   0,   0),    // Black
+ 6:     RGB(   0,   0, 255),    // Blue
+ 7:     RGB(   0, 255,   0),    // Green
+ 8:     RGB(   0, 255, 255),    // Cyan
+ 9:     RGB( 255,   0,   0),    // Red
+10:     RGB( 255,   0, 255),    // Magenta
+11:     RGB( 255, 255,   0),    // Yellow
+12:     RGB( 255, 255, 255)    // White
+13: };
+14: 
+15: ////////////////////////////////////////////////////////////////////// 16: // CDay10Doc construction/destruction
+17: 
+</PRE>
+<PRE>18: CDay10Doc::CDay10Doc()
+</PRE>
+<PRE>19: .
+20: .
+21: .
+22: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>6. </B>Scroll down to the OnNewDocument function and edit it as in Listing
+	10.18.
+	<P>
+</DL>
+
+<H4>LISTING 10.18. THE MODIFIED OnNewDocument FUNCTION.</H4>
+<PRE> 1: BOOL CDay10Doc::OnNewDocument()
+ 2: {
+ 3:     if (!CDocument::OnNewDocument())
+ 4:         return FALSE;
+ 5: 
+ 6:     // TODO: add reinitialization code here
+ 7:     // (SDI documents will reuse this document)
+ 8: 
+ 9:     ///////////////////////
+10:     // MY CODE STARTS HERE
+11:     ///////////////////////
+12: 
+13:     // Initialize the color to black
+14:     m_nColor = ID_COLOR_BLACK - ID_COLOR_BLACK;
+15: 
+16:     ///////////////////////
+17:     // MY CODE ENDS HERE
+18:     ///////////////////////
+19: 
+20:     return TRUE;
+21: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>7. </B>Scroll down to the AddLine function, and modify it as in Listing 10.19.
+	<P>
+</DL>
+
+<H4>LISTING 10.19. THE MODIFIED AddLine FUNCTION.</H4>
+<PRE> 1: CLine * CDay10Doc::AddLine(CPoint ptFrom, CPoint ptTo)
+ 2: {
+ 3:     // Create a new CLine object
+ 4:     CLine *pLine = new CLine(ptFrom, ptTo, m_crColors[m_nColor]);
+ 5:     try
+ 6:     {
+ 7:         // Add the new line to the object array
+ 8:         m_oaLines.Add(pLine);
+ 9:         // Mark the document as dirty
+10:         SetModifiedFlag();
+11:     }
+12:     // Did we run into a memory exception?
+13:     catch (CMemoryException* perr)
+14:     {
+15:         // Display a message for the user, giving him or her the
+16:         // bad news
+17:         AfxMessageBox(&quot;Out of memory&quot;, MB_ICONSTOP | MB_OK);
+18:         // Did we create a line object?
+19:         if (pLine)
+20:         {
+21:             // Delete it
+22:             delete pLine;
+23:             pLine = NULL;
+24:         }
+25:         // Delete the exception object
+26:         perr-&gt;Delete();
+27:     }
+28:     return pLine;
+29: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>8. </B>Add a new member function to the CDay10Doc class. Specify the function
+	type as UINT, the declaration as GetColor, and the access as public.
+	<P>
+	<DT></DT>
+	<DD><B>9. </B>Edit the GetColor function, adding the code in Listing 10.20.
+	<P>
+</DL>
+
+<H4>LISTING 10.20. THE GetColor FUNCTION.</H4>
+<PRE>1: UINT CDay10Doc::GetColor()
+</PRE>
+<PRE>2: {
+</PRE>
+<PRE>3:     // Return the current color
+4:     return ID_COLOR_BLACK + m_nColor;
+5: }
+</PRE>
+<P>In the OnNewDocument and the GetColor functions, the color is added and subtracted
+from ID_COLOR_BLACK. This is the lowest numbered color menu ID when you add the menu
+entries. These calculations maintain the variable as a number between 0 and 7, but
+when working with the menus, they allow comparison with the actual menu IDs.</P>
+<P>
+<H3><A NAME="Heading13"></A>Modifying the Menu</H3>
+<P>Now comes the fun part. You need to add a new pull-down menu to the main menu.
+You need to add menu entries for all the colors in the color table. You need to add
+message handlers for all the color menu entries. Finally, you need to add event handlers
+to check the menu entry that is the current color. To do all of this, follow these
+steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select the Resource View tab in the workspace pane. Expand the tree
+	so that you can see the contents of the Menu folder. Double-click the menu resource.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Grab the blank top-level menu (at the right end of the menu bar) and
+	drag it to the left, dropping it in front of the View menu entry.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Open the properties for the blank menu entry. Specify the caption as
+	&amp;Color. Close the properties dialog.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Add submenu entries below the Color top-level menu. Specify the submenus
+	in order, setting their properties as specified in Table 10.2. You should wind up
+	with a menu looking like Figure 10.7.
+	<P>
+</DL>
+
+<P><A HREF="javascrip:popUp('10fig11.gif')"><B>FIGURE 10.7.</B></A><B> </B><I>The
+Color menu as designed.</I></P>
+
+<P><I></I>
+<H4>TABLE 10.2. MENU PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Menu Entry		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">ID_COLOR_BLACK		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Black		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Menu Entry		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">ID_COLOR_BLUE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">B&amp;lue		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Menu Entry		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">ID_COLOR_GREEN		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Green		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Menu Entry		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">ID_COLOR_CYAN		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Cyan		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Menu Entry		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">ID_COLOR_RED		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Red		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Menu Entry		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">ID_COLOR_MAGENTA		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Magenta		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Menu Entry		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">ID_COLOR_YELLOW		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;Yellow		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Menu Entry		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">ID_COLOR_WHITE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">&amp;White		</TD>
+	</TR>
+</TABLE>
+</P>
+
+<DL>
+	<DT><B></B></DT>
+	<DD><B>5. </B>Open the Class Wizard. Select the CDay10Doc in the Class Name combo
+	box.
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>Add functions for both the COMMAND and UPDATE_COMMAND_UI event messages
+	for all the color menu entries.
+	<P>
+	<DT></DT>
+	<DD><B>7. </B>After the final menu entry function has been added, click Edit Code.
+	<P>
+	<DT></DT>
+	<DD><B>8. </B>Edit the Black menu functions as in Listing 10.21.
+	<P>
+</DL>
+
+<H4>LISTING 10.21. THE BLACK MENU FUNCTIONS.</H4>
+<PRE> 1: void CDay10Doc::OnColorBlack()
+ 2: {
+ 3:     // TODO: Add your command handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Set the current color to black
+10:     m_nColor = ID_COLOR_BLACK - ID_COLOR_BLACK;
+11: 
+12:     ///////////////////////
+13:     // MY CODE ENDS HERE
+14:     ///////////////////////
+15: }
+16: 
+17: void CDay10Doc::OnUpdateColorBlack(CCmdUI* pCmdUI)
+18: {
+19:     // TODO: Add your command update UI handler code here
+20: 
+21:     ///////////////////////
+22:     // MY CODE STARTS HERE
+23:     ///////////////////////
+24: 
+</PRE>
+<PRE>25:     // Determine if the Black menu entry should be checked
+</PRE>
+<PRE>26:     pCmdUI-&gt;SetCheck(GetColor() == ID_COLOR_BLACK ? 1 : 0);
+27: 
+28:     ///////////////////////
+29:     // MY CODE ENDS HERE
+30:     ///////////////////////
+31: }
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>9. </B>Edit the Blue menu functions as in Listing 10.22. Edit the remaining
+	menu functions in the same way, substituting their menu IDs for ID_COLOR_BLUE.
+	<P>
+</DL>
+
+<H4>LISTING 10.22. THE BLUE MENU FUNCTIONS.</H4>
+<PRE> 1: void CDay10Doc::OnColorBlue()
+ 2: {
+ 3:     // TODO: Add your command handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Set the current color to blue
+10:     m_nColor = ID_COLOR_BLUE - ID_COLOR_BLACK;
+11: 
+12:     ///////////////////////
+13:     // MY CODE ENDS HERE
+14:     ///////////////////////
+15: }
+16: 
+17: void CDay10Doc::OnUpdateColorBlue(CCmdUI* pCmdUI)
+18: {
+19:     // TODO: Add your command update UI handler code here
+20: 
+21:     ///////////////////////
+22:     // MY CODE STARTS HERE
+23:     ///////////////////////
+24: 
+25:     // Determine if the Blue menu entry should be checked
+26:     pCmdUI-&gt;SetCheck(GetColor() == ID_COLOR_BLUE ? 1 : 0);
+27: 
+28:     ///////////////////////
+29:     // MY CODE ENDS HERE
+30:     ///////////////////////
+31: }
+</PRE>
+<P>In the first of the two menu functions, the COMMAND function, the current color
+variable is set to the new color. If you add the menu entries in the correct order,
+their ID numbers are sequential, starting with ID_COLOR_BLACK. Subtracting ID_COLOR_BLACK
+from the menu ID should always result in the correct position in the color table
+for the selected color. For example, the Black color is position 0 in the color table.
+ID_COLOR_BLACK - ID_COLOR_BLACK = 0. Blue is position 1 in the color table. Because
+ID_COLOR_BLUE should be one greater than ID_COLOR_BLACK, ID_COLOR_BLUE -- ID_COLOR_BLACK
+= 1.</P>
+<P>The second function, the UPDATE_COMMAND_UI function, may need a little explaining.
+The UPDATE_COMMAND_UI event is called for each menu entry just before it is displayed.
+You can use this event message function to check or uncheck the menu entry, based
+on whether it is the current color. You can also use this event to enable or disable
+menu entries or make other modifications as necessary. The code in this function</P>
+<P>
+<PRE>pCmdUI-&gt;SetCheck(GetColor() == ID_COLOR_BLUE ? 1 : 0);
+</PRE>
+<P>does several things. First, the pCmdUI object that is passed in as the only argument
+is a pointer to a menu object. The SetCheck function can check or uncheck the menu
+entry, depending on whether the argument passed is 1 or 0 (1 checks, 0 unchecks).
+The argument portion for the SetCheck function is a flow-control construct that can
+be somewhat confusing if you haven't spent a large amount of time programming in
+C/C++. The first half</P>
+<P>
+<PRE>GetColor() == ID_COLOR_BLUE
+</PRE>
+<P>is a simple boolean conditional statement. It results in a true or false result.
+The portion following this conditional statement</P>
+<P>
+<PRE>? 1 : 0
+</PRE>
+<P>is basically an if...else statement in shorthand. If the conditional statement
+is true, then the value is 1, and if the statement is false, the value is 0. This
+is a fancy way of placing an if..else flow control within the argument to another
+function.</P>
+<P>If you compile and run your application, you should be able to change the color
+that you are drawing with. When you pull down the color menu, you should see the
+current drawing color checked on the menu, as in Figure 10.8.</P>
+<P><A HREF="javascrip:popUp('10fig12.gif')"><B>FIGURE 10.8.</B></A><B> </B><I>Specifying
+the current color on the menu.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading14"></A>Summary</H2>
+<P>Whew! What a day! You learned quite a bit today because this was a packed chapter.
+You initially learned about the SDI style application and about a couple of standard
+applications that you have probably used that are SDI applications. You next learned
+about the Document/View architecture that Visual C++ uses for SDI applications. You
+learned to create a simple class of your own for use in your drawing application.
+You created a drawing application that can maintain the images drawn using it. You
+learned how you can save and restore documents in the Document/View architecture.
+You also learned about the CObArray object array class and how you can use it to
+create a dynamic object array for storing various classes. Finally, you learned how
+you can check and uncheck menu entries in MFC applications.</P>
+<P>
+<H2><A NAME="Heading15"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q Is there any way that you can reduce the number of COMMAND and UPDATE_ COMMAND_UI
+	functions for the menus?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> Yes, you can send all the color COMMAND events to the same function.
+	From there, you can examine the nID value (which is passed as an argument) and compare
+	it to the menu IDs to determine which menu is calling the function. As a result,
+	you can write the COMMAND function for the color menus as follows:
+	<P>
+</DL>
+
+<PRE>void CDay10Doc::OnColorCommand(UINT nID)
+{
+    // TODO: Add your command handler code here
+    ///////////////////////
+    // MY CODE STARTS HERE
+    ///////////////////////
+    // Set the current color to blue
+    m_nColor = nID - ID_COLOR_BLACK;
+    ///////////////////////
+    // MY CODE ENDS HERE
+    ///////////////////////
+}
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD>For the UPDATE_COMMAND_UI functions, you can do the same thing, only slightly
+	differently. In this case, you can examine the pCmdUI-&gt;m_nID value to determine
+	which menu the function is being called for. This makes the UPDATE_COMMAND_UI function
+	look like the following:
+	<P>
+</DL>
+
+<PRE>void CDay10Doc::OnUpdateColor(CCmdUI* pCmdUI)
+{
+    // TODO: Add your command update UI handler code here
+    ///////////////////////
+    // MY CODE STARTS HERE
+    ///////////////////////
+    // Determine if the Blue menu entry should be checked
+    pCmdUI-&gt;SetCheck(GetColor() == pCmdUI-&gt;m_nID ? 1 : 0);
+    ///////////////////////
+    // MY CODE ENDS HERE
+    ///////////////////////
+}
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q What's the difference between SDI and MDI applications?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> Although SDI applications can perform only one task, MDI (Multiple Document
+	Interface) applications can have multiple documents open at the same time. Plus,
+	in an MDI application, not all document types need be the same. You'll learn more
+	about MDI applications tomorrow.
+	<P>
+</DL>
+
+<H2><A NAME="Heading16"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading17"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What does SDI stand for?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>What functionality is in the view class?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What function is called to redraw the document if the window has been
+	hidden behind another window?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Where do you place code to clear out the current document before starting
+	a new document?
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>What is the purpose of the document class?
+	<P>
+</DL>
+
+<H3><A NAME="Heading18"></A>Exercise</H3>
+<P>Add another pull-down menu to control the width of the pen used for drawing. Give
+it the following settings:</P>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Menu Entry</I></TD>
+		<TD ALIGN="LEFT"><I>Width Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Very Thin		</TD>
+		<TD ALIGN="LEFT">1		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Thin		</TD>
+		<TD ALIGN="LEFT">8		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Medium		</TD>
+		<TD ALIGN="LEFT">16		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Thick		</TD>
+		<TD ALIGN="LEFT">24		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Very Thick		</TD>
+		<TD ALIGN="LEFT">32		</TD>
+	</TR>
+</TABLE>
+
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> In the pen constructor, the second argument is the width. 
+<HR>
+</P>
+
+</BLOCKQUOTE>
+
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch09/ch09.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch11/ch11.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

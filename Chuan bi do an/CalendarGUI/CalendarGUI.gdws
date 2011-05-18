@@ -1,0 +1,74 @@
+<Workspace
+	CID = "1"
+	IconCategory = "CalendarGUI"
+	NextCID = "2">
+	<OpenFiles
+		CID = "1"
+		LastActive = "11">
+		<File
+			FileID = "A90C9CC4-5B59-4098-B11114BA65F189C8"
+			RootPath = "$Container"
+			RelativePathname = "MainUI\DayView.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "12F1ABBE-9CD2-4D88-ABA9924316DE1850"
+			RootPath = "$Container"
+			RelativePathname = "MainUI\WeekView.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "0D2F0714-A7E2-4421-9A6A5AA86DDE7B9D"
+			RootPath = "$Container"
+			RelativePathname = "MainUI\monthView.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "9ACF7B7C-48B6-47BD-A3365C1A6706BEF5"
+			RootPath = "$Container"
+			RelativePathname = "MainUI\ResourceView.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "B2646261-5D47-487E-AB62AC5D4F497705"
+			RootPath = "$Container"
+			RelativePathname = "MainUI\MainGUI.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "E9085FD5-F666-4363-B3D43E7481FEDB86"
+			RootPath = "$Container"
+			RelativePathname = "NewCalendar\NewCalendarDlg.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "FCF36C73-419B-423C-A73717A33FFF78E0"
+			RootPath = "$Container"
+			RelativePathname = "NewCalendar\General_tab.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "5C5DB501-1A96-45F2-89A397D55A11EEFC"
+			RootPath = "$Container"
+			RelativePathname = "NewCalendar\Detail_tab.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "A2BE12C9-60AC-4238-9E4BEB6DDE3DBB01"
+			RootPath = "$Container"
+			RelativePathname = "Component\cayPhongban.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "3EE2D1C3-B72E-4642-B15FD4F1BA7F52A6"
+			RootPath = "$Container"
+			RelativePathname = "Component\ListTaiNguyen.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "84807C67-577F-4729-85D2F7BEE2B4FD32"
+			RootPath = "$Container"
+			RelativePathname = "CalendarView\Calendar.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "4258706F-17AB-4982-AAB890F0E8FED2F9"
+			RootPath = "$Container"
+			RelativePathname = "CalendarView\Tip.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "D24C9EDB-D8AE-4E5F-B664EE1E7F85B67E"
+			RootPath = "$Container"
+			RelativePathname = "CalendarView\calendar_month.gui"
+			ViewSettings = ""/>
+	</OpenFiles>
+</Workspace>

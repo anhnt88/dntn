@@ -1,0 +1,946 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 9 -- Adding ActiveX Controls to Your Application88</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch08/ch08.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch10/ch10.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 9 -<BR>
+Adding ActiveX Controls to Your Application</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">What Is an ActiveX Control?</A>
+	<UL>
+		<LI><A HREF="#Heading2">ActiveX and the IDispatch Interface</A>
+		<LI><A HREF="#Heading3">ActiveX Containers and Servers</A>
+	</UL>
+	<LI><A HREF="#Heading4">Adding an ActiveX Control to Your Project</A>
+	<UL>
+		<LI><A HREF="#Heading5">Registering the Control</A>
+		<LI><A HREF="#Heading6">Adding the Control to Your Dialog</A>
+	</UL>
+	<LI><A HREF="#Heading7">Using an ActiveX Control in Your Application</A>
+	<UL>
+		<LI><A HREF="#Heading8">Interacting with the Control</A>
+		<LI><A HREF="#Heading9">Responding to Control Events</A>
+	</UL>
+	<LI><A HREF="#Heading10">Summary</A>
+	<LI><A HREF="#Heading11">Q&amp;A</A>
+	<LI><A HREF="#Heading12">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading13">Quiz</A>
+		<LI><A HREF="#Heading14">Exercise</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+In today's application develop market, there are thousands of prebuilt components
+that you can plug into your applications, extending the functionality of your applications
+instantaneously. Originally the domain of Visual Basic programmers, now you can use
+readily available ActiveX controls with just about any Windows programming language,
+including Visual C++. Today you will learn how you can add ActiveX controls to your
+Visual C++ applications, taking advantage of their existing functionality. Some of
+the topics that you will cover today are</P>
+
+<P>
+
+<UL>
+	<LI>What ActiveX controls are and how they work.
+	<P>
+	<LI>How you can add ActiveX controls to your project workspace.
+	<P>
+	<LI>How you can use the ActiveX control in your Visual C++ application.
+	<P>
+	<LI>How to call the various methods associated with the ActiveX control.
+	<P>
+	<LI>How to handle events that are triggered by the ActiveX control.
+</UL>
+
+<H2><A NAME="Heading1"></A>What Is an ActiveX Control?</H2>
+<P>An ActiveX control is a software component that can be plugged into many different
+programs and used as if it were a native part of the program. It's similar to the
+concept of separate stereo components. If you buy a new tape deck, you can just plug
+it into the rest of your stereo and it works with everything else you already have.
+ActiveX controls bring this same type of interoperability to software applications.</P>
+<P>ActiveX used to be called OLE 2.0. OLE 2.0 was Microsoft's technology for combining
+two or more applications to make them work as one (or at least to switch between
+the various applications within the same application shell). This idea was an expansion
+from the original OLE (Object Linking and Embedding) technology, which only enabled
+you to combine documents created with different applications into a single document.
+When revamping OLE technologies to work in a distributed environment (such as on
+the Internet), Microsoft decided to also revamp the name. Thus, ActiveX was born.</P>
+<P>
+<H3><A NAME="Heading2"></A>ActiveX and the IDispatch Interface</H3>
+<P>The ActiveX technology is built on top of Microsoft's COM (Component Object Model)
+technology, utilizing its interface and interaction model for making ActiveX control
+integration fairly seamless. The COM technology defines how ActiveX objects are constructed
+and how their interfaces are designed. The ActiveX technology defines a layer that
+is built on top of COM, what interfaces various objects should support, and how different
+types of objects should interact.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Microsoft's COM technology defines how applications and components
+	can interact through the use of interfaces. An interface is like a function call
+	into an ActiveX component. However, COM specifies how that function call must be
+	built and called, and what supporting functionality must accom-pany the function
+	call.<BR>
+	There are interfaces, like the IUnknown interface, that are required in every COM
+	object, and which are used to query the component to find out what other interfaces
+	are supported by the component. Each interface supports a specific set of functionality;
+	you might have one interface to handle the visual appearance of the control, another
+	to control how the control appearance interacts with the surrounding application,
+	another that triggers events in the surrounding application, and so on.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>One of the key technologies in ActiveX controls is <I>automation</I>. Automation
+enables an application embedded within another application to activate itself and
+control its part of the user interface or document, making its changes and then shutting
+itself down when the user moves on to another part of the application that isn't
+controlled by the embedded application.</P>
+<P>This process is what happens when you have an Excel spreadsheet embedded within
+a Word document. If you click the spreadsheet, Excel becomes active and you can edit
+the spreadsheet using Excel, even though you're still working in Word. Then, once
+you finish making your changes to the spreadsheet, Excel closes itself down and you
+can continue working in Word.</P>
+<P>One of the keys to making automation work is a special interface called the IDispatch
+(also known as the dispinterface) interface. The IDispatch interface consists of
+a pointer to a table of available methods that can be run in the ActiveX control
+or embedded application. These methods have ID numbers, called DISPIDs, which are
+also loaded into a table that can be used to look up the ID for a specific method.
+Once you know the DISPID for a specific method, you can call that method by calling
+the Invoke method of the IDispatch interface, passing the DISPID to identify the
+method to be run. Figure 9.1 shows how the IDispatch interface uses the Invoke method
+to run methods in the ActiveX object.</P>
+<P><A HREF="javascript:popUp('09fig01.gif')"><B>FIGURE 9.1.</B></A><B> </B><I>The
+IDispatch ActiveX interface.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading3"></A>ActiveX Containers and Servers</H3>
+<P>To embed one ActiveX object within another ActiveX object, you have to implement
+the embedded object as an ActiveX <I>server</I>, and the object containing the first
+object must be an ActiveX <I>container</I>. Any ActiveX object that can be embedded
+within another is an ActiveX server, whether it is an entire application or just
+a small ActiveX control. Any ActiveX object that can have other ActiveX objects embedded
+within it is an ActiveX container.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Don't confuse the use of the terms <I>container </I>and <I>server
+	</I>with the term <I>client </I>in the previous figure. The client is the object
+	calling the other object's IDispatch interface. As you'll learn in a page or so,
+	both the container and server call the other's IDispatch interfaces, making each
+	one the client of the other.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>These two types of ActiveX objects are not mutually exclusive. An ActiveX server
+can also be an ActiveX container. A good example of this concept is Microsoft's Internet
+Explorer Web browser. Internet Explorer is implemented as an ActiveX server that
+runs within an ActiveX container shell (that can also house Word, Excel, PowerPoint,
+or any other ActiveX server application). At the same time that Internet Explorer
+is an ActiveX server running within the browser shell, it can contain other ActiveX
+controls.</P>
+<P>ActiveX controls are a special instance of an ActiveX server. Some ActiveX servers
+are also applications that can run on their own. ActiveX controls cannot run on their
+own and must be embedded within an ActiveX container. By using ActiveX components
+in your Visual C++ application, you automatically make your application an ActiveX
+container.</P>
+<P>Most of the interaction between the ActiveX container and an ActiveX control takes
+place through three IDispatch interfaces. One of these IDispatch interfaces is on
+the control, and it is used by the container to make calls to the various methods
+that the ActiveX control makes available to the container.</P>
+
+<P>The container provides two IDispatch interfaces to the control. The first of these
+IDispatch interfaces is used by the control to trigger events in the container application.
+The second interface is used to set properties of the control, as shown in Figure
+9.2. Most properties of an ActiveX control are actually provided by the container
+but are maintained by the control. When you set a property for the control, the container
+calls a method in the control to tell the control to read the properties from the
+container. Most of this activity is transparent to you because Visual C++ builds
+a series of C++ classes around the ActiveX control's interfaces. You will interact
+with the methods exposed by the C++ classes, not directly calling the control's IDispatch
+interface.</P>
+
+<P><A HREF="javascript:popUp('09fig02.gif')"><B>FIGURE 9.2.</B></A><B> </B><I>An
+ActiveX container and control interact primarily through a few IDispatch interfaces.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading4"></A>Adding an ActiveX Control to Your Project</H2>
+<P>Looking into how ActiveX controls work can be deceptive because of how easy it
+really is to use them in your applications. Visual C++ makes it easy to add ActiveX
+controls to your applications and even easier to use them. Before you begin adding
+the ActiveX control to your application, let's create an application shell into which
+you will add an ActiveX control:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Create a new MFC AppWizard project named ActiveX.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Use the same defaults on the AppWizard as in previous days, but leave
+	the check box for ActiveX Controls checked on the second AppWizard step. Give your
+	application the title ActiveX Controls.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Once you generate an application shell, remove all the controls and
+	add a single command button.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Set the button's ID to IDC_EXIT and its caption to E&amp;xit.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>Using the Class Wizard, add a function to your command button on the
+	BN_CLICKED event message.
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>Edit the function you just created, calling the OnOK function, as on
+	earlier days.
+	<P>
+</DL>
+
+<H3><A NAME="Heading5"></A>Registering the Control</H3>
+<P>Before you add an ActiveX control to your dialog window, you need to register
+the control, both with Windows and with Visual C++. There are two possible ways to
+register the ActiveX control with Windows. The first way is to run any installation
+routine that came with the ActiveX control. If you do not have an installation routine,
+you need to register the control manually. To register the control manually, follow
+these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Open a DOS shell.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Change directory to where the ActiveX control is on your system.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Run the regsvr32 command, specifying the name of the ActiveX control
+	as the only command-line argument. For instance, if you were registering a control
+	named MYCTL.OCX and it was located in your WINDOWS\SYSTEM directory, you would perform
+	the following:
+	<P>
+</DL>
+
+<PRE>C:\WINDOWS&gt; CD system
+</PRE>
+<PRE>C:\WINDOWS\SYSTEM&gt; regsvr32 MYCTL.OCX
+</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>CAUTION:</STRONG> It is preferable to run any installation routine that comes with
+	the control because registering the control manually might not enable the control
+	for development usage. Controls can be licensed for development or deployment. If
+	a control is licensed for deployment, you will not be able to use it in your Visual
+	C++ applications. This is a mechanism that protects control developers by requiring
+	that developers purchase a development license for controls; they can't just use
+	the controls they may have installed on their system with another application.
+<HR>
+
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> COM and ActiveX objects store a lot of information in the <BR>
+	Windows Registry database. Whenever an application uses an ActiveX object, the operating
+	system refers to the information in the Windows Registry to find the object and to
+	determine whether the application can use the object in the way that it requested.
+	Using the regsvr32.exe utility to register an ActiveX control places most of the
+	required information about the control into the system Registry. However, there may
+	be additional information about the control that needs to be in the Registry for
+	the control to function properly.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>Now that the ActiveX control that you want to use is registered with the operating
+system, you need to register it with Visual C++ and add it to your project. To do
+this, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select Project|Add To Project|Components and Controls from the Visual
+	C++ menu.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>In the Components and Controls Gallery dialog, navigate to the Registered
+	ActiveX Controls folder, as in Figure 9.3.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('09fig03.gif')"><B>FIGURE 9.3.</B></A><B> </B><I>The
+ActiveX controls that can be added to your project.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>3. </B>Select the control you want to register, such as the Microsoft FlexGrid
+	control, and click the Insert button.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Click OK on the message box asking whether you want to insert this
+	component in your project.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>On the Confirm Classes dialog, click the OK button to add the C++ classes
+	specified, as in Figure 9.4.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('09fig04.gif')"><B>FIGURE 9.4.</B></A><B> </B><I>Visual
+C++ tells you what classes will be added to your project.</I></P>
+
+<P><I></I>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>6. </B>Click the Close button on the Components and Controls Gallery dialog
+	to finish adding controls to your project.
+	<P>
+	<DT></DT>
+	<DD><B>7. </B>The FlexGrid control should have been added to the Control Palette
+	for your dialog window, as in Figure 9.5.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('09fig05.gif')"><B>FIGURE 9.5.</B></A><B> </B><I>The
+ActiveX control FlexGrid is added to the Control Palette for use on your dialog windows.</I></P>
+
+<P>If you examine the Class View area of the workspace pane, you see the four classes
+that Visual C++ added to your project. Expand the class trees and you see numerous
+methods for these classes. Visual C++ created these classes and methods by examining
+the ActiveX control that you just added and created class methods to call each of
+the methods in the control's IDispatch interface.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> If you use older ActiveX controls in your Visual C++ applications,
+	Visual C++ might not be able to generate the classes and methods to encapsulate the
+	control's functionality. The information in the control that provided Visual C++
+	with the information necessary to build these classes and methods is a more recent
+	addition to the ActiveX specification. As a result, older controls might not provide
+	this information, making them more difficult to use with Visual C++.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading6"></A>Adding the Control to Your Dialog</H3>
+<P>Now that you have added the FlexGrid control to your project, you can add it to
+your dialog window just as you would any other control. Set the control properties
+as in Table 9.1.</P>
+<P>
+<H4>TABLE 9.1. CONTROL PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">FlexGrid control		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_MSFGRID		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Rows		</TD>
+		<TD ALIGN="LEFT">20		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Cols		</TD>
+		<TD ALIGN="LEFT">4		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">MergeCells		</TD>
+		<TD ALIGN="LEFT">2 - Restrict Rows		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Format		</TD>
+		<TD ALIGN="LEFT">&lt; Region |&lt; Product		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">(FormatString)		</TD>
+		<TD ALIGN="LEFT">|&lt; Employee |&gt;Sales		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Once you add the control to your dialog window, you will notice that there is
+an additional tab on the properties dialog with all the control properties, as in
+Figure 9.6. You can choose to use this tab to set all the properties on the control,
+or you can go through the other tabs to set the properties, just as you would with
+the standard controls.</P>
+
+<P><A HREF="javascript:popUp('09fig06.gif')"><B>FIGURE 9.6.</B></A><B> </B><I>ActiveX
+controls have a property tab that contains all control properties.</I></P>
+
+<P>Once you have finished setting all the properties for the control, you'll need
+to add a variable for the control so that you can interact with the control in your
+code. To add this variable, open the Member Variables tab on the Class Wizard and
+add a variable for the control. Because you are adding a variable for an ActiveX
+control, you can only add a control variable, so the only thing available for you
+to specify is the variable name. For this example application, name the variable
+m_ctlFGrid.</P>
+
+<P>
+<H2><A NAME="Heading7"></A>Using an ActiveX Control in Your Application</H2>
+<PRE>Once Visual C++ has generated all the classes to encapsulate the ActiveX control, working with the control is a simple matter of calling the various methods and responding to control events just like the standard controls. You'll start with using the control methods to get information about the control and to modify data within the control. Then you'll learn how to respond to control events with Visual C++.
+</PRE>
+<H3><A NAME="Heading8"></A>Interacting with the Control</H3>
+<P>The application that you are building today will generate a number of product
+sales over five sales regions with four salespeople. You will be able to scroll through
+the data, which will be sorted by region and product, to compare how each salesperson
+did for each product.</P>
+<P>To make this project, you will build an array of values that will be loaded into
+cells in the grid. The grid will then be sorted in ascending order, using the FlexGrid
+control's internal sorting capabilities.</P>
+<P>
+<H4>Loading Data into the Control</H4>
+<P>The first thing you will do is create a function to load data into the FlexGrid
+control. Add a new function to the CActiveXDlg class by right-clicking the Class
+View of the workspace and choosing Add Member Function. Specify the Function Type
+as void, the Function Declaration as LoadData, and the access as Private. Click the
+OK button and edit the function, adding the code in Listing 9.1.</P>
+<P>
+<H4>LISTING 9.1. THE LoadData FUNCTION.</H4>
+<PRE> 1: void CActiveXDlg::LoadData()
+ 2: {
+ 3:     int liCount;        // The grid row count
+ 4:     CString lsAmount;    // The sales amount
+ 5: 
+ 6:     // Initialize the random number generator
+ 7:     srand((unsigned)time(NULL));
+ 8:     // Create Array in the control
+ 9:     for (liCount = m_ctlFGrid.GetFixedRows();
+10:         liCount &lt; m_ctlFGrid.GetRows(); liCount++)
+11:     {
+12:         // Generate the first column (region) values
+13:         m_ctlFGrid.SetTextArray(GenID(liCount, 0), RandomStringValue(0));
+14:         // Generate the second column (product) values
+15:         m_ctlFGrid.SetTextArray(GenID(liCount, 1), RandomStringValue(1));
+16:         // Generate the third column (employee) values
+17:         m_ctlFGrid.SetTextArray(GenID(liCount, 2), RandomStringValue(2));
+18:         // Generate the sales amount values
+19:         lsAmount.Format(&quot;%5d.00&quot;, rand());
+20:         // Populate the fourth column
+21:         m_ctlFGrid.SetTextArray(GenID(liCount, 3), lsAmount);
+22:     }
+23: 
+24:     // Merge the common subsequent rows in these columns
+25:     m_ctlFGrid.SetMergeCol(0, TRUE);
+26:     m_ctlFGrid.SetMergeCol(1, TRUE);
+27:     m_ctlFGrid.SetMergeCol(2, TRUE);
+28: 
+29:     // Sort the grid
+30:     DoSort();
+</PRE>
+
+<PRE>31: }</PRE>
+<P>In this function, the first thing that you do is initialize the random number
+generator. Next, you loop through all of the rows in the control, placing data in
+each of the cells. You get the total number of rows in the control by calling the
+GetRows method and the number of the header row by calling the GetFixedRows method.
+You are able to add data to the control cells by calling the SetTextArray method,
+which has the cell ID as the first argument and the cell contents as the second argument,
+both of which are generated by functions you'll be creating in a few moments.</P>
+<P>Once you have data in the grid cells, you call SetMergeCol, which tells the control
+that it can merge cells in the first three columns if adjacent rows contain the same
+value. Finally, you sort the control, using another function you have yet to create.</P>
+<P>
+<H4>Calculating the Cell ID</H4>
+<P>The cells in the FlexGrid control are numbered sequentially from left to right,
+top to bottom. With your control, the first row, which contains the headers (and
+is already populated), has cells 0 through 3, the second row cells 4 through 7, and
+so on. Therefore, you can calculate the ID of a cell by adding its column number
+to the total number of columns in the control, multiplied by the current row number.
+For instance, if your control has four columns, and you are in the third column and
+fourth row, you can calculate your cell ID as 2 + (4 * 3) = 14. (Remember that the
+column and row numbers start with 0, so the third column is 2 and the fourth row
+is number 3.)</P>
+<P>Now that you understand how you can calculate the cell ID, you need to implement
+that formula in a function. Add a new function to the CActiveXDlg class using the
+same method as for the LoadData function. The type of this function should be int
+and the description should be GenID(int m_iRow, int m_iCol). Once you add the function,
+edit it with the code in Listing 9.2.</P>
+<P>
+<H4>LISTING 9.2. THE GenID FUNCTION.</H4>
+<PRE> 1: int CActiveXDlg::GenID(int m_iRow, int m_iCol)
+ 2: {
+ 3:     // Get the number of columns
+ 4:     int liCols = m_ctlFGrid.GetCols();
+ 5: 
+ 6:     // Generate an ID based on the number of columns,
+ 7:     // the current column, and the current row
+ 8:     return (m_iCol + liCols * m_iRow);
+</PRE>
+
+<PRE>9: }</PRE>
+<P>
+<H4>Generating Random Data</H4>
+<P>To populate the first three columns in the grid, you want to randomly generate
+data. In the first column, you want to put region names. In the second column, you
+want to put product names. And in the third column, you want to put salesperson names.
+By using a switch statement to determine which column you are generating data for
+and then using a modulus division on a randomly generated number in another switch
+statement, you can randomly select between a limited set of data strings.</P>
+<P>To implement this functionality, add another function to the CActiveXDlg class
+with a type of CString and a description of RandomStringValue(int m_iColumn). Edit
+the resulting function, adding the code in Listing 9.3.</P>
+<P>
+<H4>LISTING 9.3. THE RandomStringValue FUNCTION.</H4>
+<PRE> 1: CString CActiveXDlg::RandomStringValue(int m_iColumn)
+ 2: {
+ 3:     CString lsStr;    // The return string
+ 4:     int liCase;        // A random value ID
+ 5: 
+ 6:     // Which column are we generating for?
+ 7:     switch (m_iColumn)
+ 8:     {
+ 9:     case 0:    // The first column (region)
+10:         // Generate a random value between 0 and 4
+11:         liCase = (rand() % 5);
+12:         // What value was generated?
+13:         switch (liCase)
+14:         {
+15:         case 0:
+16:             // 0 - Northwest region
+17:             lsStr = &quot;Northwest&quot;;
+18:             break;
+19:         case 1:
+20:             // 1 - Southwest region
+21:             lsStr = &quot;Southwest&quot;;
+22:             break;
+23:         case 2:
+24:             // 2 - Midwest region
+25:             lsStr = &quot;Midwest&quot;;
+26:             break;
+27:         case 3:
+28:             // 3 - Northeast region
+29:             lsStr = &quot;Northeast&quot;;
+30:             break;
+31:         default:
+32:             // 4 - Southeast region
+33:             lsStr = &quot;Southeast&quot;;
+34:             break;
+35:         }
+36:         break;
+37:     case 1:    // The second column (product)
+38:         // Generate a random value between 0 and 4
+39:         liCase = (rand() % 5);
+40:         // What value was generated?
+41:         switch (liCase)
+42:         {
+43:         case 0:
+44:             // 0 - Dodads
+45:             lsStr = &quot;Dodads&quot;;
+46:             break;
+47:         case 1:
+48:             // 1 - Thingamajigs
+49:             lsStr = &quot;Thingamajigs&quot;;
+50:             break;
+51:         case 2:
+52:             // 2 - Whatchamacallits
+53:             lsStr = &quot;Whatchamacallits&quot;;
+54:             break;
+55:         case 3:
+56:             // 3 - Round Tuits
+57:             lsStr = &quot;Round Tuits&quot;;
+58:             break;
+59:         default:
+60:             // 4 - Widgets
+61:             lsStr = &quot;Widgets&quot;;
+62:             break;
+63:         }
+64:         break;
+65:     case 2:    // The third column (employee)
+66:         // Generate a random value between 0 and 3
+67:         liCase = (rand() % 4);
+68:         // What value was generated?
+69:         switch (liCase)
+70:         {
+71:         case 0:
+72:             // 0 - Dore
+73:             lsStr = &quot;Dore&quot;;
+74:             break;
+75:         case 1:
+76:             // 1 - Harvey
+77:             lsStr = &quot;Harvey&quot;;
+78:             break;
+79:         case 2:
+80:             // 2 - Pogo
+81:             lsStr = &quot;Pogo&quot;;
+82:             break;
+83:         default:
+84:             // 3 - Nyra
+85:             lsStr = &quot;Nyra&quot;;
+86:             break;
+87:         }
+88:         break;
+89:     }
+90:     // Return the generated string
+91:     return lsStr;
+</PRE>
+
+<PRE>92: }</PRE>
+<P>
+<H4>Sorting the Control</H4>
+<P>To sort the Grid control, you need to select all the columns and then set the
+sort to ascending. To implement this functionality, add one more function to the
+CActiveXDlg class with a type of void and a definition of DoSort. Edit the function
+as in Listing 9.4.</P>
+<P>
+<H4>LISTING 9.4. THE DoSort FUNCTION.</H4>
+<PRE> 1: void CActiveXDlg::DoSort()
+ 2: {
+ 3:     // Set the current column to column 0
+ 4:     m_ctlFGrid.SetCol(0);
+ 5:     // Set the column selection to all columns
+ 6:     m_ctlFGrid.SetColSel((m_ctlFGrid.GetCols() - 1));
+ 7:     // Generic Ascending Sort
+ 8:     m_ctlFGrid.SetSort(1);
+</PRE>
+
+<PRE>9: }</PRE>
+<P>In the DoSort function, you set the current column to the first column using the
+SetCol method. Next you select from the current column to the last column using the
+SetColSel method, effectively selecting all columns in the control. Finally, you
+tell the control to sort the columns in ascending order by using the SetSort method,
+passing 1 as the flag for the sort order.</P>
+<P>Now that you have all the functionality necessary to load the control with data,
+you need to call the LoadData function in the OnInitDialog function to load the data
+before the control is visible to the user. Edit the OnInitDialog function as in Listing
+9.5 to load the data.</P>
+<P>
+<H4>LISTING 9.5. THE OnInitDialog FUNCTION.</H4>
+<PRE> 1: BOOL CActiveXDlg::OnInitDialog()
+ 2: {
+ 3:     CDialog::OnInitDialog();
+ 4: .
+ 5: .
+ 6: .
+ 7:     // TODO: Add extra initialization here
+ 8: 
+ 9:     ///////////////////////
+10:     // MY CODE STARTS HERE
+11:     ///////////////////////
+12: 
+13:     // Load data into the Grid control
+14:     LoadData();
+15: 
+16:     ///////////////////////
+17:     // MY CODE ENDS HERE
+18:     ///////////////////////
+19: 
+20:     return TRUE;  // return TRUE  unless you set the focus to a control
+</PRE>
+
+<PRE>21: }</PRE>
+<P>If you compile and run your application at this point, you find that it is loading
+the data and sorting it, as in Figure 9.7.</P>
+<P><A HREF="javascript:popUp('09fig07.gif')"><B>FIGURE 9.7.</B></A><B> </B><I>The
+FlexGrid populated with data.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading9"></A>Responding to Control Events</H3>
+<P>If you play with your application at this point, you know that the Grid control
+does not respond to any input that you might try to give it. If you click one of
+the cells and try to change the value, it doesn't respond. What you need to do is
+add a control event to handle the input. ActiveX controls make several events available
+for use in Visual C++ applications. You can use the Class Wizard to browse through
+the available events and determine which events you need to give functionality and
+which to ignore. Most ActiveX controls don't have any default functionality attached
+to the available events but instead expect you to tell the control what to do on
+each event.</P>
+<P>You are going to add two control events to capture the mouse clicks and movements.
+You will add functionality to allow the user to click a column header and drag it
+to another position, thus rearranging the column order. To implement this functionality,
+you have to capture two control events, when the mouse button is pressed down and
+when it is released. On the first event, you need to check whether the user clicked
+a header, and if so, you capture the column selected. On the second event, you need
+to move the selected column to the column on which the mouse button was released.</P>
+<P>To accomplish this functionality, you need to create a new class variable to maintain
+the clicked column number between the two events. Add a new variable to the CActiveXDlg
+class, just like you added the functions earlier, specifying the type as int, the
+variable name as m_iMouseCol, and the access as Private.</P>
+<P>
+<H4>Capturing the Column Selected</H4>
+<P>To capture the mouse click event for the control, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Using the Class Wizard, add a function for the MouseDown event message
+	for the IDC_MSFGRID object.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Edit the function using the code in Listing 9.6.
+	<P>
+</DL>
+
+<H4>LISTING 9.6. THE OnMouseDownMsfgrid FUNCTION.</H4>
+<PRE> 1: void CActiveXDlg::OnMouseDownMsfgrid(short Button, short Shift, long      	  &Acirc;x, long y)
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Did the user click on a data row and not the
+10:     // header row?
+11:     if (m_ctlFGrid.GetMouseRow() != 0)
+12:     {
+13:         // If so, then zero out the column variable
+14:         // and exit
+15:         m_iMouseCol = 0;
+16:         return;
+17:     }
+18:     // Save the column clicked on
+19:     m_iMouseCol = m_ctlFGrid.GetMouseCol();
+20: 
+21:     ///////////////////////
+22:     // MY CODE ENDS HERE
+23:     ///////////////////////
+</PRE>
+
+<PRE>24: }</PRE>
+<P>In this function, you checked the row clicked by calling the GetMouseRow method.
+If the row is not the first row, then zero out the column-holding variable and exit
+the function. Otherwise, you need to get the column clicked by calling the GetMouseCol
+method. You can store the returned column number in the m_iMouseCol variable that
+you just added to the class.</P>
+<P>
+<H4>Moving the Column Where Released</H4>
+<P>Now that you are capturing the selected column number, you need to capture the
+column on which the mouse is released. To capture the mouse release event for the
+control, follow these steps:</P>
+<P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Using the Class Wizard, add a function for the MouseUp event message
+	for the IDC_MSFGRID object.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Edit the function using the code in Listing 9.7.
+	<P>
+</DL>
+
+<H4>LISTING 9.7. THE OnMouseUpMsfgrid FUNCTION.</H4>
+<PRE> 1: void CActiveXDlg::OnMouseUpMsfgrid(short Button, short Shift, long x, 		  &Acirc;long y)
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // If the selected column was the first column,
+10:     // there's nothing to do
+11:     if (m_iMouseCol == 0)
+12:         return;
+13:     // Turn the control redraw off
+14:     m_ctlFGrid.SetRedraw(FALSE);
+15:     // Change the selected column position
+16:     m_ctlFGrid.SetColPosition(m_iMouseCol, m_ctlFGrid.GetMouseCol());
+17:     // Resort the grid
+18:     DoSort();
+19:     // Turn redraw back on
+20:     m_ctlFGrid.SetRedraw(TRUE);
+21: 
+22:     ///////////////////////
+23:     // MY CODE ENDS HERE
+24:     ///////////////////////
+</PRE>
+
+<PRE>25: }</PRE>
+<P>In this function, you first check to see if there is a selected column to be moved.
+If not, you exit the function with nothing to do. If there is a column selected,
+you turn off the redraw on the control using the SetRedraw method so that none of
+the movement is seen by the user. Next, you move the selected column to the release
+column using the SetColPosition method. Once you move the column, you resort the
+grid by calling the DoSort function. Finally, you turn the control's redraw back
+on so that the control is refreshed to show the user the moved column. If you compile
+and link your application, you should now be able to grab column headers and move
+the columns about, as in Figure 9.8.</P>
+<P><A HREF="javascript:popUp('09fig08.gif')"><B>FIGURE 9.8.</B></A><B> </B><I>The
+FlexGrid with reordered columns.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading10"></A>Summary</H2>
+<P>Today you learned how you can use ActiveX controls in your Visual C++ applications
+to easily extend your application's functionality. You learned the basics of how
+ActiveX controls work and how they interact with the containing application. You
+also learned how you can add an ActiveX control to your development project so that
+you can use it in your application. You saw how Visual C++ creates C++ classes to
+encapsulate the ActiveX controls that you add and how you can interact with the control
+through the exposed methods of these generated C++ classes. You also saw how you
+can capture events that are generated by the ActiveX control so that you can program
+your application to react to the events.</P>
+<P>
+<H2><A NAME="Heading11"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q How can I determine what methods are available to me when working with an
+	ActiveX control?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> By examining the C++ classes that Visual C++ builds to encapsulate the
+	control, you can get a good idea of what functionality is available to you. If you
+	have documentation for the control, you can compare it to the C++ class to determine
+	which class method calls which control method. You can examine the events listed
+	for the control in the Class Wizard to determine which events are also available.
+	<P>
+	<DT></DT>
+	<DD><B>Q How can I use the ActiveX controls that were installed on my machine with
+	another application in my Visual C++ applications?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> It depends on how the controls are licensed and what application installed
+	the controls. If the controls were installed by another application development tool,
+	chances are that you have a development license for the control, in which case you
+	should be able to use them in your Visual C++ applications. If the controls were
+	installed by an end-user application, such as Word or Quicken, then odds are that
+	you have only a runtime license for the control. If you want to use these controls
+	in your own applications, you need to contact the control developer to acquire a
+	development license for the controls.
+	<P>
+	<DT></DT>
+	<DD><B>Q Because the FlexGrid control does not allow me to enter data directly into
+	the control, how can I let my users enter data into the grid as if they were using
+	a spreadsheet?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> To implement this functionality for the FlexGrid control, you need to
+	add a floating Edit Box control to your window. Your code needs to determine which
+	cell the user wants to edit and float the edit box in front of that cell. This arrangement
+	allows the user to feel as if he is entering data directly into the cell. Another
+	approach is to have a data-entry field outside the grid, much like is used in Excel,
+	into which the user enters the data. You can highlight the cells as the user maneuvers
+	around the Grid control to give the user visceral feedback for her actions.
+	<P>
+</DL>
+
+<H2><A NAME="Heading12"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading13"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>How does an ActiveX container call methods in an ActiveX control?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>How does an ActiveX control trigger events in the container application?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What AppWizard option must be selected for ActiveX controls to work
+	properly in a Visual C++ application?
+	<P>
+	<DD><B>4. </B>How does Visual C++ make it easy to work with ActiveX controls?
+	<DT></DT>
+	<DD><B>5. </B>Why might it be difficult to work with older controls in Visual C++?
+	<P>
+</DL>
+
+<H3><A NAME="Heading14"></A>Exercise</H3>
+<P>Modify the application so that the user can double-click a column header and make
+it the first column in the grid.</P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch08/ch08.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch10/ch10.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

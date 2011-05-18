@@ -1,0 +1,730 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 1 -- The Visual C++ Development Environment--Building Your First Visual C++ Application</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../fm/fm.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch02/ch02.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 1 -<BR>
+The Visual C++ Development Environment--Building Your First Visual C++ Application</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">The Visual C++ Development Environment</A>
+	<UL>
+		<LI><A HREF="#Heading2">The Output Pane</A>
+		<LI><A HREF="#Heading3">The Editor Area</A>
+		<LI><A HREF="#Heading4">Menu Bars</A>
+		<LI><A HREF="#Heading5">Rearranging the Developer Studio Environment</A>
+	</UL>
+	<LI><A HREF="#Heading6">Starting Your First Project</A>
+	<UL>
+		<LI><A HREF="#Heading7">Creating the Project Workspace</A>
+		<LI><A HREF="#Heading8">Using the Application Wizard to Create the Application Shell</A>
+	</UL>
+	<LI><A HREF="#Heading9">Designing Your Application Window</A>
+	<LI><A HREF="#Heading10">Adding Code to Your Application</A>
+	<LI><A HREF="#Heading11">Finishing Touches</A>
+	<UL>
+		<LI><A HREF="#Heading12">Creating the Dialog Box Icon</A>
+		<LI><A HREF="#Heading13">Adding Maximize and Minimize Buttons</A>
+	</UL>
+	<LI><A HREF="#Heading14">Summary</A>
+	<LI><A HREF="#Heading15">Q&amp;A</A>
+	<LI><A HREF="#Heading16">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading17">Quiz</A>
+		<LI><A HREF="#Heading18">Exercise</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+Welcome to <I>Sams</I> <I>Teach Yourself Visual C++ 6 in 21 Days</I>. Over the next
+three weeks, you will learn how to build a wide variety of applications with Microsoft's
+Visual C++. What's even better is that you will learn how to create these types of
+applications by actually building them yourself. As you read this book, you will
+be gaining actual programming experience using Visual C++. So let's get started!</P>
+<P>Today, your focus will be on learning about the Visual C++ development environment
+and some of the tools that it provides for building applications. Although Visual
+C++ provides more tools than you would probably use in any one application development
+effort--even more than you could possibly learn to use in a single day--I limit the
+focus to the primary tools that you will use throughout this book, as well as in
+just about every application you build with Visual C++. Today, you'll learn about
+the following:</P>
+
+<UL>
+	<LI>The primary areas of the Visual C++ development environment
+	<P>
+	<LI>The Application Wizard--how you can use it to build the basic infrastructure
+	for your applications
+	<P>
+	<LI>The Dialog Painter--how you can use it to paint dialog windows, much in the same
+	way that you can build windows with Visual Basic, PowerBuilder, or Delphi
+	<P>
+	<LI>The Class Wizard--how you can use it to attach functionality to your application
+	windows
+</UL>
+
+<H2><A NAME="Heading1"></A>The Visual C++ Development Environment</H2>
+<P>Before you begin your quick tour around the Visual C++ development environment,
+you should start Visual C++ on your computer so that you can see firsthand how each
+of the areas are arranged and how you can change and alter that arrangement yourself.</P>
+<P>After Developer Studio (the Microsoft Visual development environment) starts,
+you see a window that looks like Figure 1.1. Each of the areas has a specific purpose
+in the Developer Studio environment. You can rearrange these areas to customize the
+Developer Studio environment so that it suits your particular development needs.</P>
+<H3>The Workspace</H3>
+<P>When you start Visual C++ for the first time, an area on the left side of Developer
+Studio looks like it is taking up a lot of real estate and providing little to show
+for it. This area is known as the workspace, and it is your key to navigating the
+various pieces and parts of your development projects. The workspace allows you to
+view the parts of your application in three different ways:</P>
+
+<UL>
+	<LI>Class View allows you to navigate and manipulate your source code on a C++ class
+	level.
+	<P>
+	<LI>Resource View allows you to find and edit each of the various resources in your
+	application, including dialog window designs, icons, and menus.
+	<P>
+	<LI>File View allows you to view and navigate all the files that make up your appli-cation.
+</UL>
+
+<P><A HREF="javascript:popUp('01fig01.gif')"><B>FIGURE 1.1.</B></A><B> </B><I>The
+Visual C++ opening screen.</I></P>
+<P>
+<H3><A NAME="Heading2"></A>The Output Pane</H3>
+<P>The Output pane might not be visible when you start Visual C++ for the first time.
+After you compile your first application, it appears at the bottom of the Developer
+Studio environment and remains open until you choose to close it. The Output pane
+is where Developer Studio provides any information that it needs to give you; where
+you see all the compiler progress statements, warnings, and error messages; and where
+the Visual C++ debugger displays all the variables with their current values as you
+step through your code. After you close the Output pane, it reopens itself when Visual
+C++ has any message that it needs to display for you.</P>
+<P>
+<H3><A NAME="Heading3"></A>The Editor Area</H3>
+<P>The area on the right side of the Developer Studio environment is the editor area.
+This is the area where you perform all your editing when using Visual C++, where
+the code editor windows display when you edit C++ source code, and where the window
+painter displays when you design a dialog box. The editor area is even where the
+icon painter displays when you design the icons for use in your applications. The
+editor area is basically the entire Developer Studio area that is not otherwise occupied
+by panes, menus, or toolbars.</P>
+<P>
+<H3><A NAME="Heading4"></A>Menu Bars</H3>
+<P>The first time you run Visual C++, three toolbars display just below the menu
+bar. Many other toolbars are available in Visual C++, and you can customize and create
+your own toolbars to accommodate how you best work. The three toolbars that are initially
+open are the following:</P>
+
+<UL>
+	<LI>The Standard toolbar contains most of the standard tools for opening and saving
+	files, cutting, copying, pasting, and a variety of other commands that you are likely
+	to find useful.
+</UL>
+
+<P>The WizardBar toolbar enables you to perform a number of Class Wizard actions
+without opening the Class Wizard.</P>
+
+<UL>
+	<LI>The Build minibar provides you with the build and run commands that you are most
+	likely to use as you develop and test your applications. The full Build toolbar also
+	lets you switch between multiple build configurations (such as between the Debug
+	and Release build configurations).
+</UL>
+
+<H3><A NAME="Heading5"></A>Rearranging the Developer Studio Environment</H3>
+<P>The Developer Studio provides two easy ways to rearrange your development environment.
+The first is by right-clicking your mouse over the toolbar area. This action opens
+the pop-up menu shown in Figure 1.2, allowing you to turn on and off various toolbars
+and panes.</P>
+<P><A HREF="javascript:popUp('01fig02.gif')"><B>FIGURE 1.2.</B></A><B> </B><I>Toolbar
+on and off menu.</I></P>
+<P>Another way that you can easily rearrange your development environment is to grab
+the double bars at the left end of any of the toolbars or panes with the mouse. You
+can drag the toolbars away from where they are currently docked, making them floating
+toolbars, as in Figure 1.3. You can drag these toolbars (and panes) to any other
+edge of the Developer Studio to dock them in a new spot. Even when the toolbars are
+docked, you can use the double bars to drag the toolbar left and right to place the
+toolbar where you want it to be located.</P>
+<P><A HREF="javascript:popUp('01fig03.gif')"><B>FIGURE 1.3.</B></A><B> </B><I>Example
+of a floating minibar.</I></P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> On the workspace and Output panes, the double bars that you
+	can use to drag the pane around the Developer Studio environment might appear on
+	the top of the pane or on the left side, depending on how and where the pane is docked.
+	
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H2><A NAME="Heading6"></A>Starting Your First Project</H2>
+<P>For your first Visual C++ application, you are going to create a simple application
+that presents the user with two buttons, as in Figure 1.4. The first button will
+present the user with a simple greeting message, shown in Figure 1.5, and the second
+button will close the application. In building this application, you will need to
+do the following things:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Create a new project workspace.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Use the Application Wizard to create the application framework.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Rearrange the dialog that is automatically created by the Application
+	Wizard to resemble how you want the application to look.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Add the C++ code to show the greeting to the user.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>Create a new icon for the application.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig04.gif')"><B>FIGURE 1.4.</B></A><B> </B><I>Your
+first Visual C++ application.</I></P>
+
+<P><A HREF="javascript:popUp('01fig05.gif')"><B>FIGURE 1.5.</B></A><B> </B><I>If
+the user clicks the first button, a simple greeting is shown.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading7"></A>Creating the Project Workspace</H3>
+<P>Every application development project needs its own project workspace in Visual
+C++. The workspace includes the directories where the application source code is
+kept, as well as the directories where the various build configuration files are
+located. You can create a new project workspace by following these steps:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select File | New. This opens the New Wizard shown in Figure 1.6.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig06.gif')"><B>FIGURE 1.6.</B></A><B> </B><I>The
+New Wizard.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>2. </B>On the Projects tab, select MFC AppWizard (exe).
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Type a name for your project, such as Hello, in the Project Name field.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Click OK. This causes the New Wizard to do two things: create a project
+	directory (specified in the Location field) and then start the AppWizard.
+	<P>
+</DL>
+
+<H3><A NAME="Heading8"></A>Using the Application Wizard to Create the Application
+Shell</H3>
+<P>The AppWizard asks you a series of questions about what type of application you
+are building and what features and functionality you need. It uses this information
+to create a shell of an application that you can immediately compile and run. This
+shell provides you with the basic infrastructure that you need to build your application
+around. You will see how this works as you follow these steps:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>In Step 1 of the AppWizard, specify that you want to create a Dialog-based
+	application. Click Next at the bottom of the wizard.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>In Step 2 of the AppWizard, the wizard asks you about a number of features
+	that you can include in your application. You can uncheck the option for including
+	support for ActiveX controls if you will not be using any ActiveX controls in your
+	application. Because you won't be using any ActiveX controls in today's application,
+	go ahead and uncheck this box.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>In the field near the bottom of the wizard, delete the project name
+	(Hello) and type in the title that you want to appear in the title bar of the main
+	application window, such as <B>My First Visual C++ Application</B>. Click Next at
+	the bottom of the wizard.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>In Step 3 of the AppWizard, leave the defaults for including source
+	file comments and using the MFC library as a DLL. Click Next at the bottom of the
+	wizard to proceed to the final AppWizard step.
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>The final step of the AppWizard shows you the C++ classes that the
+	AppWizard will create for your application. Click Finish to let AppWizard generate
+	your application shell.
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>Before AppWizard creates your application shell, it presents you with
+	a list of what it is going to put into the application shell, as shown in Figure
+	1.7, based on the options you selected when going through the AppWizard. Click OK
+	and AppWizard generates your application.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig07.gif')"><B>FIGURE 1.7.</B></A><B> </B><I>The
+New Project Information screen.</I></P>
+
+<UL>
+	<LI><B>7. </B>After the AppWizard generates your application shell, you are returned
+	to the Developer Studio environment. You will notice that the workspace pane now
+	presents you with a tree view of the classes in your application shell, as in Figure
+	1.8. You might also be presented with the main dialog window in the editor area of
+	the Developer Studio area.
+</UL>
+
+
+<DL>
+	<DT></DT>
+	<DD><B>8. </B>Select Build | Build Hello.exe to compile your application.
+	<P>
+	<DT></DT>
+	<DD><B>9. </B>As the Visual C++ compiler builds your application, you see progress
+	and other compiler messages scroll by in the Output pane. After your application
+	is built, the Output pane should display a message telling you that there were no
+	errors or warnings, as in Figure 1.9.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig08.gif')"><B>FIGURE 1.8.</B></A><B> </B><I>Your
+workspace with a tree view of the project's classes.</I></P>
+
+<P><A HREF="javascript:popUp('01fig09.gif')"><B>FIGURE 1.9.</B></A><B> </B><I>The
+Output pane displays any compiler errors.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>10. </B>Select Build | Execute Hello.exe to run your application.
+	<P>
+	<DT></DT>
+	<DD><B>11. </B>Your application presents a dialog with a TODO message and OK and
+	Cancel buttons, as shown in Figure 1.10. You can click either button to close the
+	application.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig10.gif')"><B>FIGURE 1.10.</B></A><B> </B><I>The
+unmodified application shell.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading9"></A>Designing Your Application Window</H2>
+<P>Now that you have a running application shell, you need to turn your focus to
+the window layout of your application. Even though the main dialog window may already
+be available for painting in the editor area, you should still navigate to find the
+dialog window in the workspace so that you can easily find the window in subsequent
+develop-ment efforts. To redesign the layout of your application dialog, follow these
+steps:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select the Resource View tab in the workspace pane, as in Figure 1.11.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig11.gif')"><B>FIGURE 1.11.</B></A><B> </B><I>The
+Resource View tab in the workspace pane.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>2. </B>Expand the resources tree to display the available dialogs. At this
+	point, you can double-click the IDD_DAY1_DIALOG dialog to open the window in the
+	Developer Studio editor area.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Select the text displayed in the dialog and delete it using the Delete
+	key.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>Select the Cancel button, drag it down to the bottom of the dialog,
+	and resize it so that it is the full width of the layout area of the window, as in
+	Figure 1.12.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig12.gif')"><B>FIGURE 1.12.</B></A><B> </B><I>Positioning
+the Cancel button.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>5. </B>Right-click the mouse over the Cancel button, opening the pop-up menu
+	in Figure 1.13. Select Properties from the menu, and the properties dialog in Figure
+	1.14 opens.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig13.gif')"><B>FIGURE 1.13.</B></A><B> </B><I>Right-clicking
+the mouse to open a pop-up menu.</I></P>
+
+<P><A HREF="javascript:popUp('01fig14.gif')"><B>FIGURE 1.14.</B></A><B> </B><I>The
+Cancel button properties dialog.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>6. </B>Change the value in the Caption field to &amp;Close. Close the properties
+	dialog by clicking the Close icon in the upper-right corner of the dialog.
+	<P>
+	<DT></DT>
+	<DD><B>7. </B>Move and resize the OK button to around the middle of the window, as
+	in Figure 1.15.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig15.gif')"><B>FIGURE 1.15.</B></A><B> </B><I>Positioning
+the OK button.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>8. </B>On the OK button properties dialog, change the ID value to IDHELLO
+	and the caption to &amp;Hello.
+	<P>
+	<DT></DT>
+	<DD><B>9. </B>Now when you compile and run your application, it will look like what
+	you've just designed, as shown in Figure 1.16.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig16.gif')"><B>FIGURE 1.16.</B></A><B> </B><I>Running
+your redesigned application.</I></P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> If you play with your application, you will notice that the
+	Close button still closes the application. However, the Hello button no longer does
+	anything because you changed the ID of the button. MFC applications contain a series
+	of macros in the source code that determine which functions to call based on the
+	ID and event message of each control in the application. Because you changed the
+	ID of the Hello button, these macros no longer know which function to call when the
+	button is clicked. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H2><A NAME="Heading10"></A>Adding Code to Your Application</H2>
+<PRE>You can attach code to your dialog through the Visual C++ Class Wizard. You can use the Class Wizard to build the table of Windows messages that the application might receive, including the functions they should be passed to for processing, that the MFC macros use for attaching functionality to window controls. You can attach the functionality for this first application by following these steps:
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>To attach some functionality to the Hello button, right-click over
+	the button and select Class Wizard from the pop-up menu.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>If you had the Hello button selected when you opened the Class Wizard,
+	it is already selected in the list of available Object IDs, as in Figure 1.17.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig17.gif')"><B>FIGURE 1.17.</B></A><B> </B><I>The
+Class Wizard.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>3. </B>With IDHELLO selected in the Object ID list, select BN_CLICKED in the
+	list of messages and click Add Function. This opens the Add Member Function dialog
+	shown in Figure 1.18. This dialog contains a suggestion for the function name. Click
+	OK to create the function and add it to the message map.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig18.gif')"><B>FIGURE 1.18.</B></A><B> </B><I>The
+Class Wizard Add Member Function dialog.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>4. </B>After the function is added for the click message on the Hello button,
+	select the OnHello function in the list of available functions, as in Figure 1.19.
+	Click the Edit Code button so that your cursor is positioned in the source code for
+	the function, right at the position where you should add your functionality.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig19.gif')"><B>FIGURE 1.19.</B></A><B> </B><I>The
+list of available functions in the Class Wizard.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>5. </B>Add the code in Listing 1.1 just below the TODO comment line, as shown
+	in Figure 1.20.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig20.gif')"><B>FIGURE 1.20.</B></A><B> </B><I>Source
+code view where you insert Listing 1.1.</I></P>
+
+<P><I></I>
+<H4>LISTING 1.1.HELLODLG.CPP--THE OnHello FUNCTION.</H4>
+<PRE> 1: Void CHelloDlg::OnHello()
+ 2: {
+ 3:     // TODO: Add your control notification handler code here
+ 4: 
+ 5:     ///////////////////////
+ 6:     // MY CODE STARTS HERE
+ 7:     ///////////////////////
+ 8: 
+ 9:     // Say hello to the user
+10:     MessageBox(&quot;Hello. This is my first Visual C++ Application!&quot;);
+11: 
+12:     ///////////////////////
+13:     // MY CODE ENDS HERE
+14:     ///////////////////////
+</PRE>
+
+<PRE>15: }</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>6. </B>When you compile and run your application, the Hello button should
+	display the message shown in Figure 1.21.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig21.gif')"><B>FIGURE 1.21.</B></A><B> </B><I>Now
+your application will say hello to you.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading11"></A>Finishing Touches</H2>
+<P>Now that your application is functionally complete, you can still add a few details
+to finish off the project. Those finishing touches include</P>
+
+<UL>
+	<LI>Creating the dialog box icon
+	<P>
+	<LI>Adding maximize and minimize buttons
+</UL>
+
+<H3><A NAME="Heading12"></A>Creating the Dialog Box Icon</H3>
+<P>If you noticed the icon in the top-left corner of your application window, you
+saw three blocks with the letters M, F, and C. What does MFC have to do with your
+application? MFC stands for Microsoft Foundation Classes. Technically, it's the C++
+class library that your application is built with, but do you want to broadcast that
+to every user who sees your application? Most likely not. You need to edit the application
+icon to display an image that you do want to represent your application. Let's get
+busy!</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>In the tree view of your application resources in the workspace pane,
+	expand the icon branch and select the IDR_MAINFRAME icon, as in Figure 1.22. This
+	brings the application icon into the editor area of the Developer Studio.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig22.gif')"><B>FIGURE 1.22.</B></A><B> </B><I>The
+standard MFC icon.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>2. </B>Using the painting tools provided, repaint the icon to display an image
+	that you want to use to represent your application, as in Figure 1.23.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig23.gif')"><B>FIGURE 1.23.</B></A> <I>Your own
+custom icon for your application.</I></P>
+
+<DL>
+	<DT><I></I></DT>
+	<DD><B>3. </B>When you compile and run your application, you will notice your custom
+	icon in the top-left corner of your application window. Click the icon and select
+	About Hello from the drop-down menu.
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>On the About dialog that Visual C++ created for you, you can see a
+	large version of your custom icon in all its glory, as shown in Figure 1.24.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig24.gif')"><B>FIGURE 1.24.</B></A><B> </B><I>Your
+application's About window.</I></P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> When you open an application icon in the icon designer, the
+	icon is sized by default at 32x32. You can also select a 16x16 size icon from the
+	drop-down list box just above where you are drawing the icon. You should draw both
+	of these icons because there are some instances in which the large icon will be displayed
+	and some instance in which the small icon will be shown. You will want both icons
+	to show the same image to represent your application. 
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading13"></A>Adding Maximize and Minimize Buttons</H3>
+<P>In the dialog editor, where you design your application window, you can add the
+minimize and maximize buttons to the title bar of your application window by following
+these steps:</P>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>Select the dialog window itself as if you were going to resize the
+	window.
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>Using the pop-up menu (from right-clicking the mouse), select the dialog
+	properties.
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>Select the Styles tab, as shown in Figure 1.25.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig25.gif')"><B>FIGURE 1.25.</B></A><B> </B><I>Turning
+the minimize and maximize buttons on and off.</I></P>
+
+<DL>
+	<DT><I><BR>
+	</I></DT>
+	<DD><B>4. </B>After you turn on the minimize and maximize boxes, you can compile
+	and run your application. The minimize and maximize buttons appear on the title bar,
+	as in Figure 1.26.
+	<P>
+</DL>
+
+<P><A HREF="javascript:popUp('01fig26.gif')"><B>FIGURE 1.26.</B></A><B> </B><I>The
+application window with the minimize and maximize buttons.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading14"></A>Summary</H2>
+<P>Today you got your first taste of building applications using Visual C++. You
+learned about the different areas of the Visual C++ Developer Studio and what function
+each of these areas serves. You also learned how you can rearrange the Developer
+Studio environment to suit the way you work. You also learned how you can use the
+Visual C++ wizards to create an application shell and then attach functionality to
+the visual components that you place on your application windows.</P>
+<P>
+<H2><A NAME="Heading15"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q How can I change the title on the message box, instead of using the application
+	name?</B>
+	<P>
+	<DT></DT>
+	<DD><B>A</B> By default, the message box window uses the application name as the
+	window title. You can change this by adding a second text string to the MessageBox
+	function call. The first string is always the message to be displayed, and the second
+	string is used as the window title. For example, the OnHello function would look
+	like
+	<P>
+</DL>
+
+<PRE>// Say hello to the user
+MessageBox(&quot;Hello. This is my first Visual C++ Application!&quot;, 
+</PRE>
+<PRE>           &quot;My First Application&quot;);
+</PRE>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q Can I change the text on the About window to give my company name and more
+	detailed copyright information?</B>
+	<P>
+	<DT></DT>
+	<DD><B>A</B> Yes, the About window is in the Dialogs folder in the Resources View
+	tab of the workspace pane. If you double-click the IDD_ABOUTBOX dialog, the About
+	box will be opened in the dialog designer, where you can redesign it however you
+	want.
+	<P>
+</DL>
+
+<H2><A NAME="Heading16"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help solidify your understanding of the
+material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading17"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>How do you change the caption on a button?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>What can you do with the Visual C++ AppWizard?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>How do you attach functionality to the click of a button?
+	<P>
+</DL>
+
+<H3><A NAME="Heading18"></A>Exercise</H3>
+<P>Add a second button to the About window in your application. Have the button display
+a different message from the one on the first window.</P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../fm/fm.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch02/ch02.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A><BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

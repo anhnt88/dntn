@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ figDoc.write(zhtm);
+ figDoc.close();
+ popUpWin.focus();
+ }
+
+//-->
+
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Introduction</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"></H1>
+<CENTER>
+<P><A HREF="../ch01/ch01.htm"><IMG SRC="../button/next.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Next chapter" BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif"
+WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER"></H1>
+<CENTER>
+<H1>Teach Yourself Visual C++ 6 in 21 Days</H1>
+
+<H1>
+<HR>
+About the Authors</H1>
+</CENTER>
+<P><B>DAVIS CHAPMAN</B> first began programming computers while working on his master's
+degree in music composition. Writing applications for computer music, he discovered
+that he enjoyed designing and developing computer software. It wasn't long before
+he came to the realization that he stood a much better chance of eating if he stuck
+with his new-found skill and demoted his hard-earned status as a &quot;starving artist&quot;
+to a part-time hobby. Since that time, Davis has focused on the art of software design
+and development, with a strong emphasis on the practical application of client/server
+technology. Davis is the lead author of <I>Web Development with Visual Basic 5</I>
+and <I>Building Internet Applications with Delphi 2</I>. Davis is also a contributing
+author of <I>Special Edition Using Active Server Pages</I> and <I>Running a Perfect
+Web Site, Second Edition</I>. He has been a consultant working and living in Dallas,
+Texas, for the past eight years, and he can be reached at <A HREF="mailto:davischa@onramp.net">davischa@onramp.net</A>.</P>
+<P>
+<H4>Contributing Author</H4>
+<P><B>JON BATES</B> has worked on a whole range of commercial, industrial, and military
+software development projects worldwide over the past fifteen years. He is currently
+working as a self-employed software design consultant and contract software developer,
+specializing in Visual C++ application development for Windows NT/95/98.</P>
+<P>Jon began his career writing computer games for popular microcomputers and has
+since worked with a number of operating systems, such as CPM, DOS, TRIPOS, UNIX,
+and Windows, and a number of Assembly, third-generation, and object-oriented languages.</P>
+<P>He has written system and application software as diverse as device drivers, email,
+production modeling, motion video, image analysis, network and telecommunications,
+data capture, control systems, estimating and costing, and visualization software.
+He has also written a number of technical articles for computing journals on a range
+of topics.</P>
+<P>Jon lives with his wife, Ruth, and dog, Chaos, in the middle of cool Britannia.
+When not playing with computers, he likes to sleep and dream of fractals.</P>
+<P>You can reach Jon at <A HREF="mailto:jon@chaos1.demon.co.uk">jon@chaos1.demon.co.uk</A>
+and visit his Web site at <A target="_new" HREF="http://www.chaos1.demon.co.uk">www.chaos1.demon.co.uk</A>.</P>
+<P>
+<H1 ALIGN="CENTER">Dedication</H1>
+<P ALIGN="CENTER"><I>To Dore, and the rest of my family, for being very patient with
+me while I was busy writing yet another book.</I></P>
+<P>
+<H1 ALIGN="CENTER">Acknowledgments</H1>
+<P>There are numerous people without whom this book might never have been written.
+Among those who deserve credit is Kelly Marshall, for enabling me to take on this
+project and for sticking with me even though I know I made her life stressful at
+times. Credit needs to go to the entire editing team at Macmillan. I've seen what
+some of the material you have to work with looks like when it comes in from the authors,
+and I don't want to trade jobs with any of you. I'd also like to thank my family
+for continuing to allow me to put in the work required to produce this book--and
+for not disowning me in the process.</P>
+<P>
+<H1 ALIGN="CENTER">Tell Us What You Think!</H1>
+<P>As the reader of this book, <I>you</I> are our most important critic and commentator.
+We value your opinion and want to know what we're doing right, what we could do better,
+what areas you'd like to see us publish in, and any other words of wisdom you're
+willing to pass our way.</P>
+<P>As the executive editor for the Programming team at Macmillan Computer Publishing,
+I welcome your comments. You can fax, email, or write me directly to let me know
+what you did or didn't like about this book--as well as what we can do to make our
+books stronger.</P>
+<P><I>Please note that I cannot help you with technical problems related to the topic
+of this book, and that due to the high volume of mail I receive, I might not be able
+to reply to every message.</I></P>
+<P>When you write, please be sure to include this book's title and author as well
+as your name and phone or fax number. I will carefully review your comments and share
+them with the author and editors who worked on the book.</P>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Fax:		</TD>
+		<TD ALIGN="LEFT">317-817-7070		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Email:		</TD>
+		<TD ALIGN="LEFT"><A HREF="mailto:adv_prog@mcp.com">adv_prog@mcp.com</A>		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Mail:		</TD>
+		<TD ALIGN="LEFT">Executive Editor		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Programming		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Macmillan Computer Publishing		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">201 West 103rd Street		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Indianapolis, IN 46290 USA		</TD>
+	</TR>
+</TABLE>
+
+<H1 ALIGN="CENTER">Introduction</H1>
+<P>Welcome to Visual C++. Over the next 21 days, you will learn how to use the features
+that Microsoft has built into its C++ development environment to enable you to create
+very advanced applications for the Windows and NT platforms. When Microsoft's developers
+first came up with the idea behind Visual C++, they decided to take their world-class
+C++ compiler and create a development environment and set of tools that would enable
+developers to create Windows applications with a level of ease and speed that was
+unheard of among C++ development environments. Since that first version, Microsoft
+has continued to improve the tools that are a part of Visual C++ to make it even
+easier to create Windows applications. As Microsoft has introduced new technologies
+into the Windows platforms, it has also introduced tools into the Visual C++ suite
+to make it easy to integrate these new technologies into your applications.</P>
+<P>If you are new to C++, don't worry. I've tried to make it easy for you to learn
+the C++ programming language while also learning how to build applications using
+the Visual C++ tools. Just in case you find yourself having trouble understanding
+some aspect of C++, I've included a brief overview of the programming language in
+Appendix A, &quot;C++ Review.&quot;</P>
+<P>If you've looked at previous versions of this book, you might notice that I've
+completely rewritten the entire book. Our goal with this new version is not just
+to introduce you to and guide you through the various tools and resources that you
+will use to build applications with Visual C++; I've also tried to include a great
+deal more detail about the various options that are available to you with each of
+the features that are covered. This way, you'll be able to get a lot of use out of
+this book long after the initial 21 days.</P>
+<P>
+<H2><A NAME="Heading1"></A>How This Book Is Organized</H2>
+<P>This book is organized in weeks, with each set of seven days set off into a part
+unto itself. However, even though the book is organized in weeks, the topics are
+not neces-sarily organized that way.</P>
+<P>For the first week, you'll be covering the basics of building applications with
+Visual C++. You'll learn how to use designers to design your application windows.
+You'll learn how to use various controls available to you as a Windows application
+developer. You'll also learn a lot about the Visual C++ development environment and
+the tools that it makes available to you.</P>
+<P>By the time you begin the second week, you'll be doing more and more programming,
+as the topics become more involved. You'll still be using the Visual C++ tools to
+construct your applications, but the programming code will be getting a little more
+involved. You'll also start learning about more advanced topics, such as displaying
+graphics and creating SDI and MDI applications. Toward the end of the second week,
+you'll begin to work with databases. This topic spills over into the third and final
+week.</P>
+<P>In the third week, you'll learn how to create your own modules, DLLs, and ActiveX
+controls. You'll also learn how to build multitasking applications, which perform
+multiple tasks at a time. Finally, you'll learn how to integrate Microsoft Internet
+Explorer, and the ActiveX controls it provides, into your applications so that you
+can extend your applications over the Internet.</P>
+<P>After you finish the third week, you'll be ready to tackle the world of Windows
+programming with Visual C++. You'll have the skills and know-how required to build
+most Windows applications available today.</P>
+<P>
+<H2><A NAME="Heading2"></A>Conventions Used in This Book</H2>
+<P>While you are reading this book, you will probably notice a couple conventions
+that have been used to make it easier for you to learn the topic being discussed.</P>
+<P>All the source code in this book is provided in a monospaced font, as shown in
+Listing 0.1. This includes all the source code from the applications that you will
+be building and illustrations of how various functions can be used. Whenever you
+are adding new code, or changing code in a function with other code already there,
+the line numbers of the code that you add or change will be pointed out in the text.</P>
+<P>
+<H4>LISTING 0.1. SOME SAMPLE CODE.</H4>
+<PRE>1: void main()
+2: {
+3:     // if you are adding or changing code in an existing
+4:     // code snippet, I will point out the line numbers in the text<B>.</B>
+5: }</PRE>
+<P>If a topic needs special attention, it will be set apart from the rest of the
+text by one of several special markers:</P>
+<P>
+
+<UL>
+	<LI>Notes
+	<P>
+	<LI>Tips
+	<P>
+	<LI>Cautions
+</UL>
+
+<P>
+<HR>
+<STRONG>NOTE:</STRONG> Notes offer a deeper explanation of a topic or explain interesting
+or important points.
+<HR>
+</P>
+<P>
+<HR>
+<STRONG>TIP:</STRONG> Tips are pieces of information that can make things easier.
+<HR>
+</P>
+<P>
+<HR>
+<STRONG>CAUTION:</STRONG> Cautions warn you about traps that you will want to avoid.
+<HR>
+</P>
+<P>At the end of each day, you'll find a short quiz and one or two exercises to help
+make sure that you learned the topic you were studying. Don't worry--just in case
+you need the answers to the quizzes and some guidance when building the exercises,
+the solutions are provided in Appendix B, &quot;Answers.&quot;</P>
+
+<P>Enough said! You didn't buy this book to read about this book. You bought this
+book to learn how to use Visual C++ to build Windows applications. So go ahead and
+flip the page and get started programming...</P>
+<H1 ALIGN="CENTER"></H1>
+<P>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch01/ch01.htm"><IMG SRC="../button/next.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Next chapter" BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif"
+WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

@@ -1,0 +1,1058 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 16 -- Creating Your Own Classes and Modules</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch15/ch15.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch17/ch17.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 16 -<BR>
+Creating Your Own Classes and Modules</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Designing Classes</A>
+	<UL>
+		<LI><A HREF="#Heading2">Encapsulation</A>
+		<LI><A HREF="#Heading3">Inheritance</A>
+		<LI><A HREF="#Heading4">Visual C++ Class Types</A>
+	</UL>
+	<LI><A HREF="#Heading5">Creating Library Modules</A>
+	<LI><A HREF="#Heading6">Using Library Modules</A>
+	<UL>
+		<LI><A HREF="#Heading7">Creating the Library Module</A>
+		<LI><A HREF="#Heading8">Creating a Test Application</A>
+		<LI><A HREF="#Heading10">Updating the Library Module</A>
+	</UL>
+	<LI><A HREF="#Heading11">Summary</A>
+	<LI><A HREF="#Heading12">Q&amp;A</A>
+	<LI><A HREF="#Heading13">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading14">Quiz</A>
+		<LI><A HREF="#Heading15">Exercise</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+Sometimes you need to build a set of application functionality that will be used
+in an application that another programmer is working on. Maybe the functionality
+will be used in a number of applications. Another possibility is that you want to
+separate some functionality from the rest of the application for organizational purposes.
+You might develop this separate set of functionality and then give a copy of the
+code to your friend to include in his application, but then every time you make any
+changes to your set of functionality, it has to be reincorporated into the other
+set of application code. It would be much more practical if you could give a compiled
+version of your functionality to the other programmer so that every time you updated
+your part, all you had to hand over was a new compiled file. The new file could just
+replace the previous version, without having to make any changes to the other programmer's
+code.</P>
+
+<P>Well, it is possible to place your set of functionality into a self-contained
+compiled file, link it into another programmer's application, and avoid adding any
+new files to the finished application. Today, you will learn</P>
+<P>
+
+<UL>
+	<LI>How to design your own classes.
+	<P>
+	<LI>How to create compiled modules that can be linked into other applications.
+	<P>
+	<LI>How to include these modules into an application.
+</UL>
+
+<H2><A NAME="Heading1"></A>Designing Classes</H2>
+<P>You've already designed and built your own classes over the past few days, so
+the basics of creating a new class is not a new topic. Why did you create these classes?
+Each of the new classes that you created encapsulated a set of functionality that
+acted as a self-contained unit. These units consisted of both data and functionality
+that worked together to define the object.</P>
+<P>
+<H3><A NAME="Heading2"></A>Encapsulation</H3>
+<P>Object-oriented software design is the practice of designing software in the same
+way that everything else in the world is designed. For instance, you can consider
+your car built from a collection of objects: the engine, the body, the suspension,
+and so on. Each of these objects consists of many other objects. For instance, the
+engine contains either the carburetor or the fuel injectors, the combustion chamber
+and pistons, the starter, the alternator, the drive chain, and so on. Once again,
+each of these objects consists of even more objects.</P>
+<P>Each of these objects has a function that it performs. Each of these objects knows
+how to perform its own functions with little, if any, knowledge of how the other
+objects perform their functions. Each of the objects knows how it interacts with
+the other objects and how they are connected to the other objects, but that's about
+all they know about the other objects. How each of these objects work internally
+is hidden from the other objects. The brakes on your car don't know anything about
+how the transmission works, but if you've got an automatic transmission, the brakes
+do know how to tell the transmission that they are being applied, and the transmission
+decides how to react to this information.</P>
+<P>You need to approach designing new classes for your applications in the same way.
+The rest of the application objects do not need to know how your objects work; they
+only need to know how to interact with your objects. This principle, called <I>encapsulation</I>,
+is one of the basic principles of object-oriented software.</P>
+<P>
+<H3><A NAME="Heading3"></A>Inheritance</H3>
+<P>Another key principle of object-oriented software design is the concept of <I>inheritance</I>.
+An object can be inherited from another object. The descendent object inherits all
+the existing functionality of the base object. This allows you to define the descendent
+object in terms of how it's different from the base object.</P>
+<P>Let's look at how this could work with a thermostat. Suppose you had a basic thermostat
+that you could use in just about any setting. You could set the temperature for it
+to maintain, and it would turn on the heating or the air-conditioning as needed to
+maintain that temperature. Now let's say you needed to create a thermostat for use
+in a freezer. You could start from scratch and build a customized thermostat, or
+you could take your existing thermostat and specify how the freezer version differs
+from the original. These differences might include that it's limited to turning on
+the air conditioning and could never turn on the heater. You would probably also
+put a strict limit on the range of temperatures to which the thermostat could be
+set, such as around and below 32[infinity] Fahrenheit, or 0[infinity] Celsius. Likewise,
+if you needed a thermostat for an office building, you would probably want to limit
+the temperature range to what is normally comfortable for people and not allow the
+temperature to be set to an extremely cold or hot setting.</P>
+<P>With inheritance in creating your own classes, this method just described represents
+the same principle that you want to apply. If possible, you should start with an
+existing C++ class that has the basic functionality that you need and then program
+how your class is different from the base class that you inherited from. You have
+the ability to add new data elements, extend existing functionality, or override
+existing functionality, as you see fit.</P>
+<P>
+<H3><A NAME="Heading4"></A>Visual C++ Class Types</H3>
+<P>In most application projects, when you are creating a new class, you have a few
+options on the type of class that you are creating. These options are</P>
+<P>
+
+<UL>
+	<LI>Generic class
+	<P>
+	<LI>MFC class
+	<P>
+	<LI>Form class
+</UL>
+
+<P>Which of these types of classes you choose to create depends on your needs and
+what your class will be doing. It also depends on whether your class needs to descend
+from any of the MFC classes.</P>
+<P>
+<H4>Generic Class</H4>
+<P>You use a generic class for creating a class that is inherited from a class you
+have already created. This class type is intended for creating classes that are not
+inherited from any MFC classes (although you have already seen where you need to
+use it to create classes that are based on MFC classes). If you want to create a
+more specialized version of the CLine class, for instance, a CRedLine class, that
+only drew in red, you create it as a generic class because it's inherited from another
+class that you created.</P>
+<P>When you create a generic class, the New Class Wizard tries to locate the declaration
+of the base class (the header file with the class declared). If it cannot find the
+appropriate header file, it tells you that you might need to make sure that the header
+file with the base class definition is included in the project. If the base class
+happens to be an MFC class that is not accessible as an MFC class (such as CObject),
+then you can ignore this warning because the correct header file is already part
+of the project.</P>
+<P>
+<H4>MFC Class</H4>
+<P>If you want to make a reusable class that is based on an existing MFC class, such
+as an edit box that automatically formats numbers as currency, you want to create
+an MFC class. The MFC class type is for creating new classes that are inherited from
+existing MFC classes.</P>
+<P>
+<H4>Form Class</H4>
+<P>The form class is a specialized type of MFC class. You need to create this type
+of class if you are creating a new form style window. It can be a dialog, form view,
+or database view class. This new class will be associated with a document class for
+use with the view class. If you are building a database application, you will probably
+create a number of this style of classes.</P>
+<P>
+<H2><A NAME="Heading5"></A>Creating Library Modules</H2>
+<P>When you create new classes for your application, they might be usable in other
+applications as well. Often, with a little thought and effort, classes you create
+can be made flexible enough so that they could be used in other applications. When
+this is the case, you need some way of packaging the classes for other applications
+without having to hand over all your source code. This is the issue that library
+modules address. They allow you to compile your classes and modules into a compiled
+object code library that can be linked into any other Visual C++ application.</P>
+<P>Library modules were one of the first means available to provide compiled code
+to other programmers for use in their applications. The code is combined with the
+rest of the application code by the linker as the final step in the compilation process.
+Library modules are still a viable means of sharing modules with other developers.
+All the developer needs is the library (.lib) file and the appropriate header files
+that show all the exposed classes, methods, functions, and variables, which the other
+programmer can access and use. The easiest way to do this is to provide the same
+header file that you used to create the library file, but you can also edit the header
+so that only the parts that other programmers need are included.</P>
+<P>By using library files to share your modules with other programmers, you are arranging
+that your part of the application is included in the same executable file as the
+rest of the application. Your modules are not included in a separate file, such as
+a DLL or ActiveX control. This results in one less file to be distributed with the
+application. It also means that if you make any changes to the module, fix any bugs,
+or enhance any functionality, then the applications that use your module must be
+relinked. Using library files has a slight disadvantage to creating DLLs, where you
+may be able to just distribute the new DLL without having to make any changes to
+the application, but you'll learn all about that tomorrow.</P>
+<P>
+<H2><A NAME="Heading6"></A>Using Library Modules</H2>
+<P>To get a good idea of how to use library modules, it's helpful to create a library
+module, use it in another application, and then make some modifications to the library
+module. For today's sample application, you'll create a module that generates a random
+drawing on the window space specified. It'll be able to save and restore any of these
+drawings. You'll then use this module in an SDI application, where every time a new
+document is specified, a new drawing is generated. The initial module will only use
+eight colors and will generate only a limited number of line sequences. Later, you'll
+modify the module so that it will generate any number of colors and will generate
+a larger number of line sequences.</P>
+<P>
+<H3><A NAME="Heading7"></A>Creating the Library Module</H3>
+<P>To create a library module project, you need to specify in the New dialog that
+you want to create a Win32 Static Library, as shown in Figure 16.1. This tells Visual
+C++ that the output from the project compilation will be a library module instead
+of an executable application. From there, all you have to do is define the classes
+and add the code. You have the options of including support for MFC and using precompiled
+headers in your project, as in Figure 16.2, the only step in the Project Wizard.</P>
+<P>The library that you will create for today's sample application will consist of
+two classes. The first class will be the CLine class that you first created on Day
+10, &quot;Creating Single Document Interface Applications.&quot; The second class
+will be the class that creates the random drawings on the drawing surface. This class
+will contain an object array of the CLine objects that it will create and populate
+with each of the drawing efforts. This second class will also need functionality
+to save and restore the drawing, as well as to delete the existing drawing so that
+a new drawing can be started. It will need to know the dimensions of the drawing
+area so that it can generate a drawing that will fit in the drawing area. Once you
+create this module, you'll take a look at how you can use this module in an application
+project.</P>
+<P><A HREF="javascript:popUp('16fig01.gif')"><B>FIGURE 16.1.</B></A><B> </B><I>Specifying
+a library module project.</I></P>
+
+<P><A HREF="javascript:popUp('16fig02.gif')"><B>FIGURE 16.2.</B></A><B> </B><I>Specifying
+project support options.</I></P>
+
+<P><I></I>
+<H4>Creating a Library Project</H4>
+<P>To start the library project for today's example, you need to create a new project,
+specifying that the project is a Win32 Static Library project. Give the project a
+suitable name and click OK to create the project.</P>
+<P>For today's sample project, specify on the one wizard step to include both MFC
+and precompiled header support. Although the precompiled header support is not necessary,
+it will speed up most compiles that you perform while building the module.</P>
+<P>Once you create your module project, you'll find yourself working with a project
+that has no classes. You've got a blank slate from which you can create whatever
+type of module you need.</P>
+<P>For your sample project, because you already have the CLine class built, copy
+it from the Day 10 project area into the project directory for today's project. Add
+both the header and source code file to today's project by choosing Project | Add
+To Project \ Files. Once you add both of these files to the project, you should see
+the CLine class appear in the Class View of your project.</P>
+<P>
+<H4>Defining the Classes</H4>
+<P>Now that you've got a basic library module project ready to go, it's time to begin
+adding the meat of the module. Using the CLine class is an easy way of reusing some
+functionality that you created earlier in another setting. However, the real functionality
+of this module will be in its ability to generate random drawings, or squiggles.
+For this functionality, you'll need to create a new class.</P>
+<P>To start this new class, add a new class to the project by selecting New Class
+from the pop-up menu in the Class View tab. The first thing that you'll notice in
+the New Class dialog is that you are limited to creating generic classes. Because
+you are creating a static library that will be linked into the application, Visual
+C++ is making some assumptions about the type of class that you want to create. Because
+this is not an MFC project, even though MFC support is included, you are prevented
+from creating a new MFC or form class. If you need to inherit a new class from an
+MFC class, you have to add it as if it were a generic class.</P>
+<P>Use the New Class dialog to create your new class. Give the class a name that
+reflects its functionality, such as CModArt, and specify that it's derived from the
+CObject class as public. You'll receive the same warning that the base class header
+file cannot be found, but because you specified that MFC support should be included,
+you can ignore that message.</P>
+<P>Once you create your class, you need to add a couple of variables to the class.
+First, you need somewhere to hold all the lines that will make up the drawing, so
+you'll add an object array. Second, you need to know the area of the drawing surface,
+so you'll want a CRect to hold the drawing area specification. You can add both of
+these variables to your new class using the types and names in Table 16.1.</P>
+<P>
+<H4>TABLE 16.1. CModArt VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+		<TD ALIGN="LEFT"><I>Access</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">static const COLORREF		</TD>
+		<TD ALIGN="LEFT">m_crColors[8]		</TD>
+		<TD ALIGN="LEFT">Public		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CRect		</TD>
+		<TD ALIGN="LEFT">m_rDrawArea		</TD>
+		<TD ALIGN="LEFT">Private		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">CObArray		</TD>
+		<TD ALIGN="LEFT">m_oaLines		</TD>
+		<TD ALIGN="LEFT">Private		</TD>
+	</TR>
+</TABLE>
+</P>
+<P><B>Setting the Drawing Area</B></P>
+<P>Before you can draw anything, you need to know the area that you have to draw
+within. You can add a public function to your class that will copy the passed in
+CRect to the member CRect variable. To add this function to your project, add a new
+member function to your new class, specifying the type as void, the declaration as
+SetRect(CRect rDrawArea), and the access as public. Edit the function as in Listing
+16.1.</P>
+<P>
+<H4>LISTING 16.1. THE CModArt SetRect FUNCTION.</H4>
+<PRE>1: void CModArt::SetRect(CRect rDrawArea)
+2: {
+3:     // Set the drawing area rectangle
+4:     m_rDrawArea = rDrawArea;
+5: }
+</PRE>
+<P><B>Creating a New Drawing</B></P>
+<P>One of the key pieces to this module is the ability to generate random squiggles
+that appear on the drawing area. By generating a whole series of these squiggles,
+your module will be able to create an entire drawing. Starting with the single squiggle,
+you can design a function that generates one squiggle and then calls this function
+a number of times to generate the entire drawing.</P>
+<P>This first function, the squiggle generator, needs to determine how many lines
+will be in the squiggle. It needs to determine the color and width of the pen to
+be used when drawing the squiggle. It also needs to determine the starting point
+for the squiggle. From this point, it could loop through the appropriate number of
+lines, generating a new destination to continue the squiggle from the previous destination
+point.</P>
+<P>To add this functionality to your project, add a new member function to the drawing
+class. Specify the function type as void, the definition as NewLine, and the access
+as private because this function will only be called by the master loop that is determining
+how many of these squiggles will be in the final drawing. Edit the new function with
+the code in Listing 16.2.</P>
+<P>
+<H4>LISTING 16.2. THE CModArt NewLine FUNCTION.</H4>
+<PRE>1:  void CModArt::NewLine()
+2:  {
+3:      int lNumLines;
+4:      int lCurLine;
+5:      int nCurColor;
+6:      UINT nCurWidth;
+7:      CPoint pTo;
+8:      CPoint pFrom;
+9:
+10:     // Normalize the rectangle before determining the width and height
+11:     m_rDrawArea.NormalizeRect();
+12:     // get the area width and height
+13:     int lWidth = m_rDrawArea.Width();
+14:     int lHeight = m_rDrawArea.Height();
+15:
+16:     // Determine the number of parts to this squiggle
+17:     lNumLines = rand() % 100;
+18:     // Are there any parts to this squiggle?
+19:     if (lNumLines &gt; 0)
+20:     {
+21:         // Determine the color
+22:         nCurColor = rand() % 8;
+23:         // Determine the pen width
+24:         nCurWidth = (rand() % 8) + 1;
+25:         // Determine the starting point for the squiggle
+26:         pFrom.x = (rand() % lWidth) + m_rDrawArea.left;
+27:         pFrom.y = (rand() % lHeight) + m_rDrawArea.top;
+28:         // Loop through the number of segments
+29:         for (lCurLine = 0; lCurLine &lt; lNumLines; lCurLine++)
+30:         {
+31:             // Determine the end point of the segment
+32:             pTo.x = ((rand() % 20) - 10) + pFrom.x;
+33:             pTo.y = ((rand() % 20) - 10) + pFrom.y;
+34:             // Create a new CLine object
+35:             CLine *pLine = new CLine(pFrom, pTo, nCurWidth, 
+                        &Acirc;m_crColors[nCurColor]);
+36:             try
+37:             {
+38:                 // Add the new line to the object array
+39:                 m_oaLines.Add(pLine);
+40:             }
+41:             // Did we run into a memory exception?
+42:             catch (CMemoryException* perr)
+43:             {
+44:                 // Display a message for the user, giving him the
+45:                 // bad news
+46:                 AfxMessageBox(&quot;Out of memory&quot;, MB_ICONSTOP | MB_OK);
+47:                 // Did we create a line object?
+48:                 if (pLine)
+49:                 {
+50:                     // Delete it
+51:                     delete pLine;
+52:                     pLine = NULL;
+53:                 }
+54:                 // Delete the exception object
+55:                 perr-&gt;Delete();
+56:             }
+57:             // Set the starting point to the end point
+58:             pFrom = pTo;
+59:         }
+60:     }
+61: }
+</PRE>
+<P>In this function, the first thing that you did was get the area that you had available
+for drawing with the following three lines:</P>
+<P>
+<PRE>m_rDrawArea.NormalizeRect();
+int lWidth = m_rDrawArea.Width();
+int lHeight = m_rDrawArea.Height();
+</PRE>
+<P>In the first of these lines, you normalized the rectangle. This is necessary to
+guarantee that the width and height returned in the next two lines are both positive
+values. Because of the coordinate system used in Windows, getting the width by subtracting
+the left-side position from the right-side position can result in a negative number.
+The same can happen with the height. By normalizing the rectangle, you are guaranteeing
+that you'll get positive results for these two values.</P>
+<P>Once you determined the drawing area, you determined the number of line segments
+you would use in this squiggle:</P>
+<P>
+<PRE>lNumLines = rand() % 100;
+</PRE>
+<P>The rand function is capable of returning numbers in a wide range. By getting
+the modulus of 100, you are guaranteeing that the resulting number will be between
+0 and 100. This is a common technique for generating random numbers within a certain
+range, using the modulus function with the upper limit of the value range (or the
+upper limit minus the lower limit, if the lower limit is not equal to 0, and then
+adding the lower limit to the resulting number). You use the same technique to determine
+the color, width, and starting position for the squiggle:</P>
+<P>
+<PRE>nCurColor = rand() % 8;
+nCurWidth = (rand() % 8) + 1;
+pFrom.x = (rand() % lWidth) + m_rDrawArea.left;
+pFrom.y = (rand() % lHeight) + m_rDrawArea.top;
+</PRE>
+<P>Notice how when you were determining the starting position, you added the left
+and top of the drawing area to the position that you generated. This guarantees that
+the starting position is within the drawing area. Once you enter the loop, generating
+all the line segments in the squiggle, you limit the available area for the next
+destination within 10 of the current position:</P>
+<P>
+<PRE>pTo.x = ((rand() % 20) - 10) + pFrom.x;
+pTo.y = ((rand() % 20) - 10) + pFrom.y;
+CLine *pLine = new CLine(pFrom, pTo, nCurWidth, m_crColors[nCurColor]);
+m_oaLines.Add(pLine);
+</PRE>
+<P>You can easily increase this distance to make the drawings more angular. Once
+you generate the next line segment, you create the line object and add it to the
+object array. Finally, you set the starting position to the ending position of the
+line segment you just generated:</P>
+<P>
+<PRE>pFrom = pTo;
+</PRE>
+<P>Now you are ready to go through the loop again and generate the next line segment,
+until you have generated all line segments in this squiggle.</P>
+<P>Now that you can generate a single squiggle, the rest of the process is easy.
+First, you determine how many squiggles will be in the drawing. Next, you loop for
+the number of squiggles that need to be generated and call the NewLine function once
+for each squiggle. To add this functionality to your project, add a new member function
+to the drawing class. Specify the type as void, the declaration as NewDrawing, and
+the access as public. Edit the function as in Listing 16.3.</P>
+<P>
+<H4>LISTING 16.3. THE CModArt NewDrawing FUNCTION.</H4>
+<PRE>1:  void CModArt::NewDrawing()
+2:  {
+3:      int lNumLines;
+4:      int lCurLine;
+5:
+6:      // Determine how many lines to create
+7:      lNumLines = rand() % 10;
+8:      // Are there any lines to create?
+9:      if (lNumLines &gt; 0)
+10:     {
+11:         // Loop through the number of lines
+12:         for (lCurLine = 0; lCurLine &lt; lNumLines; lCurLine++)
+13:         {
+14:             // Create the new line
+15:             NewLine();
+16:         }
+17:     }
+18: }
+</PRE>
+<P><B>Displaying the Drawing</B></P>
+<P>To draw the set of squiggles on the drawing area, you can add a function that
+will loop through the object array, calling the Draw function on each line segment
+in the array. This function needs to receive the device context as the only argument
+and must pass it along to each of the line segments. To add this function to your
+project, add a new member function to the drawing class. Specify the function type
+as void, the function declaration as Draw(CDC *pDC), and the access as public. Edit
+the function as in Listing 16.4.</P>
+<P>
+<H4>LISTING 16.4. THE CModArt Draw FUNCTION.</H4>
+<PRE>1:  void CModArt::Draw(CDC *pDC)
+2:  {
+3:      // Get the number of lines in the object array
+4:      int liCount = m_oaLines.GetSize();
+5:      int liPos;
+6:
+7:      // Are there any objects in the array?
+8:      if (liCount)
+9:      {
+10:         // Loop through the array, drawing each object
+11:         for (liPos = 0; liPos &lt; liCount; liPos++)
+12:             ((CLine*)m_oaLines[liPos])-&gt;Draw(pDC);
+13:     }
+14: }
+</PRE>
+<P><B>Serializing the Drawing</B></P>
+<P>Because you are using the line segment class that you created earlier and have
+already made serializable, you do not need to add the serialization macros to the
+drawing class. What you do need to add is a Serialize function that passes the archive
+object on to the object array, letting the object array and line segment objects
+do all the serialization work. To add this function to your project, add a new member
+function to the drawing class. Specify the function type as void, the declaration
+as Serialize(CArchive &amp;ar), and the access as public. Edit the function as in
+Listing 16.5.</P>
+<P>
+<H4>LISTING 16.5. THE CModArt Serialize FUNCTION.</H4>
+<PRE>1: void CModArt::Serialize(CArchive &amp;ar)
+2: {
+3:     // Pass the archive object on to the array
+4:     m_oaLines.Serialize(ar);
+5: }
+</PRE>
+<P><B>Clearing the Drawing</B></P>
+<P>To provide full functionality, you need to be able to delete a drawing from the
+drawing class so that a new drawing can be created or an existing drawing can be
+loaded. This is a simple matter of looping through the object array and destroying
+every line segment object and then resetting the object array. To add this functionality
+to your project, add a new member function to the drawing class. Specify the type
+as void, the declaration as ClearDrawing, and the access as public. Edit the function
+as in Listing 16.6.</P>
+<P>
+<H4>LISTING 16.6. THE CModArt ClearDrawing FUNCTION.</H4>
+<PRE>1:  void CModArt::ClearDrawing()
+2:  {
+3:      // Get the number of lines in the object array
+4:      int liCount = m_oaLines.GetSize();
+5:      int liPos;
+6:
+7:      // Are there any objects in the array?
+8:      if (liCount)
+9:      {
+10:         // Loop through the array, deleting each object
+11:         for (liPos = 0; liPos &lt; liCount; liPos++)
+12:             delete m_oaLines[liPos];
+13:         // Reset the array
+14:         m_oaLines.RemoveAll();
+15:     }
+16: }
+</PRE>
+<P><B>Completing the Class</B></P>
+<P>Finally, to wrap up your drawing class, you need to initialize the random number
+generator. The random number generator function, rand, generates a statistically
+random number sequence based on a series of mathematical calculations. If the number
+generator starts with the same number each time, then the sequence of numbers is
+the same each time. To get the random number generator to produce a different sequence
+of numbers each time your application runs, you need to seed it with a value that
+is different each time. The typical way to do this is to feed the current system
+time into the srand function, which seeds the random number generator with a different
+time each time that the application runs. This seeding of the number generator must
+be done only once each time the application is run, so you can add this functionality
+by editing the drawing class constructor with the code in Listing 16.7.</P>
+<P>
+<H4>LISTING 16.7. THE CModArt CONSTRUCTOR.</H4>
+<PRE>1: CModArt::CModArt()
+2: {
+3:     // Initialize the random number generator
+4:     srand((unsigned)time(NULL));
+5: }
+</PRE>
+<P>To complete the class, you need to include all of the necessary header files for
+the functionality that you've added to this class. The random number generator needs
+the stdlib.h and time.h header files, and the object array needs the header file
+for the CLine class. You also need to populate the color table for use when generating
+squiggles. You can add all of these finishing touches by scrolling to the top of
+the source code file for the drawing class and adding lines 5, 6, 9, and 12 through
+21 in Listing 16.8.</P>
+<P>
+<H4>LISTING 16.8. THE CModArt INCLUDES AND COLOR TABLE.</H4>
+<PRE>1:  // ModArt.cpp: implementation of the CModArt class.
+2:  //
+3:  //////////////////////////////////////////////////////////////////////
+4:
+5:  #include &lt;stdlib.h&gt;
+6:  #include &lt;time.h&gt;
+7:
+8:  #include &quot;stdafx.h&quot;
+9:  #include &quot;Line.h&quot;
+10: #include &quot;ModArt.h&quot;
+11:
+12: const COLORREF CModArt::m_crColors[8] = {
+13:     RGB(   0,   0,   0),    // Black
+14:     RGB(   0,   0, 255),    // Blue
+15:     RGB(   0, 255,   0),    // Green
+16:     RGB(   0, 255, 255),    // Cyan
+17:     RGB( 255,   0,   0),    // Red
+18:     RGB( 255,   0, 255),    // Magenta
+19:     RGB( 255, 255,   0),    // Yellow
+20:     RGB( 255, 255, 255)     // White
+21: };
+</PRE>
+<P>You have now completed your library module. Before you go any further, you need
+to compile your project. Once you compile your project, you cannot run anything because
+you need to create an application that uses your library module in order to run and
+test your code. To get ready for creating this test application, close the entire
+workspace so that you will start with a clean workspace for the test application.</P>
+<P>
+<H3><A NAME="Heading8"></A>Creating a Test Application</H3>
+<P>To be able to test your module, you need to create a test application that uses
+the module. This plain application can contain just enough functionality to thoroughly
+test the module. All you want to do at this point is test all the functionality in
+the module; you don't have to create a full-blown application.</P>
+<P>When you create your test application, you need to include the header file for
+the drawing class in the relevant classes in your application. In a typical SDI or
+MDI application, this means including the header file in the document class at a
+minimum and probably the view and application class source files also. You also have
+to add the library file that your module created in the application project so that
+it will be linked into your appli-cation.</P>
+<P>
+<H4>Creating the Test App Shell</H4>
+<P>Creating a test application shell is a simple matter of creating a standard SDI
+or MDI application shell. For the purposes of keeping the test application as simple
+as possible, it's probably advisable to use an SDI application. However, if you've
+got some functionality in your module that is intended for use in an MDI application,
+then that application style might be a better selection as your test application.</P>
+<P>For the test application for the sample module you created, create a standard
+SDI application shell using the AppWizard. Give the project a name such as TestApp
+or some other suitable name. Specify a file extension on the advanced button on the
+fourth AppWizard step. Otherwise, just go ahead and use the default settings for
+everything else.</P>
+<P>Once you create the application shell, you need to add the library module to the
+project. You can do this by selecting Project | Add To Project | Files. Once in the
+Insert Files dialog, specify the file types as library files, as shown in Figure
+16.3. Navigate to the debug directory of the module project to find the library module
+that you created with the previous project. This typically requires moving up one
+directory level, finding the project directory for the module, and then navigating
+through it to the debug directory. (If you are building the release version of the
+module and application, you want to navigate down to the release directory of the
+module project.) You should be able to find the library file for the module you created,
+as shown in Figure 16.4. Select this module and click OK to add it to the project.</P>
+<P><A HREF="javascript:popUp('16fig03.gif')"><B>FIGURE 16.3.</B></A><B> </B><I>Specifying
+library files.</I></P>
+
+<P><A HREF="javascript:popUp('16fig04.gif')"><B>FIGURE 16.4.</B></A><B> </B><I>Adding
+a library file to the project.</I></P>
+
+<P>Once you add the library file to the project, you also need to add the header
+files for any of the classes in the module that will be used into the appropriate
+application source code files. For the test application that you are building, this
+entails adding line 7 in Listing 16.9. You want to add the same line in the include
+sections of the source code files for the view and application classes as well.</P>
+<P>
+<H4>LISTING 16.9. THE CTestAppDoc INCLUDES.</H4>
+<PRE>1: // TestAppDoc.cpp : implementation of the CTestAppDoc class
+2: //
+3:
+4: #include &quot;stdafx.h&quot;
+5: #include &quot;TestApp.h&quot;
+6:
+7: #include &quot;..\ModArtMod\ModArt.h&quot;
+8: #include &quot;TestAppDoc.h&quot;
+</PRE>
+<P>The last thing that you need to do in preparing the application shell is add a
+variable for any classes from the library module that need to be included in any
+of the application classes. In the case of the test application that you are building,
+this is a variable in the document class of the drawing class that you created in
+the library module project. To add this variable to your application, add a new member
+variable to the document class. Specify the variable type as the drawing class from
+the library module (in this instance, CModArt) and specify the name as m_maDrawing
+and the access as private.</P>
+<P>
+<H4>Creating a New Drawing</H4>
+<P>The first place where you want to put some of the functionality of your module
+is when you are creating a new document. This is the time to be generating a new
+drawing. As a result, you want to do two things. First, get the drawing area of the
+view class, passing it along to the drawing object. Second, tell the drawing object
+to generate a new drawing. This is all fairly straightforward. To add this functionality
+to your application, edit the OnNewDocument function in the document class, adding
+the lines 9-23 in Listing 16.10.</P>
+<P>
+<H4>LISTING 16.10. THE CTestAppDoc OnNewDocument FUNCTION.</H4>
+<PRE>1:  BOOL CTestAppDoc::OnNewDocument()
+2:  {
+3:      if (!CDocument::OnNewDocument())
+4:          return FALSE;
+5:
+6:      // TODO: add reinitialization code here
+7:      // (SDI documents will reuse this document)
+8:
+9:      // Get the position of the view
+10:     POSITION pos = GetFirstViewPosition();
+11:     // Did we get a valid position?
+12:     if (pos != NULL)
+13:     {
+14:         // Get a pointer to the view
+15:         CView* pView = GetNextView(pos);
+16:         RECT lWndRect;
+17:         // Get the display area rectangle
+18:         pView-&gt;GetClientRect(&amp;lWndRect);
+19:         // Set the drawing area
+20:         m_maDrawing.SetRect(lWndRect);
+21:         // Create a new drawing
+22:         m_maDrawing.NewDrawing();
+23:     }
+24:
+25:     return TRUE;
+26: }
+</PRE>
+<H4>Saving and Deleting a Drawing</H4>
+<P>The other functionality that you want to add to the document class is to save
+and restore the drawing and to delete the current drawing. These tasks are the last
+of the document-related functionality of your library module.</P>
+<P>To add the functionality to save and restore drawings to your application, edit
+the Serialize function in the document class. Delete all the current contents of
+the function, replacing it with a call to the drawing object's Serialize function,
+as in Listing 16.11.</P>
+<P>
+<H4>LISTING 16.11. THE CTestAppDoc Serialize FUNCTION.</H4>
+<PRE>1: void CTestAppDoc::Serialize(CArchive&amp; ar)
+2: {
+3:     // Serialize the drawing
+4:     m_maDrawing.Serialize(ar);
+5: }
+</PRE>
+<P>To add the functionality to delete the current drawing so that a new drawing can
+be generated or a saved drawing can be loaded, you need to add the event handler
+for the DeleteContents function to the document class. In this function, you call
+the drawing object's ClearDrawing function. To add this functionality to your application,
+use the Class Wizard to add the event handler for the DeleteContents event to the
+document class. Edit this function, adding line 5 in Listing 16.12.</P>
+<P>
+<H4>LISTING 16.12. THE CTestAppDoc DeleteContents FUNCTION.</H4>
+<PRE>1: void CTestAppDoc::DeleteContents()
+2: {
+3:     // TODO: Add your specialized code here and/or call the base class
+4:     // Delete the drawing
+5:     m_maDrawing.ClearDrawing();
+6:
+7:     CDocument::DeleteContents();
+8: }
+</PRE>
+<H4>Viewing a Drawing</H4>
+<P>You need to add one final set of functionality to your test application before
+you can test your library module: the drawing functionality to the application. This
+functionality belongs in the view class because it is the object that knows when
+it needs to redraw itself. Before you can add this functionality to the view class,
+you need some way for the view class to get access to the drawing object. The easiest
+way to add this capability is to add another function to the document class that
+can be called to get a pointer to the drawing object. Once the view has this pointer,
+it can call the drawing object's own Draw function.</P>
+<P>To add the capability to get a pointer to the drawing object to your document
+class, add a new member function to the document class. Specify the function type
+as a pointer to the drawing object, in this case, CModArt*, and specify the function
+declaration as GetDrawing and the access as public. Edit the function, adding the
+code in Listing 16.13.</P>
+<P>
+<H4>LISTING 16.13. THE CTestAppDoc GetDrawing FUNCTION.</H4>
+<PRE>1: CModArt* CTestAppDoc::GetDrawing()
+2: {
+3:     // Return the drawing object
+4:     return &amp;m_maDrawing;
+5: }
+</PRE>
+<P>Adding the drawing functionality to the view class is a simple matter of editing
+the OnDraw function in the view class. In this function, you need to get a pointer
+to the drawing object and then call its Draw function, as in Listing 16.14.</P>
+<P>
+<H4>LISTING 16.14. THE CTestAppView OnDraw FUNCTION.</H4>
+<PRE>1:  void CTestAppView::OnDraw(CDC* pDC)
+2: {</PRE>
+
+<PRE>3:      CModTestAppDoc* pDoc = GetDocument();
+4:      ASSERT_VALID(pDoc);
+5:
+6:      // TODO: add draw code for native data here
+7:
+8:      // Get the drawing object
+9:      CModArt* m_maDrawing = pDoc-&gt;GetDrawing();
+10:     // Draw the drawing
+11:     m_maDrawing-&gt;Draw(pDC);
+12: }
+</PRE>
+<P>Once you add all this functionality, you can compile and run your application
+to test the functionality of your library module. Each time you select File | New
+from your application menu, a new drawing is created, as in Figure 16.5.</P>
+<P><A HREF="javascript:popUp('16fig05.gif')"><B>FIGURE 16.5.</B></A><B> </B><I>Creating
+random squiggle drawings.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading10"></A>Updating the Library Module</H3>
+<P>Now that you have a working application, let's go back to the library module and
+make some changes. Whenever you make any changes to the library module code, no matter
+how minor, you need to relink all applications that use the module in order to get
+the updates into those applications. This is because the library module is linked
+into the EXE of the application. It does not remain in a separate file.</P>
+<P>To see how this works, reopen the library module project. You will make three
+changes to this module. First, you'll increase the number of squiggles that may be
+included in a single drawing. Second, you'll increase the number of line segments
+that may make up a single squiggle. Third, you'll generate random colors, beyond
+just the eight colors included in the color table. Once you make these changes, you'll
+recompile your library module. Once you generate a new module, you'll relink your
+test application so that you can incorporate these changes into the application.</P>
+<P>To make the first change in your module, increasing the number of squiggles that
+can be in a drawing, edit the NewDrawing function in the drawing class, increasing
+the modulus value in line 7 of the function, as in Listing 16.15. This will increase
+the number of possible squiggles in a single drawing from a maximum of 10 to a maximum
+of 50. There may still be an occasional drawing that doesn't have any squiggles,
+but you can ignore this possibility for now.</P>
+<P>
+<H4>LISTING 16.15. THE MODIFIED CModArt NewDrawing FUNCTION.</H4>
+<PRE>1:  void CModArt::NewDrawing()
+2:  {
+3:      int lNumLines;
+4:      int lCurLine;
+5:
+6:      // Determine how many lines to create
+7:      lNumLines = rand() % 50;
+8:      // Are there any lines to create?
+9:      if (lNumLines &gt; 0)
+10:     {
+11:         // Loop through the number of lines
+12:         for (lCurLine = 0; lCurLine &lt; lNumLines; lCurLine++)
+13:         {
+14:             // Create the new line
+15:             NewLine();
+16:         }
+17:     }
+18: }
+</PRE>
+<P>With the increased number of squiggles that can be included in a drawing, next
+you want to increase the number of line segments that may be in a squiggle. To do
+this, edit the NewLine function and increase the modulus number on line 20 in Listing
+16.16 from 100 to 200. While you're in this function, you can also increase the number
+of colors that may be generated for use in each drawing. First, add three integer
+variable declarations, one for each of the three additive colors (red, green, and
+blue, as in lines 9 through 11 in Listing 16.16). Next, generate random values for
+each of these integers between the values of 0 and 255 (lines 26 through 28). Finally,
+when creating the CLine object, pass these colors through the RGB function to create
+the actual color that will be used in the drawing, as in line 41 of Listing 16.16.</P>
+<P>
+<H4>LISTING 16.16. THE MODIFIED CModArt NewLine FUNCTION.</H4>
+<PRE>1:  void CModArt::NewLine()
+2:  {
+3:      int lNumLines;
+4:      int lCurLine;
+5:  //  int nCurColor;
+6:      UINT nCurWidth;
+7:      CPoint pTo;
+8:      CPoint pFrom;
+9:      int cRed;
+10:     int cBlue;
+11:     int cGreen;
+12:
+13:     // Normalize the rectangle before determining the width and height
+14:     m_rDrawArea.NormalizeRect();
+15:     // get the area width and height
+16:     int lWidth = m_rDrawArea.Width();
+17:     int lHeight = m_rDrawArea.Height();
+18:
+19:     // Determine the number of parts to this squiggle
+20:     lNumLines = rand() % 200;
+21:     // Are there any parts to this squiggle?
+22:     if (lNumLines &gt; 0)
+23:     {
+24:         // Determine the color
+25: //      nCurColor = rand() % 8;
+26:         cRed = rand() % 256;
+27:         cBlue = rand() % 256;
+28:         cGreen = rand() % 256;
+29:         // Determine the pen width
+30:         nCurWidth = (rand() % 8) + 1;
+31:         // Determine the starting point for the squiggle
+32:         pFrom.x = (rand() % lWidth) + m_rDrawArea.left;
+33:         pFrom.y = (rand() % lHeight) + m_rDrawArea.top;
+34:         // Loop through the number of segments
+35:         for (lCurLine = 0; lCurLine &lt; lNumLines; lCurLine++)
+36:         {
+37:             // Determine the end point of the segment
+38:             pTo.x = ((rand() % 20) - 10) + pFrom.x;
+39:             pTo.y = ((rand() % 20) - 10) + pFrom.y;
+40:             // Create a new CLine object
+41:             CLine *pLine = new CLine(pFrom, pTo, nCurWidth, 
+                        &Acirc;RGB(cRed, cGreen, cBlue));
+42:             try
+43:             {
+44:                 // Add the new line to the object array
+45:                 m_oaLines.Add(pLine);
+46:             }
+47:             // Did we run into a memory exception?
+48:             catch (CMemoryException* perr)
+49:             {
+50:                 // Display a message for the user, giving him the
+51:                 // bad news
+52:                 AfxMessageBox(&quot;Out of memory&quot;, MB_ICONSTOP | MB_OK);
+53:                 // Did we create a line object?
+54:                 if (pLine)
+55:                 {
+56:                     // Delete it
+57:                     delete pLine;
+58:                     pLine = NULL;
+59:                 }
+60:                 // Delete the exception object
+61:                 perr-&gt;Delete();
+62:             }
+63:             // Set the starting point to the end point
+64:             pFrom = pTo;
+65:         }
+66:     }
+67: }
+</PRE>
+<P>Now that you've made all the necessary changes to the library module, compile
+it so that it's ready for use in the test application. If you run your test application
+from the Start | Run Taskbar option, as in Figure 16.6, you'll notice that there
+is no noticeable difference in how your application behaves. This is because the
+application hasn't changed. The application is still using the old version of your
+library module. To get the test application to use the new version of the library
+module, reopen the test application project in Visual C++. Build the project, which
+should not do anything other than relink the project, and then run the application.
+You should see a significant difference in the drawings that your application is
+now generating, as shown in Figure 16.7.</P>
+
+<P><A HREF="javascript:popUp('16fig06.gif')"><B>FIGURE 16.6.</B></A><B> </B><I>Run
+the test application from the Start menu.</I></P>
+
+<P><A HREF="javascript:popUp('16fig07.gif')"><B>FIGURE 16.7.</B></A><B> </B><I>The
+updated test application.</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading11"></A>Summary</H2>
+<P>Today you learned about how to approach creating and designing new classes for
+your applications. You learned the differences between the different types of classes
+that are available to you through the New Class Wizard in Visual C++. You also learned
+how you can create a library module with a set of your functionality that you can
+hand to other programmers for including in their applications. You learned how this
+module will be linked into the actual applications, thus not requiring a separate
+file to be distributed along with the applications.</P>
+<P>Tomorrow you will learn about a different approach to creating reusable packaged
+functionality that you can give to other programmers. You will learn how to create
+DLLs using Visual C++, what the differences are between creating library modules
+and DLL, and how you need to approach each task.</P>
+<P>
+<H2><A NAME="Heading12"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q Isn't most functionality packaged in DLLs now? Why would I want to create
+	library modules instead of DLLs?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> Yes, the trend toward packaging functionality modules has been to create
+	DLLs instead of library modules for a number of years now. However, there are still
+	instances where library modules are preferable. If you are creating a module that
+	contains proprietary functionality that you do not want to risk exposing to others,
+	but that is needed for any applications that you or another programmer in your company
+	is building, then you would probably want all that functionality packaged in a library
+	module so that it is internal to the application. Using library modules makes it
+	effectively inaccessible to your competition without significant disassembly and
+	reverse engineering efforts.
+	<P>
+	<DT></DT>
+	<DD><B>Q Why does the header file need to be included in the application that is
+	using my library file?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> The application needs to know about the objects that are in the library
+	file. In the sample application, you didn't need to include the header file for the
+	CLine class because the application didn't directly use or reference the CLine class.
+	However, the application did use the drawing object that was in your library module,
+	so it did need to know about that object, how it is defined, and what functions are
+	available for it. If you don't want the other programmers to know all of the internal
+	structure of your classes, then you can create another header file to be distributed
+	with your library module. This header would contain definitions of all of the same
+	classes that are in the library module but would only provide the public functions
+	and variables that the other programmers can actually access.
+	<P>
+</DL>
+
+<H2><A NAME="Heading13"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading14"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>When do you want to create a new MFC class?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>When you make changes to a library file, what do you have to do to
+	the applications that use the library file?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What are the different types of classes that you can create?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>When you package some functionality in a library file, what do you
+	need to give to other programmers who want to use your library module?
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>What are two of the basic principles in object-oriented software design?
+	<P>
+</DL>
+
+<H3><A NAME="Heading15"></A>Exercise</H3>
+<P>Separate the CLine class into a different library module from the drawing class
+so that you have two library modules instead of one. Link them into the test application.</P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch15/ch15.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch17/ch17.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

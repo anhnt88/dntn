@@ -1,0 +1,963 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Appendix E -- Using the Debugger and Profiler</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../apd/apd.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../apf/apf.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- E -<BR>
+Using the Debugger and Profiler</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">Creating Debugging and Browse Information</A>
+	<UL>
+		<LI><A HREF="#Heading2">Using Debug and Release Modes</A>
+		<LI><A HREF="#Heading3">Setting Debug Options and Levels</A>
+		<LI><A HREF="#Heading4">Table E.2.&nbsp;Debug info settings.</A>
+		<LI><A HREF="#Heading5">Creating and Using Browse Information</A>
+		<LI><A HREF="#Heading6">Using Remote and Just-in-Time Debugging</A>
+		<LI><A HREF="#Heading7">Installing the Remote Debugger Files</A>
+	</UL>
+	<LI><A HREF="#Heading8">Tracing and Single Stepping</A>
+	<UL>
+		<LI><A HREF="#Heading9">Using the TRACE Macro</A>
+		<LI><A HREF="#Heading10">Using the ASSERT and VERIFY macros</A>
+		<LI><A HREF="#Heading11">Using Breakpoints and Single Stepping the Program</A>
+		<LI><A HREF="#Heading12">Using Edit and Continue</A>
+		<LI><A HREF="#Heading13">Watching Program Variables</A>
+		<LI><A HREF="#Heading14">Other Debugger Windows</A>
+	</UL>
+	<LI><A HREF="#Heading15">Additional Debugging Tools</A>
+	<UL>
+		<LI><A HREF="#Heading16">Using Spy++</A>
+		<LI><A HREF="#Heading17">Process Viewer</A>
+		<LI><A HREF="#Heading18">The OLE/COM Object Viewer</A>
+		<LI><A HREF="#Heading19">The MFC Tracer</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+<I>by Jon Bates</I></P>
+
+<P><I></I>
+<H2><A NAME="Heading1"></A>Creating Debugging and Browse Information</H2>
+<P>A large part of application development is actually debugging your program. All
+software development is a tight cycle of application design, implementation, and
+debugging.</P>
+<P>Visual C++ has an extensive debugging environment and a range of debugging tools
+that really help with program development. You can quickly identify problems, watch
+the contents of variables, and follow the flow of programs through your own code
+and the MFC code.</P>
+<P>Tools such as the Spy++ program can show you the messages passed between Windows
+and your application and let you spy on applications to see which user interface
+controls and Window styles they use.</P>
+<P>
+<H3><A NAME="Heading2"></A>Using Debug and Release Modes</H3>
+<P>There are two main compiler configurations that you can set to build your application:
+Debug and Release mode. You can change these modes by clicking the Project menu and
+selecting the Settings option or by pressing Alt+F7, which will display the Project
+Settings dialog box (see Figure E.1). The main project settings are shown at the
+top level and can be changed by selecting the options listed in the combo box. When
+one setting is selected, changes that you make to any options on the tabs on the
+right will be set against that configuration. When you build the application, it
+will be built using your current configuration settings, or you can select All Configurations
+to build and make changes to all configurations simultaneously.</P>
+<P><A HREF="javascript:popUp('30fig01r.gif')"><B>FIGURE E.1.</B></A><B> </B><I>The
+C/C++ tab of the Project Settings dialog box.</I></P>
+
+<P>Both Release<B> </B>and Debug<B> </B>configurations are supplied whenever you
+create a new project; they produce very different object code. When configured for
+Debug mode, your build will produce a large and fairly slow executable program. This
+is because lots of debugging information is included in your program and all the
+compiler optimizations are disabled.</P>
+<P>When you compile the same program in Release mode, you'll see a small, fast executable
+program, but you won't be able to step through its source code or see any debugging
+messages from it.</P>
+<P>Normally, when developing an application, you leave the compiler set to Debug<B>
+</B>mode so that you can easily spot and debug problems that arise in your code.
+When you've finished your application and are preparing to release it, you can set
+the configuration to Release<B> </B>mode and produce a small, fast program for your
+users.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>RELEASE MODE TESTING</B></P>
+
+	<P>You should always fully test your application after rebuilding it in Release mode
+	before sending it to users. Bugs can arise from things such as leaving proper program
+	code in ASSERT macros (discussed later this chapter), which are then removed, or
+	because of the effect of some speed and memory optimizations.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading3"></A>Setting Debug Options and Levels</H3>
+<P>You can set a variety of debugging options and levels from the C/C++ tab of the
+Project Settings dialog box. This dialog page is available from the Project menu
+by selecting the Settings option (or by pressing Alt+F7) and then selecting the C/C++
+tab.</P>
+<P>With the General<B> </B>Category selected, the following items are available:</P>
+<P>
+
+<UL>
+	<LI>Warning Level.<B> </B>This is the level of compiler warning messages given during
+	compilation. You can set it to any of the values shown in Table E.1. The default
+	level is Level 3, which is quite sensitive, although many good C++ programmers insist
+	on using Level 4 to get the most warning of potential problems from the compiler.
+	Level 1 and no warnings (None) should be used only in special circumstances because
+	they indicate only severe warnings (or none at all).
+</UL>
+
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<B>LEVEL 4 WARNINGS</B></P>
+
+	<P>At level 4, you'll find that Microsoft's own AppWizard-generated code gives warnings
+	(although usually only about unused function parameters that can be safely ignored).
+<HR>
+
+
+</BLOCKQUOTE>
+
+
+<UL>
+	<LI>Warnings as Errors.<B> </B>When you check this, warning messages are shown as
+	errors that then stop the compiler.
+	<P>
+	<LI>Generate Browse Info.<B> </B>When you check this, the compiler generates information
+	that can be used to help you locate functions, symbols, and class relationships shown
+	in a Browse window (discussed in the next section). Unfortunately, generating this
+	useful information increases the compilation time quite a bit for large projects
+	(where you most need it).
+	<P>
+	<LI>Debug Info.<B> </B>This lets you specify the level of debugging information generated
+	by the compiler, as shown in Table E.2.
+	<P>
+	<LI>Optimizations.<B> </B>In Debug mode, you would normally leave these disabled
+	because they interfere with the debugging process and take longer to compile. However,
+	in Release mode you can decide whether to Maximize Speed or Minimize Size of your
+	application (or a default that compromises to get the best of both).
+	<P>
+	<LI>Preprocessor Definitions.<B> </B>This specifies manifest definitions that are
+	defined when your program is compiled. You can use these definitions in conjunction
+	with the #ifdef, #else, and #endif preprocessor commands to compile sections of code
+	in specific configurations. The _DEBUG definition is set by default when in Debug
+	mode. You can use this to compile Debug mode-only code in your application like this:
+</UL>
+
+<PRE>int a = b * c / d + e;
+#ifdef _DEBUG
+CString strMessage;
+strMessage.Format(&quot;Result of sum was %d&quot;,a);
+AfxMessageBox(strMessage);
+#endif
+</PRE>
+
+<UL>
+	<LI>The message box code is then compiled and run when your application is built
+	in Debug mode. When you switch to Release mode, the code isn't compiled into your
+	executable.
+	<P>
+	<LI>Project Options.<B> </B>The compiler itself runs as a console-based application
+	and converts your Developer Studio options into several flags to be passed on the
+	command line. You can add additional flag settings for more obscure compiler settings
+	that don't have a user interface switch directly into this edit box.
+</UL>
+
+<H4>TABLE E.1.&nbsp;COMPILER WARNING LEVELS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Level</I></TD>
+		<TD ALIGN="LEFT"><I>Warnings Reported</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">None		</TD>
+		<TD ALIGN="LEFT">None		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Level 1		</TD>
+		<TD ALIGN="LEFT">Only the most severe		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Level 2		</TD>
+		<TD ALIGN="LEFT">Some less severe messages		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Level 3		</TD>
+		<TD ALIGN="LEFT">Default level (all reasonable warnings)		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Level 4		</TD>
+		<TD ALIGN="LEFT">Very sensitive (good for perfectionists)		</TD>
+	</TR>
+</TABLE>
+
+<H3><A NAME="Heading4"></A>Table E.2.&nbsp;Debug info settings.</H3>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+		<TD ALIGN="LEFT"><I>Debugging Information Generated</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">None		</TD>
+		<TD ALIGN="LEFT">Produces no debugging information--usually reserved for Release modes.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Line Numbers Only		</TD>
+		<TD ALIGN="LEFT">This generates only line numbers that refer to the source code for functions and
+			global variables. However, compile time and executable size are reduced.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">C 7.0-Compatible		</TD>
+		<TD ALIGN="LEFT">This generates debugging information that is compatible with Microsoft C 7.0. It
+			places all the debugging information into the executable files and increases their
+			size, but allows full symbolic debugging.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Program Database		</TD>
+		<TD ALIGN="LEFT">This setting produces a file with a .pdb extension that holds the maximum level of
+			debugging information, but doesn't create the Edit and Continue information.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Program Database for Edit and Continue		</TD>
+		<TD ALIGN="LEFT">This is the default and usual debug setting. It produces a .pdb file with the highest
+			level of debugging and creates the information required for the new Edit and Continue
+			feature.		</TD>
+	</TR>
+</TABLE>
+
+<H3><A NAME="Heading5"></A>Creating and Using Browse Information</H3>
+<P>You can use the Source Browser tool to inspect your source code in detail. This
+tool can be invaluable if you are examining someone else's code or coming back to
+your own code after you haven't viewed it for awhile.</P>
+<P>To use the Source Browser, you must compile the application with the Generate
+Browse Info setting checked, in the C/C++ tab of the Project Settings dialog box.
+To run the tool, press Alt+F12 or click the Tools menu and select the Source Browser
+option. (The first time you run the tool, it will ask you to compile the browser
+information.)</P>
+<P>The first dialog box the Source Browser presents requests an Identifier to browse
+for (as shown in Figure E.2). This identifier can be a class name, structure name,
+function name, or global or local variable name in your application. After you have
+entered an identifier, the OK button is enabled, and you can browse for details about
+that identifier.</P>
+<P><A HREF="javascript:popUp('30fig02.gif')"><B>FIGURE E.2.</B></A><B> </B><I>The
+Browse dialog box requesting a symbol to browse.</I></P>
+
+<P>Select Query offers various options for details pertaining to your chosen symbol.
+You can choose from any of the following:</P>
+<P>
+
+<UL>
+	<LI>Definitions and References. This option shows you all the files that have refer-ences
+	to the specified identifier and whether they are references to the identifier (places
+	where it is used in the code) or definitions (places where the identifier is defined),
+	as shown in Figure E.3. The line numbers are listed along with the filenames in each
+	file. By double-clicking one of the references or definitions, the code to which
+	it refers will be loaded and shown in the Developer Studio editor at that specific
+	position. This is very useful for tracking all the places that a specific variable
+	or function is used.
+</UL>
+
+<P><A HREF="javascript:popUp('30fig03.gif')"><B>FIGURE E.3.</B></A><B> </B><I>Source
+Browser showing definitions and references.</I></P>
+
+<P><I></I>
+
+<UL>
+	<LI>File Outline. This option shows you all the classes, data, functions, macros,
+	and types that are defined in the specified filename (identifier), as shown in Figure
+	E.4. You can filter each type in or out by pressing relevant buttons along the top
+	of the browser window.
+</UL>
+
+<P><A HREF="javascript:popUp('30fig04.gif')"><B>FIGURE E.4.</B></A><B> </B><I>The
+file outline display of the source browser.</I></P>
+
+<P><I></I>
+
+<UL>
+	<LI>Base Classes and Members. This arguably is one of the most useful options of
+	the source browser. By specifying a class as the identifier, all the classes' hierarchy
+	and member functions and variables at each hierarchy level are displayed (see Figure
+	E.5). You can also set the filter options to show only certain types of member functions
+	and variables.
+</UL>
+
+<P><A HREF="javascript:popUp('30fig05.gif')"><B>FIGURE E.5.</B></A><B> </B><I>The
+Base Classes and Members view of the source browser.</I></P>
+
+<P><I></I>
+
+<UL>
+	<LI>Derived Classes and Members. This view is also very useful and shows all the
+	classes that are derived from the specified class, along with their own member functions
+	and variables. You can also use the browser with the MFC classes to gain more insight
+	into the MFC implementation, as shown with the MFC CWnd class in Figure E.6.
+</UL>
+
+<P><A HREF="javascript:popUp('30fig06.gif')"><B>FIGURE E.6.</B></A><B> </B><I>The
+Derived Classes and Members view of the Source Browser showing CWnd-derived classes.</I></P>
+
+<P><I></I>
+
+<UL>
+	<LI>Call Graph. The Call Graph option shows you all the functions that are called
+	by a specified identifier and the files in which they are defined and implemented.
+	This lets you quickly track the potential flow of a program.
+	<P>
+	<LI>Callers Graph. The corresponding Callers Graph option shows you all the functions
+	that call the specified identifier. You can use this to track the possible callers
+	of your specified function.
+</UL>
+
+<H3><A NAME="Heading6"></A>Using Remote and Just-in-Time Debugging</H3>
+<P>The debugger includes tools that let you debug a program running on a remote machine
+(even over the Internet via TCP/IP). This can be useful if you want to test your
+application in a different environment other than your development machine. To do
+this, you must have exactly the same versions of the .dll and .exe files on both
+machines. After loading the project, you can debug it via a shared directory from
+the remote machine by changing the Executable for Debug Session edit box to the path
+and filename of your local .exe file (located in the Project Settings dialog box
+under the Debug tab).</P>
+<P>You must also add a path to the .exe file in the Remote Executable Path and File
+Name edit box at the bottom of the Debug tab, leaving the Working Directory blank.
+You can then start the remote debugger monitor on the remote computer by running
+the MSVCMON.EXE program and connecting to it by clicking the Build menu and selecting
+the Debugger Remote Connection option.</P>
+<P>From the Remote Connection dialog box you can choose Local for a shared directory
+debug session or Remote to debug via a TCP/IP connection. (You can set the address
+by clicking Settings.) This will connect to the remote monitor that will start the
+remote debugging session.</P>
+<H3><A NAME="Heading7"></A>Installing the Remote Debugger Files</H3>
+<P>You will also need the following files to run the remote debugger monitor on the
+remote machine: MSVCMON.EXE, MSVCRT.DLL, TLN0T.DLL, DM.DLL, MSVCP5O.DLL, and MSDIS100.DLL.
+These files can be found in your installed ...\Microsoft Visual Studio\Common\MSDev98\bin
+subdirectory.</P>
+
+<P>Just-in-time debugging lets you debug a program that was run normally (not through
+the debugger) and then developed a problem. If you have Visual C++ installed on a
+machine and this option is enabled, any program that develops a fault will be loaded
+into a new Developer Studio session ready for debugging and show the code that caused
+the crash.</P>
+
+<P>This often raises a chuckle when Developer Studio itself crashes and then proceeds
+to load another session of itself, offering you an assembly code view of where the
+crash took place in the original for you to debug. It can be very useful to debug
+your own applications when they crash unexpectedly (usually in a demonstration to
+your boss). You can enable this option by clicking the Tools menu and selecting Options
+to display the Options dialog box. Then select the Debug tab and ensure that the
+Just-in-Time debugging check box is checked.</P>
+<P>The OLE RPC debugging option on this tab is also very useful when developing COM
+and DCOM applications because it lets the debugger traverse a function call into
+another out-of-process program or .dll and lets another debugger take over for the
+other process. It then hands control back when returning from the remote function
+and works across networks and different computers.</P>
+<P>
+<H2><A NAME="Heading8"></A>Tracing and Single Stepping</H2>
+<P>One of the most useful features of the Visual C++ debugging environment is the
+interactive single stepping. This feature lets you step through the code one line
+at a time and examine the contents of variables as you go. You can also set breakpoints
+so that the program runs until it reaches a breakpoint and then stops at that point,
+letting you step from that point until you want to continue running.</P>
+<P>Trace statements and assertions are also very useful tools for finding program
+faults. Trace statements let you display messages and variables from your program
+in the output window as it runs through trace statements. You can use assertions
+to cause the program to stop if a condition isn't TRUE when you assert that it should
+be.</P>
+<P>
+<H3><A NAME="Heading9"></A>Using the TRACE Macro</H3>
+<P>You can add TRACE macros to your program at various places to indicate that various
+parts of the code have been run or to display the contents of variables at those
+positions. The TRACE macros are compiled into your code in the debug configuration
+and displayed in the Output window on the Debug tab, when you run your program through
+the debugger.</P>
+<P>You can safely leave in the TRACE macros when you perform a release build because
+these macros are automatically excluded from the destination object.</P>
+<P>You can display simple messages or output variable contents by passing a format
+string as the first parameter to the TRACE macro. This format string is exactly the
+same as you would pass to a printf() or CString::Format() function. You can specify
+various special formatting codes such as %d to display a number in decimal, %x to
+display a number in hexadecimal, or %s to display a string. The following parameters
+should then correspond to the order of the formatting codes. For example, the code</P>
+<P>
+<PRE>int nMyNum = 60;
+char* szMyString = &quot;This is my String&quot;;
+TRACE(&quot;Number = %d, or %x in hex and my string is: %s\n&quot;,
+          nMyNum, szMyString);
+</PRE>
+<P>will result in this output trace line:</P>
+<P>
+<PRE>Number = 60, or 3c in hex and my string is 
+&Acirc;This is my String
+</PRE>
+<P>Listing E.1 shows the TRACE macro used to display the contents of an array before
+and after sorting by a very inefficient but simple sort algorithm.</P>
+<P>If you want to try the code shown in Listing E.1, you can use the AppWizard to
+build a simple SDI framework. Simply add the code above the OnNewDocument() member
+function of your document class and then call it by adding a DoSort() call into your
+OnNewDocument() function.</P>
+<P>You can run the application through the debugger (click Build, select Start Debug,
+and choose Go from the pop-up menu) to see the output trace.</P>
+<P>You must ensure that the output window is visible (click the View menu and select
+Output) when the tabbed output window is shown (same as the compiler output). Ensure
+that the Debug tab is selected.</P>
+<P>
+<H4>LISTING E.1.&nbsp;LSTE_1.CPP--A SIMPLE SORT ROUTINE TO DEMONSTRATE DEBUGGING
+TECHNIQUES.</H4>
+<PRE>1:  void Swap(CUIntArray* pdwNumbers,int i)
+2:  {
+3:      UINT uVal = pdwNumbers-&gt;GetAt(i);
+4:      pdwNumbers-&gt;SetAt(i, pdwNumbers-&gt;GetAt(i+1));
+5:      pdwNumbers-&gt;SetAt(i+1,uVal);
+6:  }
+7:
+8:  void DoSort()
+9:  {
+10:      CUIntArray arNumbers;
+11:      for(int i=0;i&lt;10;i++) arNumbers.Add(1+rand()%100);
+12:
+13:      TRACE(&quot;Before Sort\n&quot;);
+14:      for(i=0;i&lt;arNumbers.GetSize();i++)
+15:          TRACE(&quot;[%d] = %d\n&quot;,i+1,arNumbers[i]);
+16: 
+17:      BOOL bSorted;
+18:      do
+19:      {
+20:          bSorted = TRUE;
+21:          for(i=0;i&lt;arNumbers.GetSize()-1;i++)
+22:          {
+23:              if (arNumbers[i] &gt; arNumbers[i+1])
+24:              {
+25:                  Swap(&amp;arNumbers,i);
+26:                  bSorted = FALSE;
+27:              }
+28:          }
+29:      } while(!bSorted);
+30:
+31:      TRACE(&quot;After Sort\n&quot;);
+32:      for(i=0;i&lt;arNumbers.GetSize();i++)
+33:          TRACE(&quot;[%d] = %d\n&quot;,i+1,arNumbers[i]);
+34:  }
+</PRE>
+<P>Listing E.1 sorts an array of random numbers (between 1 and 100), generated in
+line 11. Lines 13 to 15 then print out the contents of the array before sorting by
+TRACE statements. Lines 17 through 29 sort the array by swapping pairs of numbers
+that are in the wrong order (by calling the Swap() function in line 25). The Swap()
+function (lines 1 to 6) takes a pointer to the array and a position and then swaps
+the two numbers at that position.</P>
+<P>After sorting, the contents of the array are again printed in the output window
+by the TRACE statements in lines 31 to 33.</P>
+<P>The trace output of this program appears in the Output window of Developer Studio,
+as shown in Table E.3.</P>
+<P>
+<H4>TABLE E.3.&nbsp;OUTPUT FROM THE SORTING PROGRAM.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">
+			<H4>BEFORE SORT
+		</TD>
+		<TD ALIGN="LEFT">
+			<H4>AFTER SORT
+		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">[1] = 42		</TD>
+		<TD ALIGN="LEFT">[1] = 1		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">[2] = 68		</TD>
+		<TD ALIGN="LEFT">[2] = 25		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">[3] = 35		</TD>
+		<TD ALIGN="LEFT">[3] = 35		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">[4] = 1		</TD>
+		<TD ALIGN="LEFT">[4] = 42		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">[5] = 70		</TD>
+		<TD ALIGN="LEFT">[5] = 59		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">[6] = 25		</TD>
+		<TD ALIGN="LEFT">[6] = 63		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">[7] = 79		</TD>
+		<TD ALIGN="LEFT">[7] = 65		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">[8] = 59		</TD>
+		<TD ALIGN="LEFT">[8] = 68		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">[9] = 63		</TD>
+		<TD ALIGN="LEFT">[9] = 70		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">[10] = 65		</TD>
+		<TD ALIGN="LEFT">[10] = 79		</TD>
+	</TR>
+</TABLE>
+
+<H3><A NAME="Heading10"></A>Using the ASSERT and VERIFY macros</H3>
+<P>You can use the ASSERT macro to ensure that conditions are TRUE. ASSERT is passed
+one parameter that is either a TRUE or FALSE expression. If the expression is TRUE,
+all is well. If the expression is FALSE, your program will stop and the Debug Assertion
+Failed dialog box will be displayed (see Figure E.7), prompting you to Abort the
+program, Retry the code, or Ignore the assertion. It also shows the program, source
+file, and line number where the assertion failed. If you choose Abort, the debugging
+session is terminated. Retry is probably the most useful option because the compiler
+will then show you the code where the ASSERT macro has failed, enabling you to figure
+out what went wrong. If you already know or don't care about the assertion, you can
+choose Ignore and continue running the program, which might then result in a more
+fatal error.</P>
+<P><A HREF="javascript:popUp('30fig07.gif')"><B>FIGURE E.7.</B></A><B> </B><I>The
+Debug Assertion Failed dialog box helps you track down bugs.</I></P>
+
+<P>A common use of ASSERT is to ensure that input parameters to functions are correct.
+For example, you can make the Sort() function (shown in Listing E.1) more robust
+by checking its input parameters. To check the input parameters, add ASSERT macros
+at the top of the Sort() function like this:</P>
+<P>
+<PRE>ASSERT(pdwNumbers);
+ASSERT(i&gt;=0 &amp;&amp; i&lt;10);
+</PRE>
+<P>This will ensure that the pointer to the numbers array isn't zero and that the
+position to swap is between 0 and 9. If either of these is incorrect, the Debug Assertion
+Failed dialog box is displayed. This technique helps you track down errors caused
+by passing faulty parameters to functions. It is a good practice to use the ASSERT
+macro to check that the values passed to each of your functions conform to your expectations.</P>
+<P>Another macro, ASSERT_VALID, can be used with CObject-derived classes such as
+most MFC classes. This performs a more thorough check on the object and its contents
+to ensure the entire object is in a correct and valid state. You can pass a pointer
+to the object to be checked like this:</P>
+<P>
+<PRE>ASSERT_VALID(pdwNumbers);
+</PRE>
+<P>Another ASSERT macro is ASSERT_KINDOF, which is used on CObject-derived classes
+to check that they are of the correct class type. For example, you can check that
+a pointer to your view object is of the correct view class like this:</P>
+<P>
+<PRE>ASSERT_KINDOF(CYourSpecialView,pYView);
+</PRE>
+<P>The Assertion Failed dialog box will be displayed if it isn't of the correct class
+type or any of its derivatives.</P>
+<P>You must be careful not to put any code that is needed for normal program operation
+into ASSERT macros because they are excluded in the release build. A common source
+of release mode errors that are hard to track down is coding like this:</P>
+<P>
+<PRE>int a = 0;
+ASSERT(++a &gt; 0);
+if (a&gt;0) MyFunc();
+</PRE>
+<P>In the debug build, this code will increment the integer a in the ASSERT line
+and then call MyFunc() in the following line because a is greater than zero. When
+your sales team is eager to demonstrate your new application, you might think it
+works fine because there aren't any Debug mode problems. So you recompile it in Release
+mode and hand it over to your sales department, which demonstrates it to a customer,
+whereupon it crashes badly. It crashes because the ++a isn't performed--the release
+mode excludes ASSERT lines.</P>
+<P>The VERIFY macro helps with this problem. VERIFY works like ASSERT, and in Debug
+mode it throws the same Assertion Failed dialog box if the expression is zero. However,
+in release mode the expression is still evaluated, but a zero result won't display
+the Assertion dialog box. You will tend to use VERIFY when you always want to perform
+an expression and ASSERT when you only want to check while debugging. Therefore,
+replacing ASSERT in the previous example with VERIFY, as shown in the following example,
+will enable the release build to work properly:</P>
+<P>
+<PRE>VERIFY(++a &gt; 0);
+</PRE>
+<P>You are more likely to use VERIFY to check return codes from functions:</P>
+<P>
+<PRE>VERIFY(MyFunc() != FALSE);
+</PRE>
+<H3><A NAME="Heading11"></A>Using Breakpoints and Single Stepping the Program</H3>
+<P>The use of single stepping and breakpoints is probably the most effective debugging
+tool for tracking down the majority of problems. The support for various types of
+breakpoints and the single-stepping information available is very sophisticated in
+Visual C++; I can only hope to give you a taste of the power of this debugging tool.</P>
+<P>The key to single stepping is breakpoints. You can set a breakpoint anywhere in
+your code and then run your program through the debugger. When the breakpoint is
+reached, the code will be displayed in the editor window at the breakpoint position,
+ready for you to single step or continue running.</P>
+<P>You can add a breakpoint by selecting the specific code line (clicking the editor
+cursor onto the line in the editor window) and then either clicking the Breakpoint
+icon in the Build minibar (see Figure E.8) or by pressing F9. Alternatively, most
+sophisticated breakpoints can be added or removed by clicking the Edit menu and selecting
+the Breakpoints option to display the Breakpoints dialog box (see Figure E.9). When
+you add a breakpoint, it's displayed as a small red circle next to the line you have
+specified. Breakpoints can be set only against valid code lines, so sometimes the
+Developer Studio will move one of your breakpoints to the closest valid code line
+for you.</P>
+<P><A HREF="javascript:popUp('30fig08r.gif')"><B>FIGURE E.8.</B></A><B> </B><I>Adding
+a breakpoint to your code via the Build minibar toolbar or the F9 key.</I></P>
+
+<P><A HREF="javascript:popUp('30fig09.gif')"><B>FIGURE E.9.</B></A><B> </B><I>Adding
+a breakpoint using the Breakpoints dialog box.</I></P>
+
+<P>You can toggle the breakpoint on or off by clicking the Breakpoint (hand shaped)
+icon or remove it by clicking the Remove or Remove All buttons on the Breakpoints
+dialog box. You can leave them in position but disable them by clicking the check
+mark to the left of each breakpoint listed in the Breakpoints dialog box. Clicking
+there again will show the check and re-enable the breakpoint.</P>
+<P>When you have set your breakpoint(s), you can run the code through the debugger
+by choosing Build, Start Debug, Go. Alternatively, you can use the shortcut by clicking
+the Go icon (to the left of the Breakpoint icon on the Build minibar toolbar--refer
+to Figure E.8) or by pressing the F5 key.</P>
+<P>The program will run as normal until it reaches the breakpoint, where it will
+stop and display an arrow against the line with the breakpoint. At that point, you
+can use the Debug toolbar to control the single stepping process, as shown in Figure
+E.10.</P>
+<P><A HREF="javascript:popUp('30fig10r.gif')"><B>FIGURE E.10.</B></A><B> </B><I>The
+debugger stopped at a breakpoint ready for single stepping with the Debug toolbar.</I></P>
+
+<P>When stopped in the debugger, you can see the contents of most variables merely
+by moving the cursor over them in the editor window. Their contents are then displayed
+in a ToolTip at the cursor position. More detailed contents are shown by dragging
+the variables into the Watch window, as discussed in detail in the next section.</P>
+<P>You can single step through the code using the four curly brace icons shown on
+the Debug toolbar or by clicking the Debug menu and choosing one of the step options.
+The available step options are shown in Table E.4. You can find these on the Debug
+menu and the Debug toolbar.</P>
+<P>
+<H4>TABLE E.4. STEP OPTIONS AVAILABLE IN SINGLE STEPPING.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD WIDTH="134" ALIGN="LEFT"><I>Icon/Step Option</I></TD>
+		<TD ALIGN="LEFT"><I>Shortcut Key</I></TD>
+		<TD ALIGN="LEFT"><I>Effect When Selected</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD WIDTH="134" ALIGN="LEFT"><IMG SRC="ic-12.gif" WIDTH="29" HEIGHT="28" ALIGN="BOTTOM" BORDER="0"> Step Into		</TD>
+		<TD ALIGN="LEFT">F11		</TD>
+		<TD ALIGN="LEFT">The debugger will execute the current line and if the cursor is over a function call,
+			it will enter that function.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD WIDTH="134" ALIGN="LEFT"><IMG SRC="ic-13.gif" WIDTH="29" HEIGHT="28" ALIGN="BOTTOM" BORDER="0"> Step Over		</TD>
+		<TD ALIGN="LEFT">F10		</TD>
+		<TD ALIGN="LEFT">Like Step Into except when over a function call line, it will run that function at
+			normal speed and then stop when it returns from the function, giving the effect of
+			stepping over it.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD WIDTH="134" ALIGN="LEFT"><IMG SRC="ic-14.gif" WIDTH="29" HEIGHT="28" ALIGN="BOTTOM" BORDER="0"> Step Out		</TD>
+		<TD ALIGN="LEFT">Shift+F11		</TD>
+		<TD ALIGN="LEFT">The debugger will run the rest of the current function at normal speed and stop when
+			it returns from the function to the calling function.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD WIDTH="134" ALIGN="LEFT"><IMG SRC="ic-15.gif" WIDTH="29" HEIGHT="28" ALIGN="BOTTOM" BORDER="0"> Run to Cursor		</TD>
+		<TD ALIGN="LEFT">Ctrl+F10		</TD>
+		<TD ALIGN="LEFT">The debugger will run until it reaches your specified cursor position. You can set
+			this position by clicking the line you want to run to.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD WIDTH="134" ALIGN="LEFT"><IMG SRC="ic-05.gif" WIDTH="29" HEIGHT="28" ALIGN="BOTTOM" BORDER="0"> Go		</TD>
+		<TD ALIGN="LEFT">F5		</TD>
+		<TD ALIGN="LEFT">Continue running the program at normal speed until the next breakpoint is encountered.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD WIDTH="134" ALIGN="LEFT"><IMG SRC="ic-08.gif" WIDTH="24" HEIGHT="27" ALIGN="BOTTOM" BORDER="0"> Stop Debugging		</TD>
+		<TD ALIGN="LEFT">Shift+F5		</TD>
+		<TD ALIGN="LEFT">This stops the debugger and returns to editing mode.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD WIDTH="134" ALIGN="LEFT"><IMG SRC="ic-07.gif" WIDTH="24" HEIGHT="27" ALIGN="BOTTOM" BORDER="0"> Restart		</TD>
+		<TD ALIGN="LEFT">Ctrl+Shift+F5		</TD>
+		<TD ALIGN="LEFT">This option restarts the program from the beginning, stopping at the very first line
+			of code.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD WIDTH="134" ALIGN="LEFT"><IMG SRC="ic-09.gif" WIDTH="29" HEIGHT="28" ALIGN="BOTTOM" BORDER="0"> Break Execution		</TD>
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">This option stops a program running at normal speed in its tracks.		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD WIDTH="134" ALIGN="LEFT"><IMG SRC="ic-10.gif" WIDTH="29" HEIGHT="28" ALIGN="BOTTOM" BORDER="0"> Apply Code
+			Changes		</TD>
+		<TD ALIGN="LEFT">Alt+F10		</TD>
+		<TD ALIGN="LEFT">This option lets you compile the code after making changes during a debugging session
+			and then continue debugging from where you left off.		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>By using these options, you can watch the flow of your program and see the contents
+of the variables as they are manipulated by the code. The yellow arrow in the Editor
+window will always show the next statement to be executed.</P>
+<P>The next sections describe some of the debugging windows you can use when you
+are stopped in the debugger.</P>
+<P>
+<H3><A NAME="Heading12"></A>Using Edit and Continue</H3>
+<P>A great new feature of Visual C++ 6 is the capability to Edit and Continue. This
+means that you can change or edit the code while you are stopped in the debugger.
+After editing, you'll notice the Debug menu's Apply Code Changes option becomes enabled
+(as well as the corresponding debug toolbar icon). You can then select the Apply
+Code Changes option (or toolbar button) to compile your new code changes and then
+continue debugging the new changed code. By using this new feature, you can fix bugs
+while debugging and continue the debug run from the same place in the code with the
+same variable settings, which can be very useful when debugging large and complex
+programs.</P>
+<P>
+<H3><A NAME="Heading13"></A>Watching Program Variables</H3>
+<P>The Watch and Variables windows are shown in Figure E.11. These windows display
+the contents of variables when stopped in the debugger. You can view these windows
+by clicking the View menu and selecting them from the Debug Windows pop-up menu or
+by clicking the icons from the toolbar.</P>
+<P><A HREF="javascript:popUp('30fig11r.gif')"><B>FIGURE E.11.</B></A><B> </B><I>The
+Watch window displays contents of variables while debugging.</I></P>
+
+<P>The Variables window always shows the local variables of the function displayed
+in the Context combo box at the top of the window. To get to your current function,
+you can drop this combo box list to display all the functions that were called in
+turn. This is the call stack and shows your current context within the program by
+showing the list of functions that have been called in order to get to the program's
+currently executing function where the debugger has stopped. When you select a different
+function, the relevant local variables are shown for that function level.</P>
+<P>You can expand any object pointers shown by clicking the plus symbol next to the
+pointer name. The special C++ this pointer is always shown for class member functions
+and can be opened to show all the member variables for the current object.</P>
+<P>The Watch window lets you enter variable names from the keyboard or drag variable
+names from the editor window (after selecting and inverting them with the mouse point).
+The values that are held in the displayed variables are shown until they go out of
+scope (that is, aren't relevant to the function currently being debugged).</P>
+<P>You can also enter simple casts and array indexes in the Watch window to show
+related values. Right-clicking the mouse can switch the displayed values between
+hexadecimal and decimal display. As you step through the program, the values shown
+in the Watch and Variable windows are updated accordingly so that you can track how
+the program changes the variables.</P>
+<P>
+<H3><A NAME="Heading14"></A>Other Debugger Windows</H3>
+<P>Other debugging display windows are available by clicking the View menu and selecting
+them from the Debug Windows pop-up menu or alternatively by clicking the various
+icons shown to the right of the Debug toolbar. These windows are</P>
+<P>
+
+<UL>
+	<LI>QuickWatch. By clicking a variable in the listing and choosing QuickWatch or
+	pressing Shift+F9, you can display the contents of the select variable. You can also
+	enter variables directly and then click the Add Watch button to transfer them into
+	the main Watch window.
+	<P>
+	<LI>Registers. The Registers window displays the current values in your CPU's register
+	set. This probably isn't too useful to you unless you are tracking machine or assembly
+	code-level problems.
+	<P>
+	<LI>Memory. The Memory window displays the memory from the application's address
+	space in columns that represent the address, the hex values, and the character values
+	for each 8 bytes. You can change this display to show Byte, Short, or Long values
+	by right-clicking to display the appropriate context menu options.
+	<P>
+	<LI>Call Stack. The Call Stack window shows the list of functions that were called
+	in order to get to your current function and the parameter values that were passed
+	to each function. This can be very useful to investigate how the program flow reached
+	a specific function. By double-clicking any of the listed functions, you can display
+	the position where the function call was made in the code, shown by the Editor window.
+	<P>
+	<LI>Where source code isn't available, function entries are shown as follows:
+</UL>
+
+<PRE>KERNEL32! bff88f75()
+</PRE>
+
+<UL>
+	<LI>If you click these entries, you'll be shown assembly code rather than C++ code.
+	<P>
+	<LI>Disassembly. By selecting the Disassembly toolbar button or menu option, you
+	can toggle between displaying the C++ code mixed with assembly code or just C++ code.
+	Where the source code is unavailable, only assembly code is shown.
+</UL>
+
+<H2><A NAME="Heading15"></A>Additional Debugging Tools</H2>
+<P>Along with the integrated debugging tools are several nonintegrated but very useful
+tools. You can start these by clicking the Tools menu and selecting the specific
+tool option from the menu.</P>
+<P>These tools generally let you track operating-specific items such as Windows messaging,
+running processes, and registered OLE objects to enhance your available information
+while debugging your application.</P>
+<P>
+<H3><A NAME="Heading16"></A>Using Spy++</H3>
+<P>Spy++ is undoubtedly one of the most useful of these tools. With Spy++, you can
+see the hierarchical relationships of parent to child windows, the position and flags
+settings for windows, and base window classes. You can also watch messages as they
+are sent to a window.</P>
+<P>When you first run Spy++, it shows all the windows on the current desktop, their
+siblings, and the base Windows class of each object (see Figure E.12). The view shown
+in Figure E.12 has been scrolled to shown the standard Microsoft Windows CD Player.
+Spy++ shows you all the buttons and combo boxes, which are windows in their own right
+as child windows of the main CD Player window.</P>
+<P><A HREF="javascript:popUp('30fig12.gif')"><B>FIGURE E.12.</B></A><B> </B><I>The
+Spy++ initial view of the Windows desktop showing the CD Player portion.</I></P>
+
+<P>If you click the Spy menu, you are shown the following options:</P>
+<P>
+
+<UL>
+	<LI>Messages. You might find that the Messages view is probably one of the most useful
+	options because you can use it to watch messages that are sent to any window (including
+	your own application). You can also filter these messages so that you don't receive
+	an avalanche of Mouse Movement messages.
+	<P>
+	<LI>To use messages, select this option to display the Message Options dialog box
+	shown in Figure E.13. You can then drag the finder tool over any window in the system,
+	displaying the details of the window as it moves. Spy++ also highlights the selected
+	window, so you can see frame and client windows. When you've located the window you
+	want to view, just let go of the tool. At this point you can use the other tabs to
+	set filtering options and output formatting options. When you're finished, click
+	OK to close the Message Options box.
+</UL>
+
+<P><A HREF="javascript:popUp('30fig13.gif')"><B>FIGURE E.13.</B></A><B> </B><I>Using
+the Spy++ Message Options Finder to locate windows.</I></P>
+
+<P><I></I>
+
+<UL>
+	<LI>The output shown in Figure E.14 are the messages produced from using a normal
+	SDI application's toolbar. As you can see, with no filtering you'll receive many
+	mouse movements and cursor check messages, but you can also see the familiar WM_LBUTTONUP
+	message with its position parameters.
+</UL>
+
+<P><A HREF="javascript:popUp('30fig14.gif')"><B>FIGURE E.14.</B></A><B> </B><I>Windows
+Messages for a toolbar logged by Spy++.</I></P>
+
+<P><I></I></P>
+
+<UL>
+	<LI>Windows. The Windows view is the view shown in Figure E.12 of the layout and
+	structure of the Windows desktop. If you double-click any of these windows, you'll
+	be shown a property sheet containing all the selected windows' positioning information
+	and flag settings. To update this information, you must click the Windows menu and
+	choose Refresh.
+	<P>
+	<LI>Processes. You can view all the running programs with the Processes view. These
+	can be opened to show each thread and any windows attached to those threads.
+	<P>
+	<LI>Threads. The Threads option shows the same details without the processes level
+	of hierarchy, so you can see every thread running on your machine and the windows
+	that each thread owns.
+</UL>
+
+<P>Spy++ is too sophisticated to cover in its entirety here, but as a tool for understanding
+the structure of Windows hierarchies and messaging, it is unsurpassed. You can glean
+a lot of valuable knowledge just by looking at commercial applications with Spy++.
+It is also a wonderful tool for debugging messaging problems in your own application
+to ensure that your windows are getting the correct messages and to see how these
+messages are sequenced.</P>
+<P>
+<H3><A NAME="Heading17"></A>Process Viewer</H3>
+<P>You can see all the processes in more detail than shown in Spy++ with the Process
+Viewer (PView95.exe). You can start this application from your system's main Windows
+Start menu from Programs under the Microsoft Visual Studio 6.0 Tools option (or similar
+program group). This application lists the processes running on your machine and
+lets you sort them by clicking any of the column headers. You can then click a process
+to display all its threads. Figure E.15 shows Process Viewer running with the Developer
+Studio application (MSDEV.EXE) selected and all its many threads displayed.</P>
+<P><A HREF="javascript:popUp('30fig15.gif')"><B>FIGURE E.15.</B></A><B> </B><I>The
+Process Viewer showing MSDEV.EXE and its threads.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading18"></A>The OLE/COM Object Viewer</H3>
+<P>The OLE/COM Object Viewer tool shows you all the registered OLE/COM objects on
+your system, including ActiveX controls, type libraries, embeddable objects, automation
+objects, and many other categories.</P>
+<P>You can even create instances of various objects and view their interfaces in
+detail. The OLE/COM Object Viewer is very useful if you are developing an OLE/COM
+application or looking for an elusive ActiveX control.</P>
+<P>
+<H3><A NAME="Heading19"></A>The MFC Tracer</H3>
+<P>Using the MFC Tracer tool shown in Figure E.16, you can stop the normal tracing
+or add specific Windows trace output to the normal program trace output. When you
+select this tool, you are shown a set of check boxes that you can check or uncheck
+to include that tracing option.</P>
+<P><A HREF="javascript:popUp('30fig16.gif')"><B>FIGURE E.16.</B></A><B> </B><I>The
+MFC Tracer tool options.</I></P>
+
+<P>You can add Windows messages, database messages, OLE messages, and many other
+levels of trace output to help track down elusive problems. These messages are then
+generated by the MFC code for the various selected flags.</P>
+
+<P>You can even turn off the standard tracing generated by your application by unchecking
+the Enable Tracing option.</P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../apd/apd.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../apf/apf.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

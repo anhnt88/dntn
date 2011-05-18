@@ -1,0 +1,1878 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+<SCRIPT LANGUAGE="JavaScript">
+
+<!--
+
+function popUp(pPage) {
+ var fullURL = document.location;
+ var textURL = fullURL.toString();
+ var URLlen = textURL.length;
+ var lenMinusPage = textURL.lastIndexOf("/");
+ lenMinusPage += 1;
+ var fullPath = textURL.substring(0,lenMinusPage);
+ popUpWin = window.open('','popWin','resizable=yes,scrollbars=no,width=525,height=394');
+ figDoc= popUpWin.document;
+ zhtm= '<HTML><HEAD><TITLE>' + pPage + '</TITLE>';
+ zhtm += '<link rel="stylesheet" href="/includes/stylesheets/ebooks.css"></head>';
+ zhtm += '<BODY bgcolor="#FFFFFF">';
+ zhtm += '<IMG SRC="' + fullPath + pPage + '">';
+ zhtm += '<P><B>' + pPage + '</B>';
+ zhtm += '</BODY></HTML>';
+ window.popUpWin.document.write(zhtm);
+ window.popUpWin.document.close();
+ // Johnny Jackson 4/28/98
+ }
+
+//-->
+                                                                
+</SCRIPT>
+<link rel="stylesheet" href="/includes/stylesheets/ebooks.css">
+
+	<META NAME="GENERATOR" Content="Symantec Visual Page Mac 1.1.1">
+	<TITLE>Teach Yourself Visual C++ 6 in 21 Days -- Ch 15 -- Updating and Adding Database Records Through ADO</TITLE>
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1 ALIGN="CENTER"><IMG SRC="../button/sams.gif" WIDTH="171" HEIGHT="66" ALIGN="BOTTOM"
+BORDER="0"><BR>
+Teach Yourself Visual C++ 6 in 21 Days</H1>
+<CENTER>
+<P><A HREF="../ch14/ch14.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch16/ch16.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> 
+<HR>
+
+</CENTER>
+<H1 ALIGN="CENTER">- 15 -<BR>
+Updating and Adding Database Records Through ADO</H1>
+<H1></H1>
+
+<UL>
+	<LI><A HREF="#Heading1">What Is ADO?</A>
+	<UL>
+		<LI><A HREF="#Heading2">ADO Objects</A>
+		<LI><A HREF="#Heading3">Using the ADO ActiveX Control</A>
+		<LI><A HREF="#Heading4">Importing the ADO DLL</A>
+		<LI><A HREF="#Heading5">Connecting to a Database</A>
+		<LI><A HREF="#Heading6">Executing Commands and Retrieving Data</A>
+		<LI><A HREF="#Heading7">_CommandPtr pCmd;</A>
+		<LI><A HREF="#Heading8">Navigating the Recordset</A>
+		<LI><A HREF="#Heading9">Accessing Field Values</A>
+		<LI><A HREF="#Heading10">Updating Records</A>
+		<LI><A HREF="#Heading11">Adding and Deleting</A>
+		<LI><A HREF="#Heading12">Closing the Recordset and Connection Objects</A>
+	</UL>
+	<LI><A HREF="#Heading13">Building a Database Application Using ADO</A>
+	<UL>
+		<LI><A HREF="#Heading14">Creating the Application Shell</A>
+		<LI><A HREF="#Heading15">Building a Custom Record Class</A>
+		<LI><A HREF="#Heading16">3:</A>
+		<LI><A HREF="#Heading17">Connecting and Retrieving Data</A>
+		<LI><A HREF="#Heading18">Populating the Form</A>
+		<LI><A HREF="#Heading19">Saving Updates</A>
+		<LI><A HREF="#Heading20">Navigating the Record Set</A>
+		<LI><A HREF="#Heading21">Adding New Records</A>
+		<LI><A HREF="#Heading22">Deleting Records</A>
+	</UL>
+	<LI><A HREF="#Heading23">Summary</A>
+	<LI><A HREF="#Heading24">Q&amp;A</A>
+	<LI><A HREF="#Heading25">Workshop</A>
+	<UL>
+		<LI><A HREF="#Heading26">Quiz</A>
+		<LI><A HREF="#Heading27">Exercise</A>
+	</UL>
+</UL>
+
+<P>
+<HR SIZE="4">
+<BR>
+Now that you've gotten your feet wet with an ODBC database application, one of the
+oldest Microsoft database access technologies, it's time to turn your attention to
+the newest Microsoft database access technology, ActiveX Data Objects (ADO). Designed
+for use with all of Microsoft's programming and scripting technologies, ADO presents
+the Visual C++ programmer with new challenges in database programming, while still
+keeping the functionality familiar. Today, you will learn</P>
+
+<P>
+
+<UL>
+	<LI>How ADO works and how it uses the OLE DB technology for providing simple database
+	access.
+	<P>
+	<LI>How you can build a simple ADO application in a couple of minutes using ActiveX
+	controls.
+	<P>
+	<LI>How you can build a complete database application using regular forms controls.
+	<P>
+	<LI>How you can use special ADO macros to build a custom record set class for use
+	in your database applications.
+</UL>
+
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>CAUTION:</STRONG> This chapter works with some features that may not be included
+	in all versions of Visual C++. Although ADO is an important new area of pro-gramming
+	with Microsoft data access technologies, this chapter discusses some things that
+	you may not have the ability to do with your version of Visual C++.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H2><A NAME="Heading1"></A>What Is ADO?</H2>
+<P>A couple years ago, Microsoft designed a new data access technology called OLE
+DB. This data access technology was intended to be much more than simply a way of
+getting data into and out of databases. This technology was intended to be the means
+of accessing data, regardless of where that data may be located. Through the OLE
+DB technology, you could access mail messages, spreadsheets, files, and so on. Anything
+that might have data could possibly be accessed through the OLE DB technology. This
+was one of the first technologies to be produced from the research and development
+of the object- oriented file system at the heart of what Microsoft has been calling
+&quot;Cairo&quot; for the past few years.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Many of the technologies bundled under the product name of Cairo
+	will be released some time next year in the Windows NT 5.0 operating system.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>As you can imagine, with the range of functionality that OLE DB must have to access
+data in all of those different sources, it might be quite complex to work with this
+technology. Well, it is. This is where ActiveX Data Objects come into play. ADO was
+designed as another layer on top of OLE DB, specifically for providing database access.</P>
+<P>One of the goals in designing ADO was to create a control that could be used to
+provide data access and control in Web pages, caching the data records on the client.
+Part of the reason for this goal was to allow a Web browser user to access an entire
+set of data records, without having to pull down each individual record, one at a
+time, to navigate and make changes to the records. Because of this capability with
+ADO, the ADO control is distributed with Microsoft's Internet Explorer Web browser
+(version 4.0 and above).</P>
+<P>
+<H3><A NAME="Heading2"></A>ADO Objects</H3>
+<P>To make ADO as easily usable in scripting languages such as VBScript as it is
+in programming environments such as Visual Basic, Microsoft tried to keep the number
+of objects to a minimum. As a result, you have a small number of basic objects:</P>
+<P>
+
+<UL>
+	<LI>Connection
+	<P>
+	<LI>Error
+	<P>
+	<LI>Command
+	<P>
+	<LI>Parameter
+	<P>
+	<LI>Recordset
+	<P>
+	<LI>Field
+</UL>
+
+<P>Along with these objects, you have collection objects for containing collections
+of Error, Parameter, and Field objects.</P>
+<P>
+<H4>The Connection Object</H4>
+<P>The Connection object is used for establishing and maintaining a connection to
+a database. This object is configured with the connection information, including
+database location, user ID, and password, before opening the connection. Once all
+of this information is appropriately configured, the connection object should have
+its Open method called to open the connection. Once the Connection object goes out
+of scope, the connection is automatically closed. If you want more control over closing
+and opening the database connection, you can call the Connection object's Close method
+to close the connection.</P>
+<P>The Connection object is also the object through which any high-level connection
+functionality is controlled. This includes all transaction control, through the Connection
+object's BeginTrans, CommitTrans, and RollbackTrans methods.</P>
+<P>
+<H4>The Error Object</H4>
+<P>Whenever a database error occurs, the error information from the database is placed
+into an ADO Error object. The error information in the error object is the database
+error information, not ADO error information. Whenever you encounter an error and
+need to look up the error information to determine what went wrong, you'll need to
+examine the database error codes and descriptions, not the ADO error codes.</P>
+<P>
+<H4>The Command Object</H4>
+<P>The Command object is used to execute commands in the database. You can use this
+object to run SQL statements or call stored procedures (SQL functions that are stored
+in the database). Any time that a command returns rows of data, you need to attach
+the Command object to a Recordset object for the returned data to be stored in.</P>
+<P>When you call a stored procedure, as with functions in any other programming language,
+you'll often need to pass parameters to the stored procedure. To pass these parameters,
+you'll attach a series of Parameter objects to the Command object. Each of the Parameter
+objects will have the name of the parameter that it holds the value for, along with
+the value that should be passed to the database for that particular parameter.</P>
+<P>
+<H4>The Parameter Object</H4>
+<P>The Parameter object is used for passing variables and for calling stored procedures
+or parameterized queries. These are attached to a Command object for use in calling
+the command that has been programmed into the Command object.</P>
+<P>
+<H4>The Recordset Object</H4>
+<P>The Recordset object contains a set of records from the database. The set of records
+is the result of a command being sent to the database that results in a set of records
+being returned. You can navigate through the Recordset, much like you do with the
+Recordset objects for other database access technologies. You can also access the
+fields in each record in the Recordset through the Field objects that are associated
+with the Recordset. You can update the records in the Recordset, and then use the
+Recordset to update the database. You can also insert new records into the Recordset,
+or delete records and have those changes made in the database.</P>
+<P>
+<H4>The Field Object</H4>
+<P>The Field object represents a single column in the Recordset. Each Field object
+contains the column name, data value, and how the data value should be represented.
+Because ADO was designed to be used in Microsoft's scripting languages, and the only
+data type available in these scripting languages is the Variant data type, the Field
+objects always contain a Variant data value. The data value is automatically converted
+to the correct data type when updating to the database. As the programmer working
+with the ADO objects, you will have to convert the value from a Variant to whatever
+data type you need it to be, as well as convert it back to a Variant when updating
+the value.</P>
+<P>
+<H3><A NAME="Heading3"></A>Using the ADO ActiveX Control</H3>
+<P>There are two different ways in which you can use the ADO control in your Visual
+C++ applications. The simple way to incorporate ADO into your application is through
+the use of ActiveX controls. You can add the ADO data control to your Visual C++
+project, just like any other ActiveX control, as shown in Figure 15.1.</P>
+<P><A HREF="javascript:popUp('15fig01.gif')"><B>FIGURE 15.1.</B></A><B> </B><I>Adding
+the ADO ActiveX control to a project.</I></P>
+
+<P>Once you add the ADO control to your project, and place it on a window, you'll
+need to specify the data connection in the control properties, as shown in Figure
+15.2. You'll also need to specify the source for the records that will be retrieved
+by the control, as shown in Figure 15.3.</P>
+<P><A HREF="javascript:popUp('15fig02.gif')"><B>FIGURE 15.2.</B></A><B> </B><I>Specifying
+the database connection.</I></P>
+
+<P><A HREF="javascript:popUp('15fig03.gif')"><B>FIGURE 15.3.</B></A><B> </B><I>Specifying
+the record source.</I></P>
+
+<P>To use the ADO control efficiently, you'll also want to use data-bound controls
+that are ADO-enabled, such as the Microsoft DataGrid control. When you add these
+controls to the window with the ADO control, you'll specify the ADO control as the
+data source for the control, as shown in Figure 15.4. If the control is designed
+to only provide access to a single field in a record set, you'll also need to specify
+which field is to be used for the control.</P>
+<P><A HREF="javascript:popUp('15fig04.gif')"><B>FIGURE 15.4.</B></A><B> </B><I>Specifying
+the data source.</I></P>
+
+<P>Once you add all these controls to the window and configure them, you can run
+your application and have full database access through ADO without having written
+a single line of code, as shown in Figure 15.5.</P>
+<P><A HREF="javascript:popUp('15fig05.gif')"><B>FIGURE 15.5.</B></A><B> </B><I>A
+running ADO control database application.</I></P>
+
+<P>This is such a simple way to build database applications: Just place controls
+on a window and configure the properties to tell it where to get the data. What's
+the downside of building ADO applications this way? First, using this approach involves
+a lot of unnecessary overhead in building ADO applications. For each SQL query or
+table that you want to pull in a separate record set, you have to add a separate
+ADO control. Each of these ADO controls will establish a separate connection to the
+database, which could cause problems with databases that have a limited number of
+connections available (not to mention the additional overhead on the application).
+Finally, not all data-bound controls are ADO enabled. ADO is such a new technology
+that there are few controls that you can use with it at this time. You may find some
+controls that allow you to retrieve and display data for the user, but do not allow
+the user to change and edit the data. Others may not even provide you with that much
+functionality.</P>
+<P>
+<H3><A NAME="Heading4"></A>Importing the ADO DLL</H3>
+<P>If you look around in the MFC class hierarchy, you'll find that there are no classes
+for use with ADO. If you don't want to use the controls approach, then what are your
+options? Do you have to create the classes yourself? No, Microsoft has provided other
+means for you to create and use classes for each of the objects in ADO, through the
+use of a new C++ precompiler directive called #import.</P>
+<P>The #import precompiler directive was first added to Visual C++ with the 5.0 release.
+You can use this directive to import an ActiveX DLL that has been built with the
+IDispatch interface description included in the DLL. This directive tells the Visual
+C++ compiler to import the DLL specified by the #import directive and to extract
+the object information from the DLL, creating a couple of header files that are automatically
+included in your project. These header files have the filename extensions .TLH and
+.TLI and are in the output directory for your project (the Debug or Release directory,
+the same directory where you'll find the executable application after you've compiled
+your project). These two files contain definitions of classes for each of the objects
+in the DLL that you can use in your code. The #import directive also tells the compiler
+to include the DLL as part of the project, eliminating the need to include the .LIB
+file for the DLL in your project.</P>
+<P>You can import the ADO DLL by placing the following code at the beginning of the
+header file in which you are defining any database objects:</P>
+<P>
+<PRE>#define INITGUID
+#import &quot;C:\Program Files\Common Files\System\ADO\msado15.dll&quot;
+        &Acirc;rename_namespace(&quot;ADOCG&quot;) rename(&quot;EOF&quot;, &quot;EndOfFile&quot;)
+using namespace ADOCG;
+#include &quot;icrsint.h&quot;
+</PRE>
+<P>In these four lines of directives, the first line defines a constant that needs
+to be defined for ADO. The second imports the ADO DLL, creating the two header files
+mentioned earlier. After the filename to be imported, this directive includes two
+attributes to the #import directive. The first, rename_namespace, renames the namespace
+into which the DLL has been imported. This is followed with the line following the
+#import, where the renamed namespace is specified as the one used. The second attribute,
+rename, renames an element in the header files that are created using the #import
+directive. The reason you rename elements in these header files is to prevent conflicts
+with another element named elsewhere. If you examine the header file, the element
+specified is not renamed in the file, but when the compiler reads the file, the element
+is renamed. The final line includes the ADO header file, which contains the definition
+of some macros that you will use when writing your ADO applications.</P>
+<P>
+<H3><A NAME="Heading5"></A>Connecting to a Database</H3>
+<P>Before you can use any of the ADO objects, you need to initialize the COM environment
+for your application. You can do this by calling the CoInitialize API function, passing
+NULL as the only parameter, as follows:</P>
+<P>
+<PRE>::CoInitialize(NULL);
+</PRE>
+<P>This enables you to make calls to ActiveX objects. If you leave out this one line
+of code from your application, or don't put it before you begin interacting with
+the objects, you get an COM error whenever you run your application.</P>
+<P>When you are finished with all ADO activity, you also need to shut down the COM
+environment by calling the CoUninitialize function, as follows:</P>
+<P>
+<PRE>CoUninitialize();
+</PRE>
+<P>This function cleans up the COM environment and prepares your application for
+shutting down.</P>
+<P>Once you initialize the COM environment, you can create a connection to the database.
+The best way to do this is not to declare a Connection object variable, but to declare
+a Connection object pointer, _ConnectionPtr, and use it for all your interaction
+with the Connection object. Once you declare a Connection object pointer, you can
+initialize it by creating an instance of the Connection object, calling the CreateInstance
+function, passing it the UUID of the Connection object as its only parameter, as
+follows:</P>
+<P>
+<PRE>_ConnectionPtr pConn;
+pConn.CreateInstance(__uuidof(Connection));
+</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> When you work with these objects and functions, you need to use the
+	correct number of underscore characters in front of the various object and function
+	names. The _ConnectionPtr object has only a single underscore character, whereas
+	the __uuidof function has two.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P>Once you create the object, you can call the Open function to establish the connection
+to the database. This function takes four parameters. The first parameter is the
+connection definition string. This string defines the OLE DB data source for the
+database. It may be an ODBC OLE DB driver, where OLE DB is sitting on top of an ODBC
+data source, as you'll use in your sample application. If you are using SQL Server
+or Oracle databases, it may be a direct connection to the OLE DB interface provided
+by the database itself. The second parameter is the user ID for connecting to the
+database. The third parameter is the password for connecting to the database. The
+fourth parameter is the cursor type to use with the database. These types are defined
+in the msado15.tlh header file that is created by the #import directive. A typical
+use of the Open function to connect to an ODBC data source that doesn't need a user
+ID or password is like the following:</P>
+<P>
+<PRE>pConn-&gt;Open(L&quot;Provider=MSDASQL.1;Data Source=TYVCDB&quot;, L&quot;&quot;, L&quot;&quot;, 
+    &Acirc;adOpenUnspecified);
+</PRE>
+<H3><A NAME="Heading6"></A>Executing Commands and Retrieving Data</H3>
+<P>Once you have the connection open, you can use a Command object to pass SQL commands
+to the database. This is the normal method of executing SQL commands with ADO. To
+create a Command object, follow the same process that you used to create a Connection
+object. Declare a Command object pointer, _CommandPtr, and then create an instance
+of it using the UUID of the Command object, as follows:</P>
+<P>
+<H3><A NAME="Heading7"></A>_CommandPtr pCmd;</H3>
+<PRE>pCmd.CreateInstance(__uuidof(Command));
+</PRE>
+<P>Once you create your Command object, assuming that you have already established
+the connection to the database, set the active connection property of the Command
+object to the open Connection object pointer, as follows:</P>
+<P>
+<PRE>pCmd-&gt;ActiveConnection = pConn;
+</PRE>
+<P>Next, specify the SQL command to be executed by setting the CommandText property
+of the Command object, as follows:</P>
+<P>
+<PRE>pCmd-&gt;CommandText = &quot;Select * from Addresses&quot;;
+</PRE>
+<P>At this point, you have two options for how you execute this command and retrieve
+the records. The first is to call the Command object's Execute method, which will
+return a new Recordset object, which you'll want to set to a Recordset object pointer,
+as follows:</P>
+<P>
+<PRE>_RecordsetPtr pRs;
+pRs = pCmd-&gt;Execute();
+</PRE>
+<P>The other approach to running the command and retrieving the records is to specify
+that the Command object is the source for the records in the Recordset. This requires
+creating the Recordset object as follows:</P>
+<P>
+<PRE>_RecordsetPtr pRs;
+pRs.CreateInstance(__uuidof(Recordset));
+pRs-&gt;PutRefSource(pCmd);
+</PRE>
+<P>Now, you'll need to create two NULL variant values to pass as the first two parameters
+to the Recordset's Open method. The third parameter will be the cursor type to use,
+followed by the locking method to use. Finally, the fifth parameter to the Recordset's
+Open method is an options flag that indicates how the database should evaluate the
+command being passed in. You do this with the following code:</P>
+<P>
+<PRE>// Create the variant NULL
+_variant_t vNull;
+vNull.vt = VT_ERROR;
+vNull.scode = DISP_E_PARAMNOTFOUND;
+// Open the recordset
+pRs-&gt;Open(vNull, vNull, adOpenDynamic, adLockOptimistic, adCmdUnknown);
+</PRE>
+<P>You could take another approach to accomplish all of the preceding tasks with
+only a few lines of code. Skip the use of the Command and Connection objects altogether,
+placing all the necessary connection information in the Recordset's Open function.
+You can specify the SQL command as the first parameter and the connection information
+as the second parameter, instead of the two NULLs that you passed previously. This
+method reduces all of the preceding code to the following few lines:</P>
+<P>
+<PRE>_RecordsetPtr pRs;
+pRs.CreateInstance(__uuidof(Recordset));
+pRs-&gt;Open(_T(&quot;Provider=MSDASQL.1;Data Source=TYVCDB&quot;),
+          _T(&quot;select * from Addresses&quot;), adOpenDynamic,
+           adLockOptimistic, adCmdUnknown);
+</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> Although placing all of the command and connection information into
+	the Recordset Open function is fine for a simple application, such as the one that
+	you will build today, you are better off using the Connection object with any application
+	that has more than a couple of database queries. This allows you to make a single
+	connection to the database and use that one connection for all interaction with the
+	database.az
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading8"></A>Navigating the Recordset</H3>
+<P>Once you've retrieved a set of records from the database, and you are holding
+them in a Recordset object, you'll need to navigate the set of records. This functionality
+is available, just as you would expect, through the MoveFirst, MoveLast, MovePrevious,
+and MoveNext functions. None of these functions take any parameters because they
+perform the functions that you would expect them to perform.</P>
+<P>Along with these functions, the Recordset object also has two properties, BOF
+and EOF (which you should normally rename to prevent a collision with the default
+definition of EOF), which can be checked to determine if the current record in the
+set is beyond either end of the set of records.</P>
+<P>
+<H3><A NAME="Heading9"></A>Accessing Field Values</H3>
+<P>When you need to begin accessing the data values in each of the fields is where
+working with ADO in Visual C++ begins to get interesting. Because ADO is intended
+to be easy to use in Microsoft's scripting languages, VBScript and JScript, which
+only have variant data types, all data elements that you'll retrieve from fields
+in the ADO Recordset are variant values. They have to be converted into the data
+types that you need them to be. There are two ways of doing this. The first way is
+the straight-forward way of retrieving the values into a variant and then converting
+them, as in the following code:</P>
+<P>
+<PRE>_variant_t vFirstName;
+CString strFirstName;
+vFirstName = pRs-&gt;GetCollect(_variant_t(&quot;FirstName&quot;));
+vFirstName.ChangeType(VT_BSTR);
+strFirstName = vFirstName.bstrVal;
+</PRE>
+<P>The not-so-straight-forward way to do this is actually the better way, and in
+the long run, is a lot easier to work with. Microsoft has created a series of macros
+that perform the conversion for you and that maintain a set of variables of the records
+in the set. To do this, you'll define a new class to use as the interface for your
+record set. This class will be a descendent of the CADORecordBinding class, which
+is defined in the icrsint.h header file, which you included just after the #import
+directive. This class will not have any constructor or destructor but will have a
+series of macros, along with a number of variables. Each field in the set of records
+has two variables, an unsigned long, which is used to maintain the status of the
+variable, and the field variable itself. These variables must be regular C variables,
+and they cannot be C++ classes such as CString. A simple example of this class declaration
+is the following:</P>
+<P>
+<PRE>class CCustomRs :
+    public CADORecordBinding
+{
+BEGIN_ADO_BINDING(CCustomRs)
+    ADO_FIXED_LENGTH_ENTRY(1, adInteger, m_lAddressID, lAddressIDStatus,     &Acirc;FALSE)
+    ADO_VARIABLE_LENGTH_ENTRY2(2, adVarChar, m_szFirstName, 
+        &Acirc;sizeof(m_szFirstName), lFirstNameStatus, TRUE)
+    ADO_FIXED_LENGTH_ENTRY(3, adDate, m_dtBirthdate, lBirthdateStatus,     &Acirc;TRUE)
+    ADO_FIXED_LENGTH_ENTRY(4, adBoolean, m_bSendCard, lSendCardStatus,     &Acirc;TRUE)
+END_ADO_BINDING()
+public:
+    LONG m_lAddressID;
+    ULONG lAddressIDStatus;
+    CHAR m_szFirstName[51];
+    ULONG lFirstNameStatus;
+    DATE m_dtBirthdate;
+    ULONG lBirthdateStatus;
+    VARIANT_BOOL m_bSendCard;
+    ULONG lSendCardStatus;
+};
+</PRE>
+<P>Once you define this record layout class to match the record layout that will
+be returned by your database query, you can declare a variable of this class for
+use in your application, as follows:</P>
+<P>
+<PRE>CCustomRs m_rsRecSet;
+</PRE>
+<P>Next, you need to create a pointer to an IADORecordBinding interface, as follows:</P>
+<P>
+<PRE>IADORecordBinding *picRs = NULL;
+</PRE>
+<P>This is a pointer to a COM interface that is part of the ADO Recordset object.
+Once you retrieve the set of records, you need to retrieve the pointer to the IADORecordBinding
+interface and bind the custom record set class to the Recordset object, as in the
+following code:</P>
+<P>
+<PRE>if (FAILED(pRs-&gt;QueryInterface(__uuidof(IADORecordBinding), (LPVOID &Acirc;*)&amp;picRs)))
+    _com_issue_error(E_NOINTERFACE);
+picRs-&gt;BindToRecordset(&amp;m_rsRecSet);
+</PRE>
+<P>Now, as you navigate the records in the set, you just need to access the member
+variables of your custom record class to retrieve the current value for each field.</P>
+<P>
+<H4>The BEGIN_ADO_BINDING and END_ADO_BINDING Macros</H4>
+<P>The key to the second method of accessing the data values in the record set is
+in the macros that are used in defining the record class. The set of macros start
+with the BEGIN_ADO_BINDING macro, which takes the class name as its only parameter.
+This macro sets up the structure definition that is created with the rest of the
+macros that follow.</P>
+<P>The set of macros is closed by the END_ADO_BINDING macro. This macro doesn't take
+any parameters, and it wraps up the definition of the record binding structure that
+is created in the class. It is in the rest of the macros, which are used between
+these two, where the real work is done.</P>
+<P>
+<H4>The ADO_FIXED_LENGTH_ENTRY Macros</H4>
+<P>The ADO_FIXED_LENGTH_ENTRY macro is used for any database fields that are fixed
+in size. It can be used with a date or boolean field, or even a text field that is
+a fixed size, with no option for any variation in the database. There are two versions
+of this macro; you add a 2 to the end of the name of the second version (ADO_FIXED_LENGTH_ENTRY2).</P>
+<P>Both versions require the same first three and last parameters. The first version
+requires an additional parameter that is not required in the second version. The
+first parameter is the ordinal number of the field in the record set. This is the
+position in the field order as returned by the SQL query that is run to populate
+the record set. The second parameter is the data type of the field; the available
+data types are defined in the header file created by the #import directive. The third
+parameter is the variable into which the data value is to be copied. For the first
+version of the macro, the fourth parameter is the variable for the field status (the
+unsigned long that you defined with the variable for the actual value). The last
+variable is a boolean that specifies whether this field can be modified.</P>
+<P>
+<H4>The ADO_NUMERIC_ENTRY Macros</H4>
+<P>You use the ADO_NUMERIC_ENTRY macros with numeric fields only. They are similar
+to the ADO_FIXED_LENGTH_ENTRY macros in that there are two different versions of
+the macro, named in the same way. In these macros, the first five parameters are
+the same in both versions, along with the final parameter. Like with the ADO_FIXED_LENGTH_ENTRY
+macros, the first version has an additional parameter that is not used in the second
+version.</P>
+<P>The first three parameters for the ADO_NUMERIC_ENTRY macros are the same as those
+for the ADO_FIXED_LENGTH_ENTRY macros, as are the last parameter and the next to
+last parameter for the first version. It is the fourth and fifth parameters that
+are unique to these macros. The fourth parameter specifies the precision of the value
+in this field of the record set. The fifth parameter specifies the scale of the value.
+Both of these parameters are crucial in correctly converting the value to and from
+a variant data type.</P>
+<P>
+<H4>The ADO_VARIABLE_LENGTH_ENTRY Macros</H4>
+<P>The final series of macros is the ADO_VARIABLE_LENGTH_ENTRY macros. You use this
+series of macros with database fields that are likely to vary in length. With a SQL-based
+database, you want to use this series of macros with any varchar (variable-length
+character string) columns. There are three versions of this macro. In all three versions,
+the first four parameters are the same, and the final parameter is the same. It is
+the parameters between them that vary.</P>
+<P>The first parameter is the ordinal position of the column in the record set as
+returned by the SQL query. The second parameter is the data type. The third parameter
+is the variable in which the data value should be placed. The fourth parameter for
+all versions of the macro is the size of the variable into which the value is to
+be placed. This prevents the data from being written past the end of the variable
+that you defined for it to be placed in. As with the previous macros, the final parameter
+specifies whether the field is updateable.</P>
+<P>In the first version of this macro, there are two parameters between the fourth
+and final parameters. The second version of this macro only has the first of these
+two parameters, and the third version only has the second of these two parameters.
+The first of these two parameters is the status variable for use with this field.
+The second of these two parameters is the length of the field in the database. The
+preceding example used the second version of this macro.</P>
+<P>
+<H3><A NAME="Heading10"></A>Updating Records</H3>
+<P>When you need to update values in a record in the recordset, how you handle it
+depends on which of the two methods you used to retrieve the data elements from the
+recordset. If you retrieved each field and converted it from a variant yourself,
+you need to update each individual field that has been changed. The update is done
+using the Recordset object's Update method, which takes two variables, the field
+being updated and the new value for the field. You could make this update using the
+following code:</P>
+<P>
+<PRE>_variant_t vName, vValue;
+vName.SetString(&quot;FirstName&quot;);
+vValue.SetString(&quot;John&quot;);
+pRs-&gt;Update(vName, vValue);
+</PRE>
+<P>If you created your record class and bound it to the recordset, updating the record
+is a little simpler. Once you have copied the new values into the variables in the
+record class, you can call the record-bound version of the Update function, as in
+the following:</P>
+<P>
+<PRE>picRs-&gt;Update(&amp;m_rsRecSet);
+</PRE>
+<P>This updates the record in the Recordset object to be updated with the values
+in the record class that you have bound to the set.</P>
+<P>
+<H3><A NAME="Heading11"></A>Adding and Deleting</H3>
+<P>Adding and deleting records from an ADO recordset is similar to how you accomplish
+it in other database access technologies. However, there are some slight subtleties
+to how you perform the addition of new records.</P>
+<P>For deleting the current record, you can call the Recordset object's Delete method.
+This method requires a single parameter that specifies how the delete is supposed
+to be done. Most likely, you'll pass the adAffectCurrent value so that only the current
+record in the recordset is deleted, as in the following code:</P>
+<P>
+<PRE>pRs-&gt;Delete(adAffectCurrent);
+pRs-&gt;MovePrevious();
+</PRE>
+<P>As with any other database access technology, once you've deleted the current
+record, there is no current record, so you need to navigate to another record before
+allowing the user to do anything else.</P>
+<P>When you are adding a new record, you can call the Recordset object's AddNew method.
+Once you have added a new record, the new record is the current record in the record
+set. If you check the variables in the record class that you created, you'll find
+that they are all empty. However, you cannot just begin entering data values into
+these fields. To allow the user to immediately enter the various data elements in
+the new record, you'll blank out the values in the record class and pass this variable
+as the only parameter to the Add New class. You need to call it through the record-binding
+interface pointer, as in the following example:</P>
+<P>
+<PRE>CString strBlank = &quot; &quot;;
+COleDateTime dtBlank;
+m_rsRecSet.m_lAddressID = 0;
+strcpy(m_rsRecSet.m_szFirstName, (LPCTSTR)strBlank);
+m_rsRecSet.m_dtBirthdate = (DATE)dtBlank;
+m_rsRecSet.m_bSendCard = VARIANT_FALSE;
+picRs-&gt;AddNew(&amp;m_rsRecSet);
+</PRE>
+<P>This allows you to provide the user with a blank record, ready for editing. Once
+the user has entered all the various values in the record, copy all these values
+back to the record variable. Then, call the Update method to save the record.</P>
+<P>
+<H3><A NAME="Heading12"></A>Closing the Recordset and Connection Objects</H3>
+<P>Once you finish working with a record set, you'll close the record set by calling
+the Close method, as follows:</P>
+<P>
+<PRE>pRs-&gt;Close();
+</PRE>
+<P>Once you finish all database interaction for the entire application, you'll also
+close the connection to the database by calling the Connection object's Close method:</P>
+<P>
+<PRE>pConn-&gt;Close();
+</PRE>
+<H2><A NAME="Heading13"></A>Building a Database Application Using ADO</H2>
+<P>The sample application that you will build today is another simple database application,
+basically the same as the one you built yesterday. You'll use ADO to retrieve a set
+of records from an Access database, providing functionality to navigate the record
+set. The user will be able to make changes to the data in the record set, and those
+changes will be reflected in the database as well. The user will also be able to
+add new records to the record set and delete records as desired. You will accomplish
+all of this using ADO as the means of accessing the database, which will go through
+the ODBC driver that was configured yesterday.</P>
+<P>
+<H3><A NAME="Heading14"></A>Creating the Application Shell</H3>
+<P>The application that you will build today will be an SDI-style application. As
+with sev-eral other sample applications that you build in the course of reading this
+book, everything that you do in today's application is just as applicable to an MDI
+or dialog-style application. To start the application, you'll use the MFC AppWizard
+to build the application shell, using most of the SDI-style application default settings.</P>
+<P>To start your application, create a new AppWizard project, naming the project
+something appropriate, such as DbAdo. Specify on the first panel of the AppWizard
+that you are building an SDI-style application. Accept all the default settings for
+steps 2 through 5, being sure to leave the second step stating that you want no database
+support included in the application. On the final AppWizard step, specify that the
+view class should be inherited from the CFormView class.</P>
+<P>Once you finish creating your application shell, design the main dialog form for
+use in your application. Add the standard controls for each of the fields in the
+Addresses table from the database you used yesterday (or if you used a different
+database yesterday, add controls for all the fields in the table that you used),
+as shown in Figure 15.6. Configure the controls using the properties listed in Table
+15.1.</P>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>TIP:</STRONG> If you want to save a little time when building the example, you can
+	leave out most of the controls and database fields from the application. The key
+	fields that you'll need to include on the screen are ID, First and Last Names, Birthdate,
+	and Send Card. If you want to leave out the other fields from the application, that's
+	fine. You will need to include these fields in the CCustomRs class that you create
+	in this chapter.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<P><A HREF="javascript:popUp('15fig06.gif')"><B>FIGURE 15.6.</B></A><B> </B><I>The
+main form layout.</I></P>
+
+<P><I></I>
+<H4>TABLE 15.1. CONTROL PROPERTY SETTINGS.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Property</I></TD>
+		<TD ALIGN="LEFT"><I>Setting</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Address ID		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_ADDRESSID		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">First Name		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_FIRSTNAME		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Last Name		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_LASTNAME		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Spouse Name		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_SPOUSENAME		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Address		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_ADDRESS		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">City		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_CITY		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">State Or Province		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_STATEORPROVINCE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Postal Code		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_POSTALCODE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Country		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_COUNTRY		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Email Address		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_EMAILADDRESS		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Home Phone		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_HOMEPHONE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Work Phone		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_WORKPHONE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Work Extension		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_WORKEXTENSION		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Fax Number		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_FAXNUMBER		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Birthdate		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_BIRTHDATE		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Send Card		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Check Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_CHECK_SENDCARD		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Static Text		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_STATIC		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">			<P>
+		</TD>
+		<TD ALIGN="LEFT">Caption		</TD>
+		<TD ALIGN="LEFT">Notes		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">Edit Box		</TD>
+		<TD ALIGN="LEFT">ID		</TD>
+		<TD ALIGN="LEFT">IDC_EDIT_NOTES		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>Once you add all of the controls to the form, use the Class Wizard to attach variables
+to each of these controls, as specified in Table 15.2. The variables should match
+the data types of the columns in the database that the control will be used to display.</P>
+<P>
+<H4>TABLE 15.2. CONTROL VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Object</I></TD>
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+		<TD ALIGN="LEFT"><I>Category</I></TD>
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_CHECK_SENDCARD		</TD>
+		<TD ALIGN="LEFT">m_bSendCard		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">BOOL		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_ADDRESS		</TD>
+		<TD ALIGN="LEFT">m_strAddress		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_ADDRESSID		</TD>
+		<TD ALIGN="LEFT">m_lAddressID		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">long		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_BIRTHDATE		</TD>
+		<TD ALIGN="LEFT">m_oledtBirthdate		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">COleDateTime		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_CITY		</TD>
+		<TD ALIGN="LEFT">m_strCity		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_COUNTRY		</TD>
+		<TD ALIGN="LEFT">m_strCountry		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_EMAILADDRESS		</TD>
+		<TD ALIGN="LEFT">m_strEmailAddress		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_FAXNUMBER		</TD>
+		<TD ALIGN="LEFT">m_strFaxNumber		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_FIRSTNAME		</TD>
+		<TD ALIGN="LEFT">m_strFirstName		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_HOMEPHONE		</TD>
+		<TD ALIGN="LEFT">m_strHomePhone		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_LASTNAME		</TD>
+		<TD ALIGN="LEFT">m_strLastName		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_NOTES		</TD>
+		<TD ALIGN="LEFT">m_strNotes		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_POSTALCODE		</TD>
+		<TD ALIGN="LEFT">m_strPostalCode		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_SPOUSENAME		</TD>
+		<TD ALIGN="LEFT">m_strSpouseName		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_STATEORPROVINCE		</TD>
+		<TD ALIGN="LEFT">m_strStateOrProvince		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_WORKEXTENSION		</TD>
+		<TD ALIGN="LEFT">m_strWorkExtension		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">IDC_EDIT_WORKPHONE		</TD>
+		<TD ALIGN="LEFT">m_strWorkPhone		</TD>
+		<TD ALIGN="LEFT">Value		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+	</TR>
+</TABLE>
+
+<H3><A NAME="Heading15"></A>Building a Custom Record Class</H3>
+<P>Before you go any further in building your application, you need to create your
+custom record class that you will bind to the record set. This class will need public
+variables for each of the columns in the database table that you are selecting, as
+well as status variables for each of these columns. You'll also build the set of
+macros to exchange the column values between the record set and the class variables.
+To create this class, create a new class using the same method you used in previous
+days, specifying that a generic class. Specify a suitable class name, such as CCustomRs,
+and specify the base class as CADORecordBinding with public access.</P>
+<P>Once you have created your new class, delete the constructor and destructor functions
+from both the header and source code files for the new class. Edit the header file
+for your new class, importing the ADO DLL and filling in the macros and variables,
+as in Listing 15.1.</P>
+<P>
+<H4>LISTING 15.1. THE CUSTOM RECORD CLASS.</H4>
+<PRE> 1: #define INITGUID
+ 2: #import &quot;C:\Program Files\Common Files\System\ADO\msado15.dll&quot;
+            &Acirc;rename_namespace(&quot;ADOCG&quot;) rename(&quot;EOF&quot;, &quot;EndOfFile&quot;)
+ 3: using namespace ADOCG;
+ 4: #include &quot;icrsint.h&quot;
+ 5:
+ 6: class CCustomRs :
+ 7:     public CADORecordBinding
+ 8: {
+ 9: BEGIN_ADO_BINDING(CCustomRs)
+10:     ADO_FIXED_LENGTH_ENTRY(1, adInteger, m_lAddressID,         &Acirc;lAddressIDStatus,FALSE)
+11:     ADO_VARIABLE_LENGTH_ENTRY2(2, adVarChar, m_szFirstName, 
+            &Acirc;sizeof(m_szFirstName), lFirstNameStatus, TRUE)
+12:     ADO_VARIABLE_LENGTH_ENTRY2(3, adVarChar, m_szLastName, 
+            &Acirc;sizeof(m_szLastName), lLastNameStatus, TRUE)
+13:     ADO_VARIABLE_LENGTH_ENTRY2(4, adVarChar, m_szSpouseName, 
+            &Acirc;sizeof(m_szSpouseName), lSpouseNameStatus, TRUE)
+14:     ADO_VARIABLE_LENGTH_ENTRY2(5, adVarChar, m_szAddress, 
+            &Acirc;sizeof(m_szAddress), lAddressStatus, TRUE)
+15:     ADO_VARIABLE_LENGTH_ENTRY2(6, adVarChar, m_szCity,         &Acirc;sizeof(m_szCity),lCityStatus, TRUE)
+16:     ADO_VARIABLE_LENGTH_ENTRY2(7, adVarChar, m_szStateOrProvince, 
+            &Acirc;sizeof(m_szStateOrProvince), lStateOrProvinceStatus, TRUE)
+17:     ADO_VARIABLE_LENGTH_ENTRY2(8, adVarChar, m_szPostalCode, 
+            &Acirc;sizeof(m_szPostalCode), lPostalCodeStatus, TRUE)
+18:     ADO_VARIABLE_LENGTH_ENTRY2(9, adVarChar, m_szCountry, 
+            &Acirc;sizeof(m_szCountry), lCountryStatus, TRUE)
+19:     ADO_VARIABLE_LENGTH_ENTRY2(10, adVarChar, m_szEmailAddress, 
+            &Acirc;sizeof(m_szEmailAddress), lEmailAddressStatus, TRUE)
+20:     ADO_VARIABLE_LENGTH_ENTRY2(11, adVarChar, m_szHomePhone, 
+            &Acirc;sizeof(m_szHomePhone), lHomePhoneStatus, TRUE)
+21:     ADO_VARIABLE_LENGTH_ENTRY2(12, adVarChar, m_szWorkPhone, 
+            &Acirc;sizeof(m_szWorkPhone), lWorkPhoneStatus, TRUE)
+22:     ADO_VARIABLE_LENGTH_ENTRY2(13, adVarChar, m_szWorkExtension, 
+            &Acirc;sizeof(m_szWorkExtension), lWorkExtensionStatus, TRUE)
+23:     ADO_VARIABLE_LENGTH_ENTRY2(14, adVarChar, m_szFaxNumber, 
+            &Acirc;sizeof(m_szFaxNumber), lFaxNumberStatus, TRUE)
+24:     ADO_FIXED_LENGTH_ENTRY(15, adDate, m_dtBirthdate,         &Acirc;lBirthdateStatus,TRUE)
+25:     ADO_FIXED_LENGTH_ENTRY(16, adBoolean, m_bSendCard,         &Acirc;lSendCardStatus,TRUE)
+26:     ADO_VARIABLE_LENGTH_ENTRY2(17, adLongVarChar, m_szNotes, 
+            &Acirc;sizeof(m_szNotes), lNotesStatus, TRUE)
+27: END_ADO_BINDING()
+28:
+29: public:
+30:     LONG m_lAddressID;
+31:     ULONG lAddressIDStatus;
+32:     CHAR m_szFirstName[51];
+33:     ULONG lFirstNameStatus;
+34:     CHAR m_szLastName[51];
+35:     ULONG lLastNameStatus; 
+36:     CHAR m_szSpouseName[51];
+37:     ULONG lSpouseNameStatus;
+38:     CHAR m_szAddress[256];
+39:     ULONG lAddressStatus;
+40:     CHAR m_szCity[51];
+41:     ULONG lCityStatus;
+42:     CHAR m_szStateOrProvince[21];
+43:     ULONG lStateOrProvinceStatus;
+44:     CHAR m_szPostalCode[21];
+45:     ULONG lPostalCodeStatus;
+46:     CHAR m_szCountry[51];
+47:     ULONG lCountryStatus;
+48:     CHAR m_szEmailAddress[51];
+49:     ULONG lEmailAddressStatus;
+50:     CHAR m_szHomePhone[31];
+51:     ULONG lHomePhoneStatus;
+52:     CHAR m_szWorkPhone[31];
+53:     ULONG lWorkPhoneStatus;
+54:     CHAR m_szWorkExtension[21];
+55:     ULONG lWorkExtensionStatus;
+56:     CHAR m_szFaxNumber[31];
+57:     ULONG lFaxNumberStatus;
+58:     DATE m_dtBirthdate;
+59:     ULONG lBirthdateStatus;
+60:     VARIANT_BOOL m_bSendCard;
+61:     ULONG lSendCardStatus;
+62:     CHAR m_szNotes[65536];
+63:     ULONG lNotesStatus;
+64: };
+</PRE>
+<P>Once you've created this class, you need to add a variable to the document class.
+Add a new member variable to the document class, specifying the variable type as
+CCustomRs, the name as m_rsRecSet, and the access as private. You'll also need to
+include the custom record class header file in the document source code file, as
+in Listing 15.2.</P>
+<P>
+<H4>LISTING 15.2. THE DOCUMENT SOURCE CODE INCLUDES.</H4>
+<PRE> 1: // dbadoDoc.cpp : implementation of the CDbAdoDoc class
+ 2: //
+</PRE>
+<H3><A NAME="Heading16"></A>3:</H3>
+<PRE> 4: #include &quot;stdafx.h&quot;
+ 5: #include &quot;dbado.h&quot;
+ 6:
+ 7: #include &quot;CustomRs.h&quot;
+ 8: #include &quot;dbadoDoc.h&quot;
+ 9: #include &quot;dbadoView.h&quot;
+</PRE>
+<P>Another detail that you need to attend to before going any further is providing
+a way for the view to get a pointer to the record class from the document class.
+This function should return a pointer to the record class variable. To add this function
+to your application, add a new member function to the document class, specifying
+the function type as CCustomRs*, the function declaration as GetRecSet, and the function
+access as public. Edit this function, adding the code in Listing 15.3.</P>
+<P>
+<H4>LISTING 15.3. THE CDbAdoDoc GetRecSet FUNCTION.</H4>
+<PRE> 1: CCustomRs* CDbAdoDoc::GetRecSet()
+ 2: {
+ 3:     // Return a pointer to the record object
+ 4:     return &amp;m_rsRecSet;
+ 5: }
+</PRE>
+<P>One last piece of functionality that you'll add before getting to the real heart
+of ADO programming is the function for reporting ADO and database errors. This function
+will display a message to the user, reporting that an error occurred and displaying
+the error code and error message for the user. To add this function to your application,
+add a new member function to your document class. Specify the function type as void,
+the function declaration as GenerateError(HRESULT hr, PWSTR pwszDescription), and
+the access as public. Edit the function, entering the code in Listing 15.4.</P>
+<P>
+<H4>LISTING 15.4. THE CDbAdoDoc GenerateError FUNCTION.</H4>
+<PRE> 1: void CDbAdoDoc::GenerateError(HRESULT hr, PWSTR pwszDescription)
+ 2: {
+ 3:     CString strError;
+ 4:
+ 5:     // Format and display the error message
+ 6:     strError.Format(&quot;Run-time error `%d (%x)'&quot;, hr, hr);
+ 7:     strError += &quot;\n\n&quot;;
+ 8:     strError += pwszDescription;
+ 9:
+10:     AfxMessageBox(strError);
+11: }
+</PRE>
+<H3><A NAME="Heading17"></A>Connecting and Retrieving Data</H3>
+<P>You can perform all of the connecting to the database and retrieving the record
+set in the OnNewDocument function in the document class. Before you can add this
+functionality, you need to add a few more variables to the document class. You'll
+need a Recordset object pointer, an IADORecordBinding interface pointer, a couple
+of string variables for holding the database connection string, and the SQL command
+to execute to populate the record set. Add all of these variables to the document
+class as specified in Table 15.3.</P>
+<P>
+<H4>TABLE 15.3. DOCUMENT CLASS MEMBER VARIABLES.</H4>
+<P>
+<TABLE BORDER="1">
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT"><I>Name</I></TD>
+		<TD ALIGN="LEFT"><I>Type</I></TD>
+		<TD ALIGN="LEFT"><I>Access</I></TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_pRs		</TD>
+		<TD ALIGN="LEFT">_RecordsetPtr		</TD>
+		<TD ALIGN="LEFT">Private		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_piAdoRecordBinding		</TD>
+		<TD ALIGN="LEFT">IADORecordBinding*		</TD>
+		<TD ALIGN="LEFT">Private		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_strConnection		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+		<TD ALIGN="LEFT">Private		</TD>
+	</TR>
+	<TR ALIGN="LEFT" VALIGN="TOP">
+		<TD ALIGN="LEFT">m_strCmdText		</TD>
+		<TD ALIGN="LEFT">CString		</TD>
+		<TD ALIGN="LEFT">Private		</TD>
+	</TR>
+</TABLE>
+</P>
+<P>In the OnNewDocument function, you'll perform a series of steps for connecting
+and retrieving the record set. First, you'll set the strings for the database connection
+and the SQL command to be run. Next, you'll initialize the COM environment and initialize
+the two pointers so that they are both NULL. You'll create the Recordset object using
+the CreateInstance function. Open the Recordset, connecting to the database and running
+the SQL command at the same time. Bind the record class to the record set using the
+IADORecordBinding interface pointer. Finally, tell the view class to refresh the
+bound data, displaying the initial record for the user using a view class function
+that you'll add in a little while. To add all this functionality, edit the OnNewDocument
+function in the document class, adding the code starting with line 8 in Listing 15.5.</P>
+<P>
+<H4>LISTING 15.5. THE CDbAdoDoc OnNewDocument FUNCTION.</H4>
+<PRE> 1: BOOL CDbAdoDoc::OnNewDocument()
+ 2: {
+ 3:     if (!CDocument::OnNewDocument())
+ 4:         return FALSE;
+ 5:
+ 6:     // TODO: add reinitialization code here
+ 7:     // (SDI documents will reuse this document)
+ 8:     // Set the connection and SQL command strings
+ 9:     m_strConnection = _T(&quot;Provider=MSDASQL.1;Data Source=TYVCDB&quot;);
+10:     m_strCmdText = _T(&quot;select * from Addresses&quot;);
+11:
+12:     // Initialize the Recordset and binding pointers
+13:     m_pRs = NULL;
+14:     m_piAdoRecordBinding = NULL;
+15:     // Initialize the COM environment
+16:     ::CoInitialize(NULL);
+17:     try
+18:     {
+19:         // Create the record set object
+20:         m_pRs.CreateInstance(__uuidof(Recordset));
+21:
+22:         // Open the record set object
+23:         m_pRs-&gt;Open((LPCTSTR)m_strCmdText, (LPCTSTR)m_strConnection, 
+24:             adOpenDynamic, adLockOptimistic, adCmdUnknown);
+25:
+26:         // Get a pointer to the record binding interface
+27:         if (FAILED(m_pRs-&gt;QueryInterface(__uuidof(IADORecordBinding),
+28:                 (LPVOID *)&amp;m_piAdoRecordBinding)))
+29:             _com_issue_error(E_NOINTERFACE);
+30:         // Bind the record class to the record set
+31:         m_piAdoRecordBinding-&gt;BindToRecordset(&amp;m_rsRecSet);
+32:
+33:         // Get a pointer to the view
+34:         POSITION pos = GetFirstViewPosition();
+35:         CDbAdoView* pView = (CDbAdoView*)GetNextView(pos);
+36:         if (pView)
+37:             // Sync the data set with the form
+38:             pView-&gt;RefreshBoundData();
+39:     }
+40:     // Any errors?
+41:     catch (_com_error &amp;e)
+42:     {
+43:         // Display the error
+44:         GenerateError(e.Error(), e.Description());
+45:     }
+46:
+47:     return TRUE;
+48: }
+</PRE>
+<P>Before moving any further, it's a good idea to make sure that you add all the
+code necessary to clean up as your application is closing. You need to close the
+record set and release the pointer to the record binding interface. You'll also shut
+down the COM environment. To add all this functionality to your application, add
+a function to the DeleteContents event message in the document class. Edit this function,
+adding the code in Listing 15.6.</P>
+<P>
+<H4>LISTING 15.6. THE CDbAdoDoc DeleteContents FUNCTION.</H4>
+<PRE> 1: void CDbAdoDoc::DeleteContents()
+ 2: {
+ 3:     // TODO: Add your specialized code here and/or call the base class
+ 4:     // Close the record set
+ 5:     if (m_pRs)
+ 6:         m_pRs-&gt;Close();
+ 7:     // Do we have a valid pointer to the record binding?
+ 8:     if (m_piAdoRecordBinding)
+ 9:         // Release it
+10:         m_piAdoRecordBinding-&gt;Release();
+11:     // Set the record set pointer to NULL
+12:     m_pRs = NULL;
+13:
+14:     // Shut down the COM environment
+15:     CoUninitialize();
+16:
+17:     CDocument::DeleteContents();
+18: }
+</PRE>
+<H3><A NAME="Heading18"></A>Populating the Form</H3>
+<P>To display the record column values for the user, you'll add a function for copying
+the values from the record class to the view variables. This function first needs
+to get a pointer to the record class from the document class. Next, it will check
+the status of each individual field in the record class to make sure that it's okay
+to copy, and then it will copy the value. Once all values have been copied, you can
+call UpdateData to display the values in the controls on the form. To add this functionality
+to your application, add a new member function to the view class. Specify the function
+type as void, the function declaration as RefreshBoundData, and the access as public.
+Edit this new function, adding the code in Listing 15.7.</P>
+<P>
+<H4>LISTING 15.7. THE CDbAdoView RefreshBoundData FUNCTION.</H4>
+<PRE> 1: void CDbAdoView::RefreshBoundData()
+ 2: {
+ 3:     CCustomRs* pRs;
+ 4:
+ 5:     // Get a pointer to the document object
+ 6:     pRs = GetDocument()-&gt;GetRecSet();
+ 7:
+ 8:     // Is the field OK
+ 9:     if (adFldOK == pRs-&gt;lAddressIDStatus)
+10:         // Copy the value
+11:         m_lAddressID = pRs-&gt;m_lAddressID;
+12:     else
+13:         // Otherwise, set the value to 0
+14:         m_lAddressID = 0;
+15:     // Is the field OK
+16:     if (adFldOK == pRs-&gt;lFirstNameStatus)
+17:         // Copy the value
+18:         m_strFirstName = pRs-&gt;m_szFirstName;
+19:     else
+20:         // Otherwise, set the value to 0
+21:         m_strFirstName = _T(&quot;&quot;);
+22:     if (adFldOK == pRs-&gt;lLastNameStatus)
+23:         m_strLastName = pRs-&gt;m_szLastName;
+24:     else
+25:         m_strLastName = _T(&quot;&quot;);
+26:     if (adFldOK == pRs-&gt;lSpouseNameStatus)
+27:         m_strSpouseName = pRs-&gt;m_szSpouseName;
+28:     else
+29:         m_strSpouseName = _T(&quot;&quot;);
+30:     if (adFldOK == pRs-&gt;lAddressStatus)
+31:         m_strAddress = pRs-&gt;m_szAddress;
+32:     else
+33:         m_strAddress = _T(&quot;&quot;);
+34:     if (adFldOK == pRs-&gt;lCityStatus)
+35:         m_strCity = pRs-&gt;m_szCity;
+36:     else
+37:         m_strCity = _T(&quot;&quot;);
+38:     if (adFldOK == pRs-&gt;lStateOrProvinceStatus)
+39:         m_strStateOrProvince = pRs-&gt;m_szStateOrProvince;
+40:     else
+41:         m_strStateOrProvince = _T(&quot;&quot;);
+42:     if (adFldOK == pRs-&gt;lPostalCodeStatus) 
+43:         m_strPostalCode = pRs-&gt;m_szPostalCode;
+44:     else
+45:         m_strPostalCode = _T(&quot;&quot;);
+46:     if (adFldOK == pRs-&gt;lCountryStatus)
+47:         m_strCountry = pRs-&gt;m_szCountry;
+48:     else
+49:         m_strCountry = _T(&quot;&quot;);
+50:     if (adFldOK == pRs-&gt;lEmailAddressStatus)
+51:         m_strEmailAddress = pRs-&gt;m_szEmailAddress;
+52:     else
+53:         m_strEmailAddress = _T(&quot;&quot;);
+54:     if (adFldOK == pRs-&gt;lHomePhoneStatus)
+55:         m_strHomePhone = pRs-&gt;m_szHomePhone;
+56:     else
+57:         m_strHomePhone = _T(&quot;&quot;);
+58:     if (adFldOK == pRs-&gt;lWorkPhoneStatus)
+59:         m_strWorkPhone = pRs-&gt;m_szWorkPhone;
+60:     else
+61:         m_strWorkPhone = _T(&quot;&quot;);
+62:     if (adFldOK == pRs-&gt;lWorkExtensionStatus)
+63:         m_strWorkExtension = pRs-&gt;m_szWorkExtension;
+64:     else
+65:         m_strWorkExtension = _T(&quot;&quot;);
+66:     if (adFldOK == pRs-&gt;lFaxNumberStatus)
+67:         m_strFaxNumber = pRs-&gt;m_szFaxNumber;
+68:     else
+69:         m_strFaxNumber = _T(&quot;&quot;);
+70:     if (adFldOK == pRs-&gt;lBirthdateStatus)
+71:         m_oledtBirthdate = pRs-&gt;m_dtBirthdate;
+72:     else
+73:         m_oledtBirthdate = 0L;
+74:     if (adFldOK == pRs-&gt;lSendCardStatus)
+75:         m_bSendCard = VARIANT_FALSE == pRs-&gt;m_bSendCard ? FALSE :             &Acirc;TRUE;
+76:     else
+77:         m_bSendCard = FALSE;
+78:     if (adFldOK == pRs-&gt;lNotesStatus)
+79:         m_strNotes = pRs-&gt;m_szNotes;
+80:     else
+81:         m_strNotes = _T(&quot;&quot;);
+82:
+83:     // Sync the data with the controls
+84:     UpdateData(FALSE);
+85: }
+</PRE>
+
+
+<BLOCKQUOTE>
+	<P>
+<HR>
+<STRONG>NOTE:</STRONG> Because you are working directly with the custom record class that
+	you created in this function, you must include the header file for your custom record
+	class in the view class source file, just as you did with the document class source
+	file.
+<HR>
+
+
+</BLOCKQUOTE>
+
+<H3><A NAME="Heading19"></A>Saving Updates</H3>
+<P>When you need to copy changes back to the record set, reverse the process of copying
+data from the controls on the form to the variables in the record class. You could
+take the approach of copying all values, regardless of whether their values have
+changed, or you could compare the two values to determine which have changed and
+need to be copied back. Call the function that does this before navigating to any
+other records in the record set so that any changes that the user has made are saved
+to the database. To add this functionality to your application, add a new member
+function to the view class. Specify the function type as void, the function declaration
+as UpdateBoundData, and the access as private. Edit the function, adding the code
+in Listing 15.8.</P>
+<P>
+<H4>LISTING 15.8. THE CDbAdoView UpdateBoundData FUNCTION.</H4>
+<PRE> 1: void CDbAdoView::UpdateBoundData()
+ 2: {
+ 3:     CCustomRs* pRs;
+ 4:
+ 5:     // Get a pointer to the document
+ 6:     pRs = GetDocument()-&gt;GetRecSet();
+ 7:
+ 8:     // Sync the controls with the variables
+ 9:     UpdateData(TRUE);
+10:
+11:     // Has the field changed? If so, copy the value back
+12:     if (m_lAddressID != pRs-&gt;m_lAddressID)
+13:         pRs-&gt;m_lAddressID = m_lAddressID;
+14:     if (m_strFirstName != pRs-&gt;m_szFirstName)
+15:         strcpy(pRs-&gt;m_szFirstName, (LPCTSTR)m_strFirstName);
+16:     if (m_strLastName != pRs-&gt;m_szLastName)
+17:         strcpy(pRs-&gt;m_szLastName, (LPCTSTR)m_strLastName);
+18:     if (m_strSpouseName != pRs-&gt;m_szSpouseName)
+19:         strcpy(pRs-&gt;m_szSpouseName, (LPCTSTR)m_strSpouseName);
+20:     if (m_strAddress != pRs-&gt;m_szAddress)
+21:         strcpy(pRs-&gt;m_szAddress, (LPCTSTR)m_strAddress);
+22:     if (m_strCity != pRs-&gt;m_szCity)
+23:         strcpy(pRs-&gt;m_szCity, (LPCTSTR)m_strCity);
+24:     if (m_strStateOrProvince != pRs-&gt;m_szStateOrProvince)
+25:         strcpy(pRs-&gt;m_szStateOrProvince,             &Acirc;(LPCTSTR)m_strStateOrProvince);
+26:     if (m_strPostalCode != pRs-&gt;m_szPostalCode)
+27:         strcpy(pRs-&gt;m_szPostalCode, (LPCTSTR)m_strPostalCode);
+28:     if (m_strCountry != pRs-&gt;m_szCountry)
+29:         strcpy(pRs-&gt;m_szCountry, (LPCTSTR)m_strCountry);
+30:     if (m_strEmailAddress != pRs-&gt;m_szEmailAddress)
+31:         strcpy(pRs-&gt;m_szEmailAddress, (LPCTSTR)m_strEmailAddress);
+32:     if (m_strHomePhone != pRs-&gt;m_szHomePhone)
+33:         strcpy(pRs-&gt;m_szHomePhone, (LPCTSTR)m_strHomePhone);
+34:     if (m_strWorkPhone != pRs-&gt;m_szWorkPhone)
+35:         strcpy(pRs-&gt;m_szWorkPhone, (LPCTSTR)m_strWorkPhone);
+36:     if (m_strWorkExtension != pRs-&gt;m_szWorkExtension)
+37:         strcpy(pRs-&gt;m_szWorkExtension, (LPCTSTR)m_strWorkExtension);
+38:     if (m_strFaxNumber != pRs-&gt;m_szFaxNumber)
+39:         strcpy(pRs-&gt;m_szFaxNumber, (LPCTSTR)m_strFaxNumber);
+40:     if (((DATE)m_oledtBirthdate) != pRs-&gt;m_dtBirthdate)
+41:         pRs-&gt;m_dtBirthdate = (DATE)m_oledtBirthdate;
+42:     if (m_bSendCard == TRUE)
+43:         pRs-&gt;m_bSendCard = VARIANT_TRUE;
+44:     else
+45:         pRs-&gt;m_bSendCard = VARIANT_FALSE;
+46:     if (m_strNotes != pRs-&gt;m_szNotes)
+47:         strcpy(pRs-&gt;m_szNotes, (LPCTSTR)m_strNotes);
+48: }
+</PRE>
+<H3><A NAME="Heading20"></A>Navigating the Record Set</H3>
+<P>For navigating the record set, add a series of menus for each of the four basic
+navigation choices: first, previous, next, and last. Because the Recordset object
+and the record-binding interface pointers are in the document object, the event messages
+for these menus must be passed to the document class to update the current record
+and then to navigate to the selected record. However, the view class needs to receive
+the event message first because it needs to copy back any changed values from the
+controls on the form before the update is performed. Once the navigation is complete,
+the view also needs to update the form with the new record's column values. Looking
+at the sequence of where the event message needs to be passed, it makes the most
+sense to add the event message handler to the view class, and from there, call the
+event message handler for the document class.</P>
+<P>To add this functionality to your application, add the four menu entries and the
+corresponding toolbar buttons. Using the Class Wizard, add a event message handler
+function to the view class for the command event for all four of these menus. Edit
+the event function for the Move First menu, adding the code in Listing 15.9.</P>
+<P>
+<H4>LISTING 15.9. THE CDbAdoView OnDataFirst FUNCTION.</H4>
+<PRE> 1: void CDbAdoView::OnDataFirst()
+ 2: {
+ 3:     // TODO: Add your command handler code here
+ 4:     // Update the current record
+ 5:     UpdateBoundData();
+ 6:     // Navigate to the first record
+ 7:     GetDocument()-&gt;MoveFirst();
+ 8:     // Refresh the form with the new record's data
+ 9:     RefreshBoundData();
+10: }
+</PRE>
+<P>Now add the MoveFirst function to the document class and perform all the actual
+record set functionality for this function. To add this, add a member function to
+the document class in your application. Specify the function type as void, the declaration
+as MoveFirst, and the access as public. Edit this function, adding the code in Listing
+15.10.</P>
+<P>
+<H4>LISTING 15.10. THE CDBADODOC MOVEFIRST FUNCTION.</H4>
+<PRE> 1: void CDbAdoDoc::MoveFirst()
+ 2: {
+ 3:     try
+ 4:     {
+ 5:         // Update the current record
+ 6:         m_piAdoRecordBinding-&gt;Update(&amp;m_rsRecSet);
+ 7:         // Move to the first record
+ 8:         m_pRs-&gt;MoveFirst();
+ 9:     }
+10:     // Any errors?
+11:     catch (_com_error &amp;e)
+12:     {
+13:         // Generate the error message
+14:         GenerateError(e.Error(), e.Description());
+15:     }
+16: }
+</PRE>
+<P>Edit and add the same set of functions to the view and document classes for the
+MovePrevious, MoveNext, and MoveLast ADO functions. Once you've added all these functions,
+you should be ready to compile and run your application. Your application will be
+capable of opening the Addresses database table and presenting you with each individual
+record, which you can edit and update, as in Figure 15.7.</P>
+<P><A HREF="javascript:popUp('15fig07.gif')"><B>FIGURE 15.7.</B></A><B> </B><I>The
+running application.</I></P>
+
+<P><I></I>
+<H3><A NAME="Heading21"></A>Adding New Records</H3>
+<P>Now that you are able to retrieve and navigate the set of records in the database
+table, it would be nice if you could add some new records to the table. You can add
+this function-ality in exactly the same fashion that you added the navigation functionality.
+Add a menu, trigger an event function in the view class from the menu, update the
+current record values back to the record set, call a function in the document class,
+and refresh the current record from the record set. As far as the menu and the view
+class are concerned, the only difference between this functionality and any of the
+navigation menus and functions is the ID of the menu and the name of the functions
+that are called, just as with the different navigation functions. It's in the document
+function where things begin to diverge just a little.</P>
+<P>In the document class function for adding a new record, once you've updated the
+current record, you'll make sure that adding a new record is an option. If it is,
+then you'll build an empty record and add it to the record set. Once you've added
+the empty record, navigate to the last record in the set because this will be the
+new record. At this point, you can exit this function and let the view class refresh
+the form with the data values from the new, empty record.</P>
+<P>To add this functionality to your application, add a new menu entry for adding
+a new record. Add a command event-handler function to the view class for this new
+menu, adding the same code to the function as you did with the navigation functions,
+but call the AddNew function in the document class. Now, add the AddNew function
+to the document class. Add a new member function to the document class, specifying
+the type as void, the declaration as AddNew, and the access as public. Edit the function,
+adding the code in Listing 15.11.</P>
+<P>
+<H4>LISTING 15.11. THE CDbAdoDoc AddNew FUNCTION.</H4>
+<PRE> 1: void CDbAdoDoc::AddNew()
+ 2: {
+ 3:     try
+ 4:     {
+ 5:         // Update the current record
+ 6:         m_piAdoRecordBinding-&gt;Update(&amp;m_rsRecSet);
+ 7:         // Can we add a new record?
+ 8:         if (m_pRs-&gt;Supports(adAddNew))
+ 9:         {
+10:             // Create a blank record
+11:             CreateBlankRecord();
+12:             // Add the blank record
+13:             m_piAdoRecordBinding-&gt;AddNew(&amp;m_rsRecSet);
+14:             // Move to the last record
+15:             m_pRs-&gt;MoveLast();
+16:         }
+17:     }
+18:     // Any errors?
+19:     catch (_com_error &amp;e)
+20:     {
+21:         // Generate an error message
+22:         GenerateError(e.Error(), e.Description());
+23:     }
+24: }
+</PRE>
+<P>Now add the function that creates the blank record. In this function, you'll set
+each of the field variables in the record class to an almost empty string. To add
+this function to your class, add a new member function to the document class. Specify
+its type as void, its declaration as CreateBlankRecord, and its access as private.
+Edit this new function, adding the code in Listing 15.12.</P>
+<P>
+<H4>LISTING 15.12. THE CDbAdoDoc CreateBlankRecord FUNCTION.</H4>
+<PRE> 1: void CDbAdoDoc::CreateBlankRecord()
+ 2: {
+ 3:     // Create the blank values to be used
+ 4:     CString strBlank = &quot; &quot;;
+ 5:     COleDateTime dtBlank;
+ 6:
+ 7:     // Set each of the values in the record object
+ 8:     m_rsRecSet.m_lAddressID = 0;
+ 9:     strcpy(m_rsRecSet.m_szFirstName, (LPCTSTR)strBlank);
+10:     strcpy(m_rsRecSet.m_szLastName, (LPCTSTR)strBlank);
+11:     strcpy(m_rsRecSet.m_szSpouseName, (LPCTSTR)strBlank);
+12:     strcpy(m_rsRecSet.m_szAddress, (LPCTSTR)strBlank);
+13:     strcpy(m_rsRecSet.m_szCity, (LPCTSTR)strBlank);
+14:     strcpy(m_rsRecSet.m_szStateOrProvince, (LPCTSTR)strBlank);
+15:     strcpy(m_rsRecSet.m_szPostalCode, (LPCTSTR)strBlank);
+16:     strcpy(m_rsRecSet.m_szCountry, (LPCTSTR)strBlank);
+17:     strcpy(m_rsRecSet.m_szEmailAddress, (LPCTSTR)strBlank);
+18:     strcpy(m_rsRecSet.m_szHomePhone, (LPCTSTR)strBlank);
+19:     strcpy(m_rsRecSet.m_szWorkPhone, (LPCTSTR)strBlank);
+20:     strcpy(m_rsRecSet.m_szWorkExtension, (LPCTSTR)strBlank);
+21:     strcpy(m_rsRecSet.m_szFaxNumber, (LPCTSTR)strBlank);
+22:     m_rsRecSet.m_dtBirthdate = (DATE)dtBlank;
+23:     m_rsRecSet.m_bSendCard = VARIANT_FALSE;
+24:     strcpy(m_rsRecSet.m_szNotes, (LPCTSTR)strBlank);
+25: }
+</PRE>
+<P>If you compile and run your application, you should be able to insert and edit
+new records in the database table.</P>
+<P>
+<H3><A NAME="Heading22"></A>Deleting Records</H3>
+<P>The final piece of functionality that you'll add to your application is the ability
+to delete the current record from the set. This function can follow the same form
+as all the navigation and add functions with a menu entry calling an event-handler
+function in the view class. The function in the view class can even follow the same
+set of code that you used in these previous functions, updating the current record,
+calling the corresponding function in the document class, and then refreshing the
+current record to the form.</P>
+<P>In the document class function, the record deletion should follow almost the same
+path that you took for adding a new record. Update the current record, check to see
+if it's possible to delete the current record, check with the user to verify that
+he wants to delete the current record, and then call the Delete function and navigate
+to another record in the set.</P>
+<P>To add this functionality to your application, add a new menu entry for the delete
+function and then attach an event-handler function for the menu's command event in
+the view class. Edit this function, adding the same code as in the navigation and
+add record functions and calling the Delete function in the document class. Now,
+add a new member function to the document class. Specify the new function's type
+as void, the declaration as Delete, and the access as public. Edit this function,
+adding the code in Listing 15.13.</P>
+<P>
+<H4>LISTING 15.13. THE CDbAdoDoc Delete FUNCTION.</H4>
+<PRE> 1: void CDbAdoDoc::Delete()
+ 2: {
+ 3:     try
+ 4:     {
+ 5:         // Update the current record
+ 6:         m_piAdoRecordBinding-&gt;Update(&amp;m_rsRecSet);
+ 7:         // Can we delete a record?
+ 8:         if (m_pRs-&gt;Supports(adDelete))
+ 9:         {
+10:             // Make sure the user wants to delete this record
+11:             if (AfxMessageBox(&quot;Are you sure you want to delete this                  &Acirc;record?&quot;,
+12:                 MB_YESNO | MB_ICONQUESTION) == IDYES)
+</PRE>
+<P>13: {</P>
+<P>
+<PRE>14:                 // Delete the record
+15:                 m_pRs-&gt;Delete(adAffectCurrent);
+16:                 // Move to the previous record
+17:                 m_pRs-&gt;MovePrevious();
+18:             }
+19:         }
+20:     }
+21:     // Any errors?
+22:     catch (_com_error &amp;e)
+23:     {
+24:         // Generate an error message
+25:         GenerateError(e.Error(), e.Description());
+26:     }
+27: }
+</PRE>
+<P>When you compile and run your application, you should be able to delete any records
+from the set that you want.</P>
+<P>
+<H2><A NAME="Heading23"></A>Summary</H2>
+<P>Today, you learned about Microsoft's newest database access technology, ActiveX
+Data Objects. You saw how you can use ADO as a simple ActiveX control to provide
+database access through data-bound controls without any additional programming. You
+also learned how to import the DLL, providing a rich set of data access functionality
+that you can use and control in your applications. You learned how to retrieve a
+set of data, manipulate the records in the set, and save your changes back in the
+database. You learned two different ways of accessing and updating the data values
+in a record in the record set and how you can do a little more work up front to save
+a large amount of work in the midst of the application coding.</P>
+<P>
+<H2><A NAME="Heading24"></A>Q&amp;A</H2>
+
+<DL>
+	<DT></DT>
+	<DD><B>Q Because Visual C++ doesn't support ADO with its wizards, why would I want
+	to use it?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> ADO is the database access technology direction for Microsoft. It's
+	still in the early stages of this technology, but it will gradually become the data
+	access technology for use with all programming languages and applications.
+	<P>
+	<DT></DT>
+	<DD><B>Q If ADO uses ODBC to get to my database, why wouldn't I want to just go straight
+	to the ODBC interface to access my database?</B>
+	<P>
+	<DT><B></B></DT>
+	<DD><B>A</B> ADO can use ODBC to access those databases that don't have a native
+	OLE DB interface. If you are using either Microsoft's SQL Server database or an Oracle
+	database, there are OLE DB interfaces available, in which case ADO would not go through
+	ODBC to get to the database. In these cases, using ADO gives your application better
+	performance than using the ODBC interface. With the upcoming operating system releases
+	from Microsoft, you'll find that using ADO is likely to provide you with access capabilities
+	that extend far beyond conventional databases. ADO is a new technology that you'll
+	start seeing in more use in the coming years. Because of its growing importance,
+	it's a good thing to start working with ADO now so that you'll already be prepared
+	to work with it when it's everywhere.
+	<P>
+</DL>
+
+<H2><A NAME="Heading25"></A>Workshop</H2>
+<P>The Workshop provides quiz questions to help you solidify your understanding of
+the material covered and exercises to provide you with experience in using what you've
+learned. The answers to the quiz questions and exercises are provided in Appendix
+B, &quot;Answers.&quot;</P>
+<P>
+<H3><A NAME="Heading26"></A>Quiz</H3>
+
+<DL>
+	<DT></DT>
+	<DD><B>1. </B>What does ADO stand for?
+	<P>
+	<DT></DT>
+	<DD><B>2. </B>What does ADO use for database access?
+	<P>
+	<DT></DT>
+	<DD><B>3. </B>What are the objects in ADO?
+	<P>
+	<DT></DT>
+	<DD><B>4. </B>How do you initialize the COM environment?
+	<P>
+	<DT></DT>
+	<DD><B>5. </B>How do you associate a Connection object with a Command object?
+	<P>
+	<DT></DT>
+	<DD><B>6. </B>How do you associate a Command object with and populate a Recordset
+	object?
+	<P>
+</DL>
+
+<H3><A NAME="Heading27"></A>Exercise</H3>
+<P>Enable and disable the navigation menus and toolbar buttons based on whether the
+recordset is at the beginning of file (BOF) or end of file (EOF, renamed to EndOfFile).</P>
+<H1></H1>
+<CENTER>
+<P>
+<HR>
+<A HREF="../ch14/ch14.htm"><IMG SRC="../button/previous.gif" WIDTH="128" HEIGHT="28"
+ALIGN="BOTTOM" ALT="Previous chapter" BORDER="0"></A><A HREF="../ch16/ch16.htm"><IMG
+SRC="../button/next.gif" WIDTH="128" HEIGHT="28" ALIGN="BOTTOM" ALT="Next chapter"
+BORDER="0"></A><A HREF="../index.htm"><IMG SRC="../button/contents.gif" WIDTH="128"
+HEIGHT="28" ALIGN="BOTTOM" ALT="Contents" BORDER="0"></A> <BR>
+<BR>
+</P>
+
+<P>&copy; <A HREF="../copy.htm">Copyright</A>, Macmillan Computer Publishing. All
+rights reserved.
+</CENTER>
+
+</BODY>
+
+</HTML>

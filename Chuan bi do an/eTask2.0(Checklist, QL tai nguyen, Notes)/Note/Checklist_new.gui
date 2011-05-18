@@ -1,0 +1,1109 @@
+<Screen
+	CID = "1815953095"
+	AppID = "2"
+	AppVer = "4.2.116.0"
+	DocID = ""
+	HasCanvas = "0"
+	Width = "640"
+	Height = "480"
+	NextCID = "6"
+	RepresentativeRefID = "0"
+	UseDefRepresentative = "1">
+	<Elements
+		CID = "1">
+		<Element
+			CID = "86311488"
+			Type = "StaticText"
+			X = "-246"
+			Y = "161"
+			Width = "100"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = "Centre Text"
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Centre"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "136869162"
+			Type = "HorizontalTabBar"
+			X = "-54"
+			Y = "-33"
+			Width = "854"
+			Height = "434"
+			Flags = "0"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "5"
+			LeftMargin = "0"
+			RightMargin = "0"
+			SelectedTab = "1"
+			IsProportional = "1"
+			IsFullWidth = "0"
+			IsReversed = "0"
+			EnableSimSelect = "1"
+			Mirror = "0"
+			TabMarginLeft = "0"
+			TabMarginRight = "0"
+			TabMarginTop = "0"
+			TabMarginBottom = "0">
+			<TabBarItem
+				ItemID = "1"
+				Text = "Thông tin tác nghiệp"
+				IsDisabled = "0"/>
+			<TabBarItem
+				ItemID = "2"
+				Text = "Checklist"
+				IsDisabled = "0"/>
+			<TabBarItem
+				ItemID = "3"
+				Text = "Ghi chú"
+				IsDisabled = "0"/>
+		</Element>
+		<Element
+			CID = "86326985"
+			Type = "Rectangle"
+			X = "-53"
+			Y = "-8"
+			Width = "852"
+			Height = "407"
+			Flags = "0"
+			HighlightColour = "246,246,246,0,21"
+			ShadowColour = "185,180,161,0,17"
+			FillColour = "255,255,255,0,6"
+			GradientColour = "185,180,161,0,17"
+			BorderColour = "0,20,88,0,7"
+			TextColour = "0,0,0,0,19"
+			Fill = "Solid"
+			Border = "Solid"
+			TextPlacement = "Top"
+			HorzAlign = "Left"
+			BorderDepth = "2"
+			BorderWidth = "0"
+			Text = ""
+			TextOutsideExtent = "1"
+			IsDisabled = "0"/>
+		<Element
+			CID = "86324309"
+			Type = "Rectangle"
+			X = "-52"
+			Y = "-7"
+			Width = "850"
+			Height = "29"
+			Flags = "0"
+			HighlightColour = "246,246,246,0,21"
+			ShadowColour = "185,180,161,0,17"
+			FillColour = "122,150,223,0,0"
+			GradientColour = "0,84,227,0,3"
+			BorderColour = "145,151,227,0,0"
+			TextColour = "0,0,0,0,19"
+			Fill = "Solid"
+			Border = "Solid"
+			TextPlacement = "Top"
+			HorzAlign = "Left"
+			BorderDepth = "2"
+			BorderWidth = "1"
+			Text = ""
+			TextOutsideExtent = "1"
+			IsDisabled = "0"/>
+		<Element
+			CID = "86324076"
+			Type = "ComboBox"
+			X = "666"
+			Y = "-4"
+			Width = "131"
+			Height = "21"
+			Flags = "2"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = "Tất cả "
+			IsDisabled = "0"
+			IsEditable = "0"
+			IsFlat = "0"
+			Mirror = "0"
+			CustomStyle = "0"
+			HorzAlign = "Left"
+			OverrideTextColour = "0"
+			OverrideDisabledTextColour = "0"
+			OverrideFillColour = "0"
+			OverrideDisabledFillColour = "0"
+			OverrideBorderColour = "0"
+			TextColour = "0,0,0,0,9"
+			DisabledTextColour = "161,161,146,0,18"
+			FillColour = "240,240,255,0,0"
+			DisabledFillColour = "236,233,216,0,16"
+			BorderColour = "192,192,255,0,0"/>
+		<Element
+			CID = "86324067"
+			Type = "Table"
+			X = "-51"
+			Y = "27"
+			Width = "849"
+			Height = "268"
+			Flags = "0"
+			HeaderBackgroundColour = "239,251,254,0,0"
+			HeaderBorderColour = "102,147,204,0,0"
+			HeaderTextColour = "21,66,139,0,0"
+			BackgroundColour = "255,104,32,0,0"
+			BorderColour = "102,147,204,0,0"
+			GridLineColour = "102,147,204,0,0"
+			SortedBlendColour = "64,64,64,0,0"
+			DefOddBackgroundColour = "246,246,246,0,21"
+			DefEvenBackgroundColour = "255,255,255,0,0"
+			DefTextColour = "0,0,0,0,9"
+			Typeface = "Tahoma"
+			FontAttributes = "0"
+			TextSize = "90"
+			NextColumnID = "6"
+			IsFlat = "0"
+			IsHeaderBold = "1"
+			IsTransparent = "1"
+			HasBorder = "0"
+			HasHorzScrollBar = "0"
+			HasVertScrollBar = "0"
+			Mirror = "0"
+			HasHorzLines = "1"
+			HasVertLines = "1"
+			HasExtHorzLines = "0"
+			HasExtVertLines = "0"
+			ExtendColumnHeaders = "0"
+			ExtendColumns = "0"
+			ExtendRows = "0"
+			VariableHeightRows = "1"
+			FullRowSelection = "1"
+			HeaderWordWrap = "1"
+			WordWrap = "1"
+			HeaderSpace = "0"
+			HeaderHeight = "26"
+			RowHeight = "26"
+			FirstVisibleRow = "0"
+			FixedColumns = "0"
+			SortedColumn = "0"
+			SortedBlendFactor = "0.000000"
+			ColumnSort = "Descending"
+			HeaderStyle = "Flat"
+			FixedCellStyle = "Flat">
+			<Columns>
+				<ColumnItem
+					OddBackgroundColour = "255,255,255,0,6"
+					EvenBackgroundColour = "255,255,255,0,6"
+					TextColour = "0,0,0,0,9"
+					ColumnID = "3"
+					Heading = "Tên công việc"
+					Width = "180"
+					HeaderMargin = "0"
+					CellMargin = "0"
+					HasCustomOddBgColour = "0"
+					HasCustomEvenBgColour = "0"
+					HasCustomTextColour = "0"
+					HeadingAlignment = "Centre"
+					CellAlignment = "Left"/>
+				<ColumnItem
+					OddBackgroundColour = "255,255,255,0,6"
+					EvenBackgroundColour = "255,255,255,0,6"
+					TextColour = "0,0,0,0,9"
+					ColumnID = "1"
+					Heading = "Nội dung"
+					Width = "200"
+					HeaderMargin = "0"
+					CellMargin = "0"
+					HasCustomOddBgColour = "0"
+					HasCustomEvenBgColour = "0"
+					HasCustomTextColour = "0"
+					HeadingAlignment = "Centre"
+					CellAlignment = "Left"/>
+				<ColumnItem
+					OddBackgroundColour = "255,255,255,0,6"
+					EvenBackgroundColour = "255,255,255,0,6"
+					TextColour = "0,0,0,0,9"
+					ColumnID = "2"
+					Heading = "Thời gian"
+					Width = "74"
+					HeaderMargin = "0"
+					CellMargin = "0"
+					HasCustomOddBgColour = "0"
+					HasCustomEvenBgColour = "0"
+					HasCustomTextColour = "0"
+					HeadingAlignment = "Centre"
+					CellAlignment = "Centre"/>
+				<ColumnItem
+					OddBackgroundColour = "255,255,255,0,6"
+					EvenBackgroundColour = "255,255,255,0,6"
+					TextColour = "0,0,0,0,9"
+					ColumnID = "3"
+					Heading = "Tiến độ"
+					Width = "232"
+					HeaderMargin = "0"
+					CellMargin = "0"
+					HasCustomOddBgColour = "0"
+					HasCustomEvenBgColour = "0"
+					HasCustomTextColour = "0"
+					HeadingAlignment = "Centre"
+					CellAlignment = "Left"/>
+				<ColumnItem
+					OddBackgroundColour = "255,255,255,0,6"
+					EvenBackgroundColour = "255,255,255,0,6"
+					TextColour = "0,0,0,0,9"
+					ColumnID = "4"
+					Heading = "Người thực hiện"
+					Width = "136"
+					HeaderMargin = "0"
+					CellMargin = "0"
+					HasCustomOddBgColour = "0"
+					HasCustomEvenBgColour = "0"
+					HasCustomTextColour = "0"
+					HeadingAlignment = "Centre"
+					CellAlignment = "Left"/>
+				<ColumnItem
+					OddBackgroundColour = "255,255,255,0,6"
+					EvenBackgroundColour = "255,255,255,0,6"
+					TextColour = "0,0,0,0,9"
+					ColumnID = "5"
+					Heading = ""
+					Width = "26"
+					HeaderMargin = "0"
+					CellMargin = "0"
+					HasCustomOddBgColour = "0"
+					HasCustomEvenBgColour = "0"
+					HasCustomTextColour = "0"
+					HeadingAlignment = "Centre"
+					CellAlignment = "Left"/>
+			</Columns>
+			<Data>
+				<Row
+					IsSelected = "0">
+					<Cell>
+						&#32;   Công việc 1
+					</Cell>
+					<Cell>
+						Nội dung công việc 1
+					</Cell>
+					<Cell>
+						30/03/2011 Đến 01/04/2011
+					</Cell>
+					<Cell>
+						-ThuNN(8:30AM 30/03/2011): hoàn thành phần đính kèm file
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+				</Row>
+				<Row
+					IsSelected = "0">
+					<Cell>
+						&#32;      Công việc 2
+					</Cell>
+					<Cell>
+						Nội dung công việc 2
+					</Cell>
+					<Cell>
+						01/04/2011 Đến 03/04/2011
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+				</Row>
+				<Row
+					IsSelected = "0">
+					<Cell>
+						&#32;            Công việc 2.1
+					</Cell>
+					<Cell>
+						Nội dung công việc 2.1
+					</Cell>
+					<Cell>
+						02/04/2011 Đến 04/04/2011
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+				</Row>
+				<Row
+					IsSelected = "0">
+					<Cell>
+						&#32;   Công việc 3|
+					</Cell>
+					<Cell>
+						Nội dung công việc 3
+					</Cell>
+					<Cell>
+						03/04/2011 Đến 04/04/2011
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+				</Row>
+				<Row
+					IsSelected = "0">
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						Đến
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+				</Row>
+				<Row
+					IsSelected = "0">
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+					<Cell>
+						
+					</Cell>
+				</Row>
+			</Data>
+		</Element>
+		<Element
+			CID = "730743446"
+			Type = "CheckBox"
+			X = "-33"
+			Y = "125"
+			Width = "80"
+			Height = "21"
+			Flags = "0"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = ""
+			IsDisabled = "0"
+			IsTextLeft = "0"
+			Is3State = "0"
+			CheckSize = "13"
+			State = "Unchecked"/>
+		<Element
+			CID = "86340646"
+			Type = "Bitmap"
+			X = "-47"
+			Y = "130"
+			Width = "11"
+			Height = "11"
+			Flags = "0"
+			FileID = "634C0E4E-7B09-49A7-9758CCFC8AF3C17C"
+			RootPath = "$Container"
+			Filename = "..\Bitmap\Expand.gif"
+			Placement = "Stretch"
+			HorzAlign = "Left"
+			VertAlign = "Top"
+			ClipLeft = "0"
+			ClipRight = "0"
+			ClipTop = "0"
+			ClipBottom = "0"/>
+		<Element
+			CID = "86333053"
+			Type = "StaticText"
+			X = "10"
+			Y = "61"
+			Width = "28"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,255,0,0"
+			Typeface = ""
+			FontAttributes = "4"
+			TextSize = "Normal"
+			Text = ""
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "86330589"
+			Type = "StaticText"
+			X = "26"
+			Y = "128"
+			Width = "28"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,255,0,0"
+			Typeface = ""
+			FontAttributes = "4"
+			TextSize = "Normal"
+			Text = ""
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "86343300"
+			Type = "StaticText"
+			X = "-43"
+			Y = "-4"
+			Width = "132"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "21,66,139,0,0"
+			Typeface = ""
+			FontAttributes = "1"
+			TextSize = "90"
+			Text = "Chi tiết checklist"
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "730733131"
+			Type = "CheckBox"
+			X = "-47"
+			Y = "70"
+			Width = "80"
+			Height = "21"
+			Flags = "0"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = ""
+			IsDisabled = "0"
+			IsTextLeft = "0"
+			Is3State = "0"
+			CheckSize = "13"
+			State = "Unchecked"/>
+		<Element
+			CID = "730735312"
+			Type = "CheckBox"
+			X = "-11"
+			Y = "177"
+			Width = "80"
+			Height = "21"
+			Flags = "0"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = ""
+			IsDisabled = "0"
+			IsTextLeft = "0"
+			Is3State = "0"
+			CheckSize = "13"
+			State = "Unchecked"/>
+		<Element
+			CID = "730734914"
+			Type = "CheckBox"
+			X = "-46"
+			Y = "231"
+			Width = "80"
+			Height = "21"
+			Flags = "0"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = ""
+			IsDisabled = "0"
+			IsTextLeft = "0"
+			Is3State = "0"
+			CheckSize = "13"
+			State = "Unchecked"/>
+		<Element
+			CID = "730745113"
+			Type = "Bitmap"
+			X = "777"
+			Y = "32"
+			Width = "14"
+			Height = "15"
+			Flags = "0"
+			FileID = "A9DA1056-EA9E-477F-A2B979A416B982B8"
+			RootPath = "$Container"
+			Filename = "..\Bitmap\attach.gif"
+			Placement = "Stretch"
+			HorzAlign = "Left"
+			VertAlign = "Top"
+			ClipLeft = "0"
+			ClipRight = "0"
+			ClipTop = "0"
+			ClipBottom = "0"/>
+		<Element
+			CID = "767846507"
+			Type = "StaticText"
+			X = "642"
+			Y = "65"
+			Width = "52"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "1"
+			TextSize = "Normal"
+			Text = "AnhNTb"
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "767824259"
+			Type = "StaticText"
+			X = "688"
+			Y = "65"
+			Width = "52"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = ", ThuNN"
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "1797017785"
+			Type = "StaticText"
+			X = "643"
+			Y = "122"
+			Width = "52"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "1"
+			TextSize = "Normal"
+			Text = "AnhNTb"
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "1797015984"
+			Type = "StaticText"
+			X = "689"
+			Y = "122"
+			Width = "52"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = ", ThuNN"
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "1797015331"
+			Type = "StaticText"
+			X = "644"
+			Y = "178"
+			Width = "52"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "1"
+			TextSize = "Normal"
+			Text = "ThuNN"
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "1797004532"
+			Type = "StaticText"
+			X = "684"
+			Y = "178"
+			Width = "52"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = ", AnhNTb"
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "1797020537"
+			Type = "StaticText"
+			X = "644"
+			Y = "229"
+			Width = "52"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "1"
+			TextSize = "Normal"
+			Text = "ThuNN"
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "1797005487"
+			Type = "StaticText"
+			X = "684"
+			Y = "229"
+			Width = "52"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = ", AnhNTb"
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "371535761"
+			Type = "Bitmap"
+			X = "332"
+			Y = "274"
+			Width = "17"
+			Height = "16"
+			Flags = "0"
+			FileID = "3C2D98BA-E286-44D3-8DF1FCBCE2C52B84"
+			RootPath = "$Container"
+			Filename = "..\Bitmap\Calendar.bmp"
+			Placement = "Stretch"
+			HorzAlign = "Left"
+			VertAlign = "Top"
+			ClipLeft = "0"
+			ClipRight = "0"
+			ClipTop = "0"
+			ClipBottom = "0"/>
+		<Element
+			CID = "371524712"
+			Type = "Bitmap"
+			X = "380"
+			Y = "274"
+			Width = "17"
+			Height = "16"
+			Flags = "0"
+			FileID = "3C2D98BA-E286-44D3-8DF1FCBCE2C52B84"
+			RootPath = "$Container"
+			Filename = "..\Bitmap\Calendar.bmp"
+			Placement = "Stretch"
+			HorzAlign = "Left"
+			VertAlign = "Top"
+			ClipLeft = "0"
+			ClipRight = "0"
+			ClipTop = "0"
+			ClipBottom = "0"/>
+		<Element
+			CID = "2112305902"
+			Type = "Bitmap"
+			X = "644"
+			Y = "270"
+			Width = "19"
+			Height = "19"
+			Flags = "0"
+			FileID = "1399DE4F-A420-4EA0-ADBC9B2FF3797712"
+			RootPath = "$Container"
+			Filename = "..\Bitmap\Group.bmp"
+			Placement = "Stretch"
+			HorzAlign = "Left"
+			VertAlign = "Top"
+			ClipLeft = "0"
+			ClipRight = "0"
+			ClipTop = "0"
+			ClipBottom = "0"/>
+		<Element
+			CID = "3898100"
+			Type = "MenuPopup"
+			X = "526"
+			Y = "-215"
+			Width = "129"
+			Height = "99"
+			Flags = "3"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "9"
+			LeftMargin = "6"
+			RightMargin = "8"
+			Mirror = "0">
+			<MenuPopupItem
+				ItemID = "1"
+				Type = "CommandOption"
+				Item = "Tất cả"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "2"
+				Type = "CommandOption"
+				Item = "Công việc trong ngày"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "4"
+				Type = "CommandOption"
+				Item = "Công việc ngày mai"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "3"
+				Type = "CommandOption"
+				Item = "Công việc trong tuần"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "5"
+				Type = "CommandOption"
+				Item = "Công việc tuần sau"
+				Hotkey = ""
+				IsDisabled = "0"/>
+		</Element>
+		<Element
+			CID = "652434028"
+			Type = "MenuPopup"
+			X = "74"
+			Y = "-161"
+			Width = "121"
+			Height = "42"
+			Flags = "3"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "5"
+			LeftMargin = "10"
+			RightMargin = "16"
+			Mirror = "0">
+			<MenuPopupItem
+				ItemID = "1"
+				Type = "CommandOption"
+				Item = "Quản lý checklist"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "3"
+				Type = "CommandOption"
+				Item = "Thêm checklist"
+				Hotkey = ""
+				IsDisabled = "0"/>
+		</Element>
+		<Element
+			CID = "1512984791"
+			Type = "Component"
+			X = "417"
+			Y = "86"
+			Width = "290"
+			Height = "275"
+			Flags = "3"
+			BackgroundColour = "255,255,255,0,6"
+			FileID = "9DB59AC0-8DBE-4D51-8E59228631942C56"
+			RootPath = "$Container"
+			Filename = "components\AddUser.gui"
+			Background = "Transparent"
+			HorzAlign = "Left"
+			VertAlign = "Top"
+			MaintainSize = "0"/>
+		<Element
+			CID = "719456454"
+			Type = "MenuPopup"
+			X = "360"
+			Y = "-344"
+			Width = "100"
+			Height = "80"
+			Flags = "3"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "6"
+			LeftMargin = "9"
+			RightMargin = "0"
+			Mirror = "0">
+			<MenuPopupItem
+				ItemID = "1"
+				Type = "CommandOption"
+				Item = "Chi tiết"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "4"
+				Type = "CommandOption"
+				Item = "Sửa"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "3"
+				Type = "CommandOption"
+				Item = "Xóa"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "5"
+				Type = "CommandOption"
+				Item = "Thêm công việc"
+				Hotkey = ""
+				IsDisabled = "0"/>
+		</Element>
+		<Element
+			CID = "179272015"
+			Type = "ComboBox"
+			X = "523"
+			Y = "-4"
+			Width = "131"
+			Height = "21"
+			Flags = "2"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = "Tất cả "
+			IsDisabled = "0"
+			IsEditable = "0"
+			IsFlat = "0"
+			Mirror = "0"
+			CustomStyle = "0"
+			HorzAlign = "Left"
+			OverrideTextColour = "0"
+			OverrideDisabledTextColour = "0"
+			OverrideFillColour = "0"
+			OverrideDisabledFillColour = "0"
+			OverrideBorderColour = "0"
+			TextColour = "0,0,0,0,9"
+			DisabledTextColour = "161,161,146,0,18"
+			FillColour = "240,240,255,0,0"
+			DisabledFillColour = "236,233,216,0,16"
+			BorderColour = "192,192,255,0,0"/>
+		<Element
+			CID = "179246692"
+			Type = "MenuPopup"
+			X = "383"
+			Y = "-196"
+			Width = "125"
+			Height = "80"
+			Flags = "3"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "9"
+			LeftMargin = "6"
+			RightMargin = "23"
+			Mirror = "0">
+			<MenuPopupItem
+				ItemID = "1"
+				Type = "CommandOption"
+				Item = "Tất cả"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "6"
+				Type = "CommandOption"
+				Item = "Chưa hoàn thành"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "7"
+				Type = "CommandOption"
+				Item = "Hoàn thành"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "8"
+				Type = "CommandOption"
+				Item = "Mới cập nhật"
+				Hotkey = ""
+				IsDisabled = "0"/>
+		</Element>
+		<Element
+			CID = "248458184"
+			Type = "ComboBox"
+			X = "380"
+			Y = "-4"
+			Width = "131"
+			Height = "21"
+			Flags = "2"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			Text = "Tất cả "
+			IsDisabled = "0"
+			IsEditable = "0"
+			IsFlat = "0"
+			Mirror = "0"
+			CustomStyle = "0"
+			HorzAlign = "Left"
+			OverrideTextColour = "0"
+			OverrideDisabledTextColour = "0"
+			OverrideFillColour = "0"
+			OverrideDisabledFillColour = "0"
+			OverrideBorderColour = "0"
+			TextColour = "0,0,0,0,9"
+			DisabledTextColour = "161,161,146,0,18"
+			FillColour = "240,240,255,0,0"
+			DisabledFillColour = "236,233,216,0,16"
+			BorderColour = "192,192,255,0,0"/>
+		<Element
+			CID = "1674133068"
+			Type = "MenuPopup"
+			X = "669"
+			Y = "-196"
+			Width = "129"
+			Height = "80"
+			Flags = "3"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Normal"
+			NextItemID = "9"
+			LeftMargin = "6"
+			RightMargin = "46"
+			Mirror = "0">
+			<MenuPopupItem
+				ItemID = "1"
+				Type = "CommandOption"
+				Item = "Tất cả"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "6"
+				Type = "CommandOption"
+				Item = "Việc cá nhân"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "7"
+				Type = "CommandOption"
+				Item = "Việc public"
+				Hotkey = ""
+				IsDisabled = "0"/>
+			<MenuPopupItem
+				ItemID = "8"
+				Type = "CommandOption"
+				Item = "Việc private"
+				Hotkey = ""
+				IsDisabled = "0"/>
+		</Element>
+		<Element
+			CID = "2028929461"
+			Type = "StaticText"
+			X = "406"
+			Y = "64"
+			Width = "172"
+			Height = "17"
+			Flags = "0"
+			FillColour = "255,255,255,0,6"
+			TextColour = "139,0,0,0,0"
+			Typeface = "Tahoma"
+			FontAttributes = "2"
+			TextSize = "90"
+			Text = "-ThuNN(8:30 AM 30/03/2011):"
+			IsDisabled = "0"
+			Fill = "Solid"
+			HorzAlign = "Left"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "829250967"
+			Type = "Component"
+			X = "-471"
+			Y = "263"
+			Width = "212"
+			Height = "169"
+			Flags = "3"
+			BackgroundColour = "255,255,255,0,6"
+			FileID = "DF710C13-2269-4E3F-9A0A2D1A7AEBE4F9"
+			RootPath = "$Container"
+			Filename = "components\DateTime.gui"
+			Background = "Transparent"
+			HorzAlign = "Left"
+			VertAlign = "Top"
+			MaintainSize = "0"/>
+		<Element
+			CID = "652416915"
+			Type = "Icon"
+			X = "-466"
+			Y = "255"
+			Width = "16"
+			Height = "16"
+			Flags = "0"
+			RootPath = "$Application"
+			Filename = "Icons\Miscellaneous\Pointer.ico"
+			IconIndex = "0"/>
+		<Element
+			CID = "1453423528"
+			Type = "Icon"
+			X = "678"
+			Y = "80"
+			Width = "16"
+			Height = "16"
+			Flags = "0"
+			RootPath = "$Application"
+			Filename = "Icons\Miscellaneous\Pointer.ico"
+			IconIndex = "0"/>
+	</Elements>
+	<Connections
+		CID = "2"/>
+	<Groups
+		CID = "3"/>
+	<SelectionGroups
+		CID = "4"/>
+	<Notes
+		CID = "5">
+		<Note
+			CID = "1815940159"
+			Name = "Description"
+			NextCID = "2">
+			<Text
+				CID = "1">
+				
+			</Text>
+		</Note>
+	</Notes>
+</Screen>
