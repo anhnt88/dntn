@@ -759,6 +759,22 @@
 				</Row>
 			</Data>
 		</Element>
+		<Element
+			CID = "1604215104"
+			Type = "Component"
+			X = "82"
+			Y = "233"
+			Width = "242"
+			Height = "128"
+			Flags = "0"
+			BackgroundColour = "255,255,255,0,6"
+			FileID = "84807C67-577F-4729-85D2F7BEE2B4FD32"
+			RootPath = "$Container"
+			Filename = "..\CalendarView\Calendar.gui"
+			Background = "Transparent"
+			HorzAlign = "Left"
+			VertAlign = "Top"
+			MaintainSize = "0"/>
 	</Elements>
 	<Connections
 		CID = "2"/>

@@ -81,6 +81,11 @@
 			OriginalPath = "MainUI.gui"
 			IsDeleted = "1"/>
 		<FileInfo
+			ID = "6E9EE4F4-411D-4EBC-9DE8CA03D5EBD5B2"
+			RelativePath = "NewCalendar\ConflictDlg.gui"
+			OriginalRoot = "$Project"
+			OriginalPath = "NewCalendar\ConflictDlg.gui"/>
+		<FileInfo
 			ID = "745A32B2-D9BF-45B8-B9CF972C27320D9F"
 			RelativePath = "Bitmap\Cancel.ico"
 			OriginalRoot = "$Project"

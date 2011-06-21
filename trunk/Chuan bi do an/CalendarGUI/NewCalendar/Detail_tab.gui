@@ -3,7 +3,7 @@
 	AppID = "2"
 	AppVer = "4.2.116.0"
 	DocID = ""
-	HasCanvas = "1"
+	HasCanvas = "0"
 	Width = "640"
 	Height = "480"
 	NextCID = "6"
@@ -19,11 +19,11 @@
 			Width = "633"
 			Height = "296"
 			Flags = "0"
-			HighlightColour = "246,246,246,0,21"
-			ShadowColour = "185,180,161,0,17"
+			HighlightColour = "250,250,250,0,21"
+			ShadowColour = "172,168,153,0,17"
 			FillColour = "236,233,216,0,16"
-			GradientColour = "185,180,161,0,17"
-			BorderColour = "0,20,88,0,7"
+			GradientColour = "172,168,153,0,17"
+			BorderColour = "28,81,128,0,7"
 			TextColour = "0,0,0,0,19"
 			Fill = "Solid"
 			Border = "None"
@@ -212,7 +212,7 @@
 			DisabledTextColour = "161,161,146,0,18"
 			FillColour = "255,255,255,0,6"
 			DisabledFillColour = "236,233,216,0,16"
-			BorderColour = "127,157,185,0,12"
+			BorderColour = "164,185,127,0,12"
 			NextCID = "2">
 			<Text
 				CID = "1">
@@ -266,7 +266,7 @@
 			DisabledTextColour = "161,161,146,0,18"
 			FillColour = "255,255,153,0,0"
 			DisabledFillColour = "236,233,216,0,16"
-			BorderColour = "127,157,185,0,12"/>
+			BorderColour = "164,185,127,0,12"/>
 		<Element
 			CID = "2090149348"
 			Type = "ComboBox"

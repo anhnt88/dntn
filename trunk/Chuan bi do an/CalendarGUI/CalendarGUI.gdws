@@ -4,7 +4,7 @@
 	NextCID = "2">
 	<OpenFiles
 		CID = "1"
-		LastActive = "11">
+		LastActive = "14">
 		<File
 			FileID = "A90C9CC4-5B59-4098-B11114BA65F189C8"
 			RootPath = "$Container"
@@ -19,11 +19,6 @@
 			FileID = "0D2F0714-A7E2-4421-9A6A5AA86DDE7B9D"
 			RootPath = "$Container"
 			RelativePathname = "MainUI\monthView.gui"
-			ViewSettings = ""/>
-		<File
-			FileID = "9ACF7B7C-48B6-47BD-A3365C1A6706BEF5"
-			RootPath = "$Container"
-			RelativePathname = "MainUI\ResourceView.gui"
 			ViewSettings = ""/>
 		<File
 			FileID = "B2646261-5D47-487E-AB62AC5D4F497705"
@@ -56,9 +51,19 @@
 			RelativePathname = "Component\ListTaiNguyen.gui"
 			ViewSettings = ""/>
 		<File
+			FileID = "D24C9EDB-D8AE-4E5F-B664EE1E7F85B67E"
+			RootPath = "$Container"
+			RelativePathname = "CalendarView\calendar_month.gui"
+			ViewSettings = ""/>
+		<File
 			FileID = "84807C67-577F-4729-85D2F7BEE2B4FD32"
 			RootPath = "$Container"
 			RelativePathname = "CalendarView\Calendar.gui"
+			ViewSettings = ""/>
+		<File
+			FileID = "9ACF7B7C-48B6-47BD-A3365C1A6706BEF5"
+			RootPath = "$Container"
+			RelativePathname = "MainUI\ResourceView.gui"
 			ViewSettings = ""/>
 		<File
 			FileID = "4258706F-17AB-4982-AAB890F0E8FED2F9"
@@ -66,9 +71,9 @@
 			RelativePathname = "CalendarView\Tip.gui"
 			ViewSettings = ""/>
 		<File
-			FileID = "D24C9EDB-D8AE-4E5F-B664EE1E7F85B67E"
+			FileID = "6E9EE4F4-411D-4EBC-9DE8CA03D5EBD5B2"
 			RootPath = "$Container"
-			RelativePathname = "CalendarView\calendar_month.gui"
+			RelativePathname = "NewCalendar\ConflictDlg.gui"
 			ViewSettings = ""/>
 	</OpenFiles>
 </Workspace>

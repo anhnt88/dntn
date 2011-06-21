@@ -1,6 +1,6 @@
 <Project
 	CID = "1"
-	NextCID = "3">
+	NextCID = "4">
 	<Links
 		CID = "1">
 		<Link
@@ -13,5 +13,33 @@
 			RelativePath = "Libraries\Windows Library\"/>
 	</Links>
 	<Options
-		CID = "2"/>
+		CID = "2"
+		UseProjectVisualStyle = "1"
+		DesignVisualStyle = "Windows XP"
+		DesignColourScheme = "XP Blue"
+		DesignDefTypeface = "Microsoft Sans Serif"
+		DesignDefFontScale = "1.000000"
+		SimulationVisualStyle = "Windows XP"
+		SimulationColourScheme = "XP Blue"
+		SimulationDefTypeface = "Microsoft Sans Serif"
+		SimulationDefFontScale = "1.000000"
+		SimBrowserBarOption = "Auto"
+		SimBackgroundFill = "Default"
+		SimBackgroundColour1 = "255,255,255,0,0"
+		SimBackgroundColour2 = "255,255,255,0,0"
+		SimBackgroundText = "Prototype"
+		SimBackgroundTextPosition = "TopLeft"
+		SimShowBackgroundStartDesignName = "1"
+		SimBackgroundTextColour = "48,128,48,0,0"
+		NextCID = "2">
+		<DataSets
+			CID = "1"/>
+	</Options>
+	<Description
+		CID = "3"
+		Author = ""
+		Organization = ""
+		URL = ""
+		Version = ""
+		Keywords = ""/>
 </Project>
