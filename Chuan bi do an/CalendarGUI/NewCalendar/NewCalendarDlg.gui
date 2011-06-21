@@ -142,7 +142,7 @@
 			DisabledTextColour = "161,161,146,0,18"
 			FillColour = "255,255,153,0,0"
 			DisabledFillColour = "236,233,216,0,16"
-			BorderColour = "127,157,185,0,12"/>
+			BorderColour = "164,185,127,0,12"/>
 		<Element
 			CID = "1099000944"
 			Type = "StaticText"
@@ -202,11 +202,11 @@
 			Width = "633"
 			Height = "296"
 			Flags = "0"
-			HighlightColour = "246,246,246,0,21"
-			ShadowColour = "185,180,161,0,17"
+			HighlightColour = "250,250,250,0,21"
+			ShadowColour = "172,168,153,0,17"
 			FillColour = "236,233,216,0,16"
-			GradientColour = "185,180,161,0,17"
-			BorderColour = "0,20,88,0,7"
+			GradientColour = "172,168,153,0,17"
+			BorderColour = "28,81,128,0,7"
 			TextColour = "0,0,0,0,19"
 			Fill = "Solid"
 			Border = "None"
@@ -217,6 +217,40 @@
 			Text = ""
 			TextOutsideExtent = "1"
 			IsDisabled = "0"/>
+		<Element
+			CID = "804271633"
+			Type = "StaticText"
+			X = "281"
+			Y = "279"
+			Width = "100"
+			Height = "21"
+			Flags = "0"
+			FillColour = "236,233,216,0,16"
+			TextColour = "0,0,0,0,19"
+			Typeface = ""
+			FontAttributes = "0"
+			TextSize = "Large"
+			Text = "Tab thông tin chung"
+			IsDisabled = "0"
+			Fill = "None"
+			HorzAlign = "Centre"
+			VertAlign = "Centre"/>
+		<Element
+			CID = "888092389"
+			Type = "Component"
+			X = "3"
+			Y = "165"
+			Width = "633"
+			Height = "296"
+			Flags = "3"
+			BackgroundColour = "255,255,255,0,6"
+			FileID = "FCF36C73-419B-423C-A73717A33FFF78E0"
+			RootPath = "$Container"
+			Filename = "General_tab.gui"
+			Background = "Transparent"
+			HorzAlign = "Left"
+			VertAlign = "Top"
+			MaintainSize = "0"/>
 	</Elements>
 	<Connections
 		CID = "2"/>

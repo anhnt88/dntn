@@ -2146,6 +2146,22 @@
 				</Row>
 			</Data>
 		</Element>
+		<Element
+			CID = "2005943460"
+			Type = "Component"
+			X = "495"
+			Y = "22"
+			Width = "99"
+			Height = "21"
+			Flags = "3"
+			BackgroundColour = "255,255,255,0,6"
+			FileID = "D24C9EDB-D8AE-4E5F-B664EE1E7F85B67E"
+			RootPath = "$Container"
+			Filename = "..\CalendarView\calendar_month.gui"
+			Background = "Transparent"
+			HorzAlign = "Left"
+			VertAlign = "Top"
+			MaintainSize = "0"/>
 	</Elements>
 	<Connections
 		CID = "2"/>
